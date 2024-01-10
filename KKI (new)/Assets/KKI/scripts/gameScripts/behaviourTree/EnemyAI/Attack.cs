@@ -1,0 +1,28 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using BehaviourTree;
+
+public class Attack : Node
+{
+
+    private BattleSystem _battleSystem;
+    private BehaviourTree.Tree _EnemyBT;
+    public Attack(BattleSystem battleSystem, EnemyController EnemyBT)
+    {
+        _battleSystem = battleSystem;
+        _EnemyBT = EnemyBT;
+    }
+
+    public override NodeState Evaluate()
+    {
+        GameObject _character = (GameObject)GetData("target");
+
+        _battleSystem.OnAttackButton(_character.GetComponent<Character>());        
+        state = NodeState.RUNNING;
+        ClearData("target");
+        _EnemyBT.RestartTree();
+        return state;
+    }
+    
+}

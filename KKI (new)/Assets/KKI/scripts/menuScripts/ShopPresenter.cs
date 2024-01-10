@@ -1,0 +1,173 @@
+
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ShopPresenter : CardPresenter, ILoadable
+{
+    [Space, Header("Prefabs")]
+    [SerializeField]
+    private CardDisplay characterCardObjectPrefab;
+    [SerializeField]
+    private CardSupportDisplay supportCardObjectPrefab;
+    [Space, Header("Buttons")]
+    [SerializeField]
+    private List<ButtonRace> raceButtons;
+    [SerializeField]
+    private List<ButtonClass> classButtons;
+    [SerializeField]
+    private List<ButtonSupportType> supportTypeButtons;
+
+
+    private List<CardDisplay> characterCardObjects = new();
+    private List<CardSupportDisplay> supportCardObjects = new();
+
+    [SerializeField]
+    private BuyCardDisplay buyCardDisplay;
+  
+    private ShopController shopController;
+    public void Init()
+    {
+        shopController = FindObjectOfType<ShopController>();
+        buyCardDisplay.BuyButton.onClick.AddListener(BuyCard);
+        SpawnCharacterCards();
+        SpawnSupportCards();
+        foreach (var raceButton in raceButtons)
+        {
+            raceButton.OnButtonClick += RaceButtonCLick;
+        }
+        foreach (var classButton in classButtons)
+        {
+            classButton.OnButtonClick += ClassButtonCLick;
+        }
+        foreach (var supportTypeButton in supportTypeButtons)
+        {
+            supportTypeButton.OnButtonClick += SupportTypeButtonCLick;
+        }
+    }
+
+    private void SetBuyCardWindow(GameObject CardObject)
+    {
+        buyCardDisplay.gameObject.SetActive(true);
+        if (CardObject.TryGetComponent(out CardDisplay characterCard))
+        {
+            buyCardDisplay.SetCardInfo(characterCard.Card);
+        }
+        if (CardObject.TryGetComponent(out CardSupportDisplay cardSupport))
+        {
+            buyCardDisplay.SetCardInfo(cardSupport.CardSupport);
+        }
+
+    }
+    private void BuyCard()
+    {
+        if (buyCardDisplay.ChosenCard is CharacterCard)
+        {
+            if (shopController.CanBuyCharacterCard(buyCardDisplay.ChosenCard as CharacterCard))
+            {
+                SpawnCharacterCards();
+            }
+            else
+            {
+              StartCoroutine(buyCardDisplay.TurnOffNotEnoughtCaption());
+            }
+
+        }
+        if (buyCardDisplay.ChosenCard is CardSupport)
+        {
+            if (shopController.CanBuySupportCard(buyCardDisplay.ChosenCard as CardSupport))
+            {
+                SpawnSupportCards();
+            }
+            else
+            {
+                StartCoroutine(buyCardDisplay.TurnOffNotEnoughtCaption());
+            }
+            
+        }
+    }
+
+    private void RaceButtonCLick(ButtonRace buttonRace)
+    {
+        foreach (var raceButton in raceButtons)
+        {
+            if (raceButton!= buttonRace)
+            {
+                raceButton.IsEnabled = false;
+            }
+            
+        }
+        shopController.SetCurrentRace(buttonRace.Race);
+        SpawnCharacterCards();
+    }
+    private void ClassButtonCLick(ButtonClass buttonClass)
+    {
+        foreach (var classButton in classButtons)
+        {
+            if (classButton!= buttonClass)
+            {
+                classButton.IsEnabled = false;
+            }
+            
+        }
+        shopController.SetCurrentClass(buttonClass.Class);
+        SpawnCharacterCards();
+    }
+    private void SupportTypeButtonCLick(ButtonSupportType buttonSupportType)
+    {
+        foreach (var supportTypeButton in supportTypeButtons)
+        {
+            if (buttonSupportType!= supportTypeButton)
+            {
+                supportTypeButton.IsEnabled = false;
+            }
+            
+        }
+        shopController.SetCurrentTypeOfSupport(buttonSupportType.TypeOfSupport);
+        SpawnSupportCards();
+    }
+
+    protected override void SpawnCharacterCards()
+    {
+        foreach (var characterCardObject in characterCardObjects)
+        {
+            Destroy(characterCardObject.gameObject);
+        }
+        characterCardObjects.Clear();
+
+        List<CharacterCard> cards = shopController.FilterCharacterCards(shopController.CharacterShopCards);
+
+        foreach (var card in cards)
+        {
+            CardDisplay cardObject = Instantiate(characterCardObjectPrefab,Vector3.zero,Quaternion.identity, parentToSpawnCharacterCards);
+            cardObject.transform.localPosition = Vector3.zero;            
+            cardObject.SetValues(card);
+
+            cardObject.Clicable.OnClick += SetBuyCardWindow;
+            characterCardObjects.Add(cardObject);
+        } 
+    }
+
+
+
+    protected override void SpawnSupportCards()
+    {
+        foreach (var supportCardObject in supportCardObjects)
+        {
+            Destroy(supportCardObject.gameObject);
+        }
+        supportCardObjects.Clear();
+
+        List<CardSupport> cardsSupport = shopController.FilterSupportCards(shopController.SupportShopCards);
+        
+
+        foreach (var cardSupport in cardsSupport)
+        {
+            CardSupportDisplay cardSupportObject = Instantiate(supportCardObjectPrefab, Vector3.zero, Quaternion.identity, parentToSpawnSupportCards);
+            cardSupportObject.transform.localPosition = Vector3.zero;         
+            cardSupportObject.SetValues(cardSupport);
+            cardSupportObject.Clicable.OnClick += SetBuyCardWindow;
+
+            supportCardObjects.Add(cardSupportObject);
+        }
+    }
+}
