@@ -70,3 +70,6 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+KKI (new)/Library/PackageCache/com.unity.burst@1.8.2/.Runtime/libburst-llvm-14.dylib
+KKI (new)/Library/PlayerDataCache/Win64/Data/sharedassets0.assets.resS
+KKI (new)/Library/PlayerDataCache/Win64/Data/sharedassets1.assets.resS
