@@ -10,15 +10,38 @@ public class OutlineClicableUI : MonoBehaviour, IPointerExitHandler, IPointerEnt
     private UnityEngine.UI.Outline outline;
     [SerializeField]
     private ImageWithRoundedCorners roundedCorners;
+    [SerializeField]
+    private GameObject blocker;
 
     public event Action<GameObject> OnClick;
     public event Action OnHoverExit;
     public event Action OnHoverEnter;
 
+    private bool m_isEnabled;
+
+    public bool IsEnabled
+    {
+        get
+        {
+            return m_isEnabled;
+        }
+        set {
+            m_isEnabled = value;
+            SetBlockerState(!m_isEnabled);
+        }
+    }
+
+    public void SetBlockerState(bool state)
+    {
+        if (blocker != null)
+        {
+            blocker.SetActive(state);
+        }
+    }
     
     private void Start()
     {
-
+        IsEnabled = true;
         outline.enabled = false;
         outline.effectColor = Color.black;
         outline.effectDistance = new Vector2(2, -2);
@@ -26,18 +49,27 @@ public class OutlineClicableUI : MonoBehaviour, IPointerExitHandler, IPointerEnt
     }
     public void OnPointerExit(PointerEventData eventData)
     {
-        outline.enabled = false;
-        OnHoverExit?.Invoke();
+        if (m_isEnabled)
+        {
+            outline.enabled = false;
+            OnHoverExit?.Invoke();
+        }      
     }
 
     void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
     {
-        OnClick?.Invoke(eventData.pointerClick);
+        if (m_isEnabled)
+        {
+            OnClick?.Invoke(eventData.pointerClick);
+        }
     }
 
     void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
     {
-        outline.enabled = true;
-        OnHoverEnter?.Invoke();
+        if (m_isEnabled)
+        {
+            outline.enabled = true;
+            OnHoverEnter?.Invoke();
+        }
     }
 }

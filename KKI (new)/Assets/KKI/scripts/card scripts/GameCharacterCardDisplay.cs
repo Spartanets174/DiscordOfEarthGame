@@ -1,7 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
-
 public class GameCharacterCardDisplay : MonoBehaviour
 {
     [SerializeField]
@@ -15,21 +14,43 @@ public class GameCharacterCardDisplay : MonoBehaviour
     [SerializeField]
     private HealthBar m_charealthBar;
 
+    [SerializeField]
+    private OutlineClicableUI m_outlineClicableUI;
+    public OutlineClicableUI OutlineClicableUI => m_outlineClicableUI;
+
     private CharacterCard m_currentCharacterCard;
     public CharacterCard CurrentCharacterCard => m_currentCharacterCard;
 
-    private Character m_currentCharacter;
-    public Character CurrentCharacter => m_currentCharacter;
+    private PlayerCharacter m_currentCharacter;
+    public PlayerCharacter CurrentCharacter => m_currentCharacter;
 
     private Image image;
-    private bool IsCharacterSpawned
+
+    private bool m_isCharacterSpawned;
+    public bool IsCharacterSpawned
     {
-        get;
-        set;
-    } = false;
+        get { return m_isCharacterSpawned; }
+        set
+        {
+            m_isCharacterSpawned = value;
+            OutlineClicableUI.IsEnabled = !value;
+        }
+    }
+
+    private bool m_isChosen;
+    public bool IsChosen
+    {
+        get { return m_isChosen; }
+        set
+        {
+            m_isChosen = value;
+            OutlineClicableUI.IsEnabled = value;
+        }
+    }
 
     private void Start()
     {
+        m_isCharacterSpawned = false;
         image = GetComponent<Image>();
     }
 
@@ -41,7 +62,7 @@ public class GameCharacterCardDisplay : MonoBehaviour
         m_charealthBar.SetHealth(m_currentCharacterCard.health);      
     }
 
-    public void SetCharacter(Character character)
+    public void SetCharacter(PlayerCharacter character)
     {
         m_currentCharacter = character;
 

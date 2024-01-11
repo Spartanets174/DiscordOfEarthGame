@@ -1,15 +1,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 
 public class BattleSystem : StateMachine, ILoadable
 {
-    [Space,Header("Game data")]
-    [SerializeField]
-    private PlayerManager playerManager;
-    public PlayerManager PlayerManager=> playerManager;
-
     [SerializeField]
     private EnemyController enemyController;
     public EnemyController EnemyController => enemyController;
@@ -23,14 +19,11 @@ public class BattleSystem : StateMachine, ILoadable
 
     [Space, Header("Prefabs")]
     [SerializeField]
-    private GameObject charPrefab;
-    [SerializeField]
-    private GameObject enemyPrefab;
-    [SerializeField]
-    private GameObject staticEnemyPrefab;
+    private PlayerCharacter charPrefab;
+    public PlayerCharacter CharPrefab => charPrefab;
 
-    
-    public List<Character> playerCharacters
+    private List<PlayerCharacter> m_playerCharacters=new();
+    public List<Character> PlayerCharacters
     {
         get;
     } = new();
@@ -38,15 +31,23 @@ public class BattleSystem : StateMachine, ILoadable
 
     public void Init()
     {
+        FieldController.InvokeActionOnField(AddOnCellClick);
+
         SetState(new Begin(this));
     }
-    public void onUnitStatementButton()
+
+    private void AddOnCellClick(Cell cell)
     {
-        StartCoroutine(State.unitStatement());
+        cell.OnClick += FieldController.TurnOnCells;
+    }
+
+    public void OnUnitStatementButton(GameObject character)
+    {
+        StartCoroutine(State.UnitStatement(character));
     }
     public void OnChooseCharacterButton(GameObject character)
     {
-        StartCoroutine(State.chooseCharacter(character));
+        StartCoroutine(State.ChooseCharacter(character));
     }
     public void OnMoveButton(GameObject cell)
     {
@@ -60,29 +61,56 @@ public class BattleSystem : StateMachine, ILoadable
 
     public void OnAttackAbilityButton()
     {
-        StartCoroutine(State.attackAbility());
+        StartCoroutine(State.UseAttackAbility());
     }
 
     public void OnDefensiveAbilityButton()
     {
-        StartCoroutine(State.defensiveAbility());
+        StartCoroutine(State.UseDefensiveAbility());
     }
 
     public void OnBuffAbilityButton()
     {
-        StartCoroutine(State.buffAbility());
+        StartCoroutine(State.UseBuffAbility());
     }
     public void OnSupportCardButton()
     {
-        StartCoroutine(State.supportCard());
+        StartCoroutine(State.UseSupportCard());
     }
     public void OnUseItemButton()
     {
-        StartCoroutine(State.useItem());
+        StartCoroutine(State.UseItem());
     }
 
 
-    
+    public PlayerCharacter InstasiatePlayerCharacter(CharacterCard characterCard, Transform parent)
+    {
+        PlayerCharacter prefab = Instantiate(CharPrefab, Vector3.zero, Quaternion.identity, parent);
+        prefab.transform.localPosition = new Vector3(0, 1, 0);
+        m_playerCharacters.Add(prefab);
+
+        prefab.SetData(characterCard,null, m_playerCharacters.Count-1);
+
+
+        if (m_playerCharacters.Count == 5)
+        {
+            int cubeValue = UnityEngine.Random.Range(1, 6);
+            GameUIPresenter.SetPointsOfActionAnd—ube(cubeValue);
+            GameUIPresenter.AddMessageToGameLog($"Õ‡ ÍÛ·ËˆÂ ‚˚Ô‡ÎÓ {cubeValue}");
+            if (cubeValue % 2 == 0)
+            {
+                EnemyController.gameObject.SetActive(false);
+                SetState(new PlayerTurn(this));
+            }
+            else
+            {
+                EnemyController.gameObject.SetActive(true);
+                SetState(new EnemyTurn(this));
+            }
+        }
+
+        return prefab;
+    }
    
 
 

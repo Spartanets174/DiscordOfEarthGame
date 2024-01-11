@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StaticEnemyCharacter : Character
 {
-    public void SetData(CharacterCard card, Material material)
+    public override void SetData(CharacterCard card, Material material, int currentIndex)
     {
         healthBar.SetMaxHealth(card.health);
         healthBar.SetHealth(card.health);

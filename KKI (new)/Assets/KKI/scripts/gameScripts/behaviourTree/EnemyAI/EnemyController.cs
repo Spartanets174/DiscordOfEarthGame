@@ -88,7 +88,7 @@ public class EnemyController : Tree, ILoadable
         staticEnemyCharacter.transform.localPosition = new Vector3(0, 1, 0);
         staticEnemyCharObjects.Add(staticEnemyCharacter);
 
-        staticEnemyCharacter.SetData(characterCard, material);
+        staticEnemyCharacter.SetData(characterCard, material, staticEnemyCharObjects.Count-1);
       
      /*   //«аполнение листа с клетками дл€ атаки
         EnemyStaticCharObjects[EnemyStaticCharObjects.Count - 1].GetComponent<staticEnemyAttack>().listOfCellToAttack.Add(fieldController.CellsOfFieled[i, j + 1].gameObject);

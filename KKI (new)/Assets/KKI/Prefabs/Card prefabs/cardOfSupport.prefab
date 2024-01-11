@@ -354,6 +354,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c97bbc8c78aebcb4fa866a0826227136, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outline: {fileID: 5897724931850981017}
+  roundedCorners: {fileID: 5591627553584924102}
 --- !u!114 &5897724931850981017
 MonoBehaviour:
   m_ObjectHideFlags: 0

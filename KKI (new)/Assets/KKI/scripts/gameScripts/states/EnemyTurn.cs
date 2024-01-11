@@ -49,7 +49,7 @@ public class EnemyTurn : State
 
         yield break;
     }
-    public override IEnumerator chooseCharacter(GameObject character)
+    public override IEnumerator ChooseCharacter(GameObject character)
     {
         /*Логика при выборе перса*/
         //Отключение обводки у всех юнитов и переменной, отвечающей за то, какой персонаж выбран у врага
@@ -181,27 +181,27 @@ public class EnemyTurn : State
         }*/
         yield break;
     }
-    public override IEnumerator attackAbility()
+    public override IEnumerator UseAttackAbility()
     {
         /*Логика при применении способности 1*/
         yield break;
     }
-    public override IEnumerator defensiveAbility()
+    public override IEnumerator UseDefensiveAbility()
     {
         /*Логика при применении способности 2*/
         yield break;
     }
-    public override IEnumerator buffAbility()
+    public override IEnumerator UseBuffAbility()
     {
         /*Логика при применении способности 3*/
         yield break;
     }
-    public override IEnumerator supportCard()
+    public override IEnumerator UseSupportCard()
     {
         /*Логика при применении карты помощи*/
         yield break;
     }
-    public override IEnumerator useItem()
+    public override IEnumerator UseItem()
     {
         /*Логика при применении предмета*/
         yield break;

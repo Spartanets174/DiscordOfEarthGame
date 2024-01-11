@@ -1,122 +1,88 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-
 public class Begin : State
-{
-    //Бросок кубика
-    
+{ 
     public Begin(BattleSystem battleSystem) : base(battleSystem)
     {
     }
 
     public override IEnumerator Start()
     {
-        /*Логика при старте*/
-        BattleSystem.GameUIPresenter.AddMessagToGameLog($"Начните расстановку юнитов.");
-        BattleSystem.GameUIPresenter.SetPointsOfActionAndСube(Random.Range(1, 6)) ;
+        BattleSystem.GameUIPresenter.AddMessageToGameLog($"Начните расстановку юнитов.");        
         BattleSystem.EnemyController.CreateEnemy();
         BattleSystem.EnemyController.InstantiateEnemies();
+
+        OnStepStarted += AddUnitStatementAction;
+        OnStepCompleted += RemoveUnitStatementAction;
+
+        OnStepStartedInvoke();
         yield break;
     }
 
-    public override IEnumerator unitStatement()
+    private void AddUnitStatementAction()
     {
-        //Цикл перебора клеток, на ктороые можно установить юнита в начале боя
-       /* for (int i = 0; i < BattleSystem.field.CellsOfFieled.GetLength(0); i++)
+        foreach (var gameCards in BattleSystem.GameUIPresenter.GameCharacterCardDisplays)
         {
-            for (int j = 0; j < BattleSystem.field.CellsOfFieled.GetLength(1); j++)
-            {
-                if (j == BattleSystem.field.CellsOfFieled.GetLength(1) - 1 || j == BattleSystem.field.CellsOfFieled.GetLength(1) - 2)
-                {
-                    //Расцветка в зависимости от четности/нечетности
-                    *//*BattleSystem.isCellEven((i + j) % 2 == 0, false, BattleSystem.field.CellsOfFieled[i, j]);*//*
-                }
-                //Отключение клеток, на которые нельзя ходить
-                else
-                {
-                    BattleSystem.field.CellsOfFieled[i, j].GetComponent<Cell>().Enabled = false;
-                }
-            }
-        }*/
+            gameCards.OutlineClicableUI.OnClick += BattleSystem.OnUnitStatementButton;
+        }
+        BattleSystem.FieldController.InvokeActionOnField(AddOnCellsClick);
+    }
+
+    private void RemoveUnitStatementAction()
+    {
+        foreach (var gameCards in BattleSystem.GameUIPresenter.GameCharacterCardDisplays)
+        {
+            gameCards.OutlineClicableUI.OnClick -= BattleSystem.OnUnitStatementButton;
+        }
+        BattleSystem.FieldController.InvokeActionOnField(RemoveOnCellsClick);
+    }
+
+    private void AddOnCellsClick(Cell cell)
+    {
+        cell.OnClick += BattleSystem.OnMoveButton;
+        cell.OnClick += BattleSystem.FieldController.TurnOffCells;
+    }
+
+    private void RemoveOnCellsClick(Cell cell)
+    {
+        cell.OnClick -= BattleSystem.OnMoveButton;
+        cell.OnClick -= BattleSystem.FieldController.TurnOffCells;
+    }
+
+    public override IEnumerator UnitStatement(GameObject character)
+    {
+        GameCharacterCardDisplay cardDisplay = character.GetComponent<GameCharacterCardDisplay>();        
+        BattleSystem.GameUIPresenter.SetChosenCard(cardDisplay);
+        BattleSystem.FieldController.InvokeActionOnField(SetActiveCells);
         yield break;
     }
+
+    private void SetActiveCells(Cell cell)
+    {
+        if (cell.CellIndex.y == BattleSystem.FieldController.CellsOfFieled.GetLength(1) - 1 || cell.CellIndex.y == BattleSystem.FieldController.CellsOfFieled.GetLength(1) - 2)
+        {
+            cell.SetActivatedCell(true);
+        }
+    }
+
     public override IEnumerator Move(GameObject cell)
     {
-        /*Логика при движении*/
-        //Проверка на то, можно ли поставить юнита на клетку
         if (cell.transform.childCount == 1)
         {
-            //Проверка идёт ли сейчас расстановка юнитов
-                //Цикл перебора ui карточек для спавна нужной карточки при выборе
-                /*for (int i = 0; i < BattleSystem.charCardsUI.Count; i++)
-                {
-                    *//*//Проверка на то, какая карточка выбрана
-                    if (BattleSystem.charCardsUI[i].GetComponent<cardCharHolde>().isSelected)
-                    {
-                        //Перевыбор префаба
-                        GameObject prefab = BattleSystem.charPrefab;
-                        prefab.GetComponent<Outline>().enabled = false;
-                        //Запись нужных данных о карточке в префаб
-                        prefab.GetComponent<character>().card = BattleSystem.charCardsUI[i].GetComponent<cardCharHolde>().card;
-                        //Создание на сцене префаба и расстановка на нужную позицию
-                        prefab = GameObject.Instantiate(prefab, Vector3.zero, Quaternion.identity, cell.transform);
-                        prefab.transform.localPosition = new Vector3(0, 1, 0);
-                        prefab.GetComponent<MeshRenderer>().sharedMaterial = prefab.GetComponent<materialPicker>().green;
-                        BattleSystem.charCards.Add(prefab);
-                        BattleSystem.charCards[BattleSystem.charCards.Count - 1].GetComponent<character>().index = i;
-                        BattleSystem.charCards[BattleSystem.charCards.Count - 1].GetComponent<character>().isEnemy = false;
-                        BattleSystem.charCards[BattleSystem.charCards.Count - 1].GetComponent<character>().isStaticEnemy = false;
-                        BattleSystem.charCardsUI[i].transform.GetChild(4).GetComponent<healthBar>().SetMaxHealth((float)BattleSystem.charCards[BattleSystem.charCards.Count - 1].GetComponent<character>().health);
-                        BattleSystem.charCards[BattleSystem.charCards.Count - 1].transform.GetChild(0).gameObject.SetActive(false);
-                        //Смена полей у ui карточек
-                        BattleSystem.charCardsUI[i].GetComponent<cardCharHolde>().isSelected = false;
-                        BattleSystem.charCardsUI[i].GetComponent<cardCharHolde>().wasChosen = true;
-                    }
-                    //Если карта не была раньше выбрана, то происходит включение оставшихся ui карт
-                    if (!BattleSystem.charCardsUI[i].GetComponent<cardCharHolde>().wasChosen)
-                    {
-                        BattleSystem.charCardsUI[i].GetComponent<Button>().interactable = true;
-                        BattleSystem.charCardsUI[i].GetComponent<Button>().enabled = true;
-                    }*//*
-                }*/
-               /* for (int i = 0; i < BattleSystem.field.CellsOfFieled.GetLength(0); i++)
-                {
-                    for (int j = 0; j < BattleSystem.field.CellsOfFieled.GetLength(1); j++)
-                    {
-                        //Включение и переракрас всех клеток
-                        BattleSystem.field.CellsOfFieled[i, j].GetComponent<Cell>().Enabled = true;
-                       *//* BattleSystem.isCellEven((i + j) % 2 == 0, true, BattleSystem.field.CellsOfFieled[i, j]);*//*
-                        if ((i == 2 && j == 2) || (i == 4 && j == 3) || (i == 2 && j == 7) || (i == 4 && j == 8))
-                        {
-                            BattleSystem.field.CellsOfFieled[i, j].gameObject.GetComponent<MeshRenderer>().material = BattleSystem.field.CellsOfFieled[i, j].swampColor;
-                        }
-                    }
-                }       */     
-        }
-        //При расстановек персонажа
-        //Определение хода       
-       /* if (BattleSystem.charCards.Count == 5)
-        {
-            if (BattleSystem.cubeValue % 2 == 0)
+           
+            GameCharacterCardDisplay cardDisplay = BattleSystem.GameUIPresenter.GetChosenCard();           
+            if (cardDisplay!=null)
             {
-               *//* BattleSystem.gameLog.text += $"На кубице выпало {BattleSystem.cubeValue}" + "\n";
-                BattleSystem.gameLogScrollBar.value = 0;*//*
-                BattleSystem.enemyManager.enabled = false;
-                BattleSystem.enemyManager.gameObject.SetActive(false);                
-                BattleSystem.SetState(new PlayerTurn(BattleSystem));
+                cardDisplay.SetCharacter(BattleSystem.InstasiatePlayerCharacter(cardDisplay.CurrentCharacterCard, cell.transform));
+                cardDisplay.IsCharacterSpawned = true;
             }
             else
             {
-                *//*BattleSystem.gameLog.text += $"На кубице выпало {BattleSystem.cubeValue}" + "\n";
-                BattleSystem.gameLogScrollBar.value = 0;*//*
-                BattleSystem.isEnemyTurn = true;
-                BattleSystem.enemyManager.enabled = true;
-                BattleSystem.enemyManager.gameObject.SetActive(true);
-                BattleSystem.SetState(new EnemyTurn(BattleSystem));
+                Debug.LogError("Нет выбранной карты");
             }
-        }*/
+            BattleSystem.GameUIPresenter.SetChosenStateToCards(false);
+            BattleSystem.GameUIPresenter.EbableUnspawnedCards();
+        }       
         yield break;
     }
 }

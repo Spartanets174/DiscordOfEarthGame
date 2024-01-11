@@ -1683,6 +1683,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c97bbc8c78aebcb4fa866a0826227136, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outline: {fileID: 4887834901515906045}
+  roundedCorners: {fileID: 8861103285322891397}
 --- !u!1 &4603184963223692134
 GameObject:
   m_ObjectHideFlags: 0

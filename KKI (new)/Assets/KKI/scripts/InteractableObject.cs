@@ -1,33 +1,48 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(BoxCollider))]
 public class InteractableObject : MonoBehaviour
 {
-    public event Action OnClick;
+    private bool m_enabled;
+    public bool Enabled
+    {
+        get => m_enabled;
+        set => m_enabled = value;
+    }
+
+    public event Action<GameObject> OnClick;
     public event Action OnHoverEnter;
     public event Action OnHoverExit;
     public event Action OnHover;
     private void OnMouseEnter()
     {
-        OnHoverEnter?.Invoke();
+        if (Enabled)
+        {
+            OnHoverEnter?.Invoke();
+        }     
     }
     private void OnMouseExit()
     {
-        OnHoverExit?.Invoke();
+        if (Enabled)
+        {
+            OnHoverExit?.Invoke();
+        }      
     }
 
     private void OnMouseDown()
-    {       
-        OnClick?.Invoke();
+    {
+        if (Enabled)
+        {
+            OnClick?.Invoke(gameObject);
+        }     
     }
 
     private void OnMouseOver()
-    {  
-        OnHover?.Invoke();
+    {
+        if (Enabled)
+        {
+            OnHover?.Invoke();
+        }       
     }
 }

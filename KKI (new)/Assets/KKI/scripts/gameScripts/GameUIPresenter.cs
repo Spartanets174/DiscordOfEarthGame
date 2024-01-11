@@ -6,6 +6,11 @@ using UnityEngine.UI;
 
 public class GameUIPresenter : MonoBehaviour, ILoadable
 {
+    [Space, Header("Game data")]
+    [SerializeField]
+    private PlayerManager playerManager;
+    public PlayerManager PlayerManager => playerManager;
+
     [Space, Header("Prefabs")]
     [SerializeField]
     private GameCharacterCardDisplay gameCharacterCardPrefab;
@@ -37,36 +42,80 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
     private GameObject endGameInterface;
 
 
-    private List<GameCharacterCardDisplay> gameCharacterCards=new();
-    private List<GameSupportCardDisplay> gameSupportCards = new();
-    private BattleSystem battleSystem;
+    private List<GameCharacterCardDisplay> m_gameCharacterCards=new();
+    public List<GameCharacterCardDisplay> GameCharacterCardDisplays => m_gameCharacterCards;
+
+    private List<GameSupportCardDisplay> m_gameSupportCards = new();
+    public List<GameSupportCardDisplay> GameSupportCards => m_gameSupportCards;
+
 
     public void Init()
     {
-        battleSystem = FindObjectOfType<BattleSystem>();
-        foreach (var Card in battleSystem.PlayerManager.deckUserCharCards)
+        foreach (var Card in playerManager.DeckUserCharCards)
         {
             GameCharacterCardDisplay cardDisplay = Instantiate(gameCharacterCardPrefab, Vector3.zero, Quaternion.identity, gameCharacterCardsParent);
             cardDisplay.transform.localPosition = Vector3.zero;
             cardDisplay.SetData(Card);
-            gameCharacterCards.Add(cardDisplay);
+            m_gameCharacterCards.Add(cardDisplay);
         }
-        foreach (var SupportCard in battleSystem.PlayerManager.deckUserSupportCards)
+        foreach (var SupportCard in playerManager.DeckUserSupportCards)
         {
             GameSupportCardDisplay cardDisplay = Instantiate(gameSupportCardPrefab, Vector3.zero, Quaternion.identity, gameSupportCardsParent);
             cardDisplay.transform.localPosition = Vector3.zero;
             cardDisplay.SetData(SupportCard);
-            gameSupportCards.Add(cardDisplay);
+            m_gameSupportCards.Add(cardDisplay);
         }
     }
 
-    public void AddMessagToGameLog(string message)
+    public void AddMessageToGameLog(string message)
     {
-        gameLog.text.Insert(0, message + "\n");
+        gameLog.text = gameLog.text.Insert(0, message + "\n");
     }
 
     public void SetPointsOfActionAnd—ube(float value)
     {
         pointsOfActionAnd—ube.text = value.ToString();
+    
     }
+    public void SetChosenStateToCards(bool State)
+    {
+        foreach (var item in m_gameCharacterCards)
+        {
+            item.IsChosen = State;
+        }
+    }
+
+    public void EbableUnspawnedCards()
+    {
+        foreach (var item in m_gameCharacterCards)
+        {
+            if (!item.IsCharacterSpawned)
+            {
+                item.OutlineClicableUI.IsEnabled = true;
+            }
+        }
+    }
+
+    public void SetChosenCard(GameCharacterCardDisplay cardDisplay)
+    {
+        foreach (var item in m_gameCharacterCards)
+        {
+            item.IsChosen = false;           
+        }
+        cardDisplay.IsChosen = true;
+    }
+
+    public GameCharacterCardDisplay GetChosenCard()
+    {
+        foreach (var item in m_gameCharacterCards)
+        {
+            if (item.IsChosen)
+            {
+                return item;
+            }
+        }
+        return null;
+    }
+
+
 }

@@ -6,7 +6,9 @@ public class Cell : InteractableObject
 {
     [SerializeField] private GameObject hightLight;
     public Material baseColor, offsetColor, swampColor;
-    private MeshRenderer renderer;
+    private MeshRenderer meshRenderer;
+    public MeshRenderer MeshRenderer => meshRenderer;
+
     private BoxCollider boxCollider;
     public BoxCollider BoxCollider => boxCollider;
     public Vector2 CellIndex
@@ -14,11 +16,7 @@ public class Cell : InteractableObject
         get;
         set;
     }
-    public bool Enabled
-    {
-        get;
-        set;
-    }
+
     public bool IsSwamp
     {
         get;
@@ -26,59 +24,61 @@ public class Cell : InteractableObject
     }
     private void Awake()
     {
-        renderer = GetComponent<MeshRenderer>();
+        meshRenderer = GetComponent<MeshRenderer>();
         boxCollider = GetComponent<BoxCollider>();
         OnHoverEnter += EnableHiglight;
         OnHoverExit += DisableHiglight;
-        OnClick += OnCellClick;
+        OnClick += OnClickCell;
     }
 
     private void OnDestroy()
     {
         OnHoverEnter -= EnableHiglight;
         OnHoverExit -= DisableHiglight;
-        OnClick -= OnCellClick;
     }
-    public void Init(bool isOffset)
+
+    public void SetCellState(bool isOffset, bool state)
     {
-        renderer.material = isOffset?offsetColor:baseColor;
+        Enabled = state;
+        IsSwamp = false;
+        meshRenderer.material = isOffset ? offsetColor : baseColor;
     }
-    private void OnCellClick()
+    public void SetCellSwamp(bool state)
     {
-        /*//Проверка на то, включена ли клетка
-        if (Enabled)
+        Enabled = state;
+        IsSwamp = true;
+        MeshRenderer.material = swampColor;
+    }
+    public void SetActivatedCell(bool isActivated)
+    {
+        Enabled = isActivated;
+        if ((CellIndex.x + CellIndex.y) % 2 == 0)
         {
-            //Передача данных о текущей клетки в battleSystem            
-            if (this.transform.childCount!=1)
-            {
-                if (this.transform.GetChild(1).GetComponent<character>().isEnemy|| this.transform.GetChild(1).GetComponent<character>().isStaticEnemy)
-                {
-                    battleSystem.cahngeCardWindow(this.transform.GetChild(1).gameObject, true);                  
-                }
-                else
-                {
-                    battleSystem.cahngeCardWindow(this.transform.GetChild(1).gameObject, false);                   
-                }
-                
-            }
-            if (!battleSystem.isEnemyTurn)
-            {
-                battleSystem.OnMoveButton(this.gameObject);
-            }        
-        }   */     
+            meshRenderer.material.color = new Color(0, 1, 0);
+        }
+        else
+        {
+            meshRenderer.material.color = new Color(0, 0.5f, 0);
+        }
     }
 
     private void EnableHiglight()
     {
-        if (Enabled)
+        if (transform.childCount < 2)
         {
             hightLight.SetActive(true);
         }
 
     }
+
+    private void OnClickCell(GameObject gameObject)
+    {
+        DisableHiglight();
+    }
+
     private void DisableHiglight()
     {
-        if (Enabled)
+        if (transform.childCount < 2)
         {
             hightLight.SetActive(false);
         }

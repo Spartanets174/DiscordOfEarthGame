@@ -67,7 +67,7 @@ public class UIController : MonoBehaviour, ILoadable
         settingsObject.OnHoverEnter += TurnOnSettingsText;
         settingsObject.OnHoverExit += TurnOffSettingsText;
 
-        playerNick.text = $"Приветсвуем тебя, {PlayerManager.Name}!";
+        playerNick.text = $"Приветсвуем тебя, {PlayerManager.CharacterName}!";
         SetState(shopText, false);
         SetState(settingsText,false);
     }
@@ -92,7 +92,7 @@ public class UIController : MonoBehaviour, ILoadable
 
     public void ToGame()
     {
-        if (PlayerManager.deckUserCharCards.Count < 5 || PlayerManager.deckUserSupportCards.Count < 7)
+        if (PlayerManager.DeckUserCharCards.Count < 5 || PlayerManager.DeckUserSupportCards.Count < 7)
         {
             SetState(warningText.gameObject,true);
             StartCoroutine(TurnOffWarnningText());
@@ -120,13 +120,13 @@ public class UIController : MonoBehaviour, ILoadable
         Rect shopRect = shopText.GetComponent<RectTransform>().rect;
         shopText.transform.localPosition = new Vector3(Input.mousePosition.x - cam.scaledPixelWidth / 2 - shopRect.width/2, Input.mousePosition.y - cam.scaledPixelHeight / 2 + shopRect.height / 2, 0);
     }
-    private void TurnOnShop()
+    private void TurnOnShop(GameObject gameObject)
     {
         shopObject.BoxCollider.enabled = false;
         settingsObject.BoxCollider.enabled = false;
         SetState(shop,true);
     }
-    private void TurnOnSettings()
+    private void TurnOnSettings(GameObject gameObject)
     {
         shopObject.BoxCollider.enabled = false;
         settingsObject.BoxCollider.enabled = false;

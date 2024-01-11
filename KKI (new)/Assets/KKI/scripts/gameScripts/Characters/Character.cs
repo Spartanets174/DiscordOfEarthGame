@@ -123,6 +123,7 @@ public abstract class Character : MonoBehaviour
             *//*battleSystem.GetComponent<BattleSystem>().cahngeCardWindow(this.gameObject, true);*//*
         }
     }*/
+    public abstract void SetData(CharacterCard card, Material material, int currentIndex);
     public bool Damage(Character chosenCharacter)
     {
         float crit = isCrit(chosenCharacter);

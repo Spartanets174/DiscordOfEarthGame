@@ -49,7 +49,7 @@ public class BuyCardDisplay : MonoBehaviour
     }
     private void UpdateMoneyText()
     {
-        moneyOfPlayer.text = "У вас денег: " + playerManager.money.ToString() + "$";
+        moneyOfPlayer.text = "У вас денег: " + playerManager.Money.ToString() + "$";
     }
 
     private void KillSequence()
@@ -60,7 +60,7 @@ public class BuyCardDisplay : MonoBehaviour
     public IEnumerator TurnOffNotEnoughtCaption()
     {
         NotEnoughtCaption.gameObject.SetActive(true);
-        NotEnoughtCaption.text = $"Не хватает: {m_chosenCard.Price - playerManager.money}$";
+        NotEnoughtCaption.text = $"Не хватает: {m_chosenCard.Price - playerManager.Money}$";
         yield return new WaitForSecondsRealtime(2);
         currentSequence = DOTween.Sequence();
         currentSequence.id = 1;
@@ -80,7 +80,7 @@ public class BuyCardDisplay : MonoBehaviour
         m_chosenCard = card;
         cardSprite.sprite = card.image;
         cardPrice.text = card.Price.ToString()+"$";
-        moneyOfPlayer.text = "У вас денег: " + playerManager.money.ToString() + "$";
+        moneyOfPlayer.text = "У вас денег: " + playerManager.Money.ToString() + "$";
 
         if (card is CharacterCard)
         {
