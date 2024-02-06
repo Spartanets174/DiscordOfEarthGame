@@ -255,7 +255,6 @@ GameObject:
   - component: {fileID: 3310927341985305901}
   - component: {fileID: 3310927341985305900}
   - component: {fileID: 260462291747854899}
-  - component: {fileID: 8997123102294777413}
   - component: {fileID: 5897724931850981017}
   - component: {fileID: 5591627553584924102}
   m_Layer: 5
@@ -336,26 +335,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33cf5a8e9af509c42b90dcd540387e95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_clicable: {fileID: 8997123102294777413}
+  outline: {fileID: 5897724931850981017}
+  roundedCorners: {fileID: 5591627553584924102}
+  blocker: {fileID: 0}
   cardSupportName: {fileID: 5369547094509203224}
   ability: {fileID: 3276856158671219405}
   rarity: {fileID: 3258436331442719567}
   image: {fileID: 900608762270651215}
   rarityImage: {fileID: 7255924568706218071}
---- !u!114 &8997123102294777413
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3310927341985305896}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c97bbc8c78aebcb4fa866a0826227136, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outline: {fileID: 5897724931850981017}
-  roundedCorners: {fileID: 5591627553584924102}
 --- !u!114 &5897724931850981017
 MonoBehaviour:
   m_ObjectHideFlags: 0

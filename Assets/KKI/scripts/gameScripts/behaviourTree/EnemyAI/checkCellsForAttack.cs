@@ -21,21 +21,21 @@ public class checkCellsForAttack : Node
         {
             GameObject character = null;
             List<GameObject> possibleEnemies = new List<GameObject>();
-           /* for (int i = 0; i < _battleSystem.EnemyCharObjects.Count; i++)
-            {
-                if (_battleSystem.EnemyCharObjects[i].GetComponent<character>().isChosen)
-                {
-                    character = _battleSystem.EnemyCharObjects[i];
-                }
-            }*/
-            if (character.GetComponent<Character>().IsAttackedOnTheMoved)
+            /* for (int i = 0; i < _battleSystem.EnemyCharObjects.Count; i++)
+             {
+                 if (_battleSystem.EnemyCharObjects[i].GetComponent<character>().isChosen)
+                 {
+                     character = _battleSystem.EnemyCharObjects[i];
+                 }
+             }*/
+            /*if (character.GetComponent<Character>().IsAttackedOnTheMoved)
             {
                 state = NodeState.FAILURE;
                 return state;
             }
             else
             {
-                /*//Перебор всех клеток на поле
+                *//*//Перебор всех клеток на поле
                 for (int i = 0; i < _battleSystem.field.CellsOfFieled.GetLength(0); i++)
                 {
                     for (int j = 0; j < _battleSystem.field.CellsOfFieled.GetLength(1); j++)
@@ -103,7 +103,7 @@ public class checkCellsForAttack : Node
                             }
                         }
                     }
-                }*/
+                }*//*
                 if (possibleEnemies.Count > 0)
                 {
                     parent.parent.SetData("target", possibleEnemies[UnityEngine.Random.Range(0, possibleEnemies.Count)]);
@@ -115,8 +115,8 @@ public class checkCellsForAttack : Node
                     state = NodeState.FAILURE;
                     return state;
                 }
-            }
-        }         
+            }*/
+        }
         state = NodeState.SUCCESS;
         return state;
     }

@@ -123,7 +123,7 @@ public class EnemyTurn : State
         }*/
         yield break;
     }
-    public override IEnumerator Attack(Character target)
+    public override IEnumerator Attack(GameObject target)
     {
         /*Логика при атаке*/
         new WaitForSeconds(1);

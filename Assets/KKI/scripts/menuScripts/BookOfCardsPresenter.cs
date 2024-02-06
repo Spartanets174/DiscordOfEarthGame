@@ -184,7 +184,9 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
             cardObject.transform.localPosition = Vector3.zero;
             cardObject.SetValues(card);
 
-            cardObject.Clicable.OnClick += characterCardDisplay.SetCharacterData;
+            cardObject.OnClick += characterCardDisplay.SetCharacterData;
+
+            cardObject.IsEnabled = true;
             characterCardObjects.Add(cardObject);
         }
     }
@@ -207,7 +209,8 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
             CardSupportDisplay cardSupportObject = Instantiate(supportCardObjectPrefab, Vector3.zero, Quaternion.identity, parentToSpawnSupportCards);
             cardSupportObject.transform.localPosition = Vector3.zero;
             cardSupportObject.SetValues(cardSupport);
-            cardSupportObject.Clicable.OnClick += supportCardDisplay.SetSupportCardData;
+            cardSupportObject.OnClick += supportCardDisplay.SetSupportCardData;
+            cardSupportObject.IsEnabled = true;
 
             supportCardObjects.Add(cardSupportObject);
         }

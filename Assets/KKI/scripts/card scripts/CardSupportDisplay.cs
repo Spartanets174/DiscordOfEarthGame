@@ -3,15 +3,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(OutlineClicableUI))]
-public class CardSupportDisplay : MonoBehaviour
+public class CardSupportDisplay : OutlineClicableUI
 {
     private CardSupport m_cardSupport;
     public CardSupport CardSupport => m_cardSupport;
 
-    [SerializeField]
-    private OutlineClicableUI m_clicable;
-    public OutlineClicableUI Clicable => m_clicable;
 
     public TextMeshProUGUI cardSupportName;
     
@@ -22,8 +18,9 @@ public class CardSupportDisplay : MonoBehaviour
 
     public void SetValues(CardSupport cardSupport)
     {
+        IsEnabled = true;
         m_cardSupport = cardSupport;
-        cardSupportName.text = m_cardSupport.name;
+        cardSupportName.text = m_cardSupport.characterName;
         image.sprite = m_cardSupport.image;
         ability.text = m_cardSupport.abilityText;
         rarity.text = m_cardSupport.rarity.ToString();

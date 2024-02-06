@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static enums;
 
 public class DeckSupportCardDisplay : MonoBehaviour
 {
@@ -44,7 +41,7 @@ public class DeckSupportCardDisplay : MonoBehaviour
             rarityImage.color = new Color(126, 0, 255);
         }
         supportImage.sprite = cardSupport.image;
-        supportCardName.text = cardSupport.name;
+        supportCardName.text = cardSupport.characterName;
     }
 
     private void DeleteCard()

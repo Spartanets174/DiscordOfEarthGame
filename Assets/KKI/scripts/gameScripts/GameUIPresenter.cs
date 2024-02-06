@@ -40,6 +40,8 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
     private GameObject gameInterface;
     [SerializeField]
     private GameObject endGameInterface;
+    [SerializeField]
+    private ChosenCharacterDeatilsDisplay chosenCharacterDeatilsDisplay;
 
 
     private List<GameCharacterCardDisplay> m_gameCharacterCards=new();
@@ -57,7 +59,7 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
             cardDisplay.transform.localPosition = Vector3.zero;
             cardDisplay.SetData(Card);
             m_gameCharacterCards.Add(cardDisplay);
-            cardDisplay.OutlineClicableUI.IsEnabled = true;
+            cardDisplay.IsEnabled = true;
         }
         foreach (var SupportCard in playerManager.DeckUserSupportCards)
         {
@@ -65,21 +67,25 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
             cardDisplay.transform.localPosition = Vector3.zero;
             cardDisplay.SetData(SupportCard);
             m_gameSupportCards.Add(cardDisplay);
-            cardDisplay.OutlineClicableUI.IsEnabled = false;
+            cardDisplay.IsEnabled = false;
         }
     }
 
+    public void SetChosenCharDeatils(Character character)
+    {
+        chosenCharacterDeatilsDisplay.SetData(character);
 
+    }
     public void OnPlayerTurnStart()
     {
         endMoveButton.interactable = true;
         foreach (var supportCard in m_gameSupportCards)
         {
-            supportCard.OutlineClicableUI.IsEnabled = true;
+            supportCard.IsEnabled = true;
         }
         foreach (var Card in m_gameCharacterCards)
         {
-            Card.OutlineClicableUI.IsEnabled = true;
+            Card.IsEnabled = true;
         }
     }
 
@@ -88,11 +94,11 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
         endMoveButton.interactable = false;
         foreach (var supportCard in m_gameSupportCards)
         {
-            supportCard.OutlineClicableUI.IsEnabled = false;
+            supportCard.IsEnabled = false;
         }
         foreach (var Card in m_gameCharacterCards)
         {
-            Card.OutlineClicableUI.IsEnabled = false;
+            Card.IsEnabled = false;
         }
     }
 
@@ -120,7 +126,7 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
         {
             if (!item.IsCharacterSpawned)
             {
-                item.OutlineClicableUI.IsEnabled = true;
+                item.IsEnabled = true;
             }
         }
     }

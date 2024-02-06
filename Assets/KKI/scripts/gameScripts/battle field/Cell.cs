@@ -1,3 +1,8 @@
+using Mono.Cecil;
+using Org.BouncyCastle.Bcpg.Sig;
+using Renci.SshNet.Security;
+using RotaryHeart.Lib.SerializableDictionary;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,12 +10,16 @@ using UnityEngine;
 public class Cell : InteractableObject
 {
     [SerializeField] private GameObject hightLight;
-    public Material baseColor, offsetColor, swampColor;
+
+    [SerializeField]
+    private ColorDictioanary colorDictionary;
+
     private MeshRenderer meshRenderer;
     public MeshRenderer MeshRenderer => meshRenderer;
 
     private BoxCollider boxCollider;
     public BoxCollider BoxCollider => boxCollider;
+
     public Vector2 CellIndex
     {
         get;
@@ -27,6 +36,7 @@ public class Cell : InteractableObject
         meshRenderer = GetComponent<MeshRenderer>();
         boxCollider = GetComponent<BoxCollider>();
         OnHoverEnter += EnableHiglight;
+        OnHover += EnableHiglight;
         OnHoverExit += DisableHiglight;
         OnClick += OnClickCell;
     }
@@ -37,38 +47,38 @@ public class Cell : InteractableObject
         OnHoverExit -= DisableHiglight;
     }
 
-    public void SetCellState(bool isOffset, bool state)
+    public void SetCellState(bool state)
     {
         IsEnabled = state;
         IsSwamp = false;
-        meshRenderer.material = isOffset ? offsetColor : baseColor;
     }
     public void SetCellSwamp(bool state)
     {
         IsEnabled = state;
-        IsSwamp = true;
-        MeshRenderer.material = swampColor;
+        IsSwamp = true;      
     }
-    public void SetActivatedCell(bool isActivated)
+
+    public void SetColor(string key, bool isOffset)
     {
-        IsEnabled = isActivated;
-        if ((CellIndex.x + CellIndex.y) % 2 == 0)
+        meshRenderer.material = colorDictionary[key].GetColor(isOffset);
+    }
+    public void SetCellMovable()
+    {
+        if (IsSwamp)
         {
-            meshRenderer.material.color = new Color(0, 1, 0);
+            SetCellSwamp(true);
+            SetColor("swamp",(CellIndex.x + CellIndex.y) % 2 == 0);
         }
         else
         {
-            meshRenderer.material.color = new Color(0, 0.5f, 0);
-        }
+            SetCellState(true);          
+            SetColor("allowed", (CellIndex.x + CellIndex.y) % 2 == 0);
+        }      
     }
 
     private void EnableHiglight()
     {
-        if (transform.childCount < 2)
-        {
-            hightLight.SetActive(true);
-        }
-
+        hightLight.SetActive(true);
     }
 
     private void OnClickCell(GameObject gameObject)
@@ -78,9 +88,23 @@ public class Cell : InteractableObject
 
     private void DisableHiglight()
     {
-        if (transform.childCount < 2)
-        {
-            hightLight.SetActive(false);
-        }
+        hightLight.SetActive(false);
+    }
+}
+
+[Serializable]
+public class ColorDictioanary : SerializableDictionaryBase<string, SwapColor> { }
+
+[Serializable]
+public class SwapColor
+{
+    [SerializeField]
+    private Material baseColor ;
+    [SerializeField]
+    private Material offsetColor;
+
+    public Material GetColor(bool isOffset)
+    {
+        return isOffset ? offsetColor : baseColor;
     }
 }

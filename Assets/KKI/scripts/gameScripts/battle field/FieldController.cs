@@ -30,17 +30,12 @@ public class FieldController : MonoBehaviour, ILoadable
                     GameObject Mountain = Instantiate(mountainPrefab, Vector3.zero, Quaternion.identity, spawnedTile.transform);
                     Mountain.transform.localPosition = new Vector3(0, 0.5f, 0);
                 }
+                spawnedTile.SetCellState(true);
+                spawnedTile.SetColor("normal",(i + j) % 2 == 0);
 
-                if ((i + j) % 2 == 1)
-                {
-                    spawnedTile.SetCellState(true, true);
-                }
-                else
-                {
-                    spawnedTile.SetCellState(false, true);
-                }
                 if ((i == 2 && j == 2)|| (i == 4 && j == 3)|| (i == 2 && j == 7)|| (i == 4 && j == 8))
                 {
+                    spawnedTile.SetColor("swamp", (i + j) % 2 == 0);
                     spawnedTile.SetCellSwamp(true);                   
                 }
                 spawnedTile.IsEnabled = true;
@@ -74,13 +69,11 @@ public class FieldController : MonoBehaviour, ILoadable
 
     public void TurnOffCells()
     {
-        Debug.Log("disabled");
         SetCellsState(false);
     }
 
     public void TurnOnCells()
     {
-        Debug.Log("enabled");
         SetCellsState(true);
     }
 
@@ -88,18 +81,12 @@ public class FieldController : MonoBehaviour, ILoadable
     {
         foreach (var cell in CellsOfFieled)
         {
-            float x = cell.CellIndex.x;
-            float y = cell.CellIndex.y;
-            if ((x + y) % 2 == 1)
+            cell.SetCellState(state);
+            cell.SetColor("normal", (cell.CellIndex.y + cell.CellIndex.x) % 2 == 0);
+
+            if (cell.IsSwamp)
             {
-                cell.SetCellState(true, state);
-            }
-            else
-            {
-                cell.SetCellState(false, state);
-            }
-            if ((x == 2 && y == 2) || (x == 4 && y == 3) || (x == 2 && y == 7) || (x == 4 && y == 8))
-            {
+                cell.SetColor("swamp", (cell.CellIndex.y + cell.CellIndex.x) % 2 == 0);
                 cell.SetCellSwamp(state);
             }
         }

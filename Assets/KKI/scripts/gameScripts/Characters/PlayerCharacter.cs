@@ -5,6 +5,13 @@ using UnityEngine;
 public class PlayerCharacter : Character
 {
     private KeyCode[] keyCodes = new KeyCode[5] { KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3, KeyCode.Alpha4, KeyCode.Alpha5 };
+    private bool m_isCurrentPlayerCharacter;
+    public bool IsCurrentPlayerCharacter
+    {
+        get => m_isCurrentPlayerCharacter;
+        set => m_isCurrentPlayerCharacter = value;
+    }
+
 
     private void Update()
     {

@@ -112,9 +112,48 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hightLight: {fileID: 6656603409439158782}
-  baseColor: {fileID: 2100000, guid: 74b68f96eccf689409081240fefc1ee4, type: 2}
-  offsetColor: {fileID: 2100000, guid: a2cfe010123e8824baa48ce9139f0d81, type: 2}
-  swampColor: {fileID: 2100000, guid: bace994669d1ec84ba8195c0e868079f, type: 2}
+  colorDictionary:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 1
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 1
+    _keyValues:
+    - normal
+    - swamp
+    - attack
+    - allowed
+    _keys:
+    - normal
+    - swamp
+    - attack
+    - allowed
+    _values:
+    - baseColor: {fileID: 2100000, guid: 74b68f96eccf689409081240fefc1ee4, type: 2}
+      offsetColor: {fileID: 2100000, guid: a2cfe010123e8824baa48ce9139f0d81, type: 2}
+    - baseColor: {fileID: 2100000, guid: bace994669d1ec84ba8195c0e868079f, type: 2}
+      offsetColor: {fileID: 2100000, guid: f0210c4878f07e2439d1df6c7338b9d6, type: 2}
+    - baseColor: {fileID: 2100000, guid: b591181343f36504c8c00fe417f1bc8e, type: 2}
+      offsetColor: {fileID: 2100000, guid: 0765c48b888bfb94b8b00e937177254a, type: 2}
+    - baseColor: {fileID: 2100000, guid: d6f0025dc485ce44e98d39d1f607140e, type: 2}
+      offsetColor: {fileID: 2100000, guid: 189528fbe2b8f3147818b54562ff47d5, type: 2}
 --- !u!1 &6656603409439158782
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,15 +4,11 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-[RequireComponent(typeof(OutlineClicableUI))]
-public class CardDisplay : MonoBehaviour
+public class CardDisplay : OutlineClicableUI
 {
     
     private CharacterCard m_card;
     public CharacterCard Card=> m_card;
-    [SerializeField]
-    private OutlineClicableUI m_clicable;
-    public OutlineClicableUI Clicable => m_clicable;
 
     public TextMeshProUGUI cardName; 
     public TextMeshProUGUI health;
@@ -25,8 +21,9 @@ public class CardDisplay : MonoBehaviour
 
     public void SetValues(CharacterCard card)
     {
+        IsEnabled = true;
         m_card = card;
-        cardName.text = m_card.name;
+        cardName.text = m_card.characterName;
         if (m_card.rarity.ToString() == "Обычная")
         {
             rarity.color = Color.gray;

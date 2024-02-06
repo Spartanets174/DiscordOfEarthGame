@@ -24,7 +24,7 @@ public class Begin : State
     {
         foreach (var gameCards in BattleSystem.GameUIPresenter.GameCharacterCardDisplays)
         {
-            gameCards.OutlineClicableUI.OnClick += BattleSystem.OnUnitStatementButton;
+            gameCards.OnClick += BattleSystem.OnUnitStatementButton;
         }
         BattleSystem.FieldController.InvokeActionOnField(AddOnCellsClick);
     }
@@ -33,7 +33,7 @@ public class Begin : State
     {
         foreach (var gameCards in BattleSystem.GameUIPresenter.GameCharacterCardDisplays)
         {
-            gameCards.OutlineClicableUI.OnClick -= BattleSystem.OnUnitStatementButton;
+            gameCards.OnClick -= BattleSystem.OnUnitStatementButton;
         }
         BattleSystem.FieldController.InvokeActionOnField(RemoveOnCellsClick);
     }
@@ -45,7 +45,6 @@ public class Begin : State
 
     private void RemoveOnCellsClick(Cell cell)
     {
-        Debug.Log("sad");
         cell.OnClick -= BattleSystem.OnMoveButton;
     }
 
@@ -53,6 +52,7 @@ public class Begin : State
     {
         GameCharacterCardDisplay cardDisplay = character.GetComponent<GameCharacterCardDisplay>();        
         BattleSystem.GameUIPresenter.SetChosenCard(cardDisplay);
+        BattleSystem.FieldController.TurnOffCells();
         BattleSystem.FieldController.InvokeActionOnField(SetActiveCells);
         yield break;
     }
@@ -61,7 +61,7 @@ public class Begin : State
     {
         if (cell.CellIndex.y == BattleSystem.FieldController.CellsOfFieled.GetLength(1) - 1 || cell.CellIndex.y == BattleSystem.FieldController.CellsOfFieled.GetLength(1) - 2)
         {
-            cell.SetActivatedCell(true);
+            cell.SetCellMovable();
         }
     }
 

@@ -5,12 +5,11 @@ public abstract class Character : OutlineInteractableObject
 {
     [SerializeField]
     protected CharacterCard m_card;
+    public CharacterCard Card => m_card;
+
     [SerializeField]
     protected HealthBar healthBar;
-    public CharacterCard Card
-    {
-        get;
-    }
+    
 
     protected string m_characterName;
     public string CharacterName => m_characterName;
@@ -28,7 +27,11 @@ public abstract class Character : OutlineInteractableObject
     public float Health => m_health;
 
     protected int m_speed;
-    public int Speed => m_speed;
+    public int Speed
+    {
+        get => m_speed;
+        set => m_speed = value;
+    }
 
     protected float m_physAttack;
     public float PhysAttack => m_physAttack;
@@ -52,9 +55,22 @@ public abstract class Character : OutlineInteractableObject
     public float CritNum => m_critNum;
 
     protected int m_index;
-    public int Index
+    public int Index => m_index;
+
+    public Vector2 PositionOnField
     {
-        get;
+        get
+        {
+            return transform.GetComponentInParent<Cell>().CellIndex;
+        }
+    }
+
+    public Cell ParentCell
+    {
+        get
+        {
+            return transform.GetComponentInParent<Cell>();
+        }
     }
 
     protected bool m_isChosen = false;
@@ -73,25 +89,20 @@ public abstract class Character : OutlineInteractableObject
 
 
     protected bool m_isAttackedOnTheMove = false;
-    public bool IsAttackedOnTheMoved => m_isAttackedOnTheMove;
+    public bool IsAttackedOnTheMove
+    {
+        get => m_isAttackedOnTheMove;
+        set => m_isAttackedOnTheMove = value;
+    }
 
-    public bool IsAttackAbilityUsed
-    {
-        get;
-        private set;
-    } = false;
-    public bool IsDefenceAbilityUsed
-    {
-        get;
-        private set;
-    } = false;
-    public bool IsBuffAbilityUsed
-    {
-        get;
-        private set;
-    } = false;
+    protected bool m_isAttackAbilityUsed = false;
+    public bool IsAttackAbilityUsed => m_isAttackAbilityUsed;
 
-    private OutlineInteractableObject outlineInteractableObject;
+    protected bool m_isDefenceAbilityUsed = false;
+    public bool IsDefenceAbilityUsed => m_isDefenceAbilityUsed;
+
+    protected bool m_isBuffAbilityUsed = false;
+    public bool IsBuffAbilityUsed => m_isBuffAbilityUsed;
 
     public event Action<Character> OnAttack;
     public event Action<Character> OnHeal;
@@ -103,7 +114,7 @@ public abstract class Character : OutlineInteractableObject
 
     void Start()
     {
-        m_characterName = m_card.name;
+        m_characterName = m_card.characterName;
         m_race = m_card.race;
         m_Class = m_card.Class;
         m_rarity = m_card.rarity;
@@ -118,24 +129,18 @@ public abstract class Character : OutlineInteractableObject
         m_critNum = m_card.critNum;
 
         OnClick += OnCharacterClickedInvoke;
-        outlineInteractableObject = GetComponent<OutlineInteractableObject>();
         IsChosen = false;
         
     }
-    /*{
-        if (!isEnemy&&!isStaticEnemy)
-        {
-            battleSystem.OnChooseCharacterButton(this.gameObject);
-        }
-        else
-        {
-            if (this.isChosen)
-            {
-                battleSystem.GetComponent<BattleSystem>().OnAttackButton(this);
-            }
-            *//*battleSystem.GetComponent<BattleSystem>().cahngeCardWindow(this.gameObject, true);*//*
-        }
-    }*/
+
+    public void ResetCharacter()
+    {
+        m_speed = m_card.speed;
+        m_isAttackedOnTheMove = false;
+        m_isAttackAbilityUsed = false;
+        m_isDefenceAbilityUsed = false;
+        m_isBuffAbilityUsed = false;
+    }
     public abstract void SetData(CharacterCard card, Material material, int currentIndex);
     public bool Damage(Character chosenCharacter)
     {
@@ -191,22 +196,23 @@ public abstract class Character : OutlineInteractableObject
 
     public void UseAtackAbility()
     {
-        IsAttackAbilityUsed = true;
+        m_isAttackAbilityUsed = true;
         OnAttackAbilityUsed?.Invoke(this);
     }
     public void UseDefenceAbility()
     {
-        IsDefenceAbilityUsed = true;
+        m_isDefenceAbilityUsed = true;
         OnDefenceAbilityUsed?.Invoke(this);
     }
     public void UseBuffAbility()
     {
-        IsBuffAbilityUsed = true;
+        m_isBuffAbilityUsed = true;
         OnBuffAbilityUsed?.Invoke(this);
     }
 
     protected void OnAttackInvoke()
     {
+        m_isAttackedOnTheMove = true;
         OnAttack?.Invoke(this);
     }
 

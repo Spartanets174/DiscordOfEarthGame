@@ -142,7 +142,7 @@ public class ShopPresenter : CardPresenter, ILoadable
             cardObject.transform.localPosition = Vector3.zero;            
             cardObject.SetValues(card);
 
-            cardObject.Clicable.OnClick += SetBuyCardWindow;
+            cardObject.OnClick += SetBuyCardWindow;
             characterCardObjects.Add(cardObject);
         } 
     }
@@ -165,7 +165,7 @@ public class ShopPresenter : CardPresenter, ILoadable
             CardSupportDisplay cardSupportObject = Instantiate(supportCardObjectPrefab, Vector3.zero, Quaternion.identity, parentToSpawnSupportCards);
             cardSupportObject.transform.localPosition = Vector3.zero;         
             cardSupportObject.SetValues(cardSupport);
-            cardSupportObject.Clicable.OnClick += SetBuyCardWindow;
+            cardSupportObject.OnClick += SetBuyCardWindow;
 
             supportCardObjects.Add(cardSupportObject);
         }

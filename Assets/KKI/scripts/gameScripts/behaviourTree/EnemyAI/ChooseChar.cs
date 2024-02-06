@@ -53,7 +53,7 @@ public class ChooseChar : Node
         }
 
     }
-    private bool isCharValid(GameObject enemy)
+ /*   private bool isCharValid(GameObject enemy)
     {
         if (!enemy.GetComponent<Character>().IsAttackedOnTheMoved || enemy.GetComponent<Character>().Speed > 0)
         {
@@ -64,5 +64,5 @@ public class ChooseChar : Node
             return false;
         }
        
-    }
+    }*/
 }

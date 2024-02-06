@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
-public class GameCharacterCardDisplay : MonoBehaviour
+public class GameCharacterCardDisplay : OutlineClicableUI
 {
     [SerializeField]
     private Image charImage;
@@ -13,10 +13,6 @@ public class GameCharacterCardDisplay : MonoBehaviour
     private Image charBuffAbilityImage;
     [SerializeField]
     private HealthBar m_charealthBar;
-
-    [SerializeField]
-    private OutlineClicableUI m_outlineClicableUI;
-    public OutlineClicableUI OutlineClicableUI => m_outlineClicableUI;
 
     private CharacterCard m_currentCharacterCard;
     public CharacterCard CurrentCharacterCard => m_currentCharacterCard;
@@ -33,7 +29,7 @@ public class GameCharacterCardDisplay : MonoBehaviour
         set
         {
             m_isCharacterSpawned = value;
-            OutlineClicableUI.IsEnabled = !value;
+            IsEnabled = !value;
         }
     }
 
@@ -44,7 +40,7 @@ public class GameCharacterCardDisplay : MonoBehaviour
         set
         {
             m_isChosen = value;
-            OutlineClicableUI.IsEnabled = value;
+            IsEnabled = value;
         }
     }
 

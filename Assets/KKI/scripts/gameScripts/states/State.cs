@@ -43,7 +43,7 @@ public abstract class State
     {
         yield break;
     }
-    public virtual IEnumerator Attack(Character target)
+    public virtual IEnumerator Attack(GameObject target)
     {
         yield break;
     }

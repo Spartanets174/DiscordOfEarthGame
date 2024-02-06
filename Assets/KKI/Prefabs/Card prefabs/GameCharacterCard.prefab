@@ -367,7 +367,6 @@ GameObject:
   - component: {fileID: 1708015023212547344}
   - component: {fileID: 1708015023212547345}
   - component: {fileID: 1708015023212547358}
-  - component: {fileID: 1708015023212547347}
   - component: {fileID: 8831260267859788294}
   m_Layer: 0
   m_Name: GameCharacterCard
@@ -485,21 +484,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   radius: 20
   image: {fileID: 1708015023212547356}
---- !u!114 &1708015023212547347
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1708015023212547354}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c97bbc8c78aebcb4fa866a0826227136, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outline: {fileID: 1708015023212547345}
-  roundedCorners: {fileID: 1708015023212547358}
-  blocker: {fileID: 5718875925729617100}
 --- !u!114 &8831260267859788294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -512,12 +496,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 401477c8957e66240938886ca6bace77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  outline: {fileID: 1708015023212547345}
+  roundedCorners: {fileID: 1708015023212547358}
+  blocker: {fileID: 5718875925729617100}
   charImage: {fileID: 1708015023457039192}
   charAttackAbilityImage: {fileID: 1708015023163211080}
   charDefenceAbilityImage: {fileID: 1708015024213260215}
   charBuffAbilityImage: {fileID: 1708015023477025917}
   m_charealthBar: {fileID: 1708015022892898995}
-  m_outlineClicableUI: {fileID: 1708015023212547347}
+  m_outlineClicableUI: {fileID: 0}
 --- !u!1 &1708015023457039174
 GameObject:
   m_ObjectHideFlags: 0

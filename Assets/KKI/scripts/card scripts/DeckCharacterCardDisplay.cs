@@ -57,7 +57,7 @@ public class DeckCharacterCardDisplay : MonoBehaviour
             rarityImage.color = new Color(126, 0, 255);
         }
         characterImage.sprite = characterCard.image;
-        characterName.text = characterCard.name;
+        characterName.text = characterCard.characterName;
         switch (characterCard.Class)
         {
             case enums.Classes.Паладин:

@@ -28,6 +28,14 @@ public class BattleSystem : StateMachine, ILoadable
 
 
     private Character currentChosenCharacter;
+    private PlayerCharacter currentPlayerCharacter;
+
+    private float m_pointsOfAction;
+    public float PointsOfAction
+    {
+        get => m_pointsOfAction;
+        set => m_pointsOfAction = value;
+    }
 
     public void Init()
     {
@@ -54,7 +62,7 @@ public class BattleSystem : StateMachine, ILoadable
         StartCoroutine(State.Move(cell));
     }
 
-    public void OnAttackButton(Character target)
+    public void OnAttackButton(GameObject target)
     {
         StartCoroutine(State.Attack(target));
     }
@@ -113,6 +121,7 @@ public class BattleSystem : StateMachine, ILoadable
         foreach (var playerChar in m_playerCharactersObjects)
         {
             playerChar.OnClick += SetCurrentChosenCharacter;
+            playerChar.OnClick += SetCurrentPlayerChosenCharacter;
             playerChar.IsEnabled = true;
         }
         foreach (var enemyChar in EnemyController.EnemyCharObjects)
@@ -131,23 +140,38 @@ public class BattleSystem : StateMachine, ILoadable
             cell.OnClick += SetCurrentChosenCharacterOnCellClick;
         }
 
-        SetState(new PlayerTurn(this));
+        SetPlayerTurn();
         /*if (cubeValue % 2 == 0)
         {
-            EnemyController.gameObject.SetActive(false);
-            SetState(new PlayerTurn(this));
+            SetPlayerTurn()
         }
         else
         {
-            EnemyController.gameObject.SetActive(true);
-            SetState(new EnemyTurn(this));
+            SetEnemyTurn()
         }*/
     }
-    private void SetCurrentChosenCharacterOnCellClick(GameObject cell)
+
+    public void SetPlayerTurn()
     {
-        SetCurrentChosenCharacter(cell.GetComponentInChildren<Character>().gameObject);
+        EnemyController.gameObject.SetActive(false);
+        SetState(new PlayerTurn(this));
     }
 
+    public void SetEnemyTurn()
+    {
+        EnemyController.gameObject.SetActive(true);
+        SetState(new EnemyTurn(this));
+    }
+
+    private void SetCurrentChosenCharacterOnCellClick(GameObject cell)
+    {
+        Character temp = cell.GetComponentInChildren<Character>();
+        if (temp!=null)
+        {
+            SetCurrentChosenCharacter(temp.gameObject);
+        }
+        
+    }
 
     private void SetCurrentChosenCharacter(GameObject character)
     {
@@ -159,6 +183,7 @@ public class BattleSystem : StateMachine, ILoadable
             }           
             currentChosenCharacter = character.GetComponent<Character>();
             currentChosenCharacter.IsChosen = true;
+            GameUIPresenter.SetChosenCharDeatils(currentChosenCharacter);
         }
         else
         {
@@ -166,7 +191,50 @@ public class BattleSystem : StateMachine, ILoadable
         }
     }
 
+    private void SetCurrentPlayerChosenCharacter(GameObject character)
+    {
+        if (character != null)
+        {
+            if (currentPlayerCharacter != null)
+            {
+                currentPlayerCharacter.IsCurrentPlayerCharacter = false;
+            }
+            currentPlayerCharacter = character.GetComponent<PlayerCharacter>();
+            currentPlayerCharacter.IsCurrentPlayerCharacter = true;
+        }
+        else
+        {
+            Debug.LogError("Нет персонажа");
+        }
+    }
 
+    public PlayerCharacter GetCurrentPlayerChosenCharacter()
+    {
+        return currentPlayerCharacter;
+    }
+
+    public Cell IsCellExist(int i, int j, Vector2 pos)
+    {
+        float newI = pos.x + i;
+        float newJ = pos.y + j;
+        if (newI >= 7 || newI < 0)
+        {
+            return null;
+        }
+        if (newJ >= 11 || newJ < 0)
+        {
+            return null;
+        }
+        if (FieldController.GetCell((int)newI, (int)newJ).transform.childCount > 1)
+        {
+            return null;
+        }
+
+        return FieldController.GetCell((int)newI, (int)newJ);
+    }
+
+    //Считает кол-во пройденных клеток от местоположения юнита игрока
+    
     /*  //Функция для проверки клеток на крестообразность
       public bool isCell(float cellCoord, float charCoord, int charFeature)
       {
@@ -180,65 +248,7 @@ public class BattleSystem : StateMachine, ILoadable
               return false;
           }
       }
-      //Считает кол-во пройденных клеток от местоположения юнита игрока
-      public float howManyCells(float cellCoord, float charCoord, string direction, Cell cell)
-      {
-          float numberOfCells = charCoord - cellCoord;
-          if (direction == "z" && numberOfCells > 0)
-          {
-              //лево
-              for (int j = Convert.ToInt32(Mathf.Abs(charCoord) - 1); j >= Mathf.Abs(cellCoord); j--)
-              {
-                  if (field.CellsOfFieled[Convert.ToInt32(Mathf.Abs(cell.transform.localPosition.x / 0.27f)), j].IsSwamp)
-                  {
-                      numberOfCells--;
-                      return Mathf.Abs((float)Math.Floor(numberOfCells));
-                  }                
-              }
-              return Mathf.Abs((float)Math.Floor(numberOfCells));
-          }
-          if (direction == "z" && numberOfCells < 0)
-          {
-              //право            
-              for (int j = Convert.ToInt32(Mathf.Abs(charCoord) + 1); j < Mathf.Abs(cellCoord); j++)
-              {
-                  if (field.CellsOfFieled[Convert.ToInt32(Mathf.Abs(cell.transform.localPosition.x / 0.27f)), j].IsSwamp)
-                  {
-                      numberOfCells--;
-                      return Mathf.Abs((float)Math.Floor(numberOfCells));
-                  }
-
-              }
-              return Mathf.Abs((float)Math.Floor(numberOfCells));
-          }        
-          if (direction == "x" && numberOfCells > 0)
-          {
-              //низ
-              for (int k = Convert.ToInt32(Mathf.Abs(charCoord) + 1); k < Mathf.Abs(cellCoord); k++)
-              {
-                  if (field.CellsOfFieled[Convert.ToInt32(Mathf.Abs(cell.transform.localPosition.z/0.27f)), k].IsSwamp)
-                  {
-                      numberOfCells--;
-                      return Mathf.Abs((float)Math.Floor(numberOfCells));
-                  }
-              }
-              return Mathf.Abs((float)Math.Floor(numberOfCells));
-          }
-          if (direction == "x" && numberOfCells < 0)
-          {
-              //верх
-              for (int k = Convert.ToInt32(Mathf.Abs(charCoord) - 1); k >= Mathf.Abs(cellCoord); k--)
-              {
-                  if (field.CellsOfFieled[Convert.ToInt32(Mathf.Abs(cell.transform.localPosition.z / 0.27f)), k].IsSwamp)
-                  {
-                      numberOfCells--;
-                      return Mathf.Abs((float)Math.Floor(numberOfCells));
-                  }
-              }
-              return Mathf.Abs((float)Math.Floor(numberOfCells));
-          }
-          return 0;
-      }
+      
       //Функция для включения и выключения нужных клеток
       public void isCellEven(bool even, bool isNormal, Cell cell)
       {

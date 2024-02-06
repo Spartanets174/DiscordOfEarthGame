@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameSupportCardDisplay : MonoBehaviour
+public class GameSupportCardDisplay : OutlineClicableUI
 {
     [SerializeField]
     private Image supportImage;
@@ -15,10 +15,6 @@ public class GameSupportCardDisplay : MonoBehaviour
     private TextMeshProUGUI supportAbility;
     [SerializeField]
     private TextMeshProUGUI supportName;
-
-    [SerializeField]
-    private OutlineClicableUI m_outlineClicableUI;
-    public OutlineClicableUI OutlineClicableUI => m_outlineClicableUI;
 
     private CardSupport m_currentCardSupport;
     public CardSupport CurrentCardSupport => m_currentCardSupport;
@@ -43,7 +39,7 @@ public class GameSupportCardDisplay : MonoBehaviour
             supportCardRarity.color = Color.gray;
         }
         supportAbility.text = cardSupport.abilityText;
-        supportName.name = cardSupport.name;
+        supportName.name = cardSupport.characterName;
 /*        cardSupport.ability.onCardSupportUsed += OnCardSupportUsed;
 */    }
 
