@@ -1,18 +1,20 @@
+using HighlightPlus;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(HighlightEffect))]
 public class OutlineInteractableObject : InteractableObject
 {
-    private Outline outline;
+    private HighlightEffect highlightEffect;
 
-    private BoxCollider boxCollider;
-    public BoxCollider BoxCollider => boxCollider;
+    private Collider m_collider;
+    public Collider Collider => m_collider;
     // Start is called before the first frame update
     void Awake()
     {
-        boxCollider = GetComponent<BoxCollider>();
-        outline = GetComponent<Outline>();
+        highlightEffect = GetComponent<HighlightEffect>();
+        m_collider = GetComponent<Collider>();
         OnHoverEnter += EnableOutline;
         OnHoverExit += DisableOutline;
     }
@@ -24,15 +26,15 @@ public class OutlineInteractableObject : InteractableObject
 
     protected void SetOutlineState(bool state)
     {
-        outline.enabled = state;
+        highlightEffect.highlighted = state;
     }
 
     protected void EnableOutline()
     {
-        outline.enabled = true;
+        highlightEffect.highlighted = true;
     }
     protected void DisableOutline()
     {
-        outline.enabled = false;
+        highlightEffect.highlighted = false;
     }
 }

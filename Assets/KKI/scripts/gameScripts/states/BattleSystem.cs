@@ -29,12 +29,17 @@ public class BattleSystem : StateMachine, ILoadable
 
     private Character currentChosenCharacter;
     private PlayerCharacter currentPlayerCharacter;
+    public PlayerCharacter CurrentPlayerCharacter => currentPlayerCharacter;
 
     private float m_pointsOfAction;
     public float PointsOfAction
     {
         get => m_pointsOfAction;
-        set => m_pointsOfAction = value;
+        set
+        {
+            m_pointsOfAction = value;
+            gameUIPresenter.SetPointsOfActionAndСube(m_pointsOfAction);
+        }
     }
 
     public void Init()
@@ -135,11 +140,6 @@ public class BattleSystem : StateMachine, ILoadable
             staticEnemyChar.IsEnabled = true;
         }
 
-        foreach (var cell in FieldController.CellsOfFieled)
-        {
-            cell.OnClick += SetCurrentChosenCharacterOnCellClick;
-        }
-
         SetPlayerTurn();
         /*if (cubeValue % 2 == 0)
         {
@@ -154,23 +154,15 @@ public class BattleSystem : StateMachine, ILoadable
     public void SetPlayerTurn()
     {
         EnemyController.gameObject.SetActive(false);
+        EnemyController.StopTree();
         SetState(new PlayerTurn(this));
     }
 
     public void SetEnemyTurn()
     {
         EnemyController.gameObject.SetActive(true);
+        EnemyController.RestartTree();
         SetState(new EnemyTurn(this));
-    }
-
-    private void SetCurrentChosenCharacterOnCellClick(GameObject cell)
-    {
-        Character temp = cell.GetComponentInChildren<Character>();
-        if (temp!=null)
-        {
-            SetCurrentChosenCharacter(temp.gameObject);
-        }
-        
     }
 
     private void SetCurrentChosenCharacter(GameObject character)
@@ -208,12 +200,7 @@ public class BattleSystem : StateMachine, ILoadable
         }
     }
 
-    public PlayerCharacter GetCurrentPlayerChosenCharacter()
-    {
-        return currentPlayerCharacter;
-    }
-
-    public Cell IsCellExist(int i, int j, Vector2 pos)
+    private Cell GetCellForMove(int i, int j, Vector2 pos)
     {
         float newI = pos.x + i;
         float newJ = pos.y + j;
@@ -225,7 +212,7 @@ public class BattleSystem : StateMachine, ILoadable
         {
             return null;
         }
-        if (FieldController.GetCell((int)newI, (int)newJ).transform.childCount > 1)
+        if (FieldController.GetCell((int)newI, (int)newJ).transform.childCount > 0)
         {
             return null;
         }
@@ -233,139 +220,40 @@ public class BattleSystem : StateMachine, ILoadable
         return FieldController.GetCell((int)newI, (int)newJ);
     }
 
-    //Считает кол-во пройденных клеток от местоположения юнита игрока
-    
-    /*  //Функция для проверки клеток на крестообразность
-      public bool isCell(float cellCoord, float charCoord, int charFeature)
-      {
-          double numberOfCells = Math.Floor(Mathf.Abs(charCoord - cellCoord));
-          if (numberOfCells <= charFeature)
-          {
-              return true;
-          }
-          else
-          {           
-              return false;
-          }
-      }
-      
-      //Функция для включения и выключения нужных клеток
-      public void isCellEven(bool even, bool isNormal, Cell cell)
-      {
-          if (isNormal)
-          {
-              if (even)
-              {
-                  cell.GetComponent<MeshRenderer>().material.color = this.field.CellsOfFieled[0, 0].baseColor.color;
-              }
-              else
-              {
-                  cell.GetComponent<MeshRenderer>().material.color = this.field.CellsOfFieled[0, 0].offsetColor.color;
-              }
-          }
-          else
-          {
-              if (even)
-              {
-                  cell.GetComponent<MeshRenderer>().material.color = new Color(0, 1, 0);
-              }
-              else
-              {
-                  cell.GetComponent<MeshRenderer>().material.color = new Color(0, 0.5f, 0);
-              }
-          }
-      }
-      //Создание руки врага
+    public List<Cell> GetCellsForMove(Character character)
+    {
+        List<Cell> cellsToMove = new();
+        bool top = true;
+        bool bottom = true;
+        bool left = true;
+        bool rigth = true;
+        for (int i = 1; i <= character.Speed; i++)
+        {
+            Cell topCell = GetCellForMove(-i, 0, character.PositionOnField);
+            Cell bottomCell = GetCellForMove(0, -i, character.PositionOnField);
+            Cell leftCell = GetCellForMove(i, 0, character.PositionOnField);
+            Cell rigtCell = GetCellForMove(0, i, character.PositionOnField);
 
-      //Есть ли уже на клетке объект
-      private bool isEnemyOnCell(GameObject cell)
-      {
-          if (cell.transform.childCount != 1)
-          {
-              return true;
-          }
-          else
-          {
-              return false;
-          }
-      }
-      //Изменение информации о герое при клике на него
-      public void cahngeCardWindow(GameObject character, bool isEnemy)
-      {
-          *//*cardImage.transform.parent.gameObject.SetActive(true);
-         healthBar.GetComponent<healthBar>().SetMaxHealth((float)character.GetComponent<character>().card.health);
-          healthBar.GetComponent<healthBar>().SetHealth((float)character.GetComponent<character>().health);
-          physAttack.text = $"Физическая атака {character.GetComponent<character>().physAttack * 100}";
-          magAttack.text = $"Магическая атака {character.GetComponent<character>().magAttack * 100}";
-          physDefence.text = $"Физическая защита {character.GetComponent<character>().physDefence * 100}";
-          magDefence.text = $"Магическая атака {character.GetComponent<character>().magDefence * 100}";
-          cardImage.sprite = character.GetComponent<character>().card.image;
-          switch (character.GetComponent<character>().Class)
-          {
-              case enums.Classes.Паладин:
-                  Class.sprite = classesSprite[0];
-                  break;
-              case enums.Classes.Лучник:
-                 Class.sprite = classesSprite[1];
-                  break;
-              case enums.Classes.Маг:
-                  Class.sprite = classesSprite[2];
-                  break;
-              case enums.Classes.Кавалерия:
-                  Class.sprite = classesSprite[3];
-                  break;
-          }
-          switch (character.GetComponent<character>().race)
-          {
-              case enums.Races.Люди:
-                  rase.text = "Л";
-                  break;
-              case enums.Races.Гномы:
-                  rase.text = "Г";
-                  break;
-              case enums.Races.Эльфы:
-                  rase.text = "Э";
-                  break;
-              case enums.Races.ТёмныеЭльфы:
-                  rase.text = "Т";
-                  break;
-              case enums.Races.МагическиеСущества:
-                  rase.text = "М";
-                  break;
-          }
-          if (isEnemy||character.GetComponent<character>().isStaticEnemy)
-          {
-              cardImage.transform.parent.transform.parent.GetComponent<Image>().color = new Color(0.9921569f, 0.8740318f, 0.8666667f, 1);
-          }
-          else
-          {
-              cardImage.transform.parent.transform.parent.GetComponent<Image>().color = new Color(0.8707209f, 0.9921569f, 0.8666667f,1);
-          }
-          for (int i = 0; i < EnemyCharObjects.Count; i++)
-          {
-              EnemyCharObjects[i].GetComponent<Outline>().enabled =false;
-          }
-          for (int i = 0; i < EnemyStaticCharObjects.Count; i++)
-          {
-              EnemyStaticCharObjects[i].GetComponent<Outline>().enabled = false;
-          }
-          character.GetComponent<Outline>().enabled = true;*//*
-      }
-      //Завершение хода игрока
-      public void endMove()
-      {        
-          SetState(new EnemyTurn(this));
-          enemyManager.enabled = true;
-          isEnemyTurn = true;
-          enemyManager.gameObject.SetActive(true);
-          enemyManager.RestartTree();
-      }
-      public void endEnemyMove()
-      {
-          enemyManager.enabled = false;
-          isEnemyTurn = false;
-          enemyManager.gameObject.SetActive(false);
-          enemyManager.StopTree();
-          SetState(new PlayerTurn(this));
-      }*/
+            top = topCell != null && top;
+            bottom = bottomCell != null && bottom;
+            rigth = rigtCell != null && rigth;
+            left = leftCell != null && left;
+
+            SetActiveCell(topCell, top, cellsToMove);
+            SetActiveCell(bottomCell, bottom, cellsToMove);
+            SetActiveCell(rigtCell, rigth, cellsToMove);
+            SetActiveCell(leftCell, left, cellsToMove);
+        }
+        return cellsToMove;
+    }
+
+    private void SetActiveCell(Cell cell, bool isAllowed, List<Cell> cellsToMove)
+    {
+        if (cell != null && isAllowed)
+        {
+            cell.SetCellMovable();
+            cellsToMove.Add(cell);
+        }
+    }
+    
 }

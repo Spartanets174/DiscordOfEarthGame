@@ -7,10 +7,10 @@ using static enums;
 public class ButtonSupportType : GroupButton
 {
     [SerializeField]
-    private typeOfSupport m_typeOfSupport;
-    public typeOfSupport TypeOfSupport => m_typeOfSupport;
+    private TypeOfSupport m_typeOfSupport;
+    public TypeOfSupport TypeOfSupport => m_typeOfSupport;
     public event Action<ButtonSupportType> OnButtonClick;
-    private typeOfSupport chosenTypeOfSupport;
+    private TypeOfSupport chosenTypeOfSupport;
     private void Start()
     {
         Init();
@@ -33,7 +33,7 @@ public class ButtonSupportType : GroupButton
         }
         else
         {
-            m_typeOfSupport = typeOfSupport.Все;
+            m_typeOfSupport = TypeOfSupport.Все;
         }
         OnButtonClick?.Invoke(this);
     }

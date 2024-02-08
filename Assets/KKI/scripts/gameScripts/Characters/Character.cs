@@ -24,7 +24,15 @@ public abstract class Character : OutlineInteractableObject
     public enums.Rarity Кarity => m_rarity;
 
     protected float m_health;
-    public float Health => m_health;
+    public float Health
+    {
+        get => m_health;
+        private set 
+        { 
+            m_health = value;
+            healthBar.SetHealth(m_health);
+        }
+    }
 
     protected int m_speed;
     public int Speed
@@ -118,7 +126,7 @@ public abstract class Character : OutlineInteractableObject
         m_race = m_card.race;
         m_Class = m_card.Class;
         m_rarity = m_card.rarity;
-        m_health = m_card.health;
+        Health = m_card.health;
         m_speed = m_card.speed;
         m_physAttack = m_card.physAttack;
         m_magAttack = m_card.magAttack;
@@ -142,39 +150,21 @@ public abstract class Character : OutlineInteractableObject
         m_isBuffAbilityUsed = false;
     }
     public abstract void SetData(CharacterCard card, Material material, int currentIndex);
-    public bool Damage(Character chosenCharacter)
+    public float Damage(Character chosenCharacter)
     {
         float crit = isCrit(chosenCharacter);
         float finalPhysDamage = ((11 + chosenCharacter.PhysAttack) * chosenCharacter.PhysAttack * crit * (chosenCharacter.PhysAttack - PhysDefence + Card.health)) / 256;
         float finalMagDamage = ((11 + chosenCharacter.MagAttack) * chosenCharacter.MagAttack * crit * (chosenCharacter.MagAttack - MagDefence + Card.health)) / 256;
         float finalDamage = Math.Max(finalMagDamage, finalPhysDamage);
-        m_health = Math.Max(0, m_health - finalDamage);
-        /*battleSystem.GameUIPresenter.SendMessage($"{chosenCharacter.name} наносит  юниту {name} {Mathf.RoundToInt(finalDamage * 100)} урона");
-         if (!this.isStaticEnemy)
-         {
-             if (!this.isEnemy)
-             {
-                 for (int i = 0; i < battleSystem.charCardsUI.Count; i++)
-                 {
-                     if (this.name == battleSystem.charCardsUI[i].GetComponent<cardCharHolde>().card.name)
-                     {
-                         battleSystem.charCardsUI[i].GetComponent<cardCharHolde>().healthBar.SetHealth(health);
-                     }
-                 }
-             }
-             else
-             {
-                this.transform.GetChild(0).transform.GetChild(0).GetComponent<healthBar>().SetHealth(health);
-             }
-         }*/
+        Health = Math.Max(0, Health - finalDamage);
+
         OnDamagedInvoke();
-        if (m_health == 0)
+        if (Health == 0)
         {
             OnDeathInvoke();
         }
-        return m_health == 0;
-    }   
-
+        return finalDamage;
+    }
     protected float isCrit(Character chosenCharacter)
     {
         float chance =  UnityEngine.Random.Range(0f,1f);
@@ -190,7 +180,7 @@ public abstract class Character : OutlineInteractableObject
 
     public void Heal(int amount)
     {
-        m_health += amount;
+        Health += amount;
         OnHeal?.Invoke(this);
     }
 

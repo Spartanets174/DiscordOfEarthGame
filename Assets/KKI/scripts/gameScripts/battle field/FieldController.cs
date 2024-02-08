@@ -9,7 +9,7 @@ public class FieldController : MonoBehaviour, ILoadable
     [SerializeField] private int width, height;
     [SerializeField] private Cell cellPrefab;
     [SerializeField] private GameObject mountainPrefab;
-    public Cell[,] CellsOfFieled ;
+    public Cell[,] CellsOfFieled;
     public void Init()
     {
         GenerateField();
@@ -24,24 +24,25 @@ public class FieldController : MonoBehaviour, ILoadable
             {
                 Cell spawnedTile = Instantiate(cellPrefab, Vector3.zero,Quaternion.identity,transform);
                 spawnedTile.name = $"Cell {i} {j}";
-                spawnedTile.transform.localPosition = new Vector3(j * -0.27f,0, i * -0.27f);
-                if ((j==4 || j==6)&&i%2!=0)
+                spawnedTile.transform.localPosition = new Vector3(j * -0.27f, 0, i * -0.27f);
+                if ((j == 4 || j == 6) && i % 2 != 0)
                 {
                     GameObject Mountain = Instantiate(mountainPrefab, Vector3.zero, Quaternion.identity, spawnedTile.transform);
                     Mountain.transform.localPosition = new Vector3(0, 0.5f, 0);
                 }
                 spawnedTile.SetCellState(true);
-                spawnedTile.SetColor("normal",(i + j) % 2 == 0);
+                spawnedTile.SetColor("normal", (i + j) % 2 == 0);
 
-                if ((i == 2 && j == 2)|| (i == 4 && j == 3)|| (i == 2 && j == 7)|| (i == 4 && j == 8))
+                if ((i == 2 && j == 2) || (i == 4 && j == 3) || (i == 2 && j == 7) || (i == 4 && j == 8))
                 {
                     spawnedTile.SetColor("swamp", (i + j) % 2 == 0);
-                    spawnedTile.SetCellSwamp(true);                   
+                    spawnedTile.SetCellSwamp(true);
                 }
                 spawnedTile.IsEnabled = true;
- 
+
                 spawnedTile.CellIndex = new Vector2(i, j);
-                CellsOfFieled[i,j] = spawnedTile;
+
+                CellsOfFieled[i, j] = spawnedTile;
             }
         }
     }

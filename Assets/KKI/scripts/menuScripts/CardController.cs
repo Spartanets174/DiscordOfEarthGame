@@ -21,8 +21,8 @@ public abstract class CardController : MonoBehaviour, ILoadable
         get => m_currentClass;
     }
 
-    private typeOfSupport m_currentTypeOfSupport;
-    public typeOfSupport CurrentTypeOfSupport 
+    private TypeOfSupport m_currentTypeOfSupport;
+    public TypeOfSupport CurrentTypeOfSupport 
         {
         get => m_currentTypeOfSupport;
     }
@@ -30,7 +30,7 @@ public abstract class CardController : MonoBehaviour, ILoadable
     {
         m_currentRace = Races.Все;
         m_currentClass = Classes.Все;
-        m_currentTypeOfSupport = typeOfSupport.Все;
+        m_currentTypeOfSupport = TypeOfSupport.Все;
         m_PlayerManager = FindAnyObjectByType<PlayerManager>();
     }
 
@@ -42,7 +42,7 @@ public abstract class CardController : MonoBehaviour, ILoadable
     {
         m_currentRace = cardRace;
     }
-    public void SetCurrentTypeOfSupport(typeOfSupport cardSupportType)
+    public void SetCurrentTypeOfSupport(TypeOfSupport cardSupportType)
     {
         m_currentTypeOfSupport = cardSupportType;
     }
@@ -73,7 +73,7 @@ public abstract class CardController : MonoBehaviour, ILoadable
     {
   
         List<CardSupport> cardsSupport = listToFilter;
-        if (CurrentTypeOfSupport != typeOfSupport.Все)
+        if (CurrentTypeOfSupport != TypeOfSupport.Все)
         {
              cardsSupport = listToFilter.Where(x => x.type == CurrentTypeOfSupport).ToList();
         }

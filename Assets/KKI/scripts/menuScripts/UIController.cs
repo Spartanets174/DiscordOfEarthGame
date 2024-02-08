@@ -108,8 +108,8 @@ public class UIController : MonoBehaviour, ILoadable
 
     private void TurnOnBookOfCards()
     {
-        shopObject.BoxCollider.enabled = false;
-        settingsObject.BoxCollider.enabled = false;
+        shopObject.Collider.enabled = false;
+        settingsObject.Collider.enabled = false;
         SetState(bookOfCards, true); 
     }
     private void MoveSettingsCaption()
@@ -125,14 +125,14 @@ public class UIController : MonoBehaviour, ILoadable
     }
     private void TurnOnShop(GameObject gameObject)
     {
-        shopObject.BoxCollider.enabled = false;
-        settingsObject.BoxCollider.enabled = false;
+        shopObject.Collider.enabled = false;
+        settingsObject.Collider.enabled = false;
         SetState(shop,true);
     }
     private void TurnOnSettings(GameObject gameObject)
     {
-        shopObject.BoxCollider.enabled = false;
-        settingsObject.BoxCollider.enabled = false;
+        shopObject.Collider.enabled = false;
+        settingsObject.Collider.enabled = false;
         SetState(settings, true);
     }
     private void TurnOnShopText()

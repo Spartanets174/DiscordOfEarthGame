@@ -6,6 +6,6 @@ using static enums;
 [CreateAssetMenu(fileName = "New ability", menuName = "Ability")]
 public class ability : ScriptableObject
 {
-    typeOfSupport type;
+    TypeOfSupport type;
 
 }

@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider))]
 public class InteractableObject : MonoBehaviour
 {
     private bool m_isEnabled;

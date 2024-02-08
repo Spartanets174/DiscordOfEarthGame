@@ -102,11 +102,12 @@ public class EnemyController : Tree, ILoadable
     public void InstantiateEnemies()
     {
         int count = 0;
+        int count2 = 0;
         //Спавн двигающихся врагов
         while (count < 5)
         {
-            GameObject Cell = fieldController.CellsOfFieled[Random.Range(0, fieldController.CellsOfFieled.GetLength(0)), Random.Range(0, 2)].gameObject;
-            if (!isEnemyOnCell(Cell))
+            Cell Cell = fieldController.GetCell(Random.Range(0, fieldController.CellsOfFieled.GetLength(0)), Random.Range(0, 2));
+            if (!IsEnemyOnCell(Cell))
             {
                 EnemyCharacter enemyCharacter = Instantiate(enemyPrefab, Vector3.zero, Quaternion.identity, Cell.transform);
                 enemyCharacter.transform.localPosition = new Vector3(0, 1, 0);
@@ -114,6 +115,11 @@ public class EnemyController : Tree, ILoadable
 
                 enemyCharacter.SetData(m_enemyCharCards[count],redMaterial, count);
                 count++;
+            }
+            count2++;
+            if (count2>100)
+            {
+                break;
             }
         }
         //Спавн статических врагов
@@ -139,9 +145,10 @@ public class EnemyController : Tree, ILoadable
             }
         }
     }
-    private bool isEnemyOnCell(GameObject cell)
+    private bool IsEnemyOnCell(Cell cell)
     {
-        if (cell.transform.childCount != 1)
+        Debug.Log(cell.transform.childCount);
+        if (cell.transform.childCount > 0)
         {
             return true;
         }

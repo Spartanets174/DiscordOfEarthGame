@@ -3,14 +3,10 @@ using Org.BouncyCastle.Bcpg.Sig;
 using Renci.SshNet.Security;
 using RotaryHeart.Lib.SerializableDictionary;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Cell : InteractableObject
 {
-    [SerializeField] private GameObject hightLight;
-
     [SerializeField]
     private ColorDictioanary colorDictionary;
 
@@ -35,16 +31,6 @@ public class Cell : InteractableObject
     {
         meshRenderer = GetComponent<MeshRenderer>();
         boxCollider = GetComponent<BoxCollider>();
-        OnHoverEnter += EnableHiglight;
-        OnHover += EnableHiglight;
-        OnHoverExit += DisableHiglight;
-        OnClick += OnClickCell;
-    }
-
-    private void OnDestroy()
-    {
-        OnHoverEnter -= EnableHiglight;
-        OnHoverExit -= DisableHiglight;
     }
 
     public void SetCellState(bool state)
@@ -74,21 +60,6 @@ public class Cell : InteractableObject
             SetCellState(true);          
             SetColor("allowed", (CellIndex.x + CellIndex.y) % 2 == 0);
         }      
-    }
-
-    private void EnableHiglight()
-    {
-        hightLight.SetActive(true);
-    }
-
-    private void OnClickCell(GameObject gameObject)
-    {
-        DisableHiglight();
-    }
-
-    private void DisableHiglight()
-    {
-        hightLight.SetActive(false);
     }
 }
 

@@ -404,13 +404,13 @@ public class DbManager : MonoBehaviour
                     switch (reader.GetString("type"))
                     {
                         case "атакующая":
-                            item.type = enums.typeOfSupport.атакующая;
+                            item.type = enums.TypeOfSupport.атакующая;
                             break;
                         case "защитная":
-                            item.type = enums.typeOfSupport.защитная;
+                            item.type = enums.TypeOfSupport.защитная;
                             break;
                         case "мобильность":
-                            item.type = enums.typeOfSupport.мобильность;
+                            item.type = enums.TypeOfSupport.мобильность;
                             break;
                     }
                     item.abilityText = reader.GetString("effect");
@@ -542,13 +542,13 @@ public class DbManager : MonoBehaviour
                     switch (reader.GetString("type"))
                     {
                         case "атакующая":
-                            item.type = enums.typeOfSupport.атакующая;
+                            item.type = enums.TypeOfSupport.атакующая;
                             break;
                         case "защитная":
-                            item.type = enums.typeOfSupport.защитная;
+                            item.type = enums.TypeOfSupport.защитная;
                             break;
                         case "мобильность":
-                            item.type = enums.typeOfSupport.мобильность;
+                            item.type = enums.TypeOfSupport.мобильность;
                             break;
                     }
                     item.abilityText = reader.GetString("effect");
@@ -836,13 +836,13 @@ public class DbManager : MonoBehaviour
                     switch (reader.GetString("type"))
                     {
                         case "атакующая":
-                            item.type = enums.typeOfSupport.атакующая;
+                            item.type = enums.TypeOfSupport.атакующая;
                             break;
                         case "защитная":
-                            item.type = enums.typeOfSupport.защитная;
+                            item.type = enums.TypeOfSupport.защитная;
                             break;
                         case "мобильность":
-                            item.type = enums.typeOfSupport.мобильность;
+                            item.type = enums.TypeOfSupport.мобильность;
                             break;
                     }
                     item.abilityText = reader.GetString("effect");

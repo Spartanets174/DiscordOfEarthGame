@@ -27,11 +27,19 @@ public static class enums
         Обычная,
         Мифическая
     }
-    public enum typeOfSupport
+    public enum TypeOfSupport
     {
         Все,
         атакующая,
         защитная,
         мобильность
+    }
+
+    public enum Directions
+    {
+        top,
+        bottom,
+        left,
+        right,
     }
 }

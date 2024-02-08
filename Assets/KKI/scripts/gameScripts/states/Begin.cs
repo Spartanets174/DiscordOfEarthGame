@@ -67,7 +67,7 @@ public class Begin : State
 
     public override IEnumerator Move(GameObject cell)
     {
-        if (cell.transform.childCount == 1)
+        if (cell.transform.childCount == 0)
         {
            
             GameCharacterCardDisplay cardDisplay = BattleSystem.GameUIPresenter.GetChosenCard();           
