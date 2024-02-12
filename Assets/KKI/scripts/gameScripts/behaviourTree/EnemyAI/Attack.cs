@@ -5,23 +5,22 @@ using BehaviourTree;
 
 public class Attack : Node
 {
-
-    private BattleSystem _battleSystem;
-    private BehaviourTree.Tree _EnemyBT;
+    BattleSystem m_battleSystem;
+    private BehaviourTree.Tree m_enemyBT;
     public Attack(BattleSystem battleSystem, EnemyController EnemyBT)
     {
-        _battleSystem = battleSystem;
-        _EnemyBT = EnemyBT;
+        m_battleSystem = battleSystem;
+        m_enemyBT = EnemyBT;
     }
 
     public override NodeState Evaluate()
     {
-        GameObject _character = (GameObject)GetData("target");
+        Character _character = (Character)GetData("enemy");
 
-        _battleSystem.OnAttackButton(_character);        
+        m_battleSystem.OnAttackButton(_character.gameObject);        
         state = NodeState.RUNNING;
-        ClearData("target");
-        _EnemyBT.RestartTree();
+        ClearData("enemy");
+        m_enemyBT.RestartTree();
         return state;
     }
     

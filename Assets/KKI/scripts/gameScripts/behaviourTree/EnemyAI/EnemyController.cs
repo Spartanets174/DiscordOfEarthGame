@@ -1,13 +1,16 @@
 using BehaviourTree;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using Tree = BehaviourTree.Tree;
 
-public class EnemyController : Tree, ILoadable
+public class EnemyController : Tree
 {
     [Header("Main sripts")]
     [SerializeField]
     private BattleSystem battleSystem;
+    [SerializeField]
+    private FieldController fieldController;
     [SerializeField]
     private PlayerData playerData;
 
@@ -44,35 +47,46 @@ public class EnemyController : Tree, ILoadable
     private List<CharacterCard> m_enemyCharCards=new();
     public List<CharacterCard> EnemyCharCards => m_enemyCharCards;
 
-    private FieldController fieldController;
-    public void Init()
-    {
-        fieldController = battleSystem.FieldController;
-    }
+    private EnemyCharacter m_currentEnemyCharacter;
+    public EnemyCharacter CurrentEnemyCharacter => m_currentEnemyCharacter;
 
-    protected override Node SetupTree()
+    public override void Init()
     {
-        Node root = new Sequence(new List<Node>
+        CreateEnemy();
+        InstantiateEnemies();
+    }
+    public override void SetupTree()
+    {
+        _root = new Sequence(new List<Node>
                 {
-                    new ChooseChar(battleSystem,true),
+                    new ChooseCharacter(this, battleSystem),
                     new Selector(new List<Node>
                     {
                         new Sequence(new List<Node>{
-                            new checkCellsForAttack(battleSystem,this),
+                            new CheckCellsForAttack(battleSystem,this),
                             new Attack(battleSystem,this),
                         }),
                         new Sequence(new List<Node>{
-                            new checkCellsForMove(battleSystem,this),
+                            new CheckCellsForMove(battleSystem,this),
                             new Movement(battleSystem,this),
                         }),
                     })
 
                 });
-        return root;
     }
 
-
-    public void CreateEnemy()
+    public override void RestartTree()
+    {
+        if (_root != null)
+        {
+            _root.Evaluate();
+        }
+        else
+        {
+            SetupTree();
+        }
+    }
+    private void CreateEnemy()
     {
         while (m_enemyCharCards.Count < 5)
         {
@@ -84,44 +98,10 @@ public class EnemyController : Tree, ILoadable
 
         }
     }
-
-    private void InstantiateStaticEnemy(CharacterCard characterCard, Material material, Cell cell)
-    {
-        StaticEnemyCharacter staticEnemyCharacter = Instantiate(staticEnemyPrefab, Vector3.zero, Quaternion.identity, cell.transform);
-        staticEnemyCharacter.transform.localPosition = new Vector3(0, 1, 0);
-        m_staticEnemyCharObjects.Add(staticEnemyCharacter);
-
-        staticEnemyCharacter.SetData(characterCard, material, m_staticEnemyCharObjects.Count-1);
-      
-     /*   //Заполнение листа с клетками для атаки
-        EnemyStaticCharObjects[EnemyStaticCharObjects.Count - 1].GetComponent<staticEnemyAttack>().listOfCellToAttack.Add(fieldController.CellsOfFieled[i, j + 1].gameObject);
-        EnemyStaticCharObjects[EnemyStaticCharObjects.Count - 1].GetComponent<staticEnemyAttack>().listOfCellToAttack.Add(fieldController.CellsOfFieled[i, j - 1].gameObject);
-        EnemyStaticCharObjects[EnemyStaticCharObjects.Count - 1].transform.GetChild(0).gameObject.SetActive(false);*/
-    }
-
-    public void InstantiateEnemies()
+    private void InstantiateEnemies()
     {
         int count = 0;
         int count2 = 0;
-        //Спавн двигающихся врагов
-        while (count < 5)
-        {
-            Cell Cell = fieldController.GetCell(Random.Range(0, fieldController.CellsOfFieled.GetLength(0)), Random.Range(0, 2));
-            if (!IsEnemyOnCell(Cell))
-            {
-                EnemyCharacter enemyCharacter = Instantiate(enemyPrefab, Vector3.zero, Quaternion.identity, Cell.transform);
-                enemyCharacter.transform.localPosition = new Vector3(0, 1, 0);
-                m_enemyCharObjects.Add(enemyCharacter);
-
-                enemyCharacter.SetData(m_enemyCharCards[count],redMaterial, count);
-                count++;
-            }
-            count2++;
-            if (count2>100)
-            {
-                break;
-            }
-        }
         //Спавн статических врагов
         for (int i = 0; i < fieldController.CellsOfFieled.GetLength(0); i++)
         {
@@ -130,7 +110,7 @@ public class EnemyController : Tree, ILoadable
                 //Спавн ассасинов
                 if ((j == 4 || j == 6) && (i == 0 || i == 6))
                 {
-                    InstantiateStaticEnemy(assasinCard, assasinMaterial, fieldController.GetCell(i,j));                   
+                    InstantiateStaticEnemy(assasinCard, assasinMaterial, fieldController.GetCell(i, j));
                 }
                 //Спавн голиафов
                 if ((j == 4 || j == 6) && (i == 2 || i == 4))
@@ -144,10 +124,29 @@ public class EnemyController : Tree, ILoadable
                 }
             }
         }
+        //Спавн двигающихся врагов
+        while (count < 5)
+        {
+            Cell Cell = fieldController.GetCell(Random.Range(0, fieldController.CellsOfFieled.GetLength(0)), Random.Range(0, 2));
+            if (!IsEnemyOnCell(Cell))
+            {
+                EnemyCharacter enemyCharacter = Instantiate(enemyPrefab, Vector3.zero, Quaternion.identity, Cell.transform);
+                enemyCharacter.transform.localPosition = new Vector3(0, 1, 0);
+                m_enemyCharObjects.Add(enemyCharacter);
+
+                enemyCharacter.SetData(m_enemyCharCards[count], redMaterial, count);
+                count++;
+            }
+            count2++;
+            if (count2 > 100)
+            {
+                break;
+            }
+        }
+
     }
     private bool IsEnemyOnCell(Cell cell)
     {
-        Debug.Log(cell.transform.childCount);
         if (cell.transform.childCount > 0)
         {
             return true;
@@ -157,4 +156,78 @@ public class EnemyController : Tree, ILoadable
             return false;
         }
     }
+    private void InstantiateStaticEnemy(CharacterCard characterCard, Material material, Cell cell)
+    {
+        StaticEnemyCharacter staticEnemyCharacter = Instantiate(staticEnemyPrefab, Vector3.zero, Quaternion.identity, cell.transform);
+        staticEnemyCharacter.transform.localPosition = new Vector3(0, 1, 0);
+        m_staticEnemyCharObjects.Add(staticEnemyCharacter);
+
+        staticEnemyCharacter.SetData(characterCard, material, m_staticEnemyCharObjects.Count-1);
+
+        SetAttackableCells(enums.Directions.top, staticEnemyCharacter);
+        SetAttackableCells(enums.Directions.bottom, staticEnemyCharacter);
+        SetAttackableCells(enums.Directions.right, staticEnemyCharacter);
+        SetAttackableCells(enums.Directions.left, staticEnemyCharacter);
+    }
+    private void SetAttackableCells(enums.Directions direction, StaticEnemyCharacter staticEnemyCharacter )
+    {
+        int newI = (int)staticEnemyCharacter.PositionOnField.x;
+        int newJ = (int)staticEnemyCharacter.PositionOnField.y;
+        
+        for (int i = 0; i < staticEnemyCharacter.Range; i++)
+        {
+            switch (direction)
+            {
+                case enums.Directions.top:
+                    newI--;
+                    break;
+                case enums.Directions.bottom:
+                    newJ--;
+                    break;
+                case enums.Directions.right:
+                    newI++;
+                    break;
+                case enums.Directions.left:
+                    newJ++;
+                    break;
+            }
+           
+            if (newI >= 7 || newI < 0)
+            {
+                break;
+            }
+            if (newJ >= 11 || newJ < 0)
+            {
+                break;
+            }
+
+            Cell cell = battleSystem.FieldController.GetCell(newI, newJ);
+            
+            if (cell.transform.childCount==0)
+            {
+                staticEnemyCharacter.CellsToAttack.Add(cell);
+            }
+            
+        }
+    }
+
+
+    public void SetCurrentEnemyChosenCharacter(EnemyCharacter character)
+    {
+        if (character != null)
+        {
+            if (m_currentEnemyCharacter != null)
+            {
+                m_currentEnemyCharacter.IsCurrentEnemyCharacter = false;
+            }
+            m_currentEnemyCharacter = character;
+            m_currentEnemyCharacter.IsCurrentEnemyCharacter = true;
+        }
+        else
+        {
+            Debug.LogError("Нет персонажа");
+        }
+    }
+
+   
 }

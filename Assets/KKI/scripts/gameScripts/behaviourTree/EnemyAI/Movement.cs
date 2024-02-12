@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using BehaviourTree;
 
@@ -14,18 +13,25 @@ public class Movement : Node
     }
     public override NodeState Evaluate()
     {
-        GameObject cell = (GameObject)GetData("target");
-        _battleSystem.StartCoroutine(StartAction());
-        _battleSystem.StopCoroutine(StartAction());
-        state = NodeState.SUCCESS;
-        ClearData("target");
-        return state;
-        IEnumerator StartAction()
+        Cell cell = (Cell)GetData("cell");
+        if (cell!=null)
         {
-            yield return new WaitForSeconds(2);
-            _battleSystem.OnMoveButton(cell.gameObject);
-            _EnemyBT.RestartTree();
+            _battleSystem.StartCoroutine(StartAction(cell));
+            state = NodeState.SUCCESS;
         }
+        else
+        {
+            state = NodeState.FAILURE;
+        }
+        
+        ClearData("cell");
+        return state;      
     }
    
+    private IEnumerator StartAction(Cell cell)
+    {
+        yield return new WaitForSeconds(2);
+        _battleSystem.OnMoveButton(cell.gameObject);
+        _EnemyBT.RestartTree();
+    }
 }

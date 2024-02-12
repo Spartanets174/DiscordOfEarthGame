@@ -25,7 +25,8 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
 
     [Space, Header("Action UI")]
     [SerializeField]
-    private Button endMoveButton;
+    private Button m_endMoveButton;
+    public Button EndMoveButton=> m_endMoveButton;
     [SerializeField]
     private Button toMenuButton;
 
@@ -78,7 +79,7 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
     }
     public void OnPlayerTurnStart()
     {
-        endMoveButton.interactable = true;
+        m_endMoveButton.interactable = true;
         foreach (var supportCard in m_gameSupportCards)
         {
             supportCard.IsEnabled = true;
@@ -91,7 +92,7 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
 
     public void OnEnemyTurnStart()
     {
-        endMoveButton.interactable = false;
+        m_endMoveButton.interactable = false;
         foreach (var supportCard in m_gameSupportCards)
         {
             supportCard.IsEnabled = false;

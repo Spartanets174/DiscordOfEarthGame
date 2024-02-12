@@ -1,3 +1,5 @@
+using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +16,11 @@ public class HealthBar : MonoBehaviour
     }
     public void SetHealth(float health)
     {
-        slider.value = health;
+        DOTween.To(()=> { return slider.value; }, SetSliderValue, health,1f);
     }
 
+    private void SetSliderValue(float x)
+    {
+        slider.value = x;
+    }
 }

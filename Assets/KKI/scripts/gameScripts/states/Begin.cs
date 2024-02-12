@@ -9,9 +9,7 @@ public class Begin : State
     public override IEnumerator Start()
     {
         BattleSystem.GameUIPresenter.AddMessageToGameLog($"Начните расстановку юнитов.");        
-        BattleSystem.EnemyController.CreateEnemy();
-        BattleSystem.EnemyController.InstantiateEnemies();
-
+       
         OnStepStarted += AddUnitStatementAction;
         OnStepCompleted += RemoveUnitStatementAction;
 

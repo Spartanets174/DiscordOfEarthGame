@@ -45,6 +45,7 @@ public class BattleSystem : StateMachine, ILoadable
     public void Init()
     {
         FieldController.InvokeActionOnField(AddOnCellClick);
+        gameUIPresenter.EndMoveButton.onClick.AddListener(SetEnemyTurn);
 
         SetState(new Begin(this));
     }
@@ -140,15 +141,14 @@ public class BattleSystem : StateMachine, ILoadable
             staticEnemyChar.IsEnabled = true;
         }
 
-        SetPlayerTurn();
-        /*if (cubeValue % 2 == 0)
+        if (cubeValue % 2 == 0)
         {
-            SetPlayerTurn()
+            SetPlayerTurn();
         }
         else
         {
-            SetEnemyTurn()
-        }*/
+            SetEnemyTurn();
+        }
     }
 
     public void SetPlayerTurn()
@@ -161,7 +161,6 @@ public class BattleSystem : StateMachine, ILoadable
     public void SetEnemyTurn()
     {
         EnemyController.gameObject.SetActive(true);
-        EnemyController.RestartTree();
         SetState(new EnemyTurn(this));
     }
 
@@ -251,7 +250,10 @@ public class BattleSystem : StateMachine, ILoadable
     {
         if (cell != null && isAllowed)
         {
-            cell.SetCellMovable();
+            if (State is PlayerTurn)
+            {
+                cell.SetCellMovable();
+            }           
             cellsToMove.Add(cell);
         }
     }

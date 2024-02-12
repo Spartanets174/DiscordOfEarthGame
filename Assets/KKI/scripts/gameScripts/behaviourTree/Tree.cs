@@ -5,36 +5,18 @@ using UnityEngine;
 
 namespace BehaviourTree
 {
-    public abstract class Tree : MonoBehaviour
+    public abstract class Tree : MonoBehaviour, ILoadable
     {
-        private Node _root = null;
-        protected void Start()
-        {
-            _root = SetupTree();
-            RestartTree();
-        }
-       /* private void Update()
-        {
-            if (_root!=null)
-            {
-                _root.Evaluate();
-            }
-        }*/
-        public void RestartTree()
-        {
-            if (_root != null)
-            {
-                _root.Evaluate();
-            }
-            else
-            {
-                _root = SetupTree();
-            }
-        }
+        protected Node _root = null;
+
+        public abstract void Init();
+
+        public abstract void RestartTree();
+        
         public void StopTree()
         {
             _root = null;
         }
-        protected abstract Node SetupTree();
+        public abstract void SetupTree();
     }
 }

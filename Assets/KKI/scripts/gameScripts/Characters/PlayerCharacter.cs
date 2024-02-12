@@ -23,6 +23,7 @@ public class PlayerCharacter : Character
     
     public override void SetData(CharacterCard card, Material material, int index)
     {
+        base.SetData(card, material, index);
         m_index = index;
         healthBar.SetHealth(card.health);
         healthBar.SetMaxHealth(card.health);

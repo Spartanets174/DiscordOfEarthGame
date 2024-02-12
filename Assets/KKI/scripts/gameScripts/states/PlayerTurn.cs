@@ -2,11 +2,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
-using UnityEngine.UI;
+
+
 [Serializable]
 public class PlayerTurn : State
 {
@@ -26,6 +24,11 @@ public class PlayerTurn : State
         BattleSystem.GameUIPresenter.OnPlayerTurnStart();
         BattleSystem.FieldController.TurnOnCells();
         BattleSystem.PointsOfAction = 20;
+
+        foreach (var staticEnemy in BattleSystem.EnemyController.StaticEnemyCharObjects)
+        {
+            staticEnemy.AttackPlayerCharacters(BattleSystem);
+        }
 
         OnStepStarted += OnPlayerTurnStarted;
         OnStepCompleted += OnPlayerTurnCompleted;
@@ -92,7 +95,6 @@ public class PlayerTurn : State
         SetAttackableCells(character.PositionOnField, enums.Directions.bottom, character);
         SetAttackableCells(character.PositionOnField, enums.Directions.right, character);
         SetAttackableCells(character.PositionOnField, enums.Directions.left, character);
-        Debug.Log(enemiesToAttack.Count);
     }
     private void SetAttackableCells(Vector2 pos, enums.Directions direction, Character character)
     {
@@ -147,82 +149,7 @@ public class PlayerTurn : State
             }
             
         }
-
-        /*if (cell == null) return;
-
-        Enemy enemy = cell.GetComponentInChildren<Enemy>();
-        if (isAllowed && enemy != null)
-        {
-            cell.SetColor("attack", (cell.CellIndex.y + cell.CellIndex.x) % 2 == 0);
-            enemiesToAttack.Add(enemy);
-        }*/
     }
-    /* public List<Enemy> SetEnemiesForAttack(Character character)
-     {
-         List<Enemy> enemiesToAttack = new();
-
-         bool top = true;
-         bool bottom = true;
-         bool left = true;
-         bool rigth = true;
-
-         for (int i = 1; i <= character.Range; i++)
-         {
-             Cell topCell = GetCellForAttack(-i, 0, character.PositionOnField);
-             Cell bottomCell = GetCellForAttack(0, -i, character.PositionOnField);
-             Cell leftCell = GetCellForAttack(i, 0, character.PositionOnField);
-             Cell rigtCell = GetCellForAttack(0, i, character.PositionOnField);
-
-             top = topCell != null && top && !character.IsAttackedOnTheMove;
-             bottom = bottomCell != null && bottom && !character.IsAttackedOnTheMove;
-             rigth = rigtCell != null && rigth && !character.IsAttackedOnTheMove;
-             left = leftCell != null && left && !character.IsAttackedOnTheMove;
-
-             SetAttackableCell(topCell, top, enemiesToAttack);
-             SetAttackableCell(bottomCell, bottom, enemiesToAttack);
-             SetAttackableCell(leftCell, rigth, enemiesToAttack);
-             SetAttackableCell(rigtCell, left, enemiesToAttack);
-         }
-         return enemiesToAttack;
-     }*/
-
-    /* private void SetAttackableCell(Cell cell, bool isAllowed, List<Enemy> enemiesToAttack)
-     {
-         if (cell == null) return;
-
-         Enemy enemy = cell.GetComponentInChildren<Enemy>();
-         if (isAllowed && enemy != null)
-         {
-             cell.SetColor("attack", (cell.CellIndex.y + cell.CellIndex.x) % 2 == 0);
-             enemiesToAttack.Add(enemy);
-         }
-     }
-
-     private Cell GetCellForAttack(int i, int j, Vector2 pos)
-     {
-         float newI = pos.x + i;
-         float newJ = pos.y + j;
-         if (newI >= 7 || newI < 0)
-         {
-             return null;
-         }
-         if (newJ >= 11 || newJ < 0)
-         {
-             return null;
-         }
-
-         Cell cell = BattleSystem.FieldController.GetCell((int)newI, (int)newJ);
-         Enemy enemy = cell.GetComponentInChildren<Enemy>();
-         if (cell.transform.childCount > 0)
-         {
-             if (enemy == null && BattleSystem.CurrentPlayerCharacter.Class != enums.Classes.Маг)
-             {
-                 return null;
-             }
-         }
-
-         return cell;
-     }*/
 
     public override IEnumerator Move(GameObject cell)
     {
@@ -230,6 +157,8 @@ public class PlayerTurn : State
         PlayerCharacter playerCharacter = BattleSystem.CurrentPlayerCharacter;
         Vector2 pos = playerCharacter.PositionOnField;
         float numOfCells = Mathf.Abs((pos.x+pos.y) - (currentCell.CellIndex.x + currentCell.CellIndex.y));
+
+
 
         if (numOfCells <= BattleSystem.PointsOfAction)
         {
@@ -241,6 +170,10 @@ public class PlayerTurn : State
             {
                 playerCharacter.transform.SetParent(currentCell.transform);
                 playerCharacter.transform.localPosition = new Vector3(0, 1, 0);
+                foreach (var staticEnemy in BattleSystem.EnemyController.StaticEnemyCharObjects)
+                {
+                    staticEnemy.AttackPlayerCharacter(BattleSystem, playerCharacter);
+                }
             }) ;
             
 
@@ -285,7 +218,7 @@ public class PlayerTurn : State
                     BattleSystem.EnemyController.EnemyCharObjects.Remove((EnemyCharacter)currentTarget);
                 }
                 GameObject.Destroy(currentTarget.gameObject);
-                BattleSystem.GameUIPresenter.AddMessageToGameLog($"Вражеский юнит {target.name} убит");
+                BattleSystem.GameUIPresenter.AddMessageToGameLog($"Вражеский юнит {currentTarget.CharacterName} убит");
             }
 
             foreach (var item in cellsToMove)
@@ -299,8 +232,6 @@ public class PlayerTurn : State
 
             if (BattleSystem.EnemyController.EnemyCharObjects.Count == 0)
             {
-                BattleSystem.EnemyController.gameObject.SetActive(false);
-                BattleSystem.EnemyController.StopTree();
                 BattleSystem.SetState(new Won(BattleSystem));
             }
 

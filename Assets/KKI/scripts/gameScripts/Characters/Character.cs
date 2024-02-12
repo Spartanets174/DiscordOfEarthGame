@@ -120,8 +120,17 @@ public abstract class Character : OutlineInteractableObject
     public event Action<Character> OnDefenceAbilityUsed;
     public event Action<Character> OnBuffAbilityUsed;
 
-    void Start()
+    public void ResetCharacter()
     {
+        m_speed = m_card.speed;
+        m_isAttackedOnTheMove = false;
+        m_isAttackAbilityUsed = false;
+        m_isDefenceAbilityUsed = false;
+        m_isBuffAbilityUsed = false;
+    }
+    public virtual void SetData(CharacterCard card, Material material, int currentIndex)
+    {
+        m_card = card;
         m_characterName = m_card.characterName;
         m_race = m_card.race;
         m_Class = m_card.Class;
@@ -138,18 +147,7 @@ public abstract class Character : OutlineInteractableObject
 
         OnClick += OnCharacterClickedInvoke;
         IsChosen = false;
-        
     }
-
-    public void ResetCharacter()
-    {
-        m_speed = m_card.speed;
-        m_isAttackedOnTheMove = false;
-        m_isAttackAbilityUsed = false;
-        m_isDefenceAbilityUsed = false;
-        m_isBuffAbilityUsed = false;
-    }
-    public abstract void SetData(CharacterCard card, Material material, int currentIndex);
     public float Damage(Character chosenCharacter)
     {
         float crit = isCrit(chosenCharacter);

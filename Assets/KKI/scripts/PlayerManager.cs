@@ -11,7 +11,7 @@ public class PlayerManager:MonoBehaviour, ILoadable
     public List<CharacterCard> AllCharCards => m_allCharCards;
 
     private List<CardSupport> m_allSupportCards = new();
-    public List<CardSupport> ФllSupportCards => m_allSupportCards;
+    public List<CardSupport> AllSupportCards => m_allSupportCards;
 
     private List<CharacterCard> m_allShopCharCards = new();
     public List<CharacterCard> AllShopCharCards => m_allShopCharCards;
