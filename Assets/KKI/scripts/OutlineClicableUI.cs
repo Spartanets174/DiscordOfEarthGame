@@ -11,7 +11,7 @@ public class OutlineClicableUI : MonoBehaviour, IPointerExitHandler, IPointerEnt
     [SerializeField]
     private ImageWithRoundedCorners roundedCorners;
     [SerializeField]
-    private GameObject blocker;
+    protected GameObject blocker;
 
     public event Action<GameObject> OnClick;
     public event Action OnHoverExit;

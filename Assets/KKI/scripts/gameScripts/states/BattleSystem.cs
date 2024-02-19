@@ -151,13 +151,14 @@ public class BattleSystem : StateMachine, ILoadable
         }
     }
 
+    [ContextMenu("SetPlayerTurn")]
     public void SetPlayerTurn()
     {
         EnemyController.gameObject.SetActive(false);
         EnemyController.StopTree();
         SetState(new PlayerTurn(this));
     }
-
+    [ContextMenu("SetEnemyTurn")]
     public void SetEnemyTurn()
     {
         EnemyController.gameObject.SetActive(true);

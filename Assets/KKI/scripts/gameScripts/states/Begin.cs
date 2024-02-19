@@ -12,6 +12,7 @@ public class Begin : State
        
         OnStepStarted += AddUnitStatementAction;
         OnStepCompleted += RemoveUnitStatementAction;
+        BattleSystem.GameUIPresenter.SetDragAllowToSupportCards(false);
 
         BattleSystem.FieldController.TurnOffCells();
         OnStepStartedInvoke();

@@ -1,6 +1,9 @@
+using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,11 +35,23 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
 
     [Space, Header("Info UI")]
     [SerializeField]
+    private TextMeshProUGUI tipsText;
+    [SerializeField]
     private TextMeshProUGUI gameLog;
     [SerializeField]
     private TextMeshProUGUI pointsOfActionAnd—ube;
     [SerializeField]
     private TextMeshProUGUI endGameText;
+
+    [Space, Header("GameObjects")]
+    [SerializeField]
+    private GameObject tipsTextParent;
+    [SerializeField]
+    private GameObject centerBlocker;
+    [SerializeField]
+    private GameObject topBlocker;
+    [SerializeField]
+    private GameObject bottomBlocker;
     [SerializeField]
     private GameObject gameInterface;
     [SerializeField]
@@ -54,6 +69,8 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
 
     public void Init()
     {
+        SetBlockersState(false);
+        tipsTextParent.SetActive(false);
         foreach (var Card in playerManager.DeckUserCharCards)
         {
             GameCharacterCardDisplay cardDisplay = Instantiate(gameCharacterCardPrefab, Vector3.zero, Quaternion.identity, gameCharacterCardsParent);
@@ -66,9 +83,53 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
         {
             GameSupportCardDisplay cardDisplay = Instantiate(gameSupportCardPrefab, Vector3.zero, Quaternion.identity, gameSupportCardsParent);
             cardDisplay.transform.localPosition = Vector3.zero;
+
+            cardDisplay.DragAndDropComponent.OnBeginDragEvent += OnBeginDrag;
+            cardDisplay.DragAndDropComponent.OnEndDragEvent += OnEndDrag;
+            cardDisplay.DragAndDropComponent.StartPos = cardDisplay.transform.localPosition;
+
+            StartCoroutine(SetDataDelayed(cardDisplay.DragAndDropComponent));
+
             cardDisplay.SetData(SupportCard);
             m_gameSupportCards.Add(cardDisplay);
             cardDisplay.IsEnabled = false;
+        }
+    }
+
+    private IEnumerator SetDataDelayed(DragAndDropComponent dragAndDropComponent)
+    {
+        yield return new WaitForEndOfFrame();
+        dragAndDropComponent.StartPos = dragAndDropComponent.transform.localPosition;
+    }
+
+    public void SetDragAllowToSupportCards(bool state)
+    {
+        foreach (var cardDisplay in m_gameSupportCards)
+        {
+            cardDisplay.DragAndDropComponent.IsAllowedToDrag = state;
+        }
+    }
+
+    private void OnBeginDrag(GameObject gameObject)
+    {
+        tipsTextParent.SetActive(true);
+        SetBlockersState(true);
+        SetTipsText("œÂÂÚ‡˘ËÚÂ Í‡ÚÛ ‚ Ó·Î‡ÒÚ¸");
+    }
+
+    private void OnEndDrag(GameObject gameObject)
+    {
+        tipsTextParent.SetActive(false);
+        SetBlockersState(false);
+        SetTipsText("");
+    }
+
+    private void OnDestroy()
+    {
+        foreach (var cardDisplay in m_gameSupportCards)
+        {
+            cardDisplay.DragAndDropComponent.OnBeginDragEvent -= OnBeginDrag;
+            cardDisplay.DragAndDropComponent.OnBeginDragEvent -= OnEndDrag;
         }
     }
 
@@ -106,6 +167,11 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
     public void AddMessageToGameLog(string message)
     {
         gameLog.text = gameLog.text.Insert(0, message + "\n");
+    }
+
+    public void SetTipsText(string message)
+    {
+        tipsText.text = message;
     }
 
     public void SetPointsOfActionAnd—ube(float value)
@@ -154,5 +220,10 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
         return null;
     }
 
-
+    private void SetBlockersState(bool state)
+    {
+        topBlocker.SetActive(state);
+        bottomBlocker.SetActive(state);
+        centerBlocker.SetActive(state);
+    }
 }

@@ -7,6 +7,7 @@ namespace BehaviourTree
 {
     public abstract class Tree : MonoBehaviour, ILoadable
     {
+        
         protected Node _root = null;
 
         public abstract void Init();

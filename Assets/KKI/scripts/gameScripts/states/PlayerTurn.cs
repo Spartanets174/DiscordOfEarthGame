@@ -20,6 +20,7 @@ public class PlayerTurn : State
         /*Логика при выборе старте*/
         new WaitForSecondsRealtime(1f);
 
+        BattleSystem.GameUIPresenter.SetDragAllowToSupportCards(true);
         BattleSystem.GameUIPresenter.AddMessageToGameLog("Ваш ход.");
         BattleSystem.GameUIPresenter.OnPlayerTurnStart();
         BattleSystem.FieldController.TurnOnCells();

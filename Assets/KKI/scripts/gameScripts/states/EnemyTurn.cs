@@ -15,6 +15,7 @@ public class EnemyTurn : State
     {
         new WaitForSecondsRealtime(1f);
 
+        BattleSystem.GameUIPresenter.SetDragAllowToSupportCards(false);
         BattleSystem.GameUIPresenter.AddMessageToGameLog("Ход противника.");
         BattleSystem.GameUIPresenter.OnEnemyTurnStart();
         BattleSystem.FieldController.TurnOnCells();

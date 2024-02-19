@@ -1,4 +1,5 @@
 using BehaviourTree;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,23 +21,25 @@ public class CheckCellsForAttack : Node
         EnemyCharacter enemyCharacter = m_EnemyBT.CurrentEnemyCharacter;
         SetEnemiesForAttack(enemyCharacter);
 
-        if (enemyCharacter.IsAttackedOnTheMove||m_battleSystem.PointsOfAction<2)
+        if (enemyCharacter.IsAttackedOnTheMove)
         {
             state = NodeState.FAILURE;
             return state;
         }
         else
         {
-            Debug.Log(enemiesToAttack.Count);
+            Debug.Log($"{enemiesToAttack.Count}" );
             if (enemiesToAttack.Count > 0)
             {
-                parent.parent.SetData("enemy", enemiesToAttack[Random.Range(0, enemiesToAttack.Count)]);
+                parent.parent.SetData("enemy", enemiesToAttack[UnityEngine.Random.Range(0, enemiesToAttack.Count)]);
                 state = NodeState.SUCCESS;
+                Debug.Log($"{state}");
                 return state;
             }
             else
             {
                 state = NodeState.FAILURE;
+                Debug.Log($"{state}");
                 return state;
             }
         }

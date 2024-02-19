@@ -15,10 +15,18 @@ public class ChooseCharacter : Node
     public override NodeState Evaluate()
     {
         EnemyCharacter enemyCharacter = ChooseChar();
-        m_battleSystem.OnChooseCharacterButton(enemyCharacter.gameObject);
-
-        state = NodeState.SUCCESS;
-        return state;
+        Debug.Log(enemyCharacter.CharacterName);
+        if (enemyCharacter!=null)
+        {
+            m_battleSystem.OnChooseCharacterButton(enemyCharacter.gameObject);
+            state = NodeState.SUCCESS;
+            return state;
+        }
+        else
+        {
+            state = NodeState.FAILURE;
+            return state;
+        }       
     }
     public EnemyCharacter ChooseChar()
     {
