@@ -1,8 +1,5 @@
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,13 +19,18 @@ public class GameSupportCardDisplay : OutlineClicableUI
 
     private CardSupport m_currentCardSupport;
     public CardSupport CurrentCardSupport => m_currentCardSupport;
-
-    private void Start()
-    {       
+    private BaseSupportÑardAbility m_gameSupportÑardAbility;
+    public BaseSupportÑardAbility GameSupportÑardAbility => m_gameSupportÑardAbility;
+    private void Awake()
+    {
         m_dragAndDropComponent.OnBeginDragEvent += OnBeginDrag;
         m_dragAndDropComponent.OnEndDragEvent += OnEndDrag;
+        m_dragAndDropComponent.OnDropEvent += OnDrop;
     }
-
+    private void OnDrop(GameObject gameObject)
+    {
+        m_gameSupportÑardAbility.SelectCard();
+    }
     private void OnBeginDrag(GameObject gameObject)
     {
         SetBlockerState(true);
@@ -50,8 +52,8 @@ public class GameSupportCardDisplay : OutlineClicableUI
         m_currentCardSupport = cardSupport;
         supportImage.sprite = cardSupport.image;
 
-        if (cardSupport.rarity == enums.Rarity.Ìèôè÷åñêàÿ) 
-        { 
+        if (cardSupport.rarity == enums.Rarity.Ìèôè÷åñêàÿ)
+        {
             supportCardRarity.color = new Color(126, 0, 255);
         }
         else
@@ -60,6 +62,18 @@ public class GameSupportCardDisplay : OutlineClicableUI
         }
 
         supportAbility.text = cardSupport.abilityText;
-        supportName.name = cardSupport.characterName;      
+        supportName.text = cardSupport.cardName;
+
+        if (cardSupport.GameSupportÑardAbility != null)
+        {
+
+            if (cardSupport.GameSupportÑardAbility.Type != null)
+            {
+                gameObject.AddComponent(cardSupport.GameSupportÑardAbility.Type);
+                m_gameSupportÑardAbility = (BaseSupportÑardAbility)gameObject.GetComponent(cardSupport.GameSupportÑardAbility.Type);
+            }
+
+        }
+
     }
 }

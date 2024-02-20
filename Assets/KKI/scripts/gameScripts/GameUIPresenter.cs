@@ -86,20 +86,44 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
 
             cardDisplay.DragAndDropComponent.OnBeginDragEvent += OnBeginDrag;
             cardDisplay.DragAndDropComponent.OnEndDragEvent += OnEndDrag;
+            
             cardDisplay.DragAndDropComponent.StartPos = cardDisplay.transform.localPosition;
 
             StartCoroutine(SetDataDelayed(cardDisplay.DragAndDropComponent));
 
             cardDisplay.SetData(SupportCard);
+            if (cardDisplay.GameSupportÑardAbility !=null)
+            {
+                cardDisplay.GameSupportÑardAbility.OnSupportCardAbilityUsed += OnSupportCardAbilityUsed;
+
+            }
+            
+
             m_gameSupportCards.Add(cardDisplay);
             cardDisplay.IsEnabled = false;
         }
+    }
+
+    private void OnSupportCardAbilityUsed()
+    {
+        tipsTextParent.SetActive(false);
+        SetBlockersState(false);
+        SetTipsText("");
     }
 
     private IEnumerator SetDataDelayed(DragAndDropComponent dragAndDropComponent)
     {
         yield return new WaitForEndOfFrame();
         dragAndDropComponent.StartPos = dragAndDropComponent.transform.localPosition;
+        dragAndDropComponent.OnDropEvent += OnDropEvent;
+        
+    }
+
+    private void OnDropEvent(GameObject gameObject)
+    {
+        SetBlockersState(false);
+        m_gameSupportCards.Remove(gameObject.GetComponent<GameSupportCardDisplay>());
+        Destroy(gameObject);
     }
 
     public void SetDragAllowToSupportCards(bool state)
@@ -130,6 +154,12 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
         {
             cardDisplay.DragAndDropComponent.OnBeginDragEvent -= OnBeginDrag;
             cardDisplay.DragAndDropComponent.OnBeginDragEvent -= OnEndDrag;
+            cardDisplay.DragAndDropComponent.OnDropEvent-= OnDropEvent;
+            if (cardDisplay.GameSupportÑardAbility != null)
+            {
+                cardDisplay.GameSupportÑardAbility.OnSupportCardAbilityUsed -= OnSupportCardAbilityUsed;
+
+            }
         }
     }
 

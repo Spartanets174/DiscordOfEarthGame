@@ -20,7 +20,7 @@ public class CardSupportDisplay : OutlineClicableUI
     {
         IsEnabled = true;
         m_cardSupport = cardSupport;
-        cardSupportName.text = m_cardSupport.characterName;
+        cardSupportName.text = m_cardSupport.cardName;
         image.sprite = m_cardSupport.image;
         ability.text = m_cardSupport.abilityText;
         rarity.text = m_cardSupport.rarity.ToString();

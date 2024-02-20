@@ -41,7 +41,7 @@ public class DeckSupportCardDisplay : MonoBehaviour
             rarityImage.color = new Color(126, 0, 255);
         }
         supportImage.sprite = cardSupport.image;
-        supportCardName.text = cardSupport.characterName;
+        supportCardName.text = cardSupport.cardName;
     }
 
     private void DeleteCard()

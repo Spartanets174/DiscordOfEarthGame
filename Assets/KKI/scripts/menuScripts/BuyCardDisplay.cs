@@ -76,7 +76,7 @@ public class BuyCardDisplay : MonoBehaviour
 
     public void SetCardInfo(Card card)
     {
-        cardName.text = card.characterName;
+        cardName.text = card.cardName;
         m_chosenCard = card;
         cardSprite.sprite = card.image;
         cardPrice.text = card.Price.ToString()+"$";

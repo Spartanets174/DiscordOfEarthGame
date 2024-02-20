@@ -11,6 +11,7 @@ public class PlayerTurn : State
     private List<Cell> cellsToMove = new();
     private List<Enemy> enemiesToAttack = new();
 
+
     public PlayerTurn(BattleSystem battleSystem) : base(battleSystem)
     {
     }
@@ -25,6 +26,11 @@ public class PlayerTurn : State
         BattleSystem.GameUIPresenter.OnPlayerTurnStart();
         BattleSystem.FieldController.TurnOnCells();
         BattleSystem.PointsOfAction = 20;
+
+        foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
+        {
+            SupportCard.IsEnabled = true;
+        }
 
         foreach (var staticEnemy in BattleSystem.EnemyController.StaticEnemyCharObjects)
         {
@@ -43,16 +49,33 @@ public class PlayerTurn : State
         yield break;
     }
 
-    private void OnPlayerTurnStarted()
+    public void OnPlayerTurnStarted()
     {
+        foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
+        {
+            SupportCard.DragAndDropComponent.OnDropEvent += OnDropEvent;
+        }
+
         foreach (var playerCharacter in BattleSystem.PlayerCharactersObjects)
         {
             playerCharacter.OnClick += BattleSystem.OnChooseCharacterButton;
         }
     }
 
-    private void OnPlayerTurnCompleted()
+    private void OnDropEvent(GameObject gameObject)
     {
+        foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
+        {
+            SupportCard.IsEnabled = false;
+        }
+    }
+
+    public void OnPlayerTurnCompleted()
+    {
+        foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
+        {
+            SupportCard.DragAndDropComponent.OnDropEvent -= OnDropEvent;
+        }
         foreach (var playerCharacter in BattleSystem.PlayerCharactersObjects)
         {
             playerCharacter.OnClick -= BattleSystem.OnChooseCharacterButton;

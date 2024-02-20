@@ -36,6 +36,6 @@ public class ChosenSupportCardDisplay : MonoBehaviour
         }
         supportCardRarityText.text = cardSupport.rarity.ToString();
         supportCardAbility.text = $"Способность: {cardSupport.abilityText}";
-        supportCardName.text = cardSupport.characterName;
+        supportCardName.text = cardSupport.cardName;
     }
 }

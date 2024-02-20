@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 public class Begin : State
 { 
@@ -12,7 +13,7 @@ public class Begin : State
        
         OnStepStarted += AddUnitStatementAction;
         OnStepCompleted += RemoveUnitStatementAction;
-        BattleSystem.GameUIPresenter.SetDragAllowToSupportCards(false);
+        BattleSystem.GameUIPresenter.SetDragAllowToSupportCards(false);        
 
         BattleSystem.FieldController.TurnOffCells();
         OnStepStartedInvoke();

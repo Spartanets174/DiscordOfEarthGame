@@ -131,7 +131,7 @@ public abstract class Character : OutlineInteractableObject
     public virtual void SetData(CharacterCard card, Material material, int currentIndex)
     {
         m_card = card;
-        m_characterName = m_card.characterName;
+        m_characterName = m_card.cardName;
         m_race = m_card.race;
         m_Class = m_card.Class;
         m_rarity = m_card.rarity;

@@ -23,7 +23,7 @@ public class CardDisplay : OutlineClicableUI
     {
         IsEnabled = true;
         m_card = card;
-        cardName.text = m_card.characterName;
+        cardName.text = m_card.cardName;
         if (m_card.rarity.ToString() == "Обычная")
         {
             rarity.color = Color.gray;

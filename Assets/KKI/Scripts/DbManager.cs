@@ -212,7 +212,7 @@ public class DbManager : MonoBehaviour
             {
                 critChance = critChance.Replace(",", ".");
             }
-            string query = $"insert into gamedb.characters(char_name, race, class, rarity, desctiption, health, speed ,p_attack,m_attack,char_range,p_defence,m_defence,crit_possibility,crit,passive,special_1,special_2,special_3,path) values('{playerData.allCharCards[i].characterName}','{playerData.allCharCards[i].race}','{playerData.allCharCards[i].Class}','{playerData.allCharCards[i].rarity}','{playerData.allCharCards[i].description}',{playerData.allCharCards[i].health},{playerData.allCharCards[i].speed},{playerData.allCharCards[i].physAttack},{playerData.allCharCards[i].magAttack},{playerData.allCharCards[i].range},{playerData.allCharCards[i].physDefence},{playerData.allCharCards[i].magDefence},{critChance},{crit},'{playerData.allCharCards[i].passiveAbility}','{playerData.allCharCards[i].attackAbility}','{playerData.allCharCards[i].defenceAbility}','{playerData.allCharCards[i].buffAbility}','{playerData.allCharCards[i].image.name}')";
+            string query = $"insert into gamedb.characters(char_name, race, class, rarity, desctiption, health, speed ,p_attack,m_attack,char_range,p_defence,m_defence,crit_possibility,crit,passive,special_1,special_2,special_3,path) values('{playerData.allCharCards[i].cardName}','{playerData.allCharCards[i].race}','{playerData.allCharCards[i].Class}','{playerData.allCharCards[i].rarity}','{playerData.allCharCards[i].description}',{playerData.allCharCards[i].health},{playerData.allCharCards[i].speed},{playerData.allCharCards[i].physAttack},{playerData.allCharCards[i].magAttack},{playerData.allCharCards[i].range},{playerData.allCharCards[i].physDefence},{playerData.allCharCards[i].magDefence},{critChance},{crit},'{playerData.allCharCards[i].passiveAbility}','{playerData.allCharCards[i].attackAbility}','{playerData.allCharCards[i].defenceAbility}','{playerData.allCharCards[i].buffAbility}','{playerData.allCharCards[i].image.name}')";
             var command = new MySqlCommand(query, con);
             try
             {
@@ -240,7 +240,7 @@ public class DbManager : MonoBehaviour
                 while (reader.Read())
                 {
                     CharacterCard item = new CharacterCard();
-                    item.characterName = reader.GetString("char_name");
+                    item.cardName = reader.GetString("char_name");
 
                     switch (reader.GetString("race"))
                     {
@@ -355,7 +355,7 @@ public class DbManager : MonoBehaviour
     {
         for (int i = 0; i < playerData.allSupportCards.Count; i++)
         {
-            string query = $"insert into gamedb.cards(race,name,effect,type,rarity,path, price) values('{playerData.allSupportCards[i].race}','{playerData.allSupportCards[i].characterName}','{playerData.allSupportCards[i].abilityText}','{playerData.allSupportCards[i].type}','{playerData.allSupportCards[i].rarity}','{playerData.allSupportCards[i].characterName}',{playerData.allSupportCards[i].Price})";
+            string query = $"insert into gamedb.cards(race,name,effect,type,rarity,path, price) values('{playerData.allSupportCards[i].race}','{playerData.allSupportCards[i].cardName}','{playerData.allSupportCards[i].abilityText}','{playerData.allSupportCards[i].type}','{playerData.allSupportCards[i].rarity}','{playerData.allSupportCards[i].cardName}',{playerData.allSupportCards[i].Price})";
             var command = new MySqlCommand(query, con);
             try
             {
@@ -382,7 +382,7 @@ public class DbManager : MonoBehaviour
                 while (reader.Read())
                 {
                     CardSupport item = new CardSupport();
-                    item.characterName = reader.GetString("name");
+                    item.cardName = reader.GetString("name");
                     switch (reader.GetString("race"))
                     {
                         case "Люди":
@@ -520,7 +520,7 @@ public class DbManager : MonoBehaviour
                 while (reader.Read())
                 {
                     CardSupport item = new CardSupport();
-                    item.characterName = reader.GetString("name");
+                    item.cardName = reader.GetString("name");
                     switch (reader.GetString("race"))
                     {
                         case "Люди":
@@ -656,7 +656,7 @@ public class DbManager : MonoBehaviour
                 while (reader.Read())
                 {
                     CharacterCard item = new CharacterCard();
-                    item.characterName = reader.GetString("char_name");
+                    item.cardName = reader.GetString("char_name");
 
                     switch (reader.GetString("race"))
                     {
@@ -814,7 +814,7 @@ public class DbManager : MonoBehaviour
                 while (reader.Read())
                 {
                     CardSupport item = new CardSupport();
-                    item.characterName = reader.GetString("name");
+                    item.cardName = reader.GetString("name");
                     switch (reader.GetString("race"))
                     {
                         case "Люди":
@@ -950,7 +950,7 @@ public class DbManager : MonoBehaviour
                 while (reader.Read())
                 {
                     CharacterCard item = new CharacterCard();
-                    item.characterName = reader.GetString("char_name");
+                    item.cardName = reader.GetString("char_name");
 
                     switch (reader.GetString("race"))
                     {

@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class Card : ScriptableObject
 {
     [Space, Header("Info")]
-    public string characterName;
+    public string cardName;
     public string description;
     public enums.Races race;
     public Sprite image;

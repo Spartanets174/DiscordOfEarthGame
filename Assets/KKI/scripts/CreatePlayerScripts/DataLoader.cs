@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using System.Linq;
 
 public class DataLoader : MonoBehaviour, ILoadable
 {
@@ -53,9 +53,14 @@ public class DataLoader : MonoBehaviour, ILoadable
         List<CharacterCard> CardOfPlayer = DB.SelectFromChars();
         List<CardSupport> CardSupportOfPlayer = DB.SelectFromCardsSupport();
 
+        playerData.allCharCards = playerData.allCharCards.OrderBy(x => x.cardName).ToList();
+        CardOfPlayer = CardOfPlayer.OrderBy(x => x.cardName).ToList();
+        playerData.allSupportCards = playerData.allSupportCards.OrderBy(x => x.cardName).ToList();
+        CardSupportOfPlayer = CardSupportOfPlayer.OrderBy(x => x.cardName).ToList();
+
         for (int i = 0; i < playerData.allCharCards.Count; i++)
         {
-            playerData.allCharCards[i].characterName = CardOfPlayer[i].characterName;
+            playerData.allCharCards[i].cardName = CardOfPlayer[i].cardName;
             playerData.allCharCards[i].race = CardOfPlayer[i].race;
             playerData.allCharCards[i].Class = CardOfPlayer[i].Class;
             playerData.allCharCards[i].rarity = CardOfPlayer[i].rarity;
@@ -76,9 +81,11 @@ public class DataLoader : MonoBehaviour, ILoadable
             playerData.allCharCards[i].Price = CardOfPlayer[i].Price;
             playerData.allCharCards[i].id = CardOfPlayer[i].id;
         }
+
+        
         for (int i = 0; i < playerData.allSupportCards.Count; i++)
         {
-            playerData.allSupportCards[i].characterName = CardSupportOfPlayer[i].characterName;
+            playerData.allSupportCards[i].cardName = CardSupportOfPlayer[i].cardName;
             playerData.allSupportCards[i].race = CardSupportOfPlayer[i].race;
             playerData.allSupportCards[i].type = CardSupportOfPlayer[i].type;
             /*Debug.Log($"{playerData.allSupportCards[i].image},{CardSupportOfPlayer[i].image}");*/
@@ -104,34 +111,34 @@ public class DataLoader : MonoBehaviour, ILoadable
         playerData.allShopCharCards.Clear();
         for (int i = 0; i < CardOfShopPlayer.Count; i++)
         {
-            if (CardOfShopPlayer[i].characterName == "Бесстрашный \"Страж\"")
+            if (CardOfShopPlayer[i].cardName == "Бесстрашный \"Страж\"")
             {
-                CardOfShopPlayer[i].characterName = "Бесстрашный Страж";
+                CardOfShopPlayer[i].cardName = "Бесстрашный Страж";
             }
-            CharacterCard card = Resources.Load<CharacterCard>($"cards/characters/{CardOfShopPlayer[i].characterName}");
+            CharacterCard card = Resources.Load<CharacterCard>($"cards/characters/{CardOfShopPlayer[i].cardName}");
             playerData.allShopCharCards.Add(card);
         }
         playerData.allShopSupportCards.Clear();
         for (int i = 0; i < CardSupportOfShopPlayer.Count; i++)
         {
-            CardSupport CardSupport = Resources.Load<CardSupport>($"cards/support/{CardSupportOfShopPlayer[i].characterName}");
+            CardSupport CardSupport = Resources.Load<CardSupport>($"cards/support/{CardSupportOfShopPlayer[i].cardName}");
             playerData.allShopSupportCards.Add(CardSupport);
         }
 
         playerData.allUserCharCards.Clear();
         for (int i = 0; i < OwnedCardOfPlayer.Count; i++)
         {
-            if (OwnedCardOfPlayer[i].characterName == "Бесстрашный \"Страж\"")
+            if (OwnedCardOfPlayer[i].cardName == "Бесстрашный \"Страж\"")
             {
-                OwnedCardOfPlayer[i].characterName = "Бесстрашный Страж";
+                OwnedCardOfPlayer[i].cardName = "Бесстрашный Страж";
             }
-            CharacterCard card = Resources.Load<CharacterCard>($"cards/characters/{OwnedCardOfPlayer[i].characterName}");
+            CharacterCard card = Resources.Load<CharacterCard>($"cards/characters/{OwnedCardOfPlayer[i].cardName}");
             playerData.allUserCharCards.Add(card);
         }
         playerData.allUserSupportCards.Clear();
         for (int i = 0; i < OwnedCardSupportOfPlayer.Count; i++)
         {
-            CardSupport CardSupport = Resources.Load<CardSupport>($"cards/support/{OwnedCardSupportOfPlayer[i].characterName}");
+            CardSupport CardSupport = Resources.Load<CardSupport>($"cards/support/{OwnedCardSupportOfPlayer[i].cardName}");
             playerData.allUserSupportCards.Add(CardSupport);
         }
     }
@@ -146,9 +153,14 @@ public class DataLoader : MonoBehaviour, ILoadable
         List<CharacterCard> CardOfPlayer = DB.SelectFromChars();
         List<CardSupport> CardSupportOfPlayer = DB.SelectFromCardsSupport();
 
+        playerData.allCharCards = playerData.allCharCards.OrderBy(x => x.cardName).ToList();
+        CardOfPlayer = CardOfPlayer.OrderBy(x => x.cardName).ToList();
+        playerData.allSupportCards = playerData.allSupportCards.OrderBy(x => x.cardName).ToList();
+        CardSupportOfPlayer = CardSupportOfPlayer.OrderBy(x => x.cardName).ToList();
+
         for (int i = 0; i < playerData.allCharCards.Count; i++)
         {
-            playerData.allCharCards[i].characterName = CardOfPlayer[i].characterName;
+            playerData.allCharCards[i].cardName = CardOfPlayer[i].cardName;
             playerData.allCharCards[i].race = CardOfPlayer[i].race;
             playerData.allCharCards[i].Class = CardOfPlayer[i].Class;
             playerData.allCharCards[i].rarity = CardOfPlayer[i].rarity;
@@ -171,7 +183,7 @@ public class DataLoader : MonoBehaviour, ILoadable
         }
         for (int i = 0; i < playerData.allSupportCards.Count; i++)
         {
-            playerData.allSupportCards[i].characterName = CardSupportOfPlayer[i].characterName;
+            playerData.allSupportCards[i].cardName = CardSupportOfPlayer[i].cardName;
             playerData.allSupportCards[i].race = CardSupportOfPlayer[i].race;
             playerData.allSupportCards[i].type = CardSupportOfPlayer[i].type;
             playerData.allSupportCards[i].image = CardSupportOfPlayer[i].image;
@@ -189,34 +201,34 @@ public class DataLoader : MonoBehaviour, ILoadable
         playerData.allShopCharCards.Clear();
         for (int i = 0; i < CardOfShopPlayer.Count; i++)
         {
-            if (CardOfShopPlayer[i].characterName == "Бесстрашный \"Страж\"")
+            if (CardOfShopPlayer[i].cardName == "Бесстрашный \"Страж\"")
             {
-                CardOfShopPlayer[i].characterName = "Бесстрашный Страж";
+                CardOfShopPlayer[i].cardName = "Бесстрашный Страж";
             }
-            CharacterCard card = Resources.Load<CharacterCard>($"cards/characters/{CardOfShopPlayer[i].characterName}");
+            CharacterCard card = Resources.Load<CharacterCard>($"cards/characters/{CardOfShopPlayer[i].cardName}");
             playerData.allShopCharCards.Add(card);
         }
         playerData.allShopSupportCards.Clear();
         for (int i = 0; i < CardSupportOfShopPlayer.Count; i++)
         {
-            CardSupport CardSupport = Resources.Load<CardSupport>($"cards/support/{CardSupportOfShopPlayer[i].characterName}");
+            CardSupport CardSupport = Resources.Load<CardSupport>($"cards/support/{CardSupportOfShopPlayer[i].cardName}");
             playerData.allShopSupportCards.Add(CardSupport);
         }
 
         playerData.allUserCharCards.Clear();
         for (int i = 0; i < OwnedCardOfPlayer.Count; i++)
         {
-            if (OwnedCardOfPlayer[i].characterName == "Бесстрашный \"Страж\"")
+            if (OwnedCardOfPlayer[i].cardName == "Бесстрашный \"Страж\"")
             {
-                OwnedCardOfPlayer[i].characterName = "Бесстрашный Страж";
+                OwnedCardOfPlayer[i].cardName = "Бесстрашный Страж";
             }
-            CharacterCard card = Resources.Load<CharacterCard>($"cards/characters/{OwnedCardOfPlayer[i].characterName}");
+            CharacterCard card = Resources.Load<CharacterCard>($"cards/characters/{OwnedCardOfPlayer[i].cardName}");
             playerData.allUserCharCards.Add(card);
         }
         playerData.allUserSupportCards.Clear();
         for (int i = 0; i < OwnedCardSupportOfPlayer.Count; i++)
         {
-            CardSupport CardSupport = Resources.Load<CardSupport>($"cards/support/{OwnedCardSupportOfPlayer[i].characterName}");
+            CardSupport CardSupport = Resources.Load<CardSupport>($"cards/support/{OwnedCardSupportOfPlayer[i].cardName}");
             playerData.allUserSupportCards.Add(CardSupport);
         }
 
