@@ -52,7 +52,7 @@ public class BattleSystem : StateMachine, ILoadable
 
     private void AddOnCellClick(Cell cell)
     {
-        cell.OnClick += FieldController.TurnOnCells;
+        cell.OnClick += x => { FieldController.TurnOnCells(); };
     }
 
     public void OnUnitStatementButton(GameObject character)
@@ -220,14 +220,14 @@ public class BattleSystem : StateMachine, ILoadable
         return FieldController.GetCell((int)newI, (int)newJ);
     }
 
-    public List<Cell> GetCellsForMove(Character character)
+    public List<Cell> GetCellsForMove(Character character, int numberOfCells)
     {
         List<Cell> cellsToMove = new();
         bool top = true;
         bool bottom = true;
         bool left = true;
         bool rigth = true;
-        for (int i = 1; i <= character.Speed; i++)
+        for (int i = 1; i <= numberOfCells; i++)
         {
             Cell topCell = GetCellForMove(-i, 0, character.PositionOnField);
             Cell bottomCell = GetCellForMove(0, -i, character.PositionOnField);

@@ -12,14 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f07b7677596d73a42b7bae752aea67b3, type: 3}
   m_Name: "\u0422\u0430\u0439\u043D\u0430\u044F \u0442\u0440\u043E\u043F\u0430"
   m_EditorClassIdentifier: 
-  name: "\u0422\u0430\u0439\u043D\u0430\u044F \u0442\u0440\u043E\u043F\u0430"
+  cardName: "\u0422\u0430\u0439\u043D\u0430\u044F \u0442\u0440\u043E\u043F\u0430"
   description: 
   race: 2
   image: {fileID: 21300000, guid: c642609a13d7d8741bf7671ddd6695a4, type: 3}
   rarity: 1
-  Price: 543
-  id: 0
-  type: 2
-  ability: "\u041F\u0435\u0440\u0435\u043C\u0435\u0449\u0430\u0435\u0442 \u0433\u0435\u0440\u043E\u044F
+  Price: 654
+  id: 22
+  type: 3
+  abilityText: "\u041F\u0435\u0440\u0435\u043C\u0435\u0449\u0430\u0435\u0442 \u0433\u0435\u0440\u043E\u044F
     \u043D\u0430 3 \u043A\u043B\u0435\u0442\u043A\u0438, \u043D\u0435 \u0442\u0440\u0430\u0442\u044F
     \u041E\u0414"
+  "m_gameSupport\u0421ardAbility":
+    GuidAssignmentFailed: 0
+    GUID: 6d34241f318bc794791faf60efa5558d
+    _typeNameAndAssembly: SecretPathSupportCardAbility, Assembly-CSharp
+    _suppressLogs: 0

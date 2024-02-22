@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6688806995402944095}
   - component: {fileID: 8942622942012439245}
   m_Layer: 0
-  m_Name: Cell
+  m_Name: SwampCell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -144,14 +144,14 @@ MonoBehaviour:
     - attack
     - allowed
     _values:
-    - baseColor: {fileID: 2100000, guid: 74b68f96eccf689409081240fefc1ee4, type: 2}
-      offsetColor: {fileID: 2100000, guid: a2cfe010123e8824baa48ce9139f0d81, type: 2}
+    - baseColor: {fileID: 2100000, guid: bace994669d1ec84ba8195c0e868079f, type: 2}
+      offsetColor: {fileID: 2100000, guid: f0210c4878f07e2439d1df6c7338b9d6, type: 2}
     - baseColor: {fileID: 2100000, guid: b591181343f36504c8c00fe417f1bc8e, type: 2}
       offsetColor: {fileID: 2100000, guid: 0765c48b888bfb94b8b00e937177254a, type: 2}
     - baseColor: {fileID: 2100000, guid: d6f0025dc485ce44e98d39d1f607140e, type: 2}
       offsetColor: {fileID: 2100000, guid: 189528fbe2b8f3147818b54562ff47d5, type: 2}
-  transitionCost: 1
-  m_isSwamp: 0
+  transitionCost: 2
+  m_isSwamp: 1
 --- !u!114 &6688806995402944095
 MonoBehaviour:
   m_ObjectHideFlags: 0

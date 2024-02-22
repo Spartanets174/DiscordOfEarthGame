@@ -47,18 +47,32 @@ public class EnemyTurn : State
 
     public override IEnumerator Move(GameObject cell)
     {
-        Cell currentCell = cell.GetComponent<Cell>();
+        Cell cellToMove = cell.GetComponent<Cell>();
         EnemyCharacter enemyCharacter = BattleSystem.EnemyController.CurrentEnemyCharacter;
-        Vector2 pos = enemyCharacter.PositionOnField;
-        float numOfCells = Mathf.Abs((pos.x + pos.y) - (currentCell.CellIndex.x + currentCell.CellIndex.y));
+        Cell currentCell = enemyCharacter.GetComponentInParent<Cell>();
+        int moveCost = BattleSystem.FieldController.GetMoveCost(currentCell, cellToMove,BattleSystem.State);
 
-        BattleSystem.PointsOfAction -= numOfCells;
-        enemyCharacter.Speed -= Convert.ToInt32(numOfCells);
+        if (moveCost > BattleSystem.PointsOfAction)
+        {
+            Debug.Log("Недостаточно очков действий");
+            new WaitForSecondsRealtime(1f);
+            yield break;
+        }
 
-        Vector3 currentCellPos = currentCell.transform.position;
-        enemyCharacter.transform.SetParent(currentCell.transform);
-        enemyCharacter.transform.DOMove(new Vector3(currentCellPos.x, enemyCharacter.transform.position.y, currentCellPos.z), 0.5f).OnComplete(() =>
-        {           
+        if (moveCost > enemyCharacter.Speed)
+        {
+            Debug.Log("Недостаточно скорости у персонажа");
+            new WaitForSecondsRealtime(1f);
+            yield break;
+        }
+
+        BattleSystem.PointsOfAction -= moveCost;
+        enemyCharacter.Speed -= Convert.ToInt32(moveCost);
+
+        Vector3 cellToMovePos = cellToMove.transform.position;
+        enemyCharacter.transform.SetParent(cellToMove.transform);
+        enemyCharacter.transform.DOMove(new Vector3(cellToMovePos.x, enemyCharacter.transform.position.y, cellToMovePos.z), 0.5f).OnComplete(() =>
+        {
             enemyCharacter.transform.localPosition = new Vector3(0, 1, 0);
 
             foreach (var staticEnemy in BattleSystem.EnemyController.StaticEnemyCharObjects)
@@ -71,6 +85,7 @@ public class EnemyTurn : State
         {
             BattleSystem.SetPlayerTurn();
         }
+
         new WaitForSecondsRealtime(1f);
         yield break;
     }

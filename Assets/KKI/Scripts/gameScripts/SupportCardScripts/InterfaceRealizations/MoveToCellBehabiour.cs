@@ -20,7 +20,6 @@ public class MoveToCellBehaviour : ICardUsable
         Cell currentCell = gameObject.GetComponent<Cell>();
         Character character = battleSystem.State is PlayerTurn?battleSystem.CurrentPlayerCharacter: battleSystem.EnemyController.CurrentEnemyCharacter;
         Vector2 pos = character.PositionOnField;
-        float numOfCells = Mathf.Abs((pos.x + pos.y) - (currentCell.CellIndex.x + currentCell.CellIndex.y));
 
         Vector3 currentCellPos = currentCell.transform.position;
         character.transform.DOMove(new Vector3(currentCellPos.x, character.transform.position.y, currentCellPos.z), 0.5f).OnComplete(() =>

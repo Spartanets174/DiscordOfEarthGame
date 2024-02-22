@@ -6,9 +6,9 @@ using UnityEngine;
 public class SelectAllPlayerUnitsBehaviour : ICardSelectable
 {
     private BattleSystem battleSystem;
-    private string m_selectCardTipText;
     public event Action OnSelected;
 
+    private string m_selectCardTipText;
     public string SelectCardTipText
     {
         get

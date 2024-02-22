@@ -10,6 +10,26 @@ public class Cell : InteractableObject
     [SerializeField]
     private ColorDictioanary colorDictionary;
 
+    [SerializeField]
+    private int transitionCost;
+
+    [SerializeField]
+    private bool m_isSwamp;
+    public bool IsSwamp => m_isSwamp;
+
+    private int m_transitionCostEnemy;
+    public int TransitionCostEnemy
+    {
+        get => m_transitionCostEnemy;
+        set => m_transitionCostEnemy = value;
+    }
+    private int m_transitionCostPlayer;
+    public int TransitionCostPlayer
+    {
+        get => m_transitionCostPlayer;
+        set => m_transitionCostPlayer = value;
+    }
+
     private MeshRenderer meshRenderer;
     public MeshRenderer MeshRenderer => meshRenderer;
 
@@ -22,13 +42,11 @@ public class Cell : InteractableObject
         set;
     }
 
-    public bool IsSwamp
-    {
-        get;
-        set;
-    }
     private void Awake()
     {
+        TransitionCostEnemy = transitionCost;
+        TransitionCostPlayer = transitionCost;
+
         meshRenderer = GetComponent<MeshRenderer>();
         boxCollider = GetComponent<BoxCollider>();
     }
@@ -36,12 +54,6 @@ public class Cell : InteractableObject
     public void SetCellState(bool state)
     {
         IsEnabled = state;
-        IsSwamp = false;
-    }
-    public void SetCellSwamp(bool state)
-    {
-        IsEnabled = state;
-        IsSwamp = true;      
     }
 
     public void SetColor(string key, bool isOffset)
@@ -50,16 +62,8 @@ public class Cell : InteractableObject
     }
     public void SetCellMovable()
     {
-        if (IsSwamp)
-        {
-            SetCellSwamp(true);
-            SetColor("swamp",(CellIndex.x + CellIndex.y) % 2 == 0);
-        }
-        else
-        {
-            SetCellState(true);          
-            SetColor("allowed", (CellIndex.x + CellIndex.y) % 2 == 0);
-        }      
+        SetCellState(true);
+        SetColor("allowed", (CellIndex.x + CellIndex.y) % 2 == 0);
     }
 }
 

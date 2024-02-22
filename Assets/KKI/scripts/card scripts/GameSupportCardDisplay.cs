@@ -45,6 +45,7 @@ public class GameSupportCardDisplay : OutlineClicableUI
     {
         m_dragAndDropComponent.OnBeginDragEvent -= OnBeginDrag;
         m_dragAndDropComponent.OnEndDragEvent -= OnEndDrag;
+        m_dragAndDropComponent.OnDropEvent -= OnDrop;
     }
 
     public void SetData(CardSupport cardSupport)

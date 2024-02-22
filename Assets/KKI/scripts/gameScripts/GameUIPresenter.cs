@@ -59,6 +59,7 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
     [SerializeField]
     private ChosenCharacterDeatilsDisplay chosenCharacterDeatilsDisplay;
 
+    private GameSupportCardDisplay currentGameSupportCardDisplay;
 
     private List<GameCharacterCardDisplay> m_gameCharacterCards=new();
     public List<GameCharacterCardDisplay> GameCharacterCardDisplays => m_gameCharacterCards;
@@ -94,6 +95,8 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
             cardDisplay.SetData(SupportCard);
             if (cardDisplay.GameSupportÑardAbility !=null)
             {
+                cardDisplay.GameSupportÑardAbility.OnSupportCardAbilitySelected += OnSupportCardAbilitySelected;
+                cardDisplay.GameSupportÑardAbility.OnSupportCardAbilityCharacterSelected += OnSupportCardAbilityCharacterSelected;
                 cardDisplay.GameSupportÑardAbility.OnSupportCardAbilityUsed += OnSupportCardAbilityUsed;
 
             }
@@ -103,12 +106,26 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
             cardDisplay.IsEnabled = false;
         }
     }
-
-    private void OnSupportCardAbilityUsed()
+    private void OnSupportCardAbilitySelected(ICardSelectable selectable)
     {
+        SetTipsText($"{selectable.SelectCardTipText}");
+    }
+    private void OnSupportCardAbilityCharacterSelected(ICharacterSelectable uharacterSelectable)
+    {
+        SetTipsText($"{uharacterSelectable.SelectCharacterTipText}");
+    }
+    private void OnSupportCardAbilityUsed(ICardUsable usable)
+    {
+        m_gameSupportCards.Remove(currentGameSupportCardDisplay);
+        Destroy(currentGameSupportCardDisplay);
         tipsTextParent.SetActive(false);
         SetBlockersState(false);
         SetTipsText("");
+
+        foreach (var cardDisplay in m_gameSupportCards)
+        {
+            cardDisplay.DragAndDropComponent.StartPos = cardDisplay.DragAndDropComponent.transform.localPosition;
+        }
     }
 
     private IEnumerator SetDataDelayed(DragAndDropComponent dragAndDropComponent)
@@ -121,9 +138,9 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
 
     private void OnDropEvent(GameObject gameObject)
     {
+        gameObject.SetActive(false);
         SetBlockersState(false);
-        m_gameSupportCards.Remove(gameObject.GetComponent<GameSupportCardDisplay>());
-        Destroy(gameObject);
+
     }
 
     public void SetDragAllowToSupportCards(bool state)

@@ -99,7 +99,7 @@ public class PlayerTurn : State
         }
 
         BattleSystem.FieldController.TurnOffCells();
-        cellsToMove = BattleSystem.GetCellsForMove(playerCharacter);
+        cellsToMove = BattleSystem.GetCellsForMove(playerCharacter, playerCharacter.Speed);
         SetEnemiesForAttack(playerCharacter);
 
         foreach (var item in cellsToMove)
@@ -177,36 +177,12 @@ public class PlayerTurn : State
 
     public override IEnumerator Move(GameObject cell)
     {
-        Cell currentCell = cell.GetComponent<Cell>();
+        Cell cellToMove = cell.GetComponent<Cell>();
         PlayerCharacter playerCharacter = BattleSystem.CurrentPlayerCharacter;
-        Vector2 pos = playerCharacter.PositionOnField;
-        float numOfCells = Mathf.Abs((pos.x+pos.y) - (currentCell.CellIndex.x + currentCell.CellIndex.y));
+        Cell currentCell = playerCharacter.GetComponentInParent<Cell>();
+        /*float numOfCells = Mathf.Abs((pos.x+pos.y) - (currentCell.CellIndex.x + currentCell.CellIndex.y));*/
 
-
-
-        if (numOfCells <= BattleSystem.PointsOfAction)
-        {
-            BattleSystem.PointsOfAction -= numOfCells;
-            playerCharacter.Speed -= Convert.ToInt32(numOfCells);
-
-            Vector3 currentCellPos = currentCell.transform.position;
-            playerCharacter.transform.DOMove(new Vector3(currentCellPos.x, playerCharacter.transform.position.y, currentCellPos.z),0.5f).OnComplete(() =>
-            {
-                playerCharacter.transform.SetParent(currentCell.transform);
-                playerCharacter.transform.localPosition = new Vector3(0, 1, 0);
-                foreach (var staticEnemy in BattleSystem.EnemyController.StaticEnemyCharObjects)
-                {
-                    staticEnemy.AttackPlayerCharacter(BattleSystem, playerCharacter);
-                }
-            }) ;
-            
-
-            if (BattleSystem.PointsOfAction == 0)
-            {
-                BattleSystem.SetEnemyTurn();
-            }
-                
-        }
+        int moveCost = BattleSystem.FieldController.GetMoveCost(currentCell,cellToMove, BattleSystem.State);
         foreach (var item in cellsToMove)
         {
             item.OnClick -= BattleSystem.OnMoveButton;
@@ -215,6 +191,37 @@ public class PlayerTurn : State
         {
             item.OnClick -= BattleSystem.OnAttackButton;
             playerCharacter.ParentCell.OnClick -= BattleSystem.OnAttackButton;
+        }
+
+        if (moveCost > BattleSystem.PointsOfAction )
+        {
+            BattleSystem.GameUIPresenter.AddMessageToGameLog("Недостаточно очков действий");
+            yield break;
+        }
+
+        if (moveCost > playerCharacter.Speed)
+        {
+            BattleSystem.GameUIPresenter.AddMessageToGameLog("Недостаточно скорости у персонажа");
+            yield break;
+        }
+
+        BattleSystem.PointsOfAction -= moveCost;
+        playerCharacter.Speed -= Convert.ToInt32(moveCost);
+
+        Vector3 cellToMovePos = cellToMove.transform.position;
+        playerCharacter.transform.DOMove(new Vector3(cellToMovePos.x, playerCharacter.transform.position.y, cellToMovePos.z), 0.5f).OnComplete(() =>
+        {
+            playerCharacter.transform.SetParent(cellToMove.transform);
+            playerCharacter.transform.localPosition = new Vector3(0, 1, 0);
+            foreach (var staticEnemy in BattleSystem.EnemyController.StaticEnemyCharObjects)
+            {
+                staticEnemy.AttackPlayerCharacter(BattleSystem, playerCharacter);
+            }
+        });
+
+        if (BattleSystem.PointsOfAction == 0)
+        {
+            BattleSystem.SetEnemyTurn();
         }
         yield break;
     }

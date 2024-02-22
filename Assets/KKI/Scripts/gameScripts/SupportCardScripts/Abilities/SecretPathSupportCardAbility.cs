@@ -1,9 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeleportSupportCardAbility : BaseSupportÑardAbility
+public class SecretPathSupportCardAbility : BaseSupportÑardAbility
 {
     private SetAbiableCellsBehaviour setAbiableCellsBehaviour;
     protected override void Start()
@@ -26,7 +24,7 @@ public class TeleportSupportCardAbility : BaseSupportÑardAbility
         {
             PlayerTurn playerTurn = (PlayerTurn)battleSystem.State;
             playerTurn.OnPlayerTurnCompleted();
-        }       
+        }
 
         foreach (var playerCharacter in battleSystem.PlayerCharactersObjects)
         {
@@ -38,33 +36,24 @@ public class TeleportSupportCardAbility : BaseSupportÑardAbility
 
     private void SetCellsToMove(GameObject @object)
     {
-        foreach (var cell in setAbiableCellsBehaviour.cellsToMove)
+        foreach (var item in setAbiableCellsBehaviour.cellsToMove)
         {
-            cell.OnClick += UseCard;
+            item.OnClick -= UseCard;
         }
-        setAbiableCellsBehaviour.cellsToMove.Clear();
-        battleSystem.FieldController.InvokeActionOnField(x =>
-        {
-            if (x.transform.childCount == 0)
-            {
-                setAbiableCellsBehaviour.cellsToMove.Add(x);
-            }
-        });
+        setAbiableCellsBehaviour.cellsToMove = battleSystem.GetCellsForMove(@object.GetComponent<Character>(), 3);
     }
-
     private void OnSelectCharacter()
     {
+
         foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
         {
             enemyCharacter.IsEnabled = true;
         }
-
-
         
 
-        foreach (var cell in setAbiableCellsBehaviour.cellsToMove)
+        foreach (var item in setAbiableCellsBehaviour.cellsToMove)
         {
-            cell.OnClick += UseCard;
+            item.OnClick += UseCard;
         }
         OnSupportCardAbilityCharacterSelectedInvoke();
     }
@@ -89,9 +78,9 @@ public class TeleportSupportCardAbility : BaseSupportÑardAbility
             playerCharacter.OnClick -= SelectCharacter;
         }
 
-        foreach (var cell in setAbiableCellsBehaviour.cellsToMove)
+        foreach (var item in setAbiableCellsBehaviour.cellsToMove)
         {
-            cell.OnClick += UseCard;
+            item.OnClick += UseCard;
         }
         OnSupportCardAbilityUsedInvoke();
     }

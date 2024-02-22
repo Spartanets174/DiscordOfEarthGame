@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 
 public class FieldController : MonoBehaviour, ILoadable
@@ -8,6 +9,7 @@ public class FieldController : MonoBehaviour, ILoadable
     //Скрипт для создания игрового поля
     [SerializeField] private int width, height;
     [SerializeField] private Cell cellPrefab;
+    [SerializeField] private Cell swampCellPrefab;
     [SerializeField] private GameObject mountainPrefab;
     public Cell[,] CellsOfFieled;
     public void Init()
@@ -22,25 +24,30 @@ public class FieldController : MonoBehaviour, ILoadable
         {
             for (int j = 0; j < height; j++)
             {
-                Cell spawnedTile = Instantiate(cellPrefab, Vector3.zero,Quaternion.identity,transform);
-                spawnedTile.name = $"Cell {i} {j}";
-                spawnedTile.transform.localPosition = new Vector3(j * -0.27f, 0, i * -0.27f);
+                Cell spawnedTile;
+                if ((i == 2 && j == 2) || (i == 4 && j == 3) || (i == 2 && j == 7) || (i == 4 && j == 8))
+                {
+                    spawnedTile = Instantiate(swampCellPrefab, Vector3.zero, Quaternion.identity, transform);
+                }
+                else
+                {
+                    spawnedTile = Instantiate(cellPrefab, Vector3.zero, Quaternion.identity, transform);
+                    
+                }
                 if ((j == 4 || j == 6) && i % 2 != 0)
                 {
                     GameObject Mountain = Instantiate(mountainPrefab, Vector3.zero, Quaternion.identity, spawnedTile.transform);
                     Mountain.transform.localPosition = new Vector3(0, 0.5f, 0);
                 }
-                spawnedTile.SetCellState(true);
-                spawnedTile.SetColor("normal", (i + j) % 2 == 0);
 
-                if ((i == 2 && j == 2) || (i == 4 && j == 3) || (i == 2 && j == 7) || (i == 4 && j == 8))
-                {
-                    spawnedTile.SetColor("swamp", (i + j) % 2 == 0);
-                    spawnedTile.SetCellSwamp(true);
-                }
+                spawnedTile.SetCellMovable();
+                
+                spawnedTile.transform.localPosition = new Vector3(j * -0.27f, 0, i * -0.27f);              
+                spawnedTile.SetCellState(true);              
                 spawnedTile.IsEnabled = true;
-
                 spawnedTile.CellIndex = new Vector2(i, j);
+
+                spawnedTile.name += $"[{spawnedTile.CellIndex.x},{spawnedTile.CellIndex.y}]";
 
                 CellsOfFieled[i, j] = spawnedTile;
             }
@@ -56,16 +63,6 @@ public class FieldController : MonoBehaviour, ILoadable
                 action?.Invoke(CellsOfFieled[i,j]);
             }
         }
-    }
-
-    public void TurnOnCells(GameObject gameObject)
-    {
-        TurnOnCells();
-    }
-
-    public void TurnOffCells(GameObject gameObject)
-    {
-        TurnOffCells();
     }
 
     public void TurnOffCells()
@@ -84,16 +81,62 @@ public class FieldController : MonoBehaviour, ILoadable
         {
             cell.SetCellState(state);
             cell.SetColor("normal", (cell.CellIndex.y + cell.CellIndex.x) % 2 == 0);
-
-            if (cell.IsSwamp)
-            {
-                cell.SetColor("swamp", (cell.CellIndex.y + cell.CellIndex.x) % 2 == 0);
-                cell.SetCellSwamp(state);
-            }
         }
     }
 
-    public Cell GetCell(int i, int j)
+    public int GetMoveCost(Cell startCell, Cell endCell, State gameState)
+    {
+        int moveCost = 0;
+
+        int x0 = (int)startCell.CellIndex.x;
+        int y0 = (int)startCell.CellIndex.y;
+        int x1 = (int)endCell.CellIndex.x;
+        int y1 = (int)endCell.CellIndex.y;
+
+        bool steep = Math.Abs(y1 - y0) > Math.Abs(x1 - x0);
+        if (steep)
+        {
+            int t;
+            t = x0; // swap x0 and y0
+            x0 = y0;
+            y0 = t;
+            t = x1; // swap x1 and y1
+            x1 = y1;
+            y1 = t;
+        }
+        if (x0 > x1)
+        {
+            int t;
+            t = x0; // swap x0 and x1
+            x0 = x1;
+            x1 = t;
+            t = y0; // swap y0 and y1
+            y0 = y1;
+            y1 = t;
+        }
+        int dx = x1 - x0;
+        int dy = Math.Abs(y1 - y0);
+        int error = dx / 2;
+        int ystep = (y0 < y1) ? 1 : -1;
+        int y = y0;
+        for (int x = x0; x <= x1; x++)
+        {
+            Cell cell =  GetCell((steep ? y : x), (steep ? x : y));
+            if (cell == startCell) continue; 
+            moveCost += gameState is PlayerTurn? cell.TransitionCostPlayer:cell.TransitionCostEnemy;
+            error = error - dy;
+            if (error < 0)
+            {
+                y += ystep;
+                error += dx;
+            }
+        }
+
+        Debug.Log(moveCost);
+        return moveCost;
+    }   
+
+   public Cell GetCell(int i, int j)
     {
         return CellsOfFieled[i, j];
     }

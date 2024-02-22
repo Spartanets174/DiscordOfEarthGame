@@ -16,7 +16,7 @@ public class CheckCellsForMove : Node
     public override NodeState Evaluate()
     {
         EnemyCharacter enemyCharacter = m_EnemyBT.CurrentEnemyCharacter;
-        possibleCells = m_battleSystem.GetCellsForMove(enemyCharacter);
+        possibleCells = m_battleSystem.GetCellsForMove(enemyCharacter, enemyCharacter.Speed);
 
        
         if (possibleCells.Count > 0)
