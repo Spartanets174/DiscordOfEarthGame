@@ -29,6 +29,7 @@ public class GameSupportCardDisplay : OutlineClicableUI
     }
     private void OnDrop(GameObject gameObject)
     {
+        m_gameSupport—ardAbility.LockState();
         m_gameSupport—ardAbility.SelectCard();
     }
     private void OnBeginDrag(GameObject gameObject)

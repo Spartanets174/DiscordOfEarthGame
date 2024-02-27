@@ -153,11 +153,6 @@ public class DataLoader : MonoBehaviour, ILoadable
         List<CharacterCard> CardOfPlayer = DB.SelectFromChars();
         List<CardSupport> CardSupportOfPlayer = DB.SelectFromCardsSupport();
 
-        playerData.allCharCards = playerData.allCharCards.OrderBy(x => x.cardName).ToList();
-        CardOfPlayer = CardOfPlayer.OrderBy(x => x.cardName).ToList();
-        playerData.allSupportCards = playerData.allSupportCards.OrderBy(x => x.cardName).ToList();
-        CardSupportOfPlayer = CardSupportOfPlayer.OrderBy(x => x.cardName).ToList();
-
         for (int i = 0; i < playerData.allCharCards.Count; i++)
         {
             playerData.allCharCards[i].cardName = CardOfPlayer[i].cardName;

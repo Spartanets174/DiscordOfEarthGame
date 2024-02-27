@@ -228,7 +228,7 @@ public class DbManager : MonoBehaviour
 
     public List<CharacterCard> SelectFromChars()
     {
-        string query = $"select * from gamedb.characters";
+        string query = $"SELECT * FROM gamedb.characters order by char_name";
         List<CharacterCard> cardList = new List<CharacterCard>();
         MySqlCommand command = new MySqlCommand(query, con);
 
@@ -370,7 +370,7 @@ public class DbManager : MonoBehaviour
     }
     public List<CardSupport> SelectFromCardsSupport()
     {
-        string query = $"select * from gamedb.cards";
+        string query = $"select * from gamedb.cards ORDER BY name";
         List<CardSupport> CardSupportList = new List<CardSupport>();
         MySqlCommand command = new MySqlCommand(query, con);
 

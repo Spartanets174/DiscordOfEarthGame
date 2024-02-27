@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f07b7677596d73a42b7bae752aea67b3, type: 3}
   m_Name: "\u041F\u0440\u0438\u0437\u044B\u0432 \u0431\u0443\u0440\u0438 2"
   m_EditorClassIdentifier: 
-  name: "\u041F\u0440\u0438\u0437\u044B\u0432 \u0431\u0443\u0440\u0438 2"
+  cardName: 
   description: 
   race: 0
   image: {fileID: 21300000, guid: bb4e32cc17a0c754aafca0498fe93d8c, type: 3}
@@ -20,5 +20,9 @@ MonoBehaviour:
   Price: 675
   id: 0
   type: 0
-  ability: "\u041D\u0430\u043D\u043E\u0441\u0438\u0442 1 \u0445\u043F \u0432\u0441\u0435\u043C
-    \u0432 \u043E\u0431\u043B\u0430\u0441\u0442\u0438 7\u04453"
+  abilityText: 
+  "m_gameSupport\u0421ardAbility":
+    GuidAssignmentFailed: 0
+    GUID: de09522deea9a4b408342401b718ff34
+    _typeNameAndAssembly: StormCallSecondSupportCardAbility, Assembly-CSharp
+    _suppressLogs: 0

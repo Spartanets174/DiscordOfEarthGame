@@ -24,7 +24,7 @@ public class SetAbiableCellsBehaviour : ICharacterSelectable
         battleSystem.FieldController.TurnOffCells();
         foreach (var cell in cellsToMove)
         {
-            if (battleSystem.State is PlayerTurn) cell.SetColor("allowed", (cell.CellIndex.x + cell.CellIndex.y) % 2 == 0);
+            if (battleSystem.State is PlayerTurn) cell.SetColor("allowed");
             cell.SetCellState(true);
         }
 

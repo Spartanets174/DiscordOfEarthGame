@@ -57,7 +57,6 @@ public class DragAndDropComponent : MonoBehaviour, IBeginDragHandler, IEndDragHa
     {
         if (m_isAllowedToDrag)
         {
-            Debug.Log("end drag");
             canvasGroup.blocksRaycasts = true;
             OnEndDragEvent?.Invoke(this.gameObject);
         }      
@@ -65,6 +64,7 @@ public class DragAndDropComponent : MonoBehaviour, IBeginDragHandler, IEndDragHa
 
     public void OnDropInvoke()
     {
+        canvasGroup.blocksRaycasts = true;
         OnDropEvent?.Invoke(gameObject);
     }
 }

@@ -24,7 +24,7 @@ public class PlayerTurn : State
         BattleSystem.GameUIPresenter.SetDragAllowToSupportCards(true);
         BattleSystem.GameUIPresenter.AddMessageToGameLog("Ваш ход.");
         BattleSystem.GameUIPresenter.OnPlayerTurnStart();
-        BattleSystem.FieldController.TurnOnCells();
+        
         BattleSystem.PointsOfAction = 20;
 
         foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
@@ -60,6 +60,7 @@ public class PlayerTurn : State
         {
             playerCharacter.OnClick += BattleSystem.OnChooseCharacterButton;
         }
+        BattleSystem.FieldController.TurnOnCells();
     }
 
     private void OnDropEvent(GameObject gameObject)
@@ -79,7 +80,16 @@ public class PlayerTurn : State
         foreach (var playerCharacter in BattleSystem.PlayerCharactersObjects)
         {
             playerCharacter.OnClick -= BattleSystem.OnChooseCharacterButton;
-        }    
+        }
+        foreach (var item in cellsToMove)
+        {
+            item.OnClick -= BattleSystem.OnMoveButton;
+        }
+        foreach (var item in enemiesToAttack)
+        {
+            item.OnClick -= BattleSystem.OnAttackButton;
+        }
+        BattleSystem.FieldController.TurnOnCells();
     }
 
   
@@ -158,7 +168,7 @@ public class PlayerTurn : State
             {
                 if (enemy != null)
                 {
-                    cell.SetColor("attack", (cell.CellIndex.y + cell.CellIndex.x) % 2 == 0);
+                    cell.SetColor("attack");
                     enemiesToAttack.Add(enemy);
                 }
                 if (BattleSystem.CurrentPlayerCharacter.Class == enums.Classes.Маг)
@@ -248,8 +258,9 @@ public class PlayerTurn : State
                 {
                     BattleSystem.EnemyController.EnemyCharObjects.Remove((EnemyCharacter)currentTarget);
                 }
-                GameObject.Destroy(currentTarget.gameObject);
+
                 BattleSystem.GameUIPresenter.AddMessageToGameLog($"Вражеский юнит {currentTarget.CharacterName} убит");
+                GameObject.Destroy(currentTarget.gameObject);             
             }
 
             foreach (var item in cellsToMove)

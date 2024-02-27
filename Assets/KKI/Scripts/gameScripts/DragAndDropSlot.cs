@@ -9,7 +9,6 @@ public class DragAndDropSlot : MonoBehaviour, IDropHandler
     {
         if (eventData.pointerClick != null)
         {
-            Debug.Log("drop");
             eventData.pointerDrag.GetComponent<DragAndDropComponent>().OnDropInvoke();
         }
     }

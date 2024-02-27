@@ -36,10 +36,11 @@ public class Cell : InteractableObject
     private BoxCollider boxCollider;
     public BoxCollider BoxCollider => boxCollider;
 
+    private Vector2 m_cellIndex;
     public Vector2 CellIndex
     {
-        get;
-        set;
+        get => m_cellIndex;
+        set => m_cellIndex=value;
     }
 
     private void Awake()
@@ -56,14 +57,14 @@ public class Cell : InteractableObject
         IsEnabled = state;
     }
 
-    public void SetColor(string key, bool isOffset)
+    public void SetColor(string key)
     {
-        meshRenderer.material = colorDictionary[key].GetColor(isOffset);
+        meshRenderer.material = colorDictionary[key].GetColor((CellIndex.x + CellIndex.y) % 2 == 0);
     }
     public void SetCellMovable()
     {
         SetCellState(true);
-        SetColor("allowed", (CellIndex.x + CellIndex.y) % 2 == 0);
+        SetColor("allowed");
     }
 }
 

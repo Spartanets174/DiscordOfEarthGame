@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UniRx;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -59,7 +60,7 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
     [SerializeField]
     private ChosenCharacterDeatilsDisplay chosenCharacterDeatilsDisplay;
 
-    private GameSupportCardDisplay currentGameSupportCardDisplay;
+    private ReactiveProperty<GameSupportCardDisplay> currentGameSupportCardDisplay=new();
 
     private List<GameCharacterCardDisplay> m_gameCharacterCards=new();
     public List<GameCharacterCardDisplay> GameCharacterCardDisplays => m_gameCharacterCards;
@@ -67,6 +68,7 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
     private List<GameSupportCardDisplay> m_gameSupportCards = new();
     public List<GameSupportCardDisplay> GameSupportCards => m_gameSupportCards;
 
+    CompositeDisposable disposables = new();
 
     public void Init()
     {
@@ -95,29 +97,35 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
             cardDisplay.SetData(SupportCard);
             if (cardDisplay.GameSupportÑardAbility !=null)
             {
-                cardDisplay.GameSupportÑardAbility.OnSupportCardAbilitySelected += OnSupportCardAbilitySelected;
+                cardDisplay.GameSupportÑardAbility.OnUsingCancel += OnUsingCancel;
                 cardDisplay.GameSupportÑardAbility.OnSupportCardAbilityCharacterSelected += OnSupportCardAbilityCharacterSelected;
                 cardDisplay.GameSupportÑardAbility.OnSupportCardAbilityUsed += OnSupportCardAbilityUsed;
-
             }
-            
+
+            currentGameSupportCardDisplay.Where(x=>x!=null).Subscribe(x =>
+            {
+                SetTipsText(x.GameSupportÑardAbility.CardSelectBehaviour.SelectCardTipText);
+            }).AddTo(disposables);
 
             m_gameSupportCards.Add(cardDisplay);
             cardDisplay.IsEnabled = false;
         }
     }
-    private void OnSupportCardAbilitySelected(ICardSelectable selectable)
+
+    private void OnUsingCancel()
     {
-        SetTipsText($"{selectable.SelectCardTipText}");
+        tipsTextParent.SetActive(false);
+        SetTipsText("");
+        currentGameSupportCardDisplay.Value.gameObject.SetActive(true);
     }
+
     private void OnSupportCardAbilityCharacterSelected(ICharacterSelectable uharacterSelectable)
     {
         SetTipsText($"{uharacterSelectable.SelectCharacterTipText}");
     }
     private void OnSupportCardAbilityUsed(ICardUsable usable)
     {
-        m_gameSupportCards.Remove(currentGameSupportCardDisplay);
-        Destroy(currentGameSupportCardDisplay);
+        m_gameSupportCards.Remove(currentGameSupportCardDisplay.Value);
         tipsTextParent.SetActive(false);
         SetBlockersState(false);
         SetTipsText("");
@@ -136,13 +144,6 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
         
     }
 
-    private void OnDropEvent(GameObject gameObject)
-    {
-        gameObject.SetActive(false);
-        SetBlockersState(false);
-
-    }
-
     public void SetDragAllowToSupportCards(bool state)
     {
         foreach (var cardDisplay in m_gameSupportCards)
@@ -151,6 +152,12 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
         }
     }
 
+    private void OnDropEvent(GameObject gameObject)
+    {
+        gameObject.SetActive(false);
+        SetBlockersState(false);
+        currentGameSupportCardDisplay.Value = gameObject.GetComponent<GameSupportCardDisplay>();       
+    }
     private void OnBeginDrag(GameObject gameObject)
     {
         tipsTextParent.SetActive(true);
@@ -167,10 +174,12 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
 
     private void OnDestroy()
     {
+        disposables.Dispose();
+        disposables.Clear();
         foreach (var cardDisplay in m_gameSupportCards)
         {
             cardDisplay.DragAndDropComponent.OnBeginDragEvent -= OnBeginDrag;
-            cardDisplay.DragAndDropComponent.OnBeginDragEvent -= OnEndDrag;
+            cardDisplay.DragAndDropComponent.OnEndDragEvent -= OnEndDrag;
             cardDisplay.DragAndDropComponent.OnDropEvent-= OnDropEvent;
             if (cardDisplay.GameSupportÑardAbility != null)
             {

@@ -15,19 +15,23 @@ public class TeleportSupportCardAbility : BaseSupport—ardAbility
 
         setAbiableCellsBehaviour = (SetAbiableCellsBehaviour)SelectCharacterBehaviour;
 
+        m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSelectBehaviour.OnSelected += OnSelected;
         m_selectCharacterBehaviour.OnSelectCharacter += OnSelectCharacter;
         m_useCardBehaviour.OnCardUse += OnCardUse;
     }
 
-    private void OnSelected()
+    private void OnCancelSelection()
     {
-        if (battleSystem.State is PlayerTurn)
+        foreach (var playerCharacter in battleSystem.PlayerCharactersObjects)
         {
-            PlayerTurn playerTurn = (PlayerTurn)battleSystem.State;
-            playerTurn.OnPlayerTurnCompleted();
-        }       
+            playerCharacter.OnClick -= SetCellsToMove;
+            playerCharacter.OnClick -= SelectCharacter;
+        }
+    }
 
+    private void OnSelected()
+    {  
         foreach (var playerCharacter in battleSystem.PlayerCharactersObjects)
         {
             playerCharacter.OnClick += SetCellsToMove;
@@ -59,9 +63,7 @@ public class TeleportSupportCardAbility : BaseSupport—ardAbility
             enemyCharacter.IsEnabled = true;
         }
 
-
-        
-
+       
         foreach (var cell in setAbiableCellsBehaviour.cellsToMove)
         {
             cell.OnClick += UseCard;
@@ -71,18 +73,6 @@ public class TeleportSupportCardAbility : BaseSupport—ardAbility
 
     private void OnCardUse()
     {
-        if (battleSystem.State is PlayerTurn)
-        {
-            PlayerTurn playerTurn = (PlayerTurn)battleSystem.State;
-            playerTurn.OnPlayerTurnStarted();
-            battleSystem.CurrentPlayerCharacter.IsChosen = false;
-        }
-        else
-        {
-            EnemyTurn enemyTurn = (EnemyTurn)battleSystem.State;
-            battleSystem.EnemyController.CurrentEnemyCharacter.IsChosen = false;
-        }
-
         foreach (var playerCharacter in battleSystem.PlayerCharactersObjects)
         {
             playerCharacter.OnClick -= SetCellsToMove;

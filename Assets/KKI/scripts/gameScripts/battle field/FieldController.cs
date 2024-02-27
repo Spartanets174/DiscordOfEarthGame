@@ -80,7 +80,7 @@ public class FieldController : MonoBehaviour, ILoadable
         foreach (var cell in CellsOfFieled)
         {
             cell.SetCellState(state);
-            cell.SetColor("normal", (cell.CellIndex.y + cell.CellIndex.x) % 2 == 0);
+            cell.SetColor("normal");
         }
     }
 

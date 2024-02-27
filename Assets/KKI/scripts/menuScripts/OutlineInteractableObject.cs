@@ -29,11 +29,11 @@ public class OutlineInteractableObject : InteractableObject
         highlightEffect.highlighted = state;
     }
 
-    protected void EnableOutline()
+    protected void EnableOutline(GameObject gameObject)
     {
         highlightEffect.highlighted = true;
     }
-    protected void DisableOutline()
+    protected void DisableOutline(GameObject gameObject)
     {
         highlightEffect.highlighted = false;
     }

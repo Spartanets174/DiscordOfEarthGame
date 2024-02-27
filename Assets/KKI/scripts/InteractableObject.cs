@@ -9,16 +9,14 @@ public class InteractableObject : MonoBehaviour
         get => m_isEnabled;
         set
         {
-           m_isEnabled = value;
-            
-        } 
-        
+           m_isEnabled = value;  
+        }        
     }
 
     public event Action<GameObject> OnClick;
-    public event Action OnHoverEnter;
-    public event Action OnHoverExit;
-    public event Action OnHover;
+    public event Action<GameObject> OnHoverEnter;
+    public event Action<GameObject> OnHoverExit;
+    public event Action<GameObject> OnHover;
     protected virtual void OnMouseEnter()
     {
         if (IsEnabled)
@@ -52,12 +50,12 @@ public class InteractableObject : MonoBehaviour
 
     public void OnHoverEnterInvoke()
     {
-        OnHoverEnter?.Invoke();
+        OnHoverEnter?.Invoke(gameObject);
     }
 
     public void OnHoverExitInvoke()
     {
-        OnHoverExit?.Invoke();
+        OnHoverExit?.Invoke(gameObject);
         
     }
 
@@ -68,6 +66,6 @@ public class InteractableObject : MonoBehaviour
 
     public void OnHoverInvoke()
     {
-        OnHover?.Invoke();
+        OnHover?.Invoke(gameObject);
     }
 }

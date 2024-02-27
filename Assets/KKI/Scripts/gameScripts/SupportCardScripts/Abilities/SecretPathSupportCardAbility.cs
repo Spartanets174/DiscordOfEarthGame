@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,19 +14,23 @@ public class SecretPathSupportCardAbility : BaseSupport—ardAbility
 
         setAbiableCellsBehaviour = (SetAbiableCellsBehaviour)SelectCharacterBehaviour;
 
+        m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSelectBehaviour.OnSelected += OnSelected;
         m_selectCharacterBehaviour.OnSelectCharacter += OnSelectCharacter;
         m_useCardBehaviour.OnCardUse += OnCardUse;
     }
 
+    private void OnCancelSelection()
+    {
+        foreach (var playerCharacter in battleSystem.PlayerCharactersObjects)
+        {
+            playerCharacter.OnClick -= SetCellsToMove;
+            playerCharacter.OnClick -= SelectCharacter;
+        }
+    }
+
     private void OnSelected()
     {
-        if (battleSystem.State is PlayerTurn)
-        {
-            PlayerTurn playerTurn = (PlayerTurn)battleSystem.State;
-            playerTurn.OnPlayerTurnCompleted();
-        }
-
         foreach (var playerCharacter in battleSystem.PlayerCharactersObjects)
         {
             playerCharacter.OnClick += SetCellsToMove;
@@ -60,18 +65,6 @@ public class SecretPathSupportCardAbility : BaseSupport—ardAbility
 
     private void OnCardUse()
     {
-        if (battleSystem.State is PlayerTurn)
-        {
-            PlayerTurn playerTurn = (PlayerTurn)battleSystem.State;
-            playerTurn.OnPlayerTurnStarted();
-            battleSystem.CurrentPlayerCharacter.IsChosen = false;
-        }
-        else
-        {
-            EnemyTurn enemyTurn = (EnemyTurn)battleSystem.State;
-            battleSystem.EnemyController.CurrentEnemyCharacter.IsChosen = false;
-        }
-
         foreach (var playerCharacter in battleSystem.PlayerCharactersObjects)
         {
             playerCharacter.OnClick -= SetCellsToMove;
@@ -80,7 +73,7 @@ public class SecretPathSupportCardAbility : BaseSupport—ardAbility
 
         foreach (var item in setAbiableCellsBehaviour.cellsToMove)
         {
-            item.OnClick += UseCard;
+            item.OnClick -= UseCard;
         }
         OnSupportCardAbilityUsedInvoke();
     }

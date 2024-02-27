@@ -5,7 +5,9 @@ using UnityEngine;
 
 public interface ICardSelectable 
 {
+    public event Action OnCancelSelection;
     public event Action OnSelected;
     public string SelectCardTipText { get;  }
     public void SelectCard();
+    public void CancelSelection();
 }

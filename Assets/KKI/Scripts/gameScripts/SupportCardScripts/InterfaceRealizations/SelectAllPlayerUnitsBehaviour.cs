@@ -7,6 +7,7 @@ public class SelectAllPlayerUnitsBehaviour : ICardSelectable
 {
     private BattleSystem battleSystem;
     public event Action OnSelected;
+    public event Action OnCancelSelection;
 
     private string m_selectCardTipText;
     public string SelectCardTipText
@@ -41,4 +42,20 @@ public class SelectAllPlayerUnitsBehaviour : ICardSelectable
         OnSelected?.Invoke();
     }
 
+    public void CancelSelection()
+    {
+        if (battleSystem.State is PlayerTurn)
+        {
+            foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
+            {
+                enemyCharacter.IsEnabled = true;
+            }
+
+            foreach (var playerCharacter in battleSystem.PlayerCharactersObjects)
+            {
+                playerCharacter.IsChosen = false;
+            }
+        }
+        OnCancelSelection?.Invoke();
+    }
 }

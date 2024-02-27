@@ -112,13 +112,13 @@ public class UIController : MonoBehaviour, ILoadable
         settingsObject.Collider.enabled = false;
         SetState(bookOfCards, true); 
     }
-    private void MoveSettingsCaption()
+    private void MoveSettingsCaption(GameObject gameObject)
     {
         Rect settingsRect = settingsText.GetComponent<RectTransform>().rect;
         settingsText.transform.localPosition = new Vector3(Input.mousePosition.x - cam.scaledPixelWidth / 2 + settingsRect.width/2, Input.mousePosition.y - cam.scaledPixelHeight / 2 + settingsRect.height / 2, 0);
     }
 
-    private void MoveShopCaption()
+    private void MoveShopCaption(GameObject gameObject)
     {
         Rect shopRect = shopText.GetComponent<RectTransform>().rect;
         shopText.transform.localPosition = new Vector3(Input.mousePosition.x - cam.scaledPixelWidth / 2 - shopRect.width/2, Input.mousePosition.y - cam.scaledPixelHeight / 2 + shopRect.height / 2, 0);
@@ -135,19 +135,19 @@ public class UIController : MonoBehaviour, ILoadable
         settingsObject.Collider.enabled = false;
         SetState(settings, true);
     }
-    private void TurnOnShopText()
+    private void TurnOnShopText(GameObject gameObject)
     {
         SetState(shopText, true);
     }
-    private void TurnOffShopText()
+    private void TurnOffShopText(GameObject gameObject)
     {
         SetState(shopText, false);
     }
-    private void TurnOnSettingsText()
+    private void TurnOnSettingsText(GameObject gameObject)
     {
         SetState(settingsText, true);
     }
-    private void TurnOffSettingsText()
+    private void TurnOffSettingsText(GameObject gameObject)
     {
         SetState(settingsText, false);
     }

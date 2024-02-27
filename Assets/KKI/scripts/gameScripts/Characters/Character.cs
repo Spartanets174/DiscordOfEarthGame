@@ -150,7 +150,7 @@ public abstract class Character : OutlineInteractableObject
     }
     public float Damage(Character chosenCharacter)
     {
-        float crit = isCrit(chosenCharacter);
+        float crit = IsCrit(chosenCharacter.CritChance,chosenCharacter.CritNum);
         float finalPhysDamage = ((11 + chosenCharacter.PhysAttack) * chosenCharacter.PhysAttack * crit * (chosenCharacter.PhysAttack - PhysDefence + Card.health)) / 256;
         float finalMagDamage = ((11 + chosenCharacter.MagAttack) * chosenCharacter.MagAttack * crit * (chosenCharacter.MagAttack - MagDefence + Card.health)) / 256;
         float finalDamage = Math.Max(finalMagDamage, finalPhysDamage);
@@ -163,12 +163,27 @@ public abstract class Character : OutlineInteractableObject
         }
         return finalDamage;
     }
-    protected float isCrit(Character chosenCharacter)
+
+    public float Damage(float damage)
+    {
+        float crit = IsCrit(0.15f,1.5f);
+        /*damage = ((11 + damage) * damage * crit * (damage - MagDefence + Card.health)) / 256;*/
+        Health = Math.Max(0, Health - damage);
+
+        OnDamagedInvoke();
+        if (Health == 0)
+        {
+            OnDeathInvoke();
+        }
+        return damage;
+    }
+
+    protected float IsCrit(float critChance, float m_critNum)
     {
         float chance =  UnityEngine.Random.Range(0f,1f);
-        if (chance < chosenCharacter.m_critChance)
+        if (chance < critChance)
         {
-            return chosenCharacter.m_critNum;
+            return m_critNum;
         }
         else
         {

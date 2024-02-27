@@ -7,6 +7,8 @@ public class EmptySelectBehaviour : ICardSelectable
 {
     
     public event Action OnSelected;
+    public event Action OnCancelSelection;
+
     private string m_selectCardTipText;
 
     public string SelectCardTipText
@@ -24,5 +26,10 @@ public class EmptySelectBehaviour : ICardSelectable
     public void SelectCard()
     {
         OnSelected?.Invoke();
+    }
+
+    public void CancelSelection()
+    {
+        OnCancelSelection?.Invoke();
     }
 }
