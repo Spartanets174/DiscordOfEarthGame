@@ -47,6 +47,12 @@ public class BattleSystem : StateMachine, ILoadable
         FieldController.InvokeActionOnField(AddOnCellClick);
         gameUIPresenter.EndMoveButton.onClick.AddListener(SetEnemyTurn);
 
+        foreach (var item in gameUIPresenter.GameSupportCards)
+        {
+            item.DragAndDropComponent.OnDropEvent += OnSupportCardButton;
+            item.DragAndDropComponent.OnDropEvent +=x=>{ FieldController.TurnOnCells(); };
+        }
+
         SetState(new Begin(this));
     }
 
@@ -87,9 +93,9 @@ public class BattleSystem : StateMachine, ILoadable
     {
         StartCoroutine(State.UseBuffAbility());
     }
-    public void OnSupportCardButton()
+    public void OnSupportCardButton(GameObject cardSupport)
     {
-        StartCoroutine(State.UseSupportCard());
+        StartCoroutine(State.UseSupportCard(cardSupport));
     }
     public void OnUseItemButton()
     {

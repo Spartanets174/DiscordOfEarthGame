@@ -34,8 +34,7 @@ public class ForestFriendsSecondCardSupportAbility : BaseSupport—ardAbility
                 }
             });
         }
-
-        OnSupportCardAbilityUsedInvoke();
         m_cardSelectBehaviour.OnSelected -= OnSelected;
+        UseCard(null);
     }
 }

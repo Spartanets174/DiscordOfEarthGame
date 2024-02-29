@@ -87,14 +87,17 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
             GameSupportCardDisplay cardDisplay = Instantiate(gameSupportCardPrefab, Vector3.zero, Quaternion.identity, gameSupportCardsParent);
             cardDisplay.transform.localPosition = Vector3.zero;
 
-            cardDisplay.DragAndDropComponent.OnBeginDragEvent += OnBeginDrag;
-            cardDisplay.DragAndDropComponent.OnEndDragEvent += OnEndDrag;
-            
+
+            cardDisplay.SetData(SupportCard);
             cardDisplay.DragAndDropComponent.StartPos = cardDisplay.transform.localPosition;
 
             StartCoroutine(SetDataDelayed(cardDisplay.DragAndDropComponent));
 
-            cardDisplay.SetData(SupportCard);
+            cardDisplay.DragAndDropComponent.OnBeginDragEvent += OnBeginDrag;
+            cardDisplay.DragAndDropComponent.OnEndDragEvent += OnEndDrag;
+            cardDisplay.DragAndDropComponent.OnDropEvent += OnDropEvent;
+
+
             if (cardDisplay.GameSupport—ardAbility !=null)
             {
                 cardDisplay.GameSupport—ardAbility.OnUsingCancel += OnUsingCancel;
@@ -139,9 +142,7 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
     private IEnumerator SetDataDelayed(DragAndDropComponent dragAndDropComponent)
     {
         yield return new WaitForEndOfFrame();
-        dragAndDropComponent.StartPos = dragAndDropComponent.transform.localPosition;
-        dragAndDropComponent.OnDropEvent += OnDropEvent;
-        
+        dragAndDropComponent.StartPos = dragAndDropComponent.transform.localPosition;          
     }
 
     public void SetDragAllowToSupportCards(bool state)

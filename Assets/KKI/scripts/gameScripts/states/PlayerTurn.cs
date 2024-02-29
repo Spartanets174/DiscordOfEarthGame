@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 
@@ -10,7 +11,7 @@ public class PlayerTurn : State
 {
     private List<Cell> cellsToMove = new();
     private List<Enemy> enemiesToAttack = new();
-
+    private CompositeDisposable disposables = new();
 
     public PlayerTurn(BattleSystem battleSystem) : base(battleSystem)
     {
@@ -49,50 +50,6 @@ public class PlayerTurn : State
         yield break;
     }
 
-    public void OnPlayerTurnStarted()
-    {
-        foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
-        {
-            SupportCard.DragAndDropComponent.OnDropEvent += OnDropEvent;
-        }
-
-        foreach (var playerCharacter in BattleSystem.PlayerCharactersObjects)
-        {
-            playerCharacter.OnClick += BattleSystem.OnChooseCharacterButton;
-        }
-        BattleSystem.FieldController.TurnOnCells();
-    }
-
-    private void OnDropEvent(GameObject gameObject)
-    {
-        foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
-        {
-            SupportCard.IsEnabled = false;
-        }
-    }
-
-    public void OnPlayerTurnCompleted()
-    {
-        foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
-        {
-            SupportCard.DragAndDropComponent.OnDropEvent -= OnDropEvent;
-        }
-        foreach (var playerCharacter in BattleSystem.PlayerCharactersObjects)
-        {
-            playerCharacter.OnClick -= BattleSystem.OnChooseCharacterButton;
-        }
-        foreach (var item in cellsToMove)
-        {
-            item.OnClick -= BattleSystem.OnMoveButton;
-        }
-        foreach (var item in enemiesToAttack)
-        {
-            item.OnClick -= BattleSystem.OnAttackButton;
-        }
-        BattleSystem.FieldController.TurnOnCells();
-    }
-
-  
 
     //При выборе персонажа
     public override IEnumerator ChooseCharacter(GameObject character)
@@ -101,7 +58,7 @@ public class PlayerTurn : State
 
         foreach (var item in cellsToMove)
         {
-            item.OnClick -=BattleSystem.OnMoveButton;
+            item.OnClick -= BattleSystem.OnMoveButton;
         }
         foreach (var item in enemiesToAttack)
         {
@@ -121,68 +78,6 @@ public class PlayerTurn : State
             item.OnClick += BattleSystem.OnAttackButton;
         }
         yield break;
-    }
-    public void SetEnemiesForAttack(Character character)
-    {
-        enemiesToAttack.Clear();
-        SetAttackableCells(character.PositionOnField, enums.Directions.top, character);
-        SetAttackableCells(character.PositionOnField, enums.Directions.bottom, character);
-        SetAttackableCells(character.PositionOnField, enums.Directions.right, character);
-        SetAttackableCells(character.PositionOnField, enums.Directions.left, character);
-    }
-    private void SetAttackableCells(Vector2 pos, enums.Directions direction, Character character)
-    {
-        int newI = (int)pos.x;
-        int newJ = (int)pos.y;
-       
-        for (int i = 0; i < character.Range; i++)
-        {
-            switch (direction)
-            {
-                case enums.Directions.top:
-                    newI--;
-                break;
-                case enums.Directions.bottom:
-                    newJ--;
-                    break;
-                case enums.Directions.right:
-                    newI++;
-                    break;                  
-                case enums.Directions.left:
-                    newJ++;
-                    break;
-            }
-
-            if (newI >= 7 || newI < 0)
-            {
-                break;
-            }
-            if (newJ >= 11 || newJ < 0)
-            {
-                break;
-            }
-
-            Cell cell = BattleSystem.FieldController.GetCell(newI, newJ);
-            Enemy enemy = cell.GetComponentInChildren<Enemy>();
-            if (cell.transform.childCount>0)
-            {
-                if (enemy != null)
-                {
-                    cell.SetColor("attack");
-                    enemiesToAttack.Add(enemy);
-                }
-                if (BattleSystem.CurrentPlayerCharacter.Class == enums.Classes.Маг)
-                {
-                    continue;                 
-                }
-                else
-                {
-                    break;
-                }
-               
-            }
-            
-        }
     }
 
     public override IEnumerator Move(GameObject cell)
@@ -291,6 +186,23 @@ public class PlayerTurn : State
        
         yield break;
     }
+    public override IEnumerator UseSupportCard(GameObject gameObject)
+    {
+
+        ResetPlayer();
+
+        GameSupportCardDisplay supportCardDisplay = gameObject.GetComponent<GameSupportCardDisplay>();
+
+        Observable.EveryUpdate().Where(x => Input.GetKey(KeyCode.Escape)).Subscribe(x =>
+        {
+            supportCardDisplay.GameSupportСardAbility.CancelUsingCard();
+        }).AddTo(disposables);
+
+        supportCardDisplay.GameSupportСardAbility.SelectCard();
+        yield break;
+    }
+
+
     public override IEnumerator UseAttackAbility()
     {
         /*Логика при применении способности 1*/
@@ -306,14 +218,177 @@ public class PlayerTurn : State
         /*Логика при применении способности 3*/
         yield break;
     }
-    public override IEnumerator UseSupportCard()
-    {
-        /*Логика при применении карты помощи*/
-        yield break;
-    }
+
     public override IEnumerator UseItem()
     {
         /*Логика при применении предмета*/
         yield break;
     }
+    public void OnPlayerTurnStarted()
+    {
+        Subscribe();
+        foreach (var gameSupportCArdDisplay in BattleSystem.GameUIPresenter.GameSupportCards)
+        {
+            gameSupportCArdDisplay.GameSupportСardAbility.OnUsingCancel += SetStateToNormal;
+            gameSupportCArdDisplay.GameSupportСardAbility.OnUsingCancel += ClearDisposables;
+
+            gameSupportCArdDisplay.GameSupportСardAbility.OnSupportCardAbilityUsed += OnSupportCardAbilityUsed;
+            gameSupportCArdDisplay.GameSupportСardAbility.OnSupportCardAbilityCharacterSelected += ClearDisposables;
+        }
+
+
+        BattleSystem.FieldController.TurnOnCells();
+    }
+
+
+
+    public void OnPlayerTurnCompleted()
+    {
+        ResetPlayer();
+        foreach (var gameSupportCArdDisplay in BattleSystem.GameUIPresenter.GameSupportCards)
+        {
+            gameSupportCArdDisplay.GameSupportСardAbility.OnUsingCancel -= SetStateToNormal;
+            gameSupportCArdDisplay.GameSupportСardAbility.OnUsingCancel -= ClearDisposables;
+
+            gameSupportCArdDisplay.GameSupportСardAbility.OnSupportCardAbilityUsed -= OnSupportCardAbilityUsed;
+            gameSupportCArdDisplay.GameSupportСardAbility.OnSupportCardAbilityCharacterSelected -= ClearDisposables;
+        }
+
+        BattleSystem.FieldController.TurnOnCells();
+    }
+
+    private void Subscribe()
+    {
+        foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
+        {
+            SupportCard.DragAndDropComponent.OnDropEvent += OnDropEvent;
+        }
+
+        foreach (var playerCharacter in BattleSystem.PlayerCharactersObjects)
+        {
+            playerCharacter.OnClick += BattleSystem.OnChooseCharacterButton;
+        }
+
+    }
+
+    private void ResetPlayer()
+    {
+        foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
+        {
+            SupportCard.DragAndDropComponent.OnDropEvent -= OnDropEvent;
+        }
+        foreach (var playerCharacter in BattleSystem.PlayerCharactersObjects)
+        {
+            playerCharacter.OnClick -= BattleSystem.OnChooseCharacterButton;
+            playerCharacter.IsChosen = false;
+        }
+        foreach (var cellToMove in cellsToMove)
+        {
+            cellToMove.OnClick -= BattleSystem.OnMoveButton;
+        }
+        foreach (var enemyToAttack in enemiesToAttack)
+        {
+            enemyToAttack.OnClick -= BattleSystem.OnAttackButton;
+        }
+        cellsToMove.Clear();
+        enemiesToAttack.Clear();
+    }
+
+    private void ClearDisposables(ICharacterSelectable selectable)
+    {
+        ClearDisposables();
+    }
+
+    private void OnSupportCardAbilityUsed(ICardUsable usable)
+    {
+        SetStateToNormal();
+        ClearDisposables();
+    }
+    private void ClearDisposables()
+    {
+        disposables.Dispose();
+        disposables.Clear();
+    }
+    private void SetStateToNormal()
+    {
+        Subscribe();
+        if (BattleSystem.CurrentPlayerCharacter != null)
+        {
+            BattleSystem.CurrentPlayerCharacter.IsChosen = false;
+        }
+    }
+
+    private void OnDropEvent(GameObject gameObject)
+    {
+        foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
+        {
+            SupportCard.IsEnabled = false;
+        }
+    }
+
+    public void SetEnemiesForAttack(Character character)
+    {
+        enemiesToAttack.Clear();
+        if (character.IsAttackedOnTheMove) return;
+
+        SetAttackableCells(character.PositionOnField, enums.Directions.top, character);
+        SetAttackableCells(character.PositionOnField, enums.Directions.bottom, character);
+        SetAttackableCells(character.PositionOnField, enums.Directions.right, character);
+        SetAttackableCells(character.PositionOnField, enums.Directions.left, character);
+    }
+    private void SetAttackableCells(Vector2 pos, enums.Directions direction, Character character)
+    {
+        int newI = (int)pos.x;
+        int newJ = (int)pos.y;
+
+        for (int i = 0; i < character.Range; i++)
+        {
+            switch (direction)
+            {
+                case enums.Directions.top:
+                    newI--;
+                    break;
+                case enums.Directions.bottom:
+                    newJ--;
+                    break;
+                case enums.Directions.right:
+                    newI++;
+                    break;
+                case enums.Directions.left:
+                    newJ++;
+                    break;
+            }
+
+            if (newI >= 7 || newI < 0)
+            {
+                break;
+            }
+            if (newJ >= 11 || newJ < 0)
+            {
+                break;
+            }
+
+            Cell cell = BattleSystem.FieldController.GetCell(newI, newJ);
+            Enemy enemy = cell.GetComponentInChildren<Enemy>();
+            if (cell.transform.childCount > 0)
+            {
+                if (enemy != null)
+                {
+                    cell.SetColor("attack");
+                    enemiesToAttack.Add(enemy);
+                }
+                if (BattleSystem.CurrentPlayerCharacter.Class == enums.Classes.Маг)
+                {
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
+
+            }
+
+        }
+    }
+
 }

@@ -25,12 +25,6 @@ public class GameSupportCardDisplay : OutlineClicableUI
     {
         m_dragAndDropComponent.OnBeginDragEvent += OnBeginDrag;
         m_dragAndDropComponent.OnEndDragEvent += OnEndDrag;
-        m_dragAndDropComponent.OnDropEvent += OnDrop;
-    }
-    private void OnDrop(GameObject gameObject)
-    {
-        m_gameSupport—ardAbility.LockState();
-        m_gameSupport—ardAbility.SelectCard();
     }
     private void OnBeginDrag(GameObject gameObject)
     {
@@ -46,7 +40,6 @@ public class GameSupportCardDisplay : OutlineClicableUI
     {
         m_dragAndDropComponent.OnBeginDragEvent -= OnBeginDrag;
         m_dragAndDropComponent.OnEndDragEvent -= OnEndDrag;
-        m_dragAndDropComponent.OnDropEvent -= OnDrop;
     }
 
     public void SetData(CardSupport cardSupport)

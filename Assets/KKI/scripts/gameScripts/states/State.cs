@@ -59,7 +59,7 @@ public abstract class State
     {
         yield break;
     }
-    public virtual IEnumerator UseSupportCard()
+    public virtual IEnumerator UseSupportCard(GameObject cardSupport)
     {
         yield break;
     }

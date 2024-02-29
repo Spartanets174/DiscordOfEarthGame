@@ -30,16 +30,20 @@ public class StormCallSupportCardAbility : BaseSupportÑardAbility
         }
         battleSystem.FieldController.InvokeActionOnField(selectCellsBehaviour.UnSubscribe);
         attackAllCharactersInAreaBehaviour.cellsToAttack = selectCellsBehaviour.highlightedCells.Where(x => x.GetComponentInChildren<Character>() != null).ToList();
-        OnSupportCardAbilitySelectedInvoke();
 
-        UseCard(null);       
+        if (attackAllCharactersInAreaBehaviour.cellsToAttack.Count==0)
+        {
+            SelectCard();
+        }
+        else
+        {
+            UseCard(null);
+        }    
     }
 
 
     private void OnCardUse()
     {
         battleSystem.FieldController.TurnOnCells();
-
-        OnSupportCardAbilityUsedInvoke();
     }
 }

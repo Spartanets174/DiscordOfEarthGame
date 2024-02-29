@@ -37,14 +37,13 @@ public class TeleportSupportCardAbility : BaseSupport—ardAbility
             playerCharacter.OnClick += SetCellsToMove;
             playerCharacter.OnClick += SelectCharacter;
         }
-        OnSupportCardAbilitySelectedInvoke();
     }
 
     private void SetCellsToMove(GameObject @object)
     {
         foreach (var cell in setAbiableCellsBehaviour.cellsToMove)
         {
-            cell.OnClick += UseCard;
+            cell.OnClick -= UseCard;
         }
         setAbiableCellsBehaviour.cellsToMove.Clear();
         battleSystem.FieldController.InvokeActionOnField(x =>
@@ -68,7 +67,6 @@ public class TeleportSupportCardAbility : BaseSupport—ardAbility
         {
             cell.OnClick += UseCard;
         }
-        OnSupportCardAbilityCharacterSelectedInvoke();
     }
 
     private void OnCardUse()
@@ -81,8 +79,7 @@ public class TeleportSupportCardAbility : BaseSupport—ardAbility
 
         foreach (var cell in setAbiableCellsBehaviour.cellsToMove)
         {
-            cell.OnClick += UseCard;
+            cell.OnClick -= UseCard;
         }
-        OnSupportCardAbilityUsedInvoke();
     }
 }

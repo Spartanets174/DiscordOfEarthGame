@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SelectCellsBehaviour : ICardSelectable
@@ -42,6 +43,22 @@ public class SelectCellsBehaviour : ICardSelectable
         cell.SetCellState(true);
         cell.OnHoverEnter += OnHoverEnter;
         cell.OnHoverExit += OnHoverExit;
+        cell.OnHover += OnHover;
+    }
+
+    private void OnHover(GameObject @object)
+    {
+        battleSystem.FieldController.InvokeActionOnField(x =>
+        {
+            if (highlightedCells.Contains(x))
+            {
+                x.SetColor("attack");
+            }
+            else
+            {
+                x.SetColor("normal");
+            }
+        });
     }
 
     private void OnHoverExit(GameObject gameObject)
@@ -53,6 +70,8 @@ public class SelectCellsBehaviour : ICardSelectable
 
     private void OnHoverEnter(GameObject gameObject)
     {
+        if (gameObject == null) return;
+
         Cell currentCell = gameObject.GetComponent<Cell>();
 
         Vector2 currentCellIndex = currentCell.CellIndex;
@@ -69,13 +88,8 @@ public class SelectCellsBehaviour : ICardSelectable
         {          
             Vector2 cellIndex = x.CellIndex;
             if (cellIndex.x >= xStart && cellIndex.x<= xEnd && cellIndex.y >= yStart && cellIndex.y <= yEnd)
-            {               
-                x.SetColor("attack");               
+            {                            
                 highlightedCells.Add(x);
-            }
-            else
-            {
-                x.SetColor("normal");
             }
         });
     }
@@ -84,6 +98,7 @@ public class SelectCellsBehaviour : ICardSelectable
     {
         cell.OnHoverEnter -= OnHoverEnter;
         cell.OnHoverExit -= OnHoverExit;
+        cell.OnHover -= OnHover;
     }
 
     public void CancelSelection()

@@ -148,7 +148,7 @@ public class EnemyTurn : State
         /*Логика при применении способности 3*/
         yield break;
     }
-    public override IEnumerator UseSupportCard()
+    public override IEnumerator UseSupportCard(GameObject cardSupport)
     {
         /*Логика при применении карты помощи*/
         yield break;

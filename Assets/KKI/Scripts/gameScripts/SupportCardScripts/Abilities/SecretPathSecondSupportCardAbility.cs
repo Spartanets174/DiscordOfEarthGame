@@ -36,7 +36,6 @@ public class SecretPathSecondSupportCardAbility : BaseSupport—ardAbility
             playerCharacter.OnClick += SetCellsToMove;
             playerCharacter.OnClick += SelectCharacter;
         }
-        OnSupportCardAbilitySelectedInvoke();
     }
 
 
@@ -62,7 +61,6 @@ public class SecretPathSecondSupportCardAbility : BaseSupport—ardAbility
         {
             item.OnClick += UseCard;
         }
-        OnSupportCardAbilityCharacterSelectedInvoke();
     }
 
     private void OnCardUse()
@@ -75,8 +73,7 @@ public class SecretPathSecondSupportCardAbility : BaseSupport—ardAbility
 
         foreach (var item in setAbiableCellsBehaviour.cellsToMove)
         {
-            item.OnClick += UseCard;
+            item.OnClick -= UseCard;
         }
-        OnSupportCardAbilityUsedInvoke();
     }
 }
