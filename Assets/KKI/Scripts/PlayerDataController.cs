@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager:MonoBehaviour, ILoadable
+public class PlayerDataController:MonoBehaviour, ILoadable
 {
     [SerializeField]
     private PlayerData m_playerData;

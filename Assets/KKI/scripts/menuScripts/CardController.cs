@@ -6,7 +6,7 @@ using static enums;
 
 public abstract class CardController : MonoBehaviour, ILoadable
 {
-    protected PlayerManager m_PlayerManager;
+    protected PlayerDataController m_PlayerManager;
 
 
     private Races m_currentRace;
@@ -31,7 +31,7 @@ public abstract class CardController : MonoBehaviour, ILoadable
         m_currentRace = Races.Все;
         m_currentClass = Classes.Все;
         m_currentTypeOfSupport = TypeOfSupport.Все;
-        m_PlayerManager = FindAnyObjectByType<PlayerManager>();
+        m_PlayerManager = FindAnyObjectByType<PlayerDataController>();
     }
 
     public void SetCurrentClass(Classes cardClass)

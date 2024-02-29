@@ -28,9 +28,9 @@ public class SetAbiableCellsBehaviour : ICharacterSelectable
             cell.SetCellState(true);
         }
 
-        foreach (var playerCharacter in battleSystem.PlayerCharactersObjects)
+        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
         {
-            if (battleSystem.CurrentPlayerCharacter!= playerCharacter)
+            if (battleSystem.PlayerController.CurrentPlayerCharacter!= playerCharacter)
             {
                 playerCharacter.IsChosen = false;
             }           

@@ -7,29 +7,23 @@ using UnityEngine.TextCore.Text;
 
 public class BattleSystem : StateMachine, ILoadable
 {
+    [Header("Controllers")]
+    [SerializeField]
+    private PlayerController m_playerController;
+    public PlayerController PlayerController => m_playerController;
     [SerializeField]
     private EnemyController enemyController;
     public EnemyController EnemyController => enemyController;
     [SerializeField]
-    private FieldController field;
-    public FieldController FieldController => field;
+    private FieldController m_fieldController;
+    public FieldController FieldController => m_fieldController;
     [SerializeField]
     private GameUIPresenter gameUIPresenter;
     public GameUIPresenter GameUIPresenter => gameUIPresenter;
 
 
-    [Space, Header("Prefabs")]
-    [SerializeField]
-    private PlayerCharacter charPrefab;
-    public PlayerCharacter CharPrefab => charPrefab;
-
-    private List<PlayerCharacter> m_playerCharactersObjects=new();
-    public List<PlayerCharacter> PlayerCharactersObjects => m_playerCharactersObjects;
-
-
     private Character currentChosenCharacter;
-    private PlayerCharacter currentPlayerCharacter;
-    public PlayerCharacter CurrentPlayerCharacter => currentPlayerCharacter;
+
 
     private float m_pointsOfAction;
     public float PointsOfAction
@@ -46,19 +40,15 @@ public class BattleSystem : StateMachine, ILoadable
     {
         FieldController.InvokeActionOnField(AddOnCellClick);
         gameUIPresenter.EndMoveButton.onClick.AddListener(SetEnemyTurn);
+        PlayerController.OnPlayerCharacterSpawned += OnPlayerCharacterSpawned;
 
         foreach (var item in gameUIPresenter.GameSupportCards)
         {
             item.DragAndDropComponent.OnDropEvent += OnSupportCardButton;
-            item.DragAndDropComponent.OnDropEvent +=x=>{ FieldController.TurnOnCells(); };
+            item.DragAndDropComponent.OnDropEvent += x=>{ FieldController.TurnOnCells(); };
         }
 
         SetState(new Begin(this));
-    }
-
-    private void AddOnCellClick(Cell cell)
-    {
-        cell.OnClick += x => { FieldController.TurnOnCells(); };
     }
 
     public void OnUnitStatementButton(GameObject character)
@@ -102,25 +92,21 @@ public class BattleSystem : StateMachine, ILoadable
         StartCoroutine(State.UseItem());
     }
 
-
-    public PlayerCharacter InstasiatePlayerCharacter(CharacterCard characterCard, Transform parent)
+    private void OnPlayerCharacterSpawned()
     {
-        PlayerCharacter prefab = Instantiate(CharPrefab, Vector3.zero, Quaternion.identity, parent);
-        prefab.transform.localPosition = new Vector3(0, 1, 0);
-        m_playerCharactersObjects.Add(prefab);
-
-        prefab.SetData(characterCard,null, m_playerCharactersObjects.Count-1);
-
         GameUIPresenter.SetChosenStateToCards(false);
         GameUIPresenter.EbableUnspawnedCards();
-        if (m_playerCharactersObjects.Count == 5)
+        if (PlayerController.PlayerCharactersObjects.Count == 5)
         {
             StartGame();
         }
-
-        return prefab;
     }
-   
+
+    private void AddOnCellClick(Cell cell)
+    {
+        cell.OnClick += x => { FieldController.TurnOnCells(); };
+    }
+
     private void StartGame()
     {
         int cubeValue = UnityEngine.Random.Range(1, 6);
@@ -130,10 +116,10 @@ public class BattleSystem : StateMachine, ILoadable
 
         EnemyController.gameObject.SetActive(false);
 
-        foreach (var playerChar in m_playerCharactersObjects)
+        foreach (var playerChar in PlayerController.PlayerCharactersObjects)
         {
             playerChar.OnClick += SetCurrentChosenCharacter;
-            playerChar.OnClick += SetCurrentPlayerChosenCharacter;
+            playerChar.OnClick += PlayerController.SetCurrentPlayerChosenCharacter;
             playerChar.IsEnabled = true;
         }
         foreach (var enemyChar in EnemyController.EnemyCharObjects)
@@ -182,23 +168,6 @@ public class BattleSystem : StateMachine, ILoadable
             currentChosenCharacter = character.GetComponent<Character>();
             currentChosenCharacter.IsChosen = true;
             GameUIPresenter.SetChosenCharDeatils(currentChosenCharacter);
-        }
-        else
-        {
-            Debug.LogError("Нет персонажа");
-        }
-    }
-
-    private void SetCurrentPlayerChosenCharacter(GameObject character)
-    {
-        if (character != null)
-        {
-            if (currentPlayerCharacter != null)
-            {
-                currentPlayerCharacter.IsCurrentPlayerCharacter = false;
-            }
-            currentPlayerCharacter = character.GetComponent<PlayerCharacter>();
-            currentPlayerCharacter.IsCurrentPlayerCharacter = true;
         }
         else
         {

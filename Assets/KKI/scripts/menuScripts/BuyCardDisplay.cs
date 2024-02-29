@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class BuyCardDisplay : MonoBehaviour
 {
     [SerializeField]
-    private PlayerManager playerManager;
+    private PlayerDataController playerManager;
 
     [SerializeField]
     private Image cardSprite;

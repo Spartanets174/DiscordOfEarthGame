@@ -33,7 +33,7 @@ public class SelectAllPlayerUnitsBehaviour : ICardSelectable
                 enemyCharacter.IsEnabled = false;
             }
 
-            foreach (var playerCharacter in battleSystem.PlayerCharactersObjects)
+            foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
             {
                 playerCharacter.IsChosen = true;
             }
@@ -51,7 +51,7 @@ public class SelectAllPlayerUnitsBehaviour : ICardSelectable
                 enemyCharacter.IsEnabled = true;
             }
 
-            foreach (var playerCharacter in battleSystem.PlayerCharactersObjects)
+            foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
             {
                 playerCharacter.IsChosen = false;
             }

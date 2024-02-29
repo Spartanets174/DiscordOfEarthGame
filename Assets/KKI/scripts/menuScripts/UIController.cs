@@ -45,7 +45,7 @@ public class UIController : MonoBehaviour, ILoadable
     [SerializeField]
     private SceneController sceneController;
     [SerializeField]
-    private PlayerManager PlayerManager;
+    private PlayerDataController PlayerManager;
 
 
     private Camera cam;

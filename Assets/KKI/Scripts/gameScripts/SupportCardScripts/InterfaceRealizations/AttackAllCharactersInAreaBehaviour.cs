@@ -35,7 +35,7 @@ public class AttackAllCharactersInAreaBehaviour : ICardUsable
                 }
                 if (character is PlayerCharacter playerCharacter)
                 {
-                    battleSystem.PlayerCharactersObjects.Remove(playerCharacter);
+                    battleSystem.PlayerController.PlayerCharactersObjects.Remove(playerCharacter);
                 }
                 if (character is EnemyCharacter enemyCharacter)
                 {

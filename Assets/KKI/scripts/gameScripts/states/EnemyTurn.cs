@@ -112,13 +112,13 @@ public class EnemyTurn : State
                 }
                 else
                 {
-                    BattleSystem.PlayerCharactersObjects.Remove((PlayerCharacter)currentTarget);
+                    BattleSystem.PlayerController.PlayerCharactersObjects.Remove((PlayerCharacter)currentTarget);
                     BattleSystem.GameUIPresenter.AddMessageToGameLog($"Союзный юнит {currentTarget.CharacterName} убит");
                 }
                 GameObject.Destroy(currentTarget.gameObject);               
             }
 
-            if (BattleSystem.PlayerCharactersObjects.Count == 0)
+            if (BattleSystem.PlayerController.PlayerCharactersObjects.Count == 0)
             {
                 BattleSystem.SetState(new Lost(BattleSystem));
             }

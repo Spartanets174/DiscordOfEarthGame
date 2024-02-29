@@ -83,12 +83,12 @@ public class StaticEnemyCharacter : Enemy
 
         if (isDeath)
         {
-            battleSystem.PlayerCharactersObjects.Remove(currentTarget);
+            battleSystem.PlayerController.PlayerCharactersObjects.Remove(currentTarget);
             battleSystem.GameUIPresenter.AddMessageToGameLog($"Союзный юнит {currentTarget.CharacterName} убит");
             GameObject.Destroy(currentTarget.gameObject);
         }
 
-        if (battleSystem.PlayerCharactersObjects.Count == 0)
+        if (battleSystem.PlayerController.PlayerCharactersObjects.Count == 0)
         {
             battleSystem.SetState(new Lost(battleSystem));
         }

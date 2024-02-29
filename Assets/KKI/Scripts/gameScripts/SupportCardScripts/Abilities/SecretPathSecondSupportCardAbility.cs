@@ -22,7 +22,7 @@ public class SecretPathSecondSupportCardAbility : BaseSupport—ardAbility
 
     private void OnCancelSelection()
     {
-        foreach (var playerCharacter in battleSystem.PlayerCharactersObjects)
+        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
         {
             playerCharacter.OnClick -= SetCellsToMove;
             playerCharacter.OnClick -= SelectCharacter;
@@ -31,7 +31,7 @@ public class SecretPathSecondSupportCardAbility : BaseSupport—ardAbility
 
     private void OnSelected()
     {
-        foreach (var playerCharacter in battleSystem.PlayerCharactersObjects)
+        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
         {
             playerCharacter.OnClick += SetCellsToMove;
             playerCharacter.OnClick += SelectCharacter;
@@ -65,7 +65,7 @@ public class SecretPathSecondSupportCardAbility : BaseSupport—ardAbility
 
     private void OnCardUse()
     {
-        foreach (var playerCharacter in battleSystem.PlayerCharactersObjects)
+        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
         {
             playerCharacter.OnClick -= SetCellsToMove;
             playerCharacter.OnClick -= SelectCharacter;

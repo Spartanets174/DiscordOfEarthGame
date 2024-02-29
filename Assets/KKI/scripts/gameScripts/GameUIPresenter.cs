@@ -10,10 +10,9 @@ using UnityEngine.UI;
 
 public class GameUIPresenter : MonoBehaviour, ILoadable
 {
-    [Space, Header("Game data")]
+    [Header("Model")]
     [SerializeField]
-    private PlayerManager playerManager;
-    public PlayerManager PlayerManager => playerManager;
+    private PlayerController playerController;
 
     [Space, Header("Prefabs")]
     [SerializeField]
@@ -58,7 +57,7 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
     [SerializeField]
     private GameObject endGameInterface;
     [SerializeField]
-    private ChosenCharacterDeatilsDisplay chosenCharacterDeatilsDisplay;
+    private ChosenCharacterDeatilsDisplay chosenCharacterDeatilsDisplay; 
 
     private ReactiveProperty<GameSupportCardDisplay> currentGameSupportCardDisplay=new();
 
@@ -74,7 +73,7 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
     {
         SetBlockersState(false);
         tipsTextParent.SetActive(false);
-        foreach (var Card in playerManager.DeckUserCharCards)
+        foreach (var Card in playerController.PlayerDataController.DeckUserCharCards)
         {
             GameCharacterCardDisplay cardDisplay = Instantiate(gameCharacterCardPrefab, Vector3.zero, Quaternion.identity, gameCharacterCardsParent);
             cardDisplay.transform.localPosition = Vector3.zero;
@@ -82,7 +81,7 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
             m_gameCharacterCards.Add(cardDisplay);
             cardDisplay.IsEnabled = true;
         }
-        foreach (var SupportCard in playerManager.DeckUserSupportCards)
+        foreach (var SupportCard in playerController.PlayerDataController.DeckUserSupportCards)
         {
             GameSupportCardDisplay cardDisplay = Instantiate(gameSupportCardPrefab, Vector3.zero, Quaternion.identity, gameSupportCardsParent);
             cardDisplay.transform.localPosition = Vector3.zero;

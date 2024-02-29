@@ -18,7 +18,7 @@ public class MoveToCellBehaviour : ICardUsable
     public void UseAbility(GameObject gameObject)
     {
         Cell currentCell = gameObject.GetComponent<Cell>();
-        Character character = battleSystem.State is PlayerTurn?battleSystem.CurrentPlayerCharacter: battleSystem.EnemyController.CurrentEnemyCharacter;
+        Character character = battleSystem.State is PlayerTurn?battleSystem.PlayerController.CurrentPlayerCharacter: battleSystem.EnemyController.CurrentEnemyCharacter;
         Vector2 pos = character.PositionOnField;
 
         Vector3 currentCellPos = currentCell.transform.position;

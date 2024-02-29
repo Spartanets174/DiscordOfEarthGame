@@ -74,7 +74,7 @@ public class Begin : State
             if (cardDisplay!=null)
             {
                 cardDisplay.IsCharacterSpawned = true;
-                cardDisplay.SetCharacter(BattleSystem.InstasiatePlayerCharacter(cardDisplay.CurrentCharacterCard, cell.transform));               
+                cardDisplay.SetCharacter(BattleSystem.PlayerController.InstasiatePlayerCharacter(cardDisplay.CurrentCharacterCard, cell.transform));               
             }
             else
             {

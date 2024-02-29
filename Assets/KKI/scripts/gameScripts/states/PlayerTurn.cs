@@ -41,7 +41,7 @@ public class PlayerTurn : State
         OnStepStarted += OnPlayerTurnStarted;
         OnStepCompleted += OnPlayerTurnCompleted;
 
-        foreach (var playerCharacter in BattleSystem.PlayerCharactersObjects)
+        foreach (var playerCharacter in BattleSystem.PlayerController.PlayerCharactersObjects)
         {
             playerCharacter.ResetCharacter();     
         }
@@ -83,7 +83,7 @@ public class PlayerTurn : State
     public override IEnumerator Move(GameObject cell)
     {
         Cell cellToMove = cell.GetComponent<Cell>();
-        PlayerCharacter playerCharacter = BattleSystem.CurrentPlayerCharacter;
+        PlayerCharacter playerCharacter = BattleSystem.PlayerController.CurrentPlayerCharacter;
         Cell currentCell = playerCharacter.GetComponentInParent<Cell>();
         /*float numOfCells = Mathf.Abs((pos.x+pos.y) - (currentCell.CellIndex.x + currentCell.CellIndex.y));*/
 
@@ -134,7 +134,7 @@ public class PlayerTurn : State
     {
         if (2 <= BattleSystem.PointsOfAction)
         {
-            PlayerCharacter playerCharacter = BattleSystem.CurrentPlayerCharacter;
+            PlayerCharacter playerCharacter = BattleSystem.PlayerController.CurrentPlayerCharacter;
             Enemy currentTarget = target.GetComponent<Enemy>();
 
             playerCharacter.IsAttackedOnTheMove = true;
@@ -264,7 +264,7 @@ public class PlayerTurn : State
             SupportCard.DragAndDropComponent.OnDropEvent += OnDropEvent;
         }
 
-        foreach (var playerCharacter in BattleSystem.PlayerCharactersObjects)
+        foreach (var playerCharacter in BattleSystem.PlayerController.PlayerCharactersObjects)
         {
             playerCharacter.OnClick += BattleSystem.OnChooseCharacterButton;
         }
@@ -277,7 +277,7 @@ public class PlayerTurn : State
         {
             SupportCard.DragAndDropComponent.OnDropEvent -= OnDropEvent;
         }
-        foreach (var playerCharacter in BattleSystem.PlayerCharactersObjects)
+        foreach (var playerCharacter in BattleSystem.PlayerController.PlayerCharactersObjects)
         {
             playerCharacter.OnClick -= BattleSystem.OnChooseCharacterButton;
             playerCharacter.IsChosen = false;
@@ -312,9 +312,9 @@ public class PlayerTurn : State
     private void SetStateToNormal()
     {
         Subscribe();
-        if (BattleSystem.CurrentPlayerCharacter != null)
+        if (BattleSystem.PlayerController.CurrentPlayerCharacter != null)
         {
-            BattleSystem.CurrentPlayerCharacter.IsChosen = false;
+            BattleSystem.PlayerController.CurrentPlayerCharacter.IsChosen = false;
         }
     }
 
@@ -377,7 +377,7 @@ public class PlayerTurn : State
                     cell.SetColor("attack");
                     enemiesToAttack.Add(enemy);
                 }
-                if (BattleSystem.CurrentPlayerCharacter.Class == enums.Classes.Маг)
+                if (BattleSystem.PlayerController.CurrentPlayerCharacter.Class == enums.Classes.Маг)
                 {
                     continue;
                 }
