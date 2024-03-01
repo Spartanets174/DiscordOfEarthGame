@@ -95,6 +95,15 @@ public abstract class Character : OutlineInteractableObject
         }
     }
 
+    private bool m_IsFreezed;
+    public bool IsFreezed
+    {
+        get=> m_IsFreezed;
+        set {
+            Speed = 0;
+            m_IsFreezed = value;
+        }
+    }
 
     protected bool m_isAttackedOnTheMove = false;
     public bool IsAttackedOnTheMove
@@ -102,15 +111,6 @@ public abstract class Character : OutlineInteractableObject
         get => m_isAttackedOnTheMove;
         set => m_isAttackedOnTheMove = value;
     }
-
-    protected bool m_isAttackAbilityUsed = false;
-    public bool IsAttackAbilityUsed => m_isAttackAbilityUsed;
-
-    protected bool m_isDefenceAbilityUsed = false;
-    public bool IsDefenceAbilityUsed => m_isDefenceAbilityUsed;
-
-    protected bool m_isBuffAbilityUsed = false;
-    public bool IsBuffAbilityUsed => m_isBuffAbilityUsed;
 
     public event Action<Character> OnAttack;
     public event Action<Character> OnHeal;
@@ -122,11 +122,11 @@ public abstract class Character : OutlineInteractableObject
 
     public void ResetCharacter()
     {
-        m_speed = m_card.speed;
+        if (!IsFreezed)
+        {
+            m_speed = m_card.speed;
+        }       
         m_isAttackedOnTheMove = false;
-        m_isAttackAbilityUsed = false;
-        m_isDefenceAbilityUsed = false;
-        m_isBuffAbilityUsed = false;
     }
     public virtual void SetData(CharacterCard card, Material material, int currentIndex)
     {
@@ -166,7 +166,7 @@ public abstract class Character : OutlineInteractableObject
 
     public float Damage(float damage)
     {
-        float crit = IsCrit(0.15f,1.5f);
+        /*float crit = IsCrit(0.15f,1.5f);*/
         /*damage = ((11 + damage) * damage * crit * (damage - MagDefence + Card.health)) / 256;*/
         Health = Math.Max(0, Health - damage);
 
@@ -199,17 +199,14 @@ public abstract class Character : OutlineInteractableObject
 
     public void UseAtackAbility()
     {
-        m_isAttackAbilityUsed = true;
         OnAttackAbilityUsed?.Invoke(this);
     }
     public void UseDefenceAbility()
     {
-        m_isDefenceAbilityUsed = true;
         OnDefenceAbilityUsed?.Invoke(this);
     }
     public void UseBuffAbility()
     {
-        m_isBuffAbilityUsed = true;
         OnBuffAbilityUsed?.Invoke(this);
     }
 

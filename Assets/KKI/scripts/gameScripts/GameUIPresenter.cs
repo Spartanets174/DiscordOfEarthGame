@@ -196,6 +196,8 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
     }
     public void OnPlayerTurnStart()
     {
+        SetDragAllowToSupportCards(true);
+        AddMessageToGameLog("Ваш ход.");
         m_endMoveButton.interactable = true;
         foreach (var supportCard in m_gameSupportCards)
         {
@@ -205,11 +207,20 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
         {
             Card.IsEnabled = true;
         }
+        foreach (var SupportCard in GameSupportCards)
+        {
+            SupportCard.IsEnabled = true;
+        }
+
     }
 
     public void OnEnemyTurnStart()
     {
         m_endMoveButton.interactable = false;
+
+        SetDragAllowToSupportCards(false);
+        AddMessageToGameLog("Враг планирует свой ход...");
+
         foreach (var supportCard in m_gameSupportCards)
         {
             supportCard.IsEnabled = false;

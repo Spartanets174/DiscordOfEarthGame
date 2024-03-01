@@ -11,7 +11,7 @@ public class BattleSystem : StateMachine, ILoadable
     [SerializeField]
     private PlayerController m_playerController;
     public PlayerController PlayerController => m_playerController;
-    [SerializeField]
+    [SerializeField] 
     private EnemyController enemyController;
     public EnemyController EnemyController => enemyController;
     [SerializeField]
@@ -21,9 +21,14 @@ public class BattleSystem : StateMachine, ILoadable
     private GameUIPresenter gameUIPresenter;
     public GameUIPresenter GameUIPresenter => gameUIPresenter;
 
+    private List<ITurnCountable> m_playerTurnCountables=new();
+    public List<ITurnCountable> PlayerTurnCountables => m_playerTurnCountables;
+
+    private List<ITurnCountable> m_enemyTurnCountables=new();
+    public List<ITurnCountable> EnemyTurnCountables => m_enemyTurnCountables;
 
     private Character currentChosenCharacter;
-
+   
 
     private float m_pointsOfAction;
     public float PointsOfAction
@@ -46,6 +51,16 @@ public class BattleSystem : StateMachine, ILoadable
         {
             item.DragAndDropComponent.OnDropEvent += OnSupportCardButton;
             item.DragAndDropComponent.OnDropEvent += x=>{ FieldController.TurnOnCells(); };
+        }
+
+        foreach (var playerTurnCountable in PlayerTurnCountables)
+        {
+            playerTurnCountable.OnReturnToNormal += x => PlayerTurnCountables.Remove(x);
+        }
+
+        foreach (var enemyTurnCountable in EnemyTurnCountables)
+        {
+            enemyTurnCountable.OnReturnToNormal += x => EnemyTurnCountables.Remove(x);
         }
 
         SetState(new Begin(this));

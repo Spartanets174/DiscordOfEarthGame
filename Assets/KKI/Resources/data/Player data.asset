@@ -149,13 +149,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7c1bf058d4094a148b9ec544c8523b87, type: 2}
   - {fileID: 11400000, guid: 8ddad6f2dd7fae749ab585f3bc109f72, type: 2}
   deckUserSupportCards:
+  - {fileID: 11400000, guid: 857761d4aa3fff942aaf7aae366ffe5d, type: 2}
+  - {fileID: 11400000, guid: b0ddec4b1c7aa7a4194f50c36424ecc4, type: 2}
   - {fileID: 11400000, guid: bc7c9e8a72f529a4dab187054b238ec8, type: 2}
   - {fileID: 11400000, guid: 7c51c4de9e922d746a9886dabd133727, type: 2}
   - {fileID: 11400000, guid: 247e8b9ff08bba24080a9a0ca99b0d38, type: 2}
-  - {fileID: 11400000, guid: d5698c88c75621d4190823ae45ce793c, type: 2}
-  - {fileID: 11400000, guid: 25dedc9f1352cd44cafd47e2f35e9220, type: 2}
-  - {fileID: 11400000, guid: 1c9b636c1594dbc4a8ab06e6d63e1256, type: 2}
-  - {fileID: 11400000, guid: a4cbfee1947cbfc4eb907f920d6c5d0c, type: 2}
+  - {fileID: 11400000, guid: 8f5cbf164e1efd545bbc328802f0b632, type: 2}
+  - {fileID: 11400000, guid: df0aedd72128a1544ae2cc75ab6768fb, type: 2}
   money: 868
   Name: "\u0430\u041C\u041E\u0413\u0423\u0421"
   PlayerId: 92

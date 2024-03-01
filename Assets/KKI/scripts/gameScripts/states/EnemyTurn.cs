@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 
@@ -15,11 +16,24 @@ public class EnemyTurn : State
     {
         new WaitForSecondsRealtime(1f);
 
-        BattleSystem.GameUIPresenter.SetDragAllowToSupportCards(false);
-        BattleSystem.GameUIPresenter.AddMessageToGameLog("Ход противника.");
         BattleSystem.GameUIPresenter.OnEnemyTurnStart();
         BattleSystem.FieldController.TurnOnCells();
         BattleSystem.PointsOfAction = 20;
+
+        foreach (var enemyTurnCountable in BattleSystem.EnemyTurnCountables)
+        {
+            Debug.Log(enemyTurnCountable.TurnCount);
+            if (enemyTurnCountable.TurnCount == 0)
+            {
+                enemyTurnCountable.ReturnToNormal();
+            }
+            else
+            {
+                enemyTurnCountable.TurnCount--;
+            }
+            Debug.Log(enemyTurnCountable.TurnCount);
+        }
+        
 
         foreach (var staticEnemy in BattleSystem.EnemyController.StaticEnemyCharObjects)
         {
@@ -33,7 +47,7 @@ public class EnemyTurn : State
 
         BattleSystem.EnemyController.SetupTree();
         BattleSystem.EnemyController.RestartTree();
-        BattleSystem.GameUIPresenter.AddMessageToGameLog($"Враг планирует свой ход...");
+        
         yield break;
     }
     public override IEnumerator ChooseCharacter(GameObject character)
@@ -133,6 +147,28 @@ public class EnemyTurn : State
         new WaitForSecondsRealtime(1f);
         yield break;
     }
+
+    public override IEnumerator UseSupportCard(GameObject cardSupport)
+    {
+
+        GameSupportCardDisplay supportCardDisplay = cardSupport.GetComponent<GameSupportCardDisplay>();
+
+        if (supportCardDisplay.GameSupportСardAbility is ITurnCountable turnCountable)
+        {
+            if (turnCountable.IsBuff)
+            {
+                BattleSystem.EnemyTurnCountables.Add(turnCountable);
+            }
+            else
+            {               
+                BattleSystem.PlayerTurnCountables.Add(turnCountable);
+            }
+        }
+
+        supportCardDisplay.GameSupportСardAbility.SelectCard();
+        yield break;
+    }
+
     public override IEnumerator UseAttackAbility()
     {
         /*Логика при применении способности 1*/
@@ -148,11 +184,7 @@ public class EnemyTurn : State
         /*Логика при применении способности 3*/
         yield break;
     }
-    public override IEnumerator UseSupportCard(GameObject cardSupport)
-    {
-        /*Логика при применении карты помощи*/
-        yield break;
-    }
+   
     public override IEnumerator UseItem()
     {
         /*Логика при применении предмета*/

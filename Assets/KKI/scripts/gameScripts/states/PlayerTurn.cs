@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UniRx;
 using UnityEngine;
 
@@ -22,15 +23,25 @@ public class PlayerTurn : State
         /*Логика при выборе старте*/
         new WaitForSecondsRealtime(1f);
 
-        BattleSystem.GameUIPresenter.SetDragAllowToSupportCards(true);
-        BattleSystem.GameUIPresenter.AddMessageToGameLog("Ваш ход.");
         BattleSystem.GameUIPresenter.OnPlayerTurnStart();
         
         BattleSystem.PointsOfAction = 20;
-
-        foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
+        
+        foreach (var playerTurnCountable in BattleSystem.PlayerTurnCountables)
         {
-            SupportCard.IsEnabled = true;
+            if (playerTurnCountable.TurnCount == 0)
+            {
+                playerTurnCountable.ReturnToNormal();
+            }
+            else
+            {
+                playerTurnCountable.TurnCount--;
+            }
+        }
+
+        foreach (var playerCharacter in BattleSystem.PlayerController.PlayerCharactersObjects)
+        {
+            playerCharacter.ResetCharacter();
         }
 
         foreach (var staticEnemy in BattleSystem.EnemyController.StaticEnemyCharObjects)
@@ -41,11 +52,7 @@ public class PlayerTurn : State
         OnStepStarted += OnPlayerTurnStarted;
         OnStepCompleted += OnPlayerTurnCompleted;
 
-        foreach (var playerCharacter in BattleSystem.PlayerController.PlayerCharactersObjects)
-        {
-            playerCharacter.ResetCharacter();     
-        }
-
+     
         OnStepStartedInvoke();
         yield break;
     }
@@ -197,6 +204,19 @@ public class PlayerTurn : State
         {
             supportCardDisplay.GameSupportСardAbility.CancelUsingCard();
         }).AddTo(disposables);
+
+
+        if (supportCardDisplay.GameSupportСardAbility is ITurnCountable turnCountable)
+        {
+            if (turnCountable.IsBuff)
+            {
+                BattleSystem.PlayerTurnCountables.Add(turnCountable);
+            }
+            else
+            {
+                BattleSystem.EnemyTurnCountables.Add(turnCountable);
+            }
+        }
 
         supportCardDisplay.GameSupportСardAbility.SelectCard();
         yield break;
