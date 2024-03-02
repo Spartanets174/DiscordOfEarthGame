@@ -22,7 +22,7 @@ public class CurseSecondCardSupportAbility : BaseSupportÑardAbility, ITurnCounta
         base.Start();
 
         SetCardSelectBehaviour(new EmptySelectBehaviour("Èñïîëüçóéòå êàğòó"));
-
+        TurnCount = 1;
         m_isBuff = false;
         m_cardSelectBehaviour.OnSelected += OnSelected;
     }
@@ -30,9 +30,6 @@ public class CurseSecondCardSupportAbility : BaseSupportÑardAbility, ITurnCounta
     private void OnSelected()
     {
         battleSystem.PointsOfAction += 3;
-
-        TurnCount = 1;
-
         enemyCharacters = battleSystem.EnemyController.EnemyCharObjects.Where(x => x.Class == enums.Classes.Ïàëàäèí).ToList();
 
         foreach (var enemyCharacter in enemyCharacters)

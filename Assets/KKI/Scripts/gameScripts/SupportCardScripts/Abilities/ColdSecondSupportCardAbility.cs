@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class CurseCardSupportAbility : BaseSupportÑardAbility, ITurnCountable
+public class ColdSecondSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 {
     private int m_turnCount;
     public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
 
     private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff;}
+    public bool IsBuff { get => m_isBuff; }
 
     private List<EnemyCharacter> enemyCharacters;
 
@@ -18,20 +18,18 @@ public class CurseCardSupportAbility : BaseSupportÑardAbility, ITurnCountable
 
     protected override void Start()
     {
-        
+
         base.Start();
 
         SetCardSelectBehaviour(new EmptySelectBehaviour("Èñïîëüçóéòå êàğòó"));
-        TurnCount = 1;
+        TurnCount = 2;
         m_isBuff = false;
         m_cardSelectBehaviour.OnSelected += OnSelected;
     }
 
     private void OnSelected()
-    {
-        battleSystem.PointsOfAction += 1;
-              
-        enemyCharacters = battleSystem.EnemyController.EnemyCharObjects.Where(x=>x.Class==enums.Classes.Ïàëàäèí).ToList();
+    {      
+        enemyCharacters = battleSystem.EnemyController.EnemyCharObjects.Where(x => x.Class == enums.Classes.Ëó÷íèê).ToList();
 
         foreach (var enemyCharacter in enemyCharacters)
         {
@@ -50,5 +48,4 @@ public class CurseCardSupportAbility : BaseSupportÑardAbility, ITurnCountable
         }
         OnReturnToNormal?.Invoke(this);
     }
-
 }

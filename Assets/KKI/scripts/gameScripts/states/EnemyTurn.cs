@@ -158,6 +158,7 @@ public class EnemyTurn : State
             if (turnCountable.IsBuff)
             {
                 BattleSystem.EnemyTurnCountables.Add(turnCountable);
+                turnCountable.TurnCount--;
             }
             else
             {               

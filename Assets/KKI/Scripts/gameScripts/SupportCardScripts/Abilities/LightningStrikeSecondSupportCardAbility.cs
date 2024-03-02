@@ -10,7 +10,7 @@ public class LightningStrikeSecondSupportCardAbility : BaseSupportСardAbility
     protected override void Start()
     {
         base.Start();
-        SetCardSelectBehaviour(new SelectCellsBehaviour("Выберите область для нанесения удара", battleSystem, new Vector2(3, 3)));
+        SetCardSelectBehaviour(new SelectCellsBehaviour("Выберите область для нанесения удара", battleSystem, new Vector2(2, 2)));
 
         SetUseCardBehaviour(new AttackAllCharactersInAreaBehaviour(1f, battleSystem, "\"Призыв бури\""));
 

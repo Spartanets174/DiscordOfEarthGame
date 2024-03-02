@@ -205,12 +205,12 @@ public class PlayerTurn : State
             supportCardDisplay.GameSupportСardAbility.CancelUsingCard();
         }).AddTo(disposables);
 
-
         if (supportCardDisplay.GameSupportСardAbility is ITurnCountable turnCountable)
         {
             if (turnCountable.IsBuff)
             {
                 BattleSystem.PlayerTurnCountables.Add(turnCountable);
+                turnCountable.TurnCount--;
             }
             else
             {
@@ -249,47 +249,28 @@ public class PlayerTurn : State
         Subscribe();
         foreach (var gameSupportCArdDisplay in BattleSystem.GameUIPresenter.GameSupportCards)
         {
-            gameSupportCArdDisplay.GameSupportСardAbility.OnUsingCancel += SetStateToNormal;
-            gameSupportCArdDisplay.GameSupportСardAbility.OnUsingCancel += ClearDisposables;
-
+            gameSupportCArdDisplay.GameSupportСardAbility.OnUsingCancel += OnUsingCancel;
             gameSupportCArdDisplay.GameSupportСardAbility.OnSupportCardAbilityUsed += OnSupportCardAbilityUsed;
-            gameSupportCArdDisplay.GameSupportСardAbility.OnSupportCardAbilityCharacterSelected += ClearDisposables;
+            gameSupportCArdDisplay.GameSupportСardAbility.OnSupportCardAbilityCharacterSelected += OnSupportCardAbilityCharacterSelected;
         }
 
 
         BattleSystem.FieldController.TurnOnCells();
     }
-
-
 
     public void OnPlayerTurnCompleted()
     {
         ResetPlayer();
         foreach (var gameSupportCArdDisplay in BattleSystem.GameUIPresenter.GameSupportCards)
         {
-            gameSupportCArdDisplay.GameSupportСardAbility.OnUsingCancel -= SetStateToNormal;
-            gameSupportCArdDisplay.GameSupportСardAbility.OnUsingCancel -= ClearDisposables;
-
+            gameSupportCArdDisplay.GameSupportСardAbility.OnUsingCancel -= OnUsingCancel;
             gameSupportCArdDisplay.GameSupportСardAbility.OnSupportCardAbilityUsed -= OnSupportCardAbilityUsed;
-            gameSupportCArdDisplay.GameSupportСardAbility.OnSupportCardAbilityCharacterSelected -= ClearDisposables;
+            gameSupportCArdDisplay.GameSupportСardAbility.OnSupportCardAbilityCharacterSelected -= OnSupportCardAbilityCharacterSelected;
         }
 
         BattleSystem.FieldController.TurnOnCells();
     }
 
-    private void Subscribe()
-    {
-        foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
-        {
-            SupportCard.DragAndDropComponent.OnDropEvent += OnDropEvent;
-        }
-
-        foreach (var playerCharacter in BattleSystem.PlayerController.PlayerCharactersObjects)
-        {
-            playerCharacter.OnClick += BattleSystem.OnChooseCharacterButton;
-        }
-
-    }
 
     private void ResetPlayer()
     {
@@ -314,10 +295,6 @@ public class PlayerTurn : State
         enemiesToAttack.Clear();
     }
 
-    private void ClearDisposables(ICharacterSelectable selectable)
-    {
-        ClearDisposables();
-    }
 
     private void OnSupportCardAbilityUsed(ICardUsable usable)
     {
@@ -328,6 +305,7 @@ public class PlayerTurn : State
     {
         disposables.Dispose();
         disposables.Clear();
+        disposables = new();
     }
     private void SetStateToNormal()
     {
@@ -337,13 +315,38 @@ public class PlayerTurn : State
             BattleSystem.PlayerController.CurrentPlayerCharacter.IsChosen = false;
         }
     }
+    private void Subscribe()
+    {
+        foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
+        {
+            SupportCard.DragAndDropComponent.OnDropEvent += OnDropEvent;           
+        }
+        foreach (var playerCharacter in BattleSystem.PlayerController.PlayerCharactersObjects)
+        {
+            playerCharacter.OnClick += BattleSystem.OnChooseCharacterButton;
+        }
 
+    }
     private void OnDropEvent(GameObject gameObject)
     {
         foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
         {
             SupportCard.IsEnabled = false;
         }
+    }
+    private void OnUsingCancel()
+    {
+        SetStateToNormal();
+        ClearDisposables();
+        foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
+        {
+            SupportCard.IsEnabled = true;
+        }
+    }
+
+    private void OnSupportCardAbilityCharacterSelected(ICharacterSelectable selectable)
+    {
+        ClearDisposables();
     }
 
     public void SetEnemiesForAttack(Character character)

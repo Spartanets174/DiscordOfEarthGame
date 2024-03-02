@@ -42,25 +42,53 @@ public abstract class Character : OutlineInteractableObject
     }
 
     protected float m_physAttack;
-    public float PhysAttack => m_physAttack;
+    public float PhysAttack
+    {
+        get => m_physAttack;
+        set => m_physAttack = value;
+    }
 
     protected float m_magAttack;
-    public float MagAttack => m_magAttack;
+    public float MagAttack
+    {
+        get => m_magAttack;
+        set => m_magAttack = value;
+    }
 
     protected int m_range;
-    public int Range => m_range;
+    public int Range
+    {
+        get => m_range;
+        set => m_range = value;
+    }
 
     protected float m_physDefence;
-    public float PhysDefence => m_physDefence;
+    public float PhysDefence
+    {
+        get => m_physDefence;
+        set => m_physDefence = value;
+    }
 
     protected float m_magDefence;
-    public float MagDefence => m_magDefence;
+    public float MagDefence
+    {
+        get => m_magDefence;
+        set => m_magDefence = value;
+    }
 
     protected float m_critChance;
-    public float CritChance => m_critChance;
+    public float CritChance
+    {
+        get => m_critChance;
+        set => m_critChance = value;
+    }
 
     protected float m_critNum;
-    public float CritNum => m_critNum;
+    public float CritNum
+    {
+        get => m_critNum;
+        set => m_critNum = value;
+    }
 
     protected int m_index;
     public int Index => m_index;
@@ -100,8 +128,11 @@ public abstract class Character : OutlineInteractableObject
     {
         get=> m_IsFreezed;
         set {
-            Speed = 0;
             m_IsFreezed = value;
+            if (m_IsFreezed)
+            {
+                Speed = 0;
+            }                      
         }
     }
 
@@ -128,6 +159,20 @@ public abstract class Character : OutlineInteractableObject
         }       
         m_isAttackedOnTheMove = false;
     }
+
+    public void SetStatsToNormal()
+    {
+        Debug.Log("Stats is normal");
+        IsFreezed = false;
+        m_physAttack = m_card.physAttack;
+        m_magAttack = m_card.magAttack;
+        m_range = m_card.range;
+        m_physDefence = m_card.physDefence;
+        m_magDefence = m_card.magDefence;
+        m_critChance = m_card.critChance;
+        m_critNum = m_card.critNum;
+    }
+
     public virtual void SetData(CharacterCard card, Material material, int currentIndex)
     {
         m_card = card;

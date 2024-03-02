@@ -31,7 +31,7 @@ public class LightningStrikeSupportCardAbility : BaseSupportÑardAbility
         attackAllCharactersInAreaBehaviour.cellsToAttack = selectCellsBehaviour.highlightedCells.Where(x => x.GetComponentInChildren<Character>() != null).ToList();
         if (attackAllCharactersInAreaBehaviour.cellsToAttack.Count == 0)
         {
-            SelectCard();
+           SelectCard();
         }
         else
         {

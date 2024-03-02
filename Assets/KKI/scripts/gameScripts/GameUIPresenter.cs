@@ -14,17 +14,23 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
     [SerializeField]
     private PlayerController playerController;
 
+
+    [Space, Header("UI Controllers")]
+    [SerializeField]
+    private ChosenCharacterDeatilsDisplay chosenCharacterDeatilsDisplay;
+
+    [SerializeField]
+    private CardSupportAbilitiesController m_cardSupportAbilitiesController;
+    public CardSupportAbilitiesController CardSupportAbilitiesController => m_cardSupportAbilitiesController;
+
     [Space, Header("Prefabs")]
     [SerializeField]
     private GameCharacterCardDisplay gameCharacterCardPrefab;
-    [SerializeField]
-    private GameSupportCardDisplay gameSupportCardPrefab;
 
     [Space, Header("Parents")]
     [SerializeField]
     private Transform gameCharacterCardsParent;
-    [SerializeField]
-    private Transform gameSupportCardsParent;
+
 
     [Space, Header("Action UI")]
     [SerializeField]
@@ -56,19 +62,16 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
     private GameObject gameInterface;
     [SerializeField]
     private GameObject endGameInterface;
-    [SerializeField]
-    private ChosenCharacterDeatilsDisplay chosenCharacterDeatilsDisplay; 
 
-    private ReactiveProperty<GameSupportCardDisplay> currentGameSupportCardDisplay=new();
 
     private List<GameCharacterCardDisplay> m_gameCharacterCards=new();
     public List<GameCharacterCardDisplay> GameCharacterCardDisplays => m_gameCharacterCards;
 
-    private List<GameSupportCardDisplay> m_gameSupportCards = new();
-    public List<GameSupportCardDisplay> GameSupportCards => m_gameSupportCards;
+    public List<GameSupportCardDisplay> GameSupportCards => CardSupportAbilitiesController.GameSupportCards;
 
-    CompositeDisposable disposables = new();
+    private ReactiveProperty<GameSupportCardDisplay> currentGameSupportCardDisplay = new();
 
+    private CompositeDisposable disposables = new();
     public void Init()
     {
         SetBlockersState(false);
@@ -81,37 +84,27 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
             m_gameCharacterCards.Add(cardDisplay);
             cardDisplay.IsEnabled = true;
         }
-        foreach (var SupportCard in playerController.PlayerDataController.DeckUserSupportCards)
+
+        foreach (var cardDisplay in GameSupportCards)
         {
-            GameSupportCardDisplay cardDisplay = Instantiate(gameSupportCardPrefab, Vector3.zero, Quaternion.identity, gameSupportCardsParent);
-            cardDisplay.transform.localPosition = Vector3.zero;
-
-
-            cardDisplay.SetData(SupportCard);
-            cardDisplay.DragAndDropComponent.StartPos = cardDisplay.transform.localPosition;
-
-            StartCoroutine(SetDataDelayed(cardDisplay.DragAndDropComponent));
-
             cardDisplay.DragAndDropComponent.OnBeginDragEvent += OnBeginDrag;
             cardDisplay.DragAndDropComponent.OnEndDragEvent += OnEndDrag;
             cardDisplay.DragAndDropComponent.OnDropEvent += OnDropEvent;
 
 
-            if (cardDisplay.GameSupport—ardAbility !=null)
+            if (cardDisplay.GameSupport—ardAbility != null)
             {
                 cardDisplay.GameSupport—ardAbility.OnUsingCancel += OnUsingCancel;
                 cardDisplay.GameSupport—ardAbility.OnSupportCardAbilityCharacterSelected += OnSupportCardAbilityCharacterSelected;
                 cardDisplay.GameSupport—ardAbility.OnSupportCardAbilityUsed += OnSupportCardAbilityUsed;
             }
 
-            currentGameSupportCardDisplay.Where(x=>x!=null).Subscribe(x =>
+            currentGameSupportCardDisplay.Where(x => x != null).Subscribe(x =>
             {
                 SetTipsText(x.GameSupport—ardAbility.CardSelectBehaviour.SelectCardTipText);
             }).AddTo(disposables);
-
-            m_gameSupportCards.Add(cardDisplay);
-            cardDisplay.IsEnabled = false;
         }
+        
     }
 
     private void OnUsingCancel()
@@ -127,26 +120,22 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
     }
     private void OnSupportCardAbilityUsed(ICardUsable usable)
     {
-        m_gameSupportCards.Remove(currentGameSupportCardDisplay.Value);
+        GameSupportCards.Remove(currentGameSupportCardDisplay.Value);
         tipsTextParent.SetActive(false);
         SetBlockersState(false);
         SetTipsText("");
 
-        foreach (var cardDisplay in m_gameSupportCards)
+        foreach (var cardDisplay in GameSupportCards)
         {
             cardDisplay.DragAndDropComponent.StartPos = cardDisplay.DragAndDropComponent.transform.localPosition;
         }
     }
 
-    private IEnumerator SetDataDelayed(DragAndDropComponent dragAndDropComponent)
-    {
-        yield return new WaitForEndOfFrame();
-        dragAndDropComponent.StartPos = dragAndDropComponent.transform.localPosition;          
-    }
+
 
     public void SetDragAllowToSupportCards(bool state)
     {
-        foreach (var cardDisplay in m_gameSupportCards)
+        foreach (var cardDisplay in GameSupportCards)
         {
             cardDisplay.DragAndDropComponent.IsAllowedToDrag = state;
         }
@@ -176,11 +165,11 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
     {
         disposables.Dispose();
         disposables.Clear();
-        foreach (var cardDisplay in m_gameSupportCards)
+        foreach (var cardDisplay in GameSupportCards)
         {
             cardDisplay.DragAndDropComponent.OnBeginDragEvent -= OnBeginDrag;
             cardDisplay.DragAndDropComponent.OnEndDragEvent -= OnEndDrag;
-            cardDisplay.DragAndDropComponent.OnDropEvent-= OnDropEvent;
+            cardDisplay.DragAndDropComponent.OnDropEvent -= OnDropEvent;
             if (cardDisplay.GameSupport—ardAbility != null)
             {
                 cardDisplay.GameSupport—ardAbility.OnSupportCardAbilityUsed -= OnSupportCardAbilityUsed;
@@ -192,14 +181,13 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
     public void SetChosenCharDeatils(Character character)
     {
         chosenCharacterDeatilsDisplay.SetData(character);
-
     }
     public void OnPlayerTurnStart()
     {
         SetDragAllowToSupportCards(true);
         AddMessageToGameLog("¬‡¯ ıÓ‰.");
         m_endMoveButton.interactable = true;
-        foreach (var supportCard in m_gameSupportCards)
+        foreach (var supportCard in GameSupportCards)
         {
             supportCard.IsEnabled = true;
         }
@@ -221,7 +209,7 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
         SetDragAllowToSupportCards(false);
         AddMessageToGameLog("¬‡„ ÔÎ‡ÌËÛÂÚ Ò‚ÓÈ ıÓ‰...");
 
-        foreach (var supportCard in m_gameSupportCards)
+        foreach (var supportCard in GameSupportCards)
         {
             supportCard.IsEnabled = false;
         }
@@ -293,4 +281,5 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
         bottomBlocker.SetActive(state);
         centerBlocker.SetActive(state);
     }
+
 }

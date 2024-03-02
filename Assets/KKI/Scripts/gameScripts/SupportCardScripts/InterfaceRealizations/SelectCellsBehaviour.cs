@@ -75,13 +75,13 @@ public class SelectCellsBehaviour : ICardSelectable
         Cell currentCell = gameObject.GetComponent<Cell>();
 
         Vector2 currentCellIndex = currentCell.CellIndex;
-        float borderX = Mathf.Floor(range.x / 2);
-        float borderY = Mathf.Floor(range.y / 2);
+        /*float borderX = Mathf.Floor(range.x / 2);
+        float borderY = Mathf.Ceil(range.y / 2);*/
 
-        float xStart = currentCellIndex.x - borderX;
-        float xEnd = currentCellIndex.x + borderX;
-        float yStart = currentCellIndex.y - borderY;
-        float yEnd = currentCellIndex.y + borderY;
+        float xStart = currentCellIndex.x - Mathf.Floor(range.x / 2);
+        float xEnd = currentCellIndex.x + Mathf.Ceil(range.x / 2)-1;
+        float yStart = currentCellIndex.y - Mathf.Floor(range.y / 2);
+        float yEnd = currentCellIndex.y + Mathf.Ceil(range.y / 2)-1;
 
         currentCell.OnClick += OnSelectedInvoke;
         battleSystem.FieldController.InvokeActionOnField(x =>
