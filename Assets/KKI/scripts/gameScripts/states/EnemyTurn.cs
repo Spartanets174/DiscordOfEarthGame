@@ -20,20 +20,7 @@ public class EnemyTurn : State
         BattleSystem.FieldController.TurnOnCells();
         BattleSystem.PointsOfAction = 20;
 
-        foreach (var enemyTurnCountable in BattleSystem.EnemyTurnCountables)
-        {
-            Debug.Log(enemyTurnCountable.TurnCount);
-            if (enemyTurnCountable.TurnCount == 0)
-            {
-                enemyTurnCountable.ReturnToNormal();
-            }
-            else
-            {
-                enemyTurnCountable.TurnCount--;
-            }
-            Debug.Log(enemyTurnCountable.TurnCount);
-        }
-        
+        CheckEnemyTurnCountables();
 
         foreach (var staticEnemy in BattleSystem.EnemyController.StaticEnemyCharObjects)
         {
@@ -50,6 +37,25 @@ public class EnemyTurn : State
         
         yield break;
     }
+
+    private void CheckEnemyTurnCountables()
+    {
+        foreach (var enemyTurnCountable in BattleSystem.EnemyTurnCountables)
+        {
+            if (enemyTurnCountable.TurnCount == 0)
+            {
+                enemyTurnCountable.ReturnToNormal();
+                BattleSystem.EnemyTurnCountables.Remove(enemyTurnCountable);
+                CheckEnemyTurnCountables();
+                break;
+            }
+            else
+            {
+                enemyTurnCountable.TurnCount--;
+            }
+        }
+    }
+
     public override IEnumerator ChooseCharacter(GameObject character)
     {
         EnemyCharacter enemyCharacter = character.GetComponent<EnemyCharacter>();

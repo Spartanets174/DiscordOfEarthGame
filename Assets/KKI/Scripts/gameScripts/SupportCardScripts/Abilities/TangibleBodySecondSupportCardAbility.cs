@@ -1,17 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
-public class FutureTechnologiesSupportCardAbility : BaseSupport�ardAbility, ITurnCountable
+public class TangibleBodySecondSupportCardAbility : BaseSupportСardAbility, ITurnCountable
 {
     private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set 
-        {
-            m_turnCount = value;
-        } }
+    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
 
     private bool m_isBuff;
     public bool IsBuff { get => m_isBuff; }
@@ -22,17 +15,16 @@ public class FutureTechnologiesSupportCardAbility : BaseSupport�ardAbility, ITur
     protected override void Start()
     {
         base.Start();
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("�������� ��������� ��� ��������", battleSystem));
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Выберите персонажа для очищения", battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
-        TurnCount = 2;
         m_isBuff = true;
+        TurnCount = 2;
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSelectBehaviour.OnSelected += OnSelected;
         m_selectCharacterBehaviour.OnSelectCharacter += OnSelectCharacter;
     }
-
 
     private void OnDestroy()
     {
@@ -49,6 +41,7 @@ public class FutureTechnologiesSupportCardAbility : BaseSupport�ardAbility, ITur
                 playerCharacter.OnClick += SelectCharacter;
             }
         }
+
     }
     private void OnSelectCharacter()
     {
@@ -61,8 +54,9 @@ public class FutureTechnologiesSupportCardAbility : BaseSupport�ardAbility, ITur
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
 
-        character.MagDefence += 1;
-        character.PhysDefence += 1;
+        character.HealMoreThenMax(1);
+        character.PhysDefence += 2;
+        character.PhysAttack += 2;
 
         foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
         {
@@ -82,9 +76,31 @@ public class FutureTechnologiesSupportCardAbility : BaseSupport�ardAbility, ITur
 
     public void ReturnToNormal()
     {
-        character.MagDefence -= 1;
-        character.PhysDefence -= 1;
+        character.PhysDefence -= 2;
+        character.PhysAttack -= 2;
+        float finalDamage = character.Damage(1);
+        bool isDeath = character.Health == 0;
 
+        if (isDeath)
+        {
+            string characterType = "";
+            if (character is StaticEnemyCharacter staticEnemyCharacter)
+            {
+                battleSystem.EnemyController.StaticEnemyCharObjects.Remove(staticEnemyCharacter);
+            }
+            if (character is PlayerCharacter playerCharacter)
+            {
+                battleSystem.PlayerController.PlayerCharactersObjects.Remove(playerCharacter);
+                characterType = "союзный";
+            }
+            if (character is EnemyCharacter enemyCharacter)
+            {
+                battleSystem.EnemyController.EnemyCharObjects.Remove(enemyCharacter);
+                characterType = "вражеский";
+            }
+            battleSystem.GameUIPresenter.AddMessageToGameLog($"Эффект дополнительного здоровья от карты \"Осязаемое тело 2\" заканчивается, {characterType} персонаж {character.CharacterName} погибает");
+            GameObject.Destroy(character.gameObject);
+        }
         OnReturnToNormal?.Invoke(this);
     }
 

@@ -13,6 +13,7 @@ public class CurseSecondCardSupportAbility : BaseSupport—ardAbility, ITurnCounta
     public bool IsBuff { get => m_isBuff; }
 
     private List<EnemyCharacter> enemyCharacters;
+    private List<PlayerCharacter> playerCharacters;
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
@@ -27,14 +28,28 @@ public class CurseSecondCardSupportAbility : BaseSupport—ardAbility, ITurnCounta
         m_cardSelectBehaviour.OnSelected += OnSelected;
     }
 
+    private void OnDestroy()
+    {
+        m_cardSelectBehaviour.OnSelected -= OnSelected;
+    }
     private void OnSelected()
     {
         battleSystem.PointsOfAction += 3;
-        enemyCharacters = battleSystem.EnemyController.EnemyCharObjects.Where(x => x.Class == enums.Classes.œ‡Î‡‰ËÌ).ToList();
-
-        foreach (var enemyCharacter in enemyCharacters)
+        if (battleSystem.State is PlayerTurn)
         {
-            enemyCharacter.IsFreezed = true;
+            enemyCharacters = battleSystem.EnemyController.EnemyCharObjects.Where(x => x.Class == enums.Classes.œ‡Î‡‰ËÌ).ToList();
+            foreach (var enemyCharacter in enemyCharacters)
+            {
+                enemyCharacter.IsFreezed = true;
+            }
+        }
+        else
+        {
+            playerCharacters = battleSystem.PlayerController.PlayerCharactersObjects.Where(x => x.Class == enums.Classes.œ‡Î‡‰ËÌ).ToList();
+            foreach (var playerCharacter in playerCharacters)
+            {
+                playerCharacter.IsFreezed = true;
+            }
         }
 
         m_cardSelectBehaviour.OnSelected -= OnSelected;
@@ -43,9 +58,20 @@ public class CurseSecondCardSupportAbility : BaseSupport—ardAbility, ITurnCounta
 
     public void ReturnToNormal()
     {
-        foreach (var enemyCharacter in enemyCharacters)
+        if (battleSystem.State is PlayerTurn)
         {
-            enemyCharacter.IsFreezed = false;
+            foreach (var playerCharacter in playerCharacters)
+            {
+                playerCharacter.IsFreezed = false;
+            }
+        }
+        else
+        {
+            foreach (var enemyCharacter in enemyCharacters)
+            {
+                enemyCharacter.IsFreezed = false;
+            }
+
         }
         OnReturnToNormal?.Invoke(this);
     }

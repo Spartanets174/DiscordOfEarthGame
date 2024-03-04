@@ -27,16 +27,36 @@ public class FutureTechnologiesSecondSupportCardAbility : BaseSupport—ardAbility
         m_cardSelectBehaviour.OnSelected += OnSelected;
         m_selectCharacterBehaviour.OnSelectCharacter += OnSelectCharacter;
     }
+
+    private void OnDestroy()
+    {
+        m_cardSelectBehaviour.OnCancelSelection -= OnCancelSelection;
+        m_cardSelectBehaviour.OnSelected -= OnSelected;
+        m_selectCharacterBehaviour.OnSelectCharacter -= OnSelectCharacter;
+    }
+
     private void OnSelected()
     {
-        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
+        if (battleSystem.State is PlayerTurn)
         {
-            playerCharacter.OnClick += SelectCharacter;
+            foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
+            {
+                playerCharacter.OnClick += SelectCharacter;
+            }
         }
+        
     }
     private void OnSelectCharacter()
     {
-        character = battleSystem.PlayerController.CurrentPlayerCharacter;
+        if (battleSystem.State is PlayerTurn)
+        {
+            character = battleSystem.PlayerController.CurrentPlayerCharacter;
+        }
+        else
+        {
+            character = battleSystem.EnemyController.CurrentEnemyCharacter;
+        }
+            
 
         character.MagDefence += 2;
         character.PhysDefence += 2;

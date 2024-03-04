@@ -1,17 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
-public class FutureTechnologiesSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
+public class TangibleBodySupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 {
     private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set 
-        {
-            m_turnCount = value;
-        } }
+    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
 
     private bool m_isBuff;
     public bool IsBuff { get => m_isBuff; }
@@ -25,14 +18,13 @@ public class FutureTechnologiesSupportCardAbility : BaseSupportÑardAbility, ITur
         SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Âûáåğèòå ïåğñîíàæà äëÿ î÷èùåíèÿ", battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
-        TurnCount = 2;
         m_isBuff = true;
+        TurnCount = 1;
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSelectBehaviour.OnSelected += OnSelected;
         m_selectCharacterBehaviour.OnSelectCharacter += OnSelectCharacter;
     }
-
 
     private void OnDestroy()
     {
@@ -40,6 +32,7 @@ public class FutureTechnologiesSupportCardAbility : BaseSupportÑardAbility, ITur
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         m_selectCharacterBehaviour.OnSelectCharacter -= OnSelectCharacter;
     }
+
     private void OnSelected()
     {
         if (battleSystem.State is PlayerTurn)
@@ -49,6 +42,7 @@ public class FutureTechnologiesSupportCardAbility : BaseSupportÑardAbility, ITur
                 playerCharacter.OnClick += SelectCharacter;
             }
         }
+
     }
     private void OnSelectCharacter()
     {
@@ -61,8 +55,9 @@ public class FutureTechnologiesSupportCardAbility : BaseSupportÑardAbility, ITur
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
 
-        character.MagDefence += 1;
+        character.HealMoreThenMax(1);
         character.PhysDefence += 1;
+        character.PhysAttack += 1;
 
         foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
         {
@@ -82,9 +77,31 @@ public class FutureTechnologiesSupportCardAbility : BaseSupportÑardAbility, ITur
 
     public void ReturnToNormal()
     {
-        character.MagDefence -= 1;
         character.PhysDefence -= 1;
+        character.PhysAttack -= 1;
+        float finalDamage = character.Damage(1);
+        bool isDeath = character.Health == 0;
 
+        if (isDeath)
+        {
+            string characterType = "";
+            if (character is StaticEnemyCharacter staticEnemyCharacter)
+            {
+                battleSystem.EnemyController.StaticEnemyCharObjects.Remove(staticEnemyCharacter);
+            }
+            if (character is PlayerCharacter playerCharacter)
+            {
+                battleSystem.PlayerController.PlayerCharactersObjects.Remove(playerCharacter);
+                characterType = "ñîşçíûé";
+            }
+            if (character is EnemyCharacter enemyCharacter)
+            {
+                battleSystem.EnemyController.EnemyCharObjects.Remove(enemyCharacter);
+                characterType = "âğàæåñêèé";
+            }
+            battleSystem.GameUIPresenter.AddMessageToGameLog($"İôôåêò äîïîëíèòåëüíîãî çäîğîâüÿ îò êàğòû \"Îñÿçàåìîå òåëî\" çàêàí÷èâàåòñÿ, {characterType} ïåğñîíàæ {character.CharacterName} ïîãèáàåò");
+            GameObject.Destroy(character.gameObject);
+        }
         OnReturnToNormal?.Invoke(this);
     }
 

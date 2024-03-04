@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SecretPathSupportCardAbility : BaseSupport—ardAbility
@@ -31,11 +29,15 @@ public class SecretPathSupportCardAbility : BaseSupport—ardAbility
 
     private void OnSelected()
     {
-        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
+        if (battleSystem.State is PlayerTurn)
         {
-            playerCharacter.OnClick += SetCellsToMove;
-            playerCharacter.OnClick += SelectCharacter;
+            foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
+            {
+                playerCharacter.OnClick += SetCellsToMove;
+                playerCharacter.OnClick += SelectCharacter;
+            }
         }
+
     }
 
     private void SetCellsToMove(GameObject @object)
@@ -53,12 +55,15 @@ public class SecretPathSupportCardAbility : BaseSupport—ardAbility
         {
             enemyCharacter.IsEnabled = true;
         }
-        
-
-        foreach (var item in setAbiableCellsBehaviour.cellsToMove)
+        if (battleSystem.State is PlayerTurn)
         {
-            item.OnClick += UseCard;
+            foreach (var item in setAbiableCellsBehaviour.cellsToMove)
+            {
+                item.OnClick += UseCard;
+            }
         }
+
+
     }
 
     private void OnCardUse()

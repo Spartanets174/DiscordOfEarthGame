@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
-public class ColdSecondSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
+public class KeenEyeSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 {
     private int m_turnCount;
     public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
@@ -23,8 +24,8 @@ public class ColdSecondSupportCardAbility : BaseSupportÑardAbility, ITurnCountab
         base.Start();
 
         SetCardSelectBehaviour(new EmptySelectBehaviour("Èñïîëüçóéòå êàðòó"));
-        TurnCount = 2;
-        m_isBuff = false;
+        TurnCount = 1;
+        m_isBuff = true;
         m_cardSelectBehaviour.OnSelected += OnSelected;
     }
     private void OnDestroy()
@@ -36,18 +37,18 @@ public class ColdSecondSupportCardAbility : BaseSupportÑardAbility, ITurnCountab
     {
         if (battleSystem.State is PlayerTurn)
         {
-            enemyCharacters = battleSystem.EnemyController.EnemyCharObjects.Where(x => x.Class == enums.Classes.Ëó÷íèê).ToList();
-            foreach (var enemyCharacter in enemyCharacters)
+            playerCharacters = battleSystem.PlayerController.PlayerCharactersObjects.Where(x => x.Class == enums.Classes.Ëó÷íèê).ToList();
+            foreach (var playerCharacter in playerCharacters)
             {
-                enemyCharacter.IsFreezed = true;
+                playerCharacter.CritChance = 0.6f;
             }
         }
         else
         {
-            playerCharacters = battleSystem.PlayerController.PlayerCharactersObjects.Where(x => x.Class == enums.Classes.Ëó÷íèê).ToList();
-            foreach (var playerCharacter in playerCharacters)
+            enemyCharacters = battleSystem.EnemyController.EnemyCharObjects.Where(x => x.Class == enums.Classes.Ëó÷íèê).ToList();
+            foreach (var enemyCharacter in enemyCharacters)
             {
-                playerCharacter.IsFreezed = true;
+                enemyCharacter.CritChance = 0.6f;
             }
         }
 
@@ -61,14 +62,14 @@ public class ColdSecondSupportCardAbility : BaseSupportÑardAbility, ITurnCountab
         {
             foreach (var playerCharacter in playerCharacters)
             {
-                playerCharacter.IsFreezed = false;
+                playerCharacter.CritChance = playerCharacter.Card.critChance;
             }
         }
         else
         {
             foreach (var enemyCharacter in enemyCharacters)
             {
-                enemyCharacter.IsFreezed = false;
+                enemyCharacter.CritChance = enemyCharacter.Card.critChance;
             }
         }
         OnReturnToNormal?.Invoke(this);

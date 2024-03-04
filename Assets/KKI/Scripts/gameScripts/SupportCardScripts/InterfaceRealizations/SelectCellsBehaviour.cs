@@ -41,9 +41,12 @@ public class SelectCellsBehaviour : ICardSelectable
     public void Subscribe(Cell cell)
     {
         cell.SetCellState(true);
-        cell.OnHoverEnter += OnHoverEnter;
-        cell.OnHoverExit += OnHoverExit;
-        cell.OnHover += OnHover;
+        if (battleSystem.State is PlayerTurn)
+        {
+            cell.OnHoverEnter += OnHoverEnter;
+            cell.OnHoverExit += OnHoverExit;
+            cell.OnHover += OnHover;
+        }       
     }
 
     private void OnHover(GameObject @object)
@@ -75,8 +78,6 @@ public class SelectCellsBehaviour : ICardSelectable
         Cell currentCell = gameObject.GetComponent<Cell>();
 
         Vector2 currentCellIndex = currentCell.CellIndex;
-        /*float borderX = Mathf.Floor(range.x / 2);
-        float borderY = Mathf.Ceil(range.y / 2);*/
 
         float xStart = currentCellIndex.x - Mathf.Floor(range.x / 2);
         float xEnd = currentCellIndex.x + Mathf.Ceil(range.x / 2)-1;

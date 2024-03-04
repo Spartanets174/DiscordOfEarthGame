@@ -26,18 +26,8 @@ public class PlayerTurn : State
         BattleSystem.GameUIPresenter.OnPlayerTurnStart();
         
         BattleSystem.PointsOfAction = 20;
-        
-        foreach (var playerTurnCountable in BattleSystem.PlayerTurnCountables)
-        {
-            if (playerTurnCountable.TurnCount == 0)
-            {
-                playerTurnCountable.ReturnToNormal();
-            }
-            else
-            {
-                playerTurnCountable.TurnCount--;
-            }
-        }
+
+        CheckPlayerTurnCountables();
 
         foreach (var playerCharacter in BattleSystem.PlayerController.PlayerCharactersObjects)
         {
@@ -218,6 +208,7 @@ public class PlayerTurn : State
             }
         }
 
+        
         supportCardDisplay.GameSupportСardAbility.SelectCard();
         yield break;
     }
@@ -341,6 +332,24 @@ public class PlayerTurn : State
         foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
         {
             SupportCard.IsEnabled = true;
+        }
+    }
+    private void CheckPlayerTurnCountables()
+    {
+        Debug.Log(BattleSystem.PlayerTurnCountables.Count);
+        foreach (var playerTurnCountable in BattleSystem.PlayerTurnCountables)
+        {
+            if (playerTurnCountable.TurnCount == 0)
+            {
+                playerTurnCountable.ReturnToNormal();
+                BattleSystem.PlayerTurnCountables.Remove(playerTurnCountable);
+                CheckPlayerTurnCountables();
+                break;
+            }
+            else
+            {
+                playerTurnCountable.TurnCount--;
+            }
         }
     }
 

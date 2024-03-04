@@ -53,16 +53,6 @@ public class BattleSystem : StateMachine, ILoadable
             item.DragAndDropComponent.OnDropEvent += x=>{ FieldController.TurnOnCells(); };
         }
 
-        foreach (var playerTurnCountable in PlayerTurnCountables)
-        {
-            playerTurnCountable.OnReturnToNormal += x => PlayerTurnCountables.Remove(x);
-        }
-
-        foreach (var enemyTurnCountable in EnemyTurnCountables)
-        {
-            enemyTurnCountable.OnReturnToNormal += x => EnemyTurnCountables.Remove(x);
-        }
-
         SetState(new Begin(this));
     }
 

@@ -29,20 +29,23 @@ public class AttackAllCharactersInAreaBehaviour : ICardUsable
 
             if (isDeath)
             {
+                string characterType = "";
                 if (character is StaticEnemyCharacter staticEnemyCharacter)
                 {
                     battleSystem.EnemyController.StaticEnemyCharObjects.Remove(staticEnemyCharacter);
+                    characterType = "Юнит";
                 }
                 if (character is PlayerCharacter playerCharacter)
                 {
                     battleSystem.PlayerController.PlayerCharactersObjects.Remove(playerCharacter);
+                    characterType = "Союзный юнит";
                 }
                 if (character is EnemyCharacter enemyCharacter)
                 {
                     battleSystem.EnemyController.EnemyCharObjects.Remove(enemyCharacter);
+                    characterType = "вражеский юнит";
                 }
-
-                battleSystem.GameUIPresenter.AddMessageToGameLog($"Вражеский юнит {character.CharacterName} убит");
+                battleSystem.GameUIPresenter.AddMessageToGameLog($"{characterType} {character.CharacterName} убит");
                 GameObject.Destroy(character.gameObject);
             }
         }

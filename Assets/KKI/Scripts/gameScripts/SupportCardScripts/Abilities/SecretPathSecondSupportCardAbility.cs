@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SecretPathSecondSupportCardAbility : BaseSupport—ardAbility
@@ -31,14 +29,33 @@ public class SecretPathSecondSupportCardAbility : BaseSupport—ardAbility
 
     private void OnSelected()
     {
-        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
+        if (battleSystem.State is PlayerTurn)
         {
-            playerCharacter.OnClick += SetCellsToMove;
-            playerCharacter.OnClick += SelectCharacter;
+            foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
+            {
+                playerCharacter.OnClick += SetCellsToMove;
+                playerCharacter.OnClick += SelectCharacter;
+            }
         }
+
     }
 
 
+    private void OnSelectCharacter()
+    {
+        foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
+        {
+            enemyCharacter.IsEnabled = true;
+        }
+
+        if (battleSystem.State is PlayerTurn)
+        {
+            foreach (var item in setAbiableCellsBehaviour.cellsToMove)
+            {
+                item.OnClick += UseCard;
+            }
+        }
+    }
 
     private void SetCellsToMove(GameObject gameObject)
     {
@@ -48,21 +65,6 @@ public class SecretPathSecondSupportCardAbility : BaseSupport—ardAbility
         }
         setAbiableCellsBehaviour.cellsToMove = battleSystem.GetCellsForMove(gameObject.GetComponent<Character>(), 5);
     }
-    private void OnSelectCharacter()
-    {
-        
-        foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
-        {
-            enemyCharacter.IsEnabled = true;
-        }
-        
-
-        foreach (var item in setAbiableCellsBehaviour.cellsToMove)
-        {
-            item.OnClick += UseCard;
-        }
-    }
-
     private void OnCardUse()
     {
         foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)

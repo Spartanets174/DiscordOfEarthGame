@@ -15,10 +15,22 @@ public class CleansingSecondSupportCardAbility : BaseSupport—ardAbility
 
     private void OnSelected()
     {
-        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
+        if (battleSystem.State is PlayerTurn)
         {
-            playerCharacter.SetStatsToNormal();
+            foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
+            {
+                playerCharacter.RemoveDebuffs();
+            }
         }
+        else
+        {
+            foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
+            {
+                enemyCharacter.RemoveDebuffs();
+            }
+        }
+        
+        
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(null);
     }

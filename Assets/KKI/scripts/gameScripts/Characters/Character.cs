@@ -80,7 +80,11 @@ public abstract class Character : OutlineInteractableObject
     public float CritChance
     {
         get => m_critChance;
-        set => m_critChance = value;
+        set
+        {         
+            m_critChance = value;
+            Debug.Log(m_critChance);
+        }
     }
 
     protected float m_critNum;
@@ -160,17 +164,17 @@ public abstract class Character : OutlineInteractableObject
         m_isAttackedOnTheMove = false;
     }
 
-    public void SetStatsToNormal()
+    public void RemoveDebuffs()
     {
         Debug.Log("Stats is normal");
         IsFreezed = false;
-        m_physAttack = m_card.physAttack;
-        m_magAttack = m_card.magAttack;
-        m_range = m_card.range;
-        m_physDefence = m_card.physDefence;
-        m_magDefence = m_card.magDefence;
-        m_critChance = m_card.critChance;
-        m_critNum = m_card.critNum;
+        if (m_physAttack< m_card.physAttack) m_physAttack = m_card.physAttack;
+        if (m_magAttack< m_card.magAttack) m_magAttack = m_card.magAttack;
+        if (m_range < m_card.range) m_range = m_card.range;
+        if (m_physDefence< m_card.physDefence) m_physDefence = m_card.physDefence;
+        if (m_magDefence< m_card.magDefence) m_magDefence = m_card.magDefence;
+        if (m_critChance< m_card.critChance) m_critChance = m_card.critChance;
+        if (m_critNum< m_card.critNum) m_critNum = m_card.critNum;        
     }
 
     public virtual void SetData(CharacterCard card, Material material, int currentIndex)
@@ -237,6 +241,20 @@ public abstract class Character : OutlineInteractableObject
     }
 
     public void Heal(int amount)
+    {
+        float temp = Health + amount;
+        if (temp>Card.health)
+        {
+            Health = Card.health;
+        }
+        else
+        {
+            Health = temp;
+        }
+        OnHeal?.Invoke(this);
+    }
+
+    public void HealMoreThenMax(int amount)
     {
         Health += amount;
         OnHeal?.Invoke(this);

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f07b7677596d73a42b7bae752aea67b3, type: 3}
   m_Name: "\u0415\u0434\u0438\u043D\u0441\u0442\u0432\u043E \u0441 \u043F\u0440\u0438\u0440\u043E\u0434\u043E\u0439"
   m_EditorClassIdentifier: 
-  name: "\u0415\u0434\u0438\u043D\u0441\u0442\u0432\u043E \u0441 \u043F\u0440\u0438\u0440\u043E\u0434\u043E\u0439"
+  cardName: 
   description: 
   race: 3
   image: {fileID: 21300000, guid: 718493903a7b0f044862547e3a096aaa, type: 3}
@@ -20,6 +20,9 @@ MonoBehaviour:
   Price: 132
   id: 1
   type: 1
-  ability: "\u041F\u043E\u0432\u044B\u0448\u0430\u0435\u0442 \u0444\u0438\u0437\u0438\u0447\u0435\u0441\u043A\u0443\u044E
-    \u0437\u0430\u0449\u0438\u0442\u0443 \u0438 \u0437\u0434\u043E\u0440\u043E\u0432\u044C\u0435
-    \u043D\u0430 1 \u043D\u0430 1 \u0445\u043E\u0434"
+  abilityText: 
+  "m_gameSupport\u0421ardAbility":
+    GuidAssignmentFailed: 0
+    GUID: d306d6bfcd89f0b4aab304ab8db54096
+    _typeNameAndAssembly: UnityWithNatureSupportCardAbility, Assembly-CSharp
+    _suppressLogs: 0

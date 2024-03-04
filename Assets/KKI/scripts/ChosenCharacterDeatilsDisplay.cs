@@ -46,10 +46,10 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour
         characterNameText.text = character.CharacterName;
         healthBar.SetMaxHealth(character.Card.health);
         healthBar.SetHealth(character.Health);
-        physAttackText.text = $"Физическая атака: {character.Card.physAttack * 100}";
-        magAttackText.text = $"Магическая атака: {character.Card.magAttack * 100}";
-        physDefenceText.text = $"Физическая защита: {character.Card.physDefence * 100}";
-        magDefenceText.text = $"Магическая защита: {character.Card.magDefence * 100}";
+        physAttackText.text = $"Физическая атака: {character.PhysAttack * 100}";
+        magAttackText.text = $"Магическая атака: {character.MagAttack * 100}";
+        physDefenceText.text = $"Физическая защита: {character.PhysDefence * 100}";
+        magDefenceText.text = $"Магическая защита: {character.MagDefence * 100}";
 
         cardImage.sprite = character.Card.image;
         switch (character.Card.Class)

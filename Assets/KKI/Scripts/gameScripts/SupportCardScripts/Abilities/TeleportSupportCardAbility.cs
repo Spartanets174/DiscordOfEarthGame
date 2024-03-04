@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TeleportSupportCardAbility : BaseSupport—ardAbility
@@ -31,12 +28,16 @@ public class TeleportSupportCardAbility : BaseSupport—ardAbility
     }
 
     private void OnSelected()
-    {  
-        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
+    {
+        if (battleSystem.State is PlayerTurn)
         {
-            playerCharacter.OnClick += SetCellsToMove;
-            playerCharacter.OnClick += SelectCharacter;
+            foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
+            {
+                playerCharacter.OnClick += SetCellsToMove;
+                playerCharacter.OnClick += SelectCharacter;
+            }
         }
+
     }
 
     private void SetCellsToMove(GameObject @object)
@@ -62,7 +63,7 @@ public class TeleportSupportCardAbility : BaseSupport—ardAbility
             enemyCharacter.IsEnabled = true;
         }
 
-       
+
         foreach (var cell in setAbiableCellsBehaviour.cellsToMove)
         {
             cell.OnClick += UseCard;

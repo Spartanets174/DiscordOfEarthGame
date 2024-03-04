@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f07b7677596d73a42b7bae752aea67b3, type: 3}
   m_Name: "\u041E\u0441\u044F\u0437\u0430\u0435\u043C\u043E\u0435 \u0442\u0435\u043B\u043E"
   m_EditorClassIdentifier: 
-  name: "\u041E\u0441\u044F\u0437\u0430\u0435\u043C\u043E\u0435 \u0442\u0435\u043B\u043E"
+  cardName: 
   description: 
   race: 5
   image: {fileID: 21300000, guid: ce2a00906f84f7e4bad59bbccf5574a8, type: 3}
@@ -20,6 +20,9 @@ MonoBehaviour:
   Price: 756
   id: 0
   type: 1
-  ability: "\u0414\u0430\u0435\u0442 1 \u0445\u043F, \u043F\u043E\u0432\u044B\u0448\u0430\u0435\u0442
-    \u0444\u0438\u0437\u0438\u0447\u0435\u0441\u043A\u0438\u0435 \u0445\u0430\u0440\u0430\u043A\u0442\u0435\u0440\u0438\u0441\u0442\u0438\u043A\u0438
-    \u043D\u0430 1 \u043D\u0430 1 \u0445\u043E\u0434"
+  abilityText: 
+  "m_gameSupport\u0421ardAbility":
+    GuidAssignmentFailed: 0
+    GUID: 5fcf000d1ca42e349b88972ecf5449fb
+    _typeNameAndAssembly: TangibleBodySupportCardAbility, Assembly-CSharp
+    _suppressLogs: 0
