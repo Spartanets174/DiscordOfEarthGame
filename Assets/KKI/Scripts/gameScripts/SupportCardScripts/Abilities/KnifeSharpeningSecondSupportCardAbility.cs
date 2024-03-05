@@ -17,7 +17,7 @@ public class KnifeSharpeningSecondSupportCardAbility : BaseSupportСardAbility, I
     protected override void Start()
     {
         base.Start();
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Выберите персонажа для очищения", battleSystem));
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Выберите персонажа", battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
         m_isBuff = true;

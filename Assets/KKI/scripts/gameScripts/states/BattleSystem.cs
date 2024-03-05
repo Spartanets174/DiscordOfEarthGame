@@ -119,8 +119,6 @@ public class BattleSystem : StateMachine, ILoadable
         GameUIPresenter.SetPointsOfActionAnd—ube(cubeValue);
         GameUIPresenter.AddMessageToGameLog($"Õ‡ ÍÛ·ËˆÂ ‚˚Ô‡ÎÓ {cubeValue}");
 
-        EnemyController.gameObject.SetActive(false);
-
         foreach (var playerChar in PlayerController.PlayerCharactersObjects)
         {
             playerChar.OnClick += SetCurrentChosenCharacter;
@@ -151,14 +149,12 @@ public class BattleSystem : StateMachine, ILoadable
     [ContextMenu("SetPlayerTurn")]
     public void SetPlayerTurn()
     {
-        EnemyController.gameObject.SetActive(false);
         EnemyController.StopTree();
         SetState(new PlayerTurn(this));
     }
     [ContextMenu("SetEnemyTurn")]
     public void SetEnemyTurn()
     {
-        EnemyController.gameObject.SetActive(true);
         SetState(new EnemyTurn(this));
     }
 

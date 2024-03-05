@@ -22,7 +22,7 @@ public class FutureTechnologiesSupportCardAbility : BaseSupportСardAbility, ITur
     protected override void Start()
     {
         base.Start();
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Выберите персонажа для очищения", battleSystem));
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Выберите персонажа", battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
         TurnCount = 2;

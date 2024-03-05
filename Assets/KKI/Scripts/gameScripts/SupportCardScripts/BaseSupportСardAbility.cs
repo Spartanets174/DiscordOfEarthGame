@@ -10,12 +10,18 @@ public abstract class BaseSupportСardAbility: MonoBehaviour
 
     protected ICardSelectable m_cardSelectBehaviour;
     public ICardSelectable CardSelectBehaviour => m_cardSelectBehaviour;
+
+    protected ICardSelectable m_cardSecondSelectBehaviour;
+    public ICardSelectable CardSecondSelectBehaviour => m_cardSecondSelectBehaviour;
+
     protected ICardUsable m_useCardBehaviour;
     public ICardUsable UseCardBehaviour => m_useCardBehaviour;
+
     protected ICharacterSelectable m_selectCharacterBehaviour;
     public ICharacterSelectable SelectCharacterBehaviour => m_selectCharacterBehaviour;
 
     public event Action<ICardSelectable> OnSupportCardAbilitySelected;
+    public event Action<ICardSelectable> OnSecondSupportCardAbilitySelected;
     public event Action<ICharacterSelectable> OnSupportCardAbilityCharacterSelected;
     public event Action<ICardUsable> OnSupportCardAbilityUsed;
 
@@ -24,6 +30,10 @@ public abstract class BaseSupportСardAbility: MonoBehaviour
     protected void SetCardSelectBehaviour(ICardSelectable behaviour)
     {
         m_cardSelectBehaviour = behaviour;
+    }
+    protected void SetSecondCardSelectBehaviour(ICardSelectable behaviour)
+    {
+        m_cardSecondSelectBehaviour = behaviour;
     }
     protected void SetUseCardBehaviour(ICardUsable behaviour)
     {
@@ -36,12 +46,22 @@ public abstract class BaseSupportСardAbility: MonoBehaviour
 
     public virtual void SelectCard()
     {
-        if (m_cardSelectBehaviour!=null)
+        if (m_cardSelectBehaviour != null)
         {
             m_cardSelectBehaviour.SelectCard();
         }
-        
+
         OnSupportCardAbilitySelected?.Invoke(m_cardSelectBehaviour);
+    }
+
+    public virtual void SelectSecondCard()
+    {
+        if (m_cardSecondSelectBehaviour != null)
+        {
+            m_cardSecondSelectBehaviour.SelectCard();
+        }
+
+        OnSecondSupportCardAbilitySelected?.Invoke(m_cardSecondSelectBehaviour);
     }
 
     public virtual void UseCard(GameObject gameObject)

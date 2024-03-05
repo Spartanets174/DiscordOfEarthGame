@@ -95,6 +95,7 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
             if (cardDisplay.GameSupportÑardAbility != null)
             {
                 cardDisplay.GameSupportÑardAbility.OnUsingCancel += OnUsingCancel;
+                cardDisplay.GameSupportÑardAbility.OnSecondSupportCardAbilitySelected += OnSecondSupportCardAbilitySelected;
                 cardDisplay.GameSupportÑardAbility.OnSupportCardAbilityCharacterSelected += OnSupportCardAbilityCharacterSelected;
                 cardDisplay.GameSupportÑardAbility.OnSupportCardAbilityUsed += OnSupportCardAbilityUsed;
             }
@@ -105,6 +106,11 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
             }).AddTo(disposables);
         }
         
+    }
+
+    private void OnSecondSupportCardAbilitySelected(ICardSelectable selectable)
+    {
+        SetTipsText($"{selectable.SelectCardTipText}");
     }
 
     private void OnUsingCancel()
