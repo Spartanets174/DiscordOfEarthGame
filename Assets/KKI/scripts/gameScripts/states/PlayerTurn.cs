@@ -82,7 +82,6 @@ public class PlayerTurn : State
         Cell cellToMove = cell.GetComponent<Cell>();
         PlayerCharacter playerCharacter = BattleSystem.PlayerController.CurrentPlayerCharacter;
         Cell currentCell = playerCharacter.GetComponentInParent<Cell>();
-        /*float numOfCells = Mathf.Abs((pos.x+pos.y) - (currentCell.CellIndex.x + currentCell.CellIndex.y));*/
 
         int moveCost = BattleSystem.FieldController.GetMoveCost(currentCell,cellToMove, BattleSystem.State);
         foreach (var item in cellsToMove)
@@ -138,7 +137,14 @@ public class PlayerTurn : State
 
             float finalDamage = currentTarget.Damage(playerCharacter);
             bool isDeath = currentTarget.Health == 0;
-            BattleSystem.GameUIPresenter.AddMessageToGameLog($"{playerCharacter.CharacterName} наносит  юниту {currentTarget.CharacterName} {finalDamage * 100:00.00} урона");
+            if (finalDamage > 0)
+            {
+                BattleSystem.GameUIPresenter.AddMessageToGameLog($"{playerCharacter.CharacterName} наносит  юниту {currentTarget.CharacterName} {finalDamage * 100:00.00} урона");
+            }
+            else
+            {
+                BattleSystem.GameUIPresenter.AddMessageToGameLog($"{currentTarget.CharacterName} избежал получения урона от {playerCharacter.CharacterName}");
+            }
 
             if (isDeath)
             {

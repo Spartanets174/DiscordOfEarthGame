@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class StaticEnemyCharacter : Enemy
 {
@@ -79,7 +80,15 @@ public class StaticEnemyCharacter : Enemy
     {
         float finalDamage = currentTarget.Damage(this);
         bool isDeath = currentTarget.Health == 0;
-        battleSystem.GameUIPresenter.AddMessageToGameLog($"{this.CharacterName} наносит  юниту {currentTarget.CharacterName} {finalDamage * 100:00.00} урона");
+        if (finalDamage > 0)
+        {
+            battleSystem.GameUIPresenter.AddMessageToGameLog($"{this.CharacterName} наносит  юниту {currentTarget.CharacterName} {finalDamage * 100:00.00} урона");
+        }
+        else
+        {
+            battleSystem.GameUIPresenter.AddMessageToGameLog($"{currentTarget.CharacterName} избежал получения урона от {this.CharacterName}");
+        }
+
 
         if (isDeath)
         {
@@ -98,7 +107,14 @@ public class StaticEnemyCharacter : Enemy
     {
         float finalDamage = currentTarget.Damage(this);
         bool isDeath = currentTarget.Health == 0;
-        battleSystem.GameUIPresenter.AddMessageToGameLog($"{this.CharacterName} наносит  юниту {currentTarget.CharacterName} {finalDamage * 100:00.00} урона");
+        if (finalDamage > 0)
+        {
+            battleSystem.GameUIPresenter.AddMessageToGameLog($"{this.CharacterName} наносит  юниту {currentTarget.CharacterName} {finalDamage * 100:00.00} урона");
+        }
+        else
+        {
+            battleSystem.GameUIPresenter.AddMessageToGameLog($"{currentTarget.CharacterName} избежал получения урона от {this.CharacterName}");
+        };
 
         if (isDeath)
         {

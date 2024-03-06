@@ -2,137 +2,93 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class MaterialBladesSecondSupportCardAbility : BaseSupport—ardAbility, ITurnCountable
 {
+    public event Action<ITurnCountable> OnReturnToNormal;
+
     private int m_turnCount;
     public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
 
     private bool m_isBuff;
     public bool IsBuff { get => m_isBuff; }
 
-    public event Action<ITurnCountable> OnReturnToNormal;
-
-    private Character character;
-
-    private Character enemyCharacter;
+    private List<Character> characters=new();
     protected override void Start()
     {
         base.Start();
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("¬˚·ÂËÚÂ ÒÓ˛ÁÌÓ„Ó ÔÂÒÓÌ‡Ê‡", battleSystem));
+        SetCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("¬˚·ÂËÚÂ ‚‡ÊÂÒÍÓ„Ó ÔÂÒÓÌ‡Ê‡ ‰Îˇ ‡Ú‡ÍË", battleSystem));
         SetSecondCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("¬˚·ÂËÚÂ ‚‡ÊÂÒÍÓ„Ó ÔÂÒÓÌ‡Ê‡", battleSystem));
         SetSelectCharacterBehaviour(new SetCurrentEnemyCharacterBehaviour("", battleSystem));
+        SetUseCardBehaviour(new AttackSelected—haractersBehaviour(1f, battleSystem, "\"Ã‡ÚÂË‡Î¸Ì˚Â ÍÎËÌÍË\""));
 
-        m_isBuff = true;
         TurnCount = 1;
+        m_isBuff = false;
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
-        m_cardSecondSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSelectBehaviour.OnSelected += OnSelected;
-        m_cardSelectBehaviour.OnSelected += OnSecondSelected;
         m_selectCharacterBehaviour.OnSelectCharacter += OnSelectCharacter;
-    }
-
-
-    private void OnDestroy()
-    {
-        m_cardSelectBehaviour.OnCancelSelection -= OnCancelSelection;
-        m_cardSecondSelectBehaviour.OnCancelSelection -= OnCancelSelection;
-        m_cardSelectBehaviour.OnSelected -= OnSelected;
-        m_cardSelectBehaviour.OnSelected -= OnSecondSelected;
-        m_selectCharacterBehaviour.OnSelectCharacter -= OnSelectCharacter;
+        m_useCardBehaviour.OnCardUse += OnCardUse;
     }
 
     private void OnSelected()
     {
         if (battleSystem.State is PlayerTurn)
         {
-            foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
-            {
-                playerCharacter.OnClick += SelectSecondCharacterInvoke;
-            }
-
-        }
-    }
-
-    private void SelectSecondCharacterInvoke(GameObject gameObject)
-    {
-        if (battleSystem.State is PlayerTurn)
-        {
-            character = battleSystem.PlayerController.CurrentPlayerCharacter;
-        }
-        else
-        {
-            character = battleSystem.EnemyController.CurrentEnemyCharacter;
-        }
-
-        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
-        {
-            playerCharacter.OnClick -= SelectSecondCharacterInvoke;
-            playerCharacter.IsChosen = false;
-        }
-        foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
-        {
-            enemyCharacter.IsEnabled = true;
-        }
-        SelectSecondCard();
-    }
-
-
-
-    private void OnSecondSelected()
-    {
-        if (battleSystem.State is PlayerTurn)
-        {
             foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
             {
-                enemyCharacter.IsEnabled = false;
                 enemyCharacter.OnClick += SelectCharacter;
             }
         }
     }
 
+
     private void OnSelectCharacter()
     {
         if (battleSystem.State is PlayerTurn)
         {
-            enemyCharacter = battleSystem.EnemyController.CurrentEnemyCharacter;
+            characters.Add(battleSystem.EnemyController.CurrentEnemyCharacter);
         }
         else
         {
-            enemyCharacter = battleSystem.PlayerController.CurrentPlayerCharacter;
+            characters.Add(battleSystem.PlayerController.CurrentPlayerCharacter);
         }
 
-        foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
+        if (characters.Count>=2)
         {
-            enemyCharacter.IsChosen = false;
-            enemyCharacter.OnClick -= SelectCharacter;
+            foreach (var character in characters)
+            {
+                character.IsFreezed = true;
+                UseCard(character.gameObject);
+            }        
         }
+        else
+        {
+            SelectSecondCard();
+        }      
+    }
 
-        character.MagAttack += 1;
-        enemyCharacter.MagDefence -= 1;
-
-        UseCard(null);
+    private void OnCardUse()
+    {
+        OnCancelSelection();
     }
 
     private void OnCancelSelection()
     {
-        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
-        {
-            playerCharacter.OnClick -= SelectSecondCharacterInvoke;
-        }
         foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
         {
-            enemyCharacter.OnClick -= SelectCharacter;
+            enemyCharacter.OnClick += SelectCharacter;
             enemyCharacter.IsChosen = false;
+            enemyCharacter.IsEnabled = true;
         }
     }
-
     public void ReturnToNormal()
     {
-        character.MagAttack -= 1;
-        enemyCharacter.MagDefence += 1;
-
-        OnReturnToNormal?.Invoke(this);
+        foreach(var character in characters)
+        {
+            character.IsFreezed = false;
+        }
+        
     }
 }

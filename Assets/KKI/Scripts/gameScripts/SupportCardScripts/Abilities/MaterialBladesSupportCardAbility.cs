@@ -20,7 +20,7 @@ public class MaterialBladesSupportCardAbility : BaseSupportСardAbility, ITurnCou
     {
         base.Start();
         SetCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("Выберите вражеского персонажа для атаки", battleSystem));
-        SetSelectCharacterBehaviour(new SetCurrentEnemyCharacterBehaviour("", battleSystem));
+        SetSelectCharacterBehaviour(new SetCurrentEnemyCharacterBehaviour("Выберите второго вражеского персонажа для атаки", battleSystem));
         SetUseCardBehaviour(new AttackSelectedСharactersBehaviour(1f, battleSystem, "\"Материальные клинки\""));
 
         TurnCount = 1;

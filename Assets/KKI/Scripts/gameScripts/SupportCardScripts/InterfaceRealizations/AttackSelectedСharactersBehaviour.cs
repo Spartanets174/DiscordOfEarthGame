@@ -20,7 +20,14 @@ public class AttackSelectedСharactersBehaviour : ICardUsable
         Character character = gameObject.GetComponent<Character>();
 
         float finalDamage = character.Damage(damage);
-        battleSystem.GameUIPresenter.AddMessageToGameLog($"{character.CharacterName} получил урон в количестве {finalDamage * 100:00.00} от {abilityName}");
+        if (finalDamage > 0)
+        {
+            battleSystem.GameUIPresenter.AddMessageToGameLog($"{character.CharacterName} получил урон в количестве {finalDamage * 100:00.00} от {abilityName}");
+        }
+        else
+        {
+            battleSystem.GameUIPresenter.AddMessageToGameLog($"{character.CharacterName} избежал получения урона от {abilityName}");
+        }       
         bool isDeath = character.Health == 0;
 
         if (isDeath)

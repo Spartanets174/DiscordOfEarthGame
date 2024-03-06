@@ -12,15 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f07b7677596d73a42b7bae752aea67b3, type: 3}
   m_Name: "\u0411\u0430\u0440\u044C\u0435\u0440 \u043A\u0440\u043E\u0432\u0438"
   m_EditorClassIdentifier: 
-  name: "\u0411\u0430\u0440\u044C\u0435\u0440 \u043A\u0440\u043E\u0432\u0438"
+  cardName: "\u0411\u0430\u0440\u044C\u0435\u0440 \u043A\u0440\u043E\u0432\u0438"
   description: 
   race: 4
   image: {fileID: 21300000, guid: a735e39cdf00ae544a08b06701f2de4c, type: 3}
   rarity: 1
-  Price: 432
-  id: 0
-  type: 1
-  ability: "\u0421\u043E\u0437\u0434\u0430\u0435\u0442 \u0431\u0430\u0440\u044C\u0435\u0440,
+  Price: 98
+  id: 39
+  type: 2
+  abilityText: "\u0421\u043E\u0437\u0434\u0430\u0435\u0442 \u0431\u0430\u0440\u044C\u0435\u0440,
     \u043A\u043E\u0442\u043E\u0440\u044B\u0439 \u0432\u043F\u0438\u0442\u044B\u0432\u0430\u0435\u0442
     \u0432\u0435\u0441\u044C \u0443\u0440\u043E\u043D \u043D\u0430 \u043F\u0440\u043E\u0442\u044F\u0436\u0435\u043D\u0438\u0438
     1 \u0445\u043E\u0434\u0430"
+  "m_gameSupport\u0421ardAbility":
+    GuidAssignmentFailed: 0
+    GUID: 845fb6b1f50211746b300296a795863e
+    _typeNameAndAssembly: BloodBarrierSupportCardAbility, Assembly-CSharp
+    _suppressLogs: 0

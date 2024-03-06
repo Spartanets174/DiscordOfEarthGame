@@ -149,13 +149,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7c1bf058d4094a148b9ec544c8523b87, type: 2}
   - {fileID: 11400000, guid: 8ddad6f2dd7fae749ab585f3bc109f72, type: 2}
   deckUserSupportCards:
-  - {fileID: 11400000, guid: 501922f67ef97b34dafe533a1d15acc0, type: 2}
-  - {fileID: 11400000, guid: 2bda1a7935a22ef4fad4e90c8bfc8301, type: 2}
-  - {fileID: 11400000, guid: bc7c9e8a72f529a4dab187054b238ec8, type: 2}
-  - {fileID: 11400000, guid: 7c51c4de9e922d746a9886dabd133727, type: 2}
-  - {fileID: 11400000, guid: 01051d735d44b6d4d882ae4ff2cd2912, type: 2}
-  - {fileID: 11400000, guid: 119a4b4fc355b564cab1cb2438170384, type: 2}
-  - {fileID: 11400000, guid: 247e8b9ff08bba24080a9a0ca99b0d38, type: 2}
+  - {fileID: 11400000, guid: 8241e45ddbded17418bcb23976749792, type: 2}
+  - {fileID: 11400000, guid: c7459b8714411a647b37bc4c6210a14b, type: 2}
+  - {fileID: 11400000, guid: 7419e220ac32d19428ace434045daefe, type: 2}
+  - {fileID: 11400000, guid: c4e106e440c384d4097d61c473aa0911, type: 2}
+  - {fileID: 11400000, guid: 1c9b636c1594dbc4a8ab06e6d63e1256, type: 2}
+  - {fileID: 11400000, guid: 4356bed165dbfaa448f3e1fb04adada3, type: 2}
+  - {fileID: 11400000, guid: db21915f334f3154280ff419b29fd575, type: 2}
   money: 868
   Name: "\u0430\u041C\u041E\u0413\u0423\u0421"
   PlayerId: 92

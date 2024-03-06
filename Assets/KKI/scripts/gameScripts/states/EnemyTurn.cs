@@ -121,7 +121,14 @@ public class EnemyTurn : State
 
             float finalDamage = currentTarget.Damage(enemyCharacter);
             bool isDeath = currentTarget.Health == 0;
-            BattleSystem.GameUIPresenter.AddMessageToGameLog($"{enemyCharacter.CharacterName} наносит  юниту {currentTarget.CharacterName} {finalDamage * 100:00.00} урона");
+            if (finalDamage > 0)
+            {
+                BattleSystem.GameUIPresenter.AddMessageToGameLog($"{enemyCharacter.CharacterName} наносит  юниту {currentTarget.CharacterName} {finalDamage * 100:00.00} урона");
+            }
+            else
+            {
+                BattleSystem.GameUIPresenter.AddMessageToGameLog($"{currentTarget.CharacterName} избежал получения урона от {enemyCharacter.CharacterName}");
+            }
 
             if (isDeath)
             {

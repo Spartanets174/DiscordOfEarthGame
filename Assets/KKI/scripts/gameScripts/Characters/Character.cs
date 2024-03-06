@@ -83,7 +83,6 @@ public abstract class Character : OutlineInteractableObject
         set
         {         
             m_critChance = value;
-            Debug.Log(m_critChance);
         }
     }
 
@@ -96,6 +95,13 @@ public abstract class Character : OutlineInteractableObject
 
     protected int m_index;
     public int Index => m_index;
+
+    protected float m_chanceToAvoidDamage = 0;
+    public float ChanceToAvoidDamage
+    {
+        get => m_chanceToAvoidDamage;
+        set => m_chanceToAvoidDamage = value;
+    }
 
     public Vector2 PositionOnField
     {
@@ -137,6 +143,16 @@ public abstract class Character : OutlineInteractableObject
             {
                 Speed = 0;
             }                      
+        }
+    }
+
+    private bool m_canBeDamaged;
+    public bool CanBeDamaged
+    {
+        get => m_canBeDamaged;
+        set
+        {
+            m_canBeDamaged = value;
         }
     }
 
@@ -196,13 +212,23 @@ public abstract class Character : OutlineInteractableObject
 
         OnClick += OnCharacterClickedInvoke;
         IsChosen = false;
+        CanBeDamaged = true;
     }
     public float Damage(Character chosenCharacter)
     {
+        if (!CanBeDamaged) return 0;
+
+        if (IsDamageAvoided()) return 0;
+
         float crit = IsCrit(chosenCharacter.CritChance,chosenCharacter.CritNum);
         float finalPhysDamage = ((11 + chosenCharacter.PhysAttack) * chosenCharacter.PhysAttack * crit * (chosenCharacter.PhysAttack - PhysDefence + Card.health)) / 256;
         float finalMagDamage = ((11 + chosenCharacter.MagAttack) * chosenCharacter.MagAttack * crit * (chosenCharacter.MagAttack - MagDefence + Card.health)) / 256;
         float finalDamage = Math.Max(finalMagDamage, finalPhysDamage);
+
+        if (finalDamage == 0)
+        {
+            finalDamage = UnityEngine.Random.Range(0.01f, 0.1f);
+        }
         Health = Math.Max(0, Health - finalDamage);
 
         OnDamagedInvoke();
@@ -210,13 +236,16 @@ public abstract class Character : OutlineInteractableObject
         {
             OnDeathInvoke();
         }
+        
         return finalDamage;
     }
 
     public float Damage(float damage)
     {
-        /*float crit = IsCrit(0.15f,1.5f);*/
-        /*damage = ((11 + damage) * damage * crit * (damage - MagDefence + Card.health)) / 256;*/
+        if (!CanBeDamaged) return 0;
+
+        if (IsDamageAvoided()) return 0;
+
         Health = Math.Max(0, Health - damage);
 
         OnDamagedInvoke();
@@ -225,6 +254,20 @@ public abstract class Character : OutlineInteractableObject
             OnDeathInvoke();
         }
         return damage;
+    }
+
+    protected bool IsDamageAvoided()
+    {
+        float chance = UnityEngine.Random.Range(0f, 1f);
+        Debug.Log(chance);
+        if (chance < ChanceToAvoidDamage)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     protected float IsCrit(float critChance, float m_critNum)
