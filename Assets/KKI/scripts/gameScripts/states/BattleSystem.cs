@@ -43,7 +43,7 @@ public class BattleSystem : StateMachine, ILoadable
 
     public void Init()
     {
-        FieldController.InvokeActionOnField(AddOnCellClick);
+        FieldController.InvokeActionOnField(x => { FieldController.TurnOnCells(); });
         gameUIPresenter.EndMoveButton.onClick.AddListener(SetEnemyTurn);
         PlayerController.OnPlayerCharacterSpawned += OnPlayerCharacterSpawned;
 
@@ -73,7 +73,10 @@ public class BattleSystem : StateMachine, ILoadable
     {
         StartCoroutine(State.Attack(target));
     }
-
+    public void OnSupportCardButton(GameObject cardSupport)
+    {
+        StartCoroutine(State.UseSupportCard(cardSupport));
+    }
     public void OnAttackAbilityButton()
     {
         StartCoroutine(State.UseAttackAbility());
@@ -88,15 +91,22 @@ public class BattleSystem : StateMachine, ILoadable
     {
         StartCoroutine(State.UseBuffAbility());
     }
-    public void OnSupportCardButton(GameObject cardSupport)
-    {
-        StartCoroutine(State.UseSupportCard(cardSupport));
-    }
+
     public void OnUseItemButton()
     {
         StartCoroutine(State.UseItem());
     }
-
+    [ContextMenu("SetPlayerTurn")]
+    public void SetPlayerTurn()
+    {
+        EnemyController.StopTree();
+        SetState(new PlayerTurn(this));
+    }
+    [ContextMenu("SetEnemyTurn")]
+    public void SetEnemyTurn()
+    {
+        SetState(new EnemyTurn(this));
+    }
     private void OnPlayerCharacterSpawned()
     {
         GameUIPresenter.SetChosenStateToCards(false);
@@ -105,11 +115,6 @@ public class BattleSystem : StateMachine, ILoadable
         {
             StartGame();
         }
-    }
-
-    private void AddOnCellClick(Cell cell)
-    {
-        cell.OnClick += x => { FieldController.TurnOnCells(); };
     }
 
     private void StartGame()
@@ -146,19 +151,8 @@ public class BattleSystem : StateMachine, ILoadable
         }
     }
 
-    [ContextMenu("SetPlayerTurn")]
-    public void SetPlayerTurn()
-    {
-        EnemyController.StopTree();
-        SetState(new PlayerTurn(this));
-    }
-    [ContextMenu("SetEnemyTurn")]
-    public void SetEnemyTurn()
-    {
-        SetState(new EnemyTurn(this));
-    }
 
-    private void SetCurrentChosenCharacter(GameObject character)
+    public void SetCurrentChosenCharacter(GameObject character)
     {
         if (character != null)
         {

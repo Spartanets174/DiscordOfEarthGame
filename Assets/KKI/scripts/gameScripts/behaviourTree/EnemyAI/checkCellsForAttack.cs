@@ -88,15 +88,20 @@ public class CheckCellsForAttack : Node
             Cell cell = m_battleSystem.FieldController.GetCell(newI, newJ);
             PlayerCharacter enemy = cell.GetComponentInChildren<PlayerCharacter>();
             StaticEnemyCharacter staticEnemy = cell.GetComponentInChildren<StaticEnemyCharacter>();
+            KostilEnemy kostilEnemy = cell .GetComponentInChildren<KostilEnemy>();
             if (cell.transform.childCount > 0)
             {
                 if (enemy != null)
                 {
                     enemiesToAttack.Add(enemy);
                 }
-                if (staticEnemy != null)
+                if (staticEnemy != null&& staticEnemy is not KostilEnemy)
                 {
                     enemiesToAttack.Add(staticEnemy);
+                }
+                if (kostilEnemy!=null)
+                {
+                    enemiesToAttack.Add(kostilEnemy.WallEnemyCharacter);
                 }
                 if (m_EnemyBT.CurrentEnemyCharacter.Class == enums.Classes.Маг)
                 {

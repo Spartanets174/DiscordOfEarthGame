@@ -70,6 +70,7 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
     public List<GameSupportCardDisplay> GameSupportCards => CardSupportAbilitiesController.GameSupportCards;
 
     private ReactiveProperty<GameSupportCardDisplay> currentGameSupportCardDisplay = new();
+    public ReactiveProperty<GameSupportCardDisplay> CurrentGameSupportCardDisplay => currentGameSupportCardDisplay;
 
     private CompositeDisposable disposables = new();
     public void Init()

@@ -163,6 +163,19 @@ public abstract class Character : OutlineInteractableObject
         set => m_isAttackedOnTheMove = value;
     }
 
+    protected float m_lastDamageAmount;
+    public float LastDamageAmount
+    {
+        get => m_lastDamageAmount;
+        private set => m_lastDamageAmount = value;
+    }
+    protected Character m_lastAttackedCharacter;
+    public Character LastAttackedCharacter
+    {
+        get => m_lastAttackedCharacter;
+        private set => m_lastAttackedCharacter = value;
+    }
+
     public event Action<Character> OnAttack;
     public event Action<Character> OnHeal;
     public event Action<Character> OnDeath;
@@ -214,7 +227,7 @@ public abstract class Character : OutlineInteractableObject
         IsChosen = false;
         CanBeDamaged = true;
     }
-    public float Damage(Character chosenCharacter)
+    public virtual float Damage(Character chosenCharacter)
     {
         if (!CanBeDamaged) return 0;
 
@@ -230,6 +243,9 @@ public abstract class Character : OutlineInteractableObject
             finalDamage = UnityEngine.Random.Range(0.01f, 0.1f);
         }
         Health = Math.Max(0, Health - finalDamage);
+
+        LastDamageAmount = finalDamage;
+        LastAttackedCharacter = chosenCharacter;
 
         OnDamagedInvoke();
         if (Health == 0)

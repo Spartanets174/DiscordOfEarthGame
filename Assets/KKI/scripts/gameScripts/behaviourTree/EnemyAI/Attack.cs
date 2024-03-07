@@ -18,7 +18,7 @@ public class Attack : Node
         Character _character = (Character)GetData("enemy");
 
         m_battleSystem.OnAttackButton(_character.gameObject);        
-        state = NodeState.RUNNING;
+        state = NodeState.SUCCESS;
         ClearData("enemy");
         m_enemyBT.RestartTree();
         return state;

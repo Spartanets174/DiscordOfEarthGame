@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 888380afc233049ce9e618f9f36c8ba8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  profile: {fileID: 11400000, guid: e6bcea395f9719d4f867efba5fe1d7a6, type: 2}
+  profile: {fileID: 11400000, guid: da8be450f1b84814a84985947fd67cad, type: 2}
   profileSync: 0
   previewInEditor: 1
   camerasLayerMask:

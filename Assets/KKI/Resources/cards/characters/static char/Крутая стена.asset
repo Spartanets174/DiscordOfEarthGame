@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f652d45b50f5d142bbb5af89b9ad55a, type: 3}
-  m_Name: "\u042D\u043B\u0435\u043C\u0435\u043D\u0442\u0430\u043B\u044C"
+  m_Name: "\u041A\u0440\u0443\u0442\u0430\u044F \u0441\u0442\u0435\u043D\u0430"
   m_EditorClassIdentifier: 
-  cardName: "\u042D\u043B\u0435\u043C\u0435\u043D\u0442\u0430\u043B\u044C"
+  cardName: "\u041A\u0440\u0443\u0442\u0430\u044F \u0441\u0442\u0435\u043D\u0430"
   description: 
-  race: 5
-  image: {fileID: 21300000, guid: 78a709a3f4f89da49b7d47c3bd8a2250, type: 3}
-  rarity: 1
+  race: 0
+  image: {fileID: 21300000, guid: c0f20f96c9600834899ee218124556e1, type: 3}
+  rarity: 0
   Price: 0
   id: 0
-  Class: 1
+  Class: 0
   health: 1
   speed: 0
   physAttack: 1

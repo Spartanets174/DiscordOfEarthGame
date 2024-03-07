@@ -22,6 +22,10 @@ public class AttackAllCharactersInAreaBehaviour : ICardUsable
         foreach (var cell in cellsToAttack)
         {
             Character character = cell.GetComponentInChildren<Character>();
+            if (character is KostilEnemy kostilEnemy)
+            {
+                character = kostilEnemy.WallEnemyCharacter;
+            }
 
             float finalDamage = character.Damage(damage);
             if (finalDamage > 0)

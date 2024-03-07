@@ -11,7 +11,7 @@ public class StormCallSupportCardAbility : BaseSupportСardAbility
     protected override void Start()
     {
         base.Start();
-        SetCardSelectBehaviour(new SelectCellsBehaviour("Выберите область для нанесения удара", battleSystem,new Vector2(3,3)));
+        SetCardSelectBehaviour(new SelectCellsBehaviour("Выберите область для нанесения удара", battleSystem,new Vector2(3,3), "attack"));
 
         SetUseCardBehaviour(new AttackAllCharactersInAreaBehaviour(0.5f,battleSystem, "\"Призыв бури\""));
 

@@ -10,7 +10,7 @@ public class LightningStrikeSupportCardAbility : BaseSupportСardAbility
     protected override void Start()
     {
         base.Start();
-        SetCardSelectBehaviour(new SelectCellsBehaviour("Выберите область для нанесения удара", battleSystem, new Vector2(1, 1)));
+        SetCardSelectBehaviour(new SelectCellsBehaviour("Выберите область для нанесения удара", battleSystem, new Vector2(1, 1), "attack"));
 
         SetUseCardBehaviour(new AttackAllCharactersInAreaBehaviour(1f, battleSystem, "\"Призыв бури\""));
 
@@ -42,6 +42,10 @@ public class LightningStrikeSupportCardAbility : BaseSupportСardAbility
 
     private void OnCardUse()
     {
+        foreach (var item in selectCellsBehaviour.highlightedCells)
+        {
+            item.OnClick -= selectCellsBehaviour.OnSelectedInvoke;
+        }
         battleSystem.FieldController.TurnOnCells();
     }
 }

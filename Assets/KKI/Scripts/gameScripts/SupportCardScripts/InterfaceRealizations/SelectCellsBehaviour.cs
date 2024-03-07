@@ -11,7 +11,9 @@ public class SelectCellsBehaviour : ICardSelectable
 
     private Vector2 range;
     private string m_selectCardTipText;
+    private string m_keyCellsColor;
 
+    public Cell clickedCell;
     public List<Cell> highlightedCells = new();
     public string SelectCardTipText
     {
@@ -21,11 +23,12 @@ public class SelectCellsBehaviour : ICardSelectable
         }
     }
 
-    public SelectCellsBehaviour(string text, BattleSystem battleSystem, Vector2 range)
+    public SelectCellsBehaviour(string text, BattleSystem battleSystem, Vector2 range, string keyCellsColor)
     {
         m_selectCardTipText = text;
         this.battleSystem = battleSystem;
         this.range = range;
+        m_keyCellsColor = keyCellsColor;
     }
 
     public void SelectCard()
@@ -35,6 +38,7 @@ public class SelectCellsBehaviour : ICardSelectable
 
     public void OnSelectedInvoke(GameObject gameObject)
     {
+        clickedCell = gameObject.GetComponent<Cell>();  
         OnSelected?.Invoke();
     }
 
@@ -55,7 +59,7 @@ public class SelectCellsBehaviour : ICardSelectable
         {
             if (highlightedCells.Contains(x))
             {
-                x.SetColor("attack");
+                x.SetColor($"{m_keyCellsColor}");
             }
             else
             {

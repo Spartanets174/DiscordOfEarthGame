@@ -408,12 +408,18 @@ public class PlayerTurn : State
 
             Cell cell = BattleSystem.FieldController.GetCell(newI, newJ);
             Enemy enemy = cell.GetComponentInChildren<Enemy>();
+            KostilEnemy kostilEnemy = cell.GetComponentInChildren<KostilEnemy>();
             if (cell.transform.childCount > 0)
             {
-                if (enemy != null)
+                if (enemy != null&&enemy is not KostilEnemy)
                 {
                     cell.SetColor("attack");
                     enemiesToAttack.Add(enemy);
+                }
+                if (kostilEnemy!=null)
+                {
+                    cell.SetColor("attack");
+                    enemiesToAttack.Add(kostilEnemy.WallEnemyCharacter);
                 }
                 if (BattleSystem.PlayerController.CurrentPlayerCharacter.Class == enums.Classes.Маг)
                 {

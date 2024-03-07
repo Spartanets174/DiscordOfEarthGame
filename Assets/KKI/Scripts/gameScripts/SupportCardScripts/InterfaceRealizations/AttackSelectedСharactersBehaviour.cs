@@ -18,6 +18,10 @@ public class AttackSelectedСharactersBehaviour : ICardUsable
     public void UseAbility(GameObject gameObject)
     {
         Character character = gameObject.GetComponent<Character>();
+        if (character is KostilEnemy kostilEnemy)
+        {
+            character = kostilEnemy.WallEnemyCharacter;
+        }
 
         float finalDamage = character.Damage(damage);
         if (finalDamage > 0)
