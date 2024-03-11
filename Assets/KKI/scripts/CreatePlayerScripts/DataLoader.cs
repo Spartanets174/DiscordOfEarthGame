@@ -12,11 +12,12 @@ public class DataLoader : MonoBehaviour, ILoadable
     public void Init()
     {
         playerData = DB.PlayerData;
-        playerData.Name = saveSystem.LoadPlayer();
+        playerData.Name = SaveSystem.LoadPlayer();
         playerData = DB.PlayerData;
         if (playerData.Name != "")
         {
             GetPlayerData();
+            SceneManager.LoadScene("menu");
         }
     }
     public bool IsNicknameInBase(string Nick)
@@ -31,8 +32,7 @@ public class DataLoader : MonoBehaviour, ILoadable
             }
         }
         if (nickList.Count == 0 || !hasName)
-        {
-            CreateNewPlayer(Nick);
+        {           
             return true;
         }
         else
@@ -41,12 +41,13 @@ public class DataLoader : MonoBehaviour, ILoadable
         }
     }
 
-    private void CreateNewPlayer(string Nick)
+    public void CreateNewPlayer(string Nick, string password)
     {
-        int id = DB.InsertToPlayers(Nick, 1000);
+        int id = DB.InsertToPlayers(Nick, password, 10000);
         playerData.Name = Nick;
-        saveSystem.savePlayer(playerData.Name);
-        playerData.money = 1000;
+        playerData.Password = password;
+        SaveSystem.SavePlayer(playerData.Name);
+        playerData.money = 10000;
         playerData.PlayerId = id;
         playerData.deckUserCharCards.Clear();
         playerData.deckUserSupportCards.Clear();
@@ -147,9 +148,8 @@ public class DataLoader : MonoBehaviour, ILoadable
     {
         playerData.money = DB.SelectBalancePlayer(playerData);
         playerData.PlayerId = DB.SelectIdPlayer(playerData.Name);
-        playerData.deckUserCharCards.Clear();
-        playerData.deckUserSupportCards.Clear();
         playerData.money = DB.SelectBalancePlayer(playerData);
+
         List<CharacterCard> CardOfPlayer = DB.SelectFromChars();
         List<CardSupport> CardSupportOfPlayer = DB.SelectFromCardsSupport();
 
@@ -187,11 +187,13 @@ public class DataLoader : MonoBehaviour, ILoadable
             playerData.allSupportCards[i].Price = CardSupportOfPlayer[i].Price;
             playerData.allSupportCards[i].id = CardSupportOfPlayer[i].id;
         }
+
         List<CharacterCard> CardOfShopPlayer = DB.SelectFromCardsShop(playerData);
         List<CardSupport> CardSupportOfShopPlayer = DB.SelectFromCardsSupportShop(playerData);
         List<CharacterCard> OwnedCardOfPlayer = DB.SelectFromOwnCards(playerData);
         List<CardSupport> OwnedCardSupportOfPlayer = DB.SelectFromOwnCardsSupport(playerData);
-
+        List<CharacterCard> DeckCardOfPlayer = DB.SelectFromDeckCards(playerData);
+        List<CardSupport> DeckCardSupportOfPlayer = DB.SelectFromDeckCardsSupport(playerData);
 
         playerData.allShopCharCards.Clear();
         for (int i = 0; i < CardOfShopPlayer.Count; i++)
@@ -209,7 +211,6 @@ public class DataLoader : MonoBehaviour, ILoadable
             CardSupport CardSupport = Resources.Load<CardSupport>($"cards/support/{CardSupportOfShopPlayer[i].cardName}");
             playerData.allShopSupportCards.Add(CardSupport);
         }
-
         playerData.allUserCharCards.Clear();
         for (int i = 0; i < OwnedCardOfPlayer.Count; i++)
         {
@@ -226,14 +227,21 @@ public class DataLoader : MonoBehaviour, ILoadable
             CardSupport CardSupport = Resources.Load<CardSupport>($"cards/support/{OwnedCardSupportOfPlayer[i].cardName}");
             playerData.allUserSupportCards.Add(CardSupport);
         }
-
-        SceneManager.LoadScene("menu");
-    }
-
-    private void testFunc()
-    {
-        DB.RemoveCardsSupportShop(playerData);
-        DB.InsertToCardsSupportShop(playerData);
-
+        playerData.deckUserCharCards.Clear();
+        for (int i = 0; i < DeckCardOfPlayer.Count; i++)
+        {
+            if (DeckCardOfPlayer[i].cardName == "Бесстрашный \"Страж\"")
+            {
+                DeckCardOfPlayer[i].cardName = "Бесстрашный Страж";
+            }
+            CharacterCard card = Resources.Load<CharacterCard>($"cards/characters/{DeckCardOfPlayer[i].cardName}");
+            playerData.deckUserCharCards.Add(card);
+        }
+        playerData.deckUserSupportCards.Clear();
+        for (int i = 0; i < DeckCardSupportOfPlayer.Count; i++)
+        {
+            CardSupport CardSupport = Resources.Load<CardSupport>($"cards/support/{DeckCardSupportOfPlayer[i].cardName}");
+            playerData.deckUserSupportCards.Add(CardSupport);
+        }
     }
 }

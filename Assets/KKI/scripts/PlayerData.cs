@@ -16,5 +16,6 @@ public class PlayerData : ScriptableObject
     public List<CardSupport> deckUserSupportCards;
     public int money;
     public string Name;
+    public string Password;
     public int PlayerId;
 }

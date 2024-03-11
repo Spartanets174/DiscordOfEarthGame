@@ -1,6 +1,6 @@
 using DG.Tweening;
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,78 +9,140 @@ using UnityEngine.UI;
 public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
 {
     [SerializeField] private InputField Nick;
-    [SerializeField] private TextMeshProUGUI warningText;
+    [SerializeField] private InputField Password;
+    [SerializeField] private TextMeshProUGUI warningTextNick;
+    [SerializeField] private TextMeshProUGUI warningTextPassword;
     [SerializeField] private Button submit;
     [SerializeField] private DataLoader dataLoader;
+
+    private Sequence sequenceName;
+    private Sequence sequencePassword;
     public void Init()
     {
-        submit.onClick.AddListener(CheckNick);
-        Nick.onValueChanged.AddListener(TurnOffWarningText);
+        submit.onClick.AddListener(CheckInputs);
+        Nick.onValueChanged.AddListener(TurnOffWarningTextName);
+        Password.onValueChanged.AddListener(TurnOffWarningTextPassword);
     }
     private void OnDestroy()
     {
-        submit.onClick.RemoveListener(CheckNick);
-        Nick.onValueChanged.RemoveListener(TurnOffWarningText);
+        submit.onClick.RemoveListener(CheckInputs);
+        Nick.onValueChanged.RemoveListener(TurnOffWarningTextName);
+        Password.onValueChanged.RemoveListener(TurnOffWarningTextPassword);
         StopAllCoroutines();
     }
-    private void TurnOffWarningText(string args)
+    private void TurnOffWarningTextName(string args)
     {
-        warningText.gameObject.SetActive(false);
+        warningTextNick.gameObject.SetActive(false);
     }
-    private void TurnOnWarningText()
+    private void TurnOnWarningTextName()
     {
-        warningText.gameObject.SetActive(true);
+        warningTextNick.alpha = 1;
+        warningTextNick.gameObject.SetActive(true);
     }
-    public void CheckNick()
+    private void TurnOffWarningTextPassword(string args)
+    {
+        warningTextPassword.gameObject.SetActive(false);
+    }
+    private void TurnOnWarningTextPassword()
+    {
+        warningTextPassword.alpha = 1;
+        warningTextPassword.gameObject.SetActive(true);
+    }
+    public void CheckInputs()
     {
         Nick.text = Nick.text.Trim();
-        if (Nick.text == "")
+        Password.text = Password.text.Trim();
+        StopAllCoroutines();
+
+        bool isNameValid = CheckName();
+        bool isPasswordValid = CheckPassword();
+
+        if (isNameValid && isPasswordValid)
         {
-            warningText.text = "Вы ничего не ввели!";
-            StartCoroutine(OnWarningText());
-        }
-        else
-        {
-            if (Nick.text.Length <= 15)
-            {
-                if (Nick.text.Length >= 4)
-                {
-                    if (dataLoader.IsNicknameInBase(Nick.text))
-                    {
-                        SceneManager.LoadScene("menu");
-                    }
-                    else
-                    {
-                        warningText.text = "Данное имя уже существует!";
-                        StartCoroutine(OnWarningText());
-                        
-                    }
-                }
-                else
-                {
-                    warningText.text = "Имя слишком маленькое (минимум 4 символа)!";
-                    StartCoroutine(OnWarningText());
-                }
-            }
-            else
-            {
-                warningText.text = "Имя слишком большое (максимум 15 символов)!";
-                StartCoroutine(OnWarningText());
-            }
+            dataLoader.CreateNewPlayer(Nick.text, Password.text);
+            SceneManager.LoadScene("menu");
         }
     }
-    IEnumerator OnWarningText()
+
+    private bool CheckPassword()
     {
-        TurnOnWarningText();
-        yield return new WaitForSecondsRealtime(2);
-            Sequence mySequence = DOTween.Sequence();
-            mySequence.Append(warningText.DOFade(0, 2f))
-            .OnComplete(() => {
-                warningText.color = Color.red;
-                TurnOffWarningText("args");
-                mySequence.Kill();
+        if (Password.text == "")
+        {
+            warningTextPassword.text = "Вы ничего не ввели!";
+            OnWarningTextPassword();
+            return false;
+        }
+        if (Password.text.Length < 4)
+        {
+            warningTextPassword.text = "Пароль слишком маленький (минимум 4 символа)!";
+            OnWarningTextPassword();
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool CheckName()
+    {
+        if (Nick.text == "")
+        {
+            warningTextNick.text = "Вы ничего не ввели!";
+            OnWarningTextName();
+            return false;        }
+
+        if (Nick.text.Length > 15)
+        {
+            warningTextNick.text = "Имя слишком большое (максимум 15 символов)!";
+            OnWarningTextName();
+            return false;
+        }
+        if (Nick.text.Length < 4)
+        {
+
+            warningTextNick.text = "Имя слишком маленькое (минимум 4 символа)!";
+            OnWarningTextName();
+            return false;
+        }
+
+        if (!dataLoader.IsNicknameInBase(Nick.text))
+        {
+            warningTextNick.text = "Данное имя уже существует!";
+            OnWarningTextName();
+            return false;
+        }
+
+
+        return true;
+    }
+
+    private void OnWarningTextName()
+    {
+        sequenceName.Kill();
+        TurnOnWarningTextName();
+        sequenceName = DOTween.Sequence();
+        sequenceName.AppendInterval(2).Append(warningTextNick.DOFade(0, 2f))
+            .OnComplete(() =>
+            {
+                warningTextNick.color = Color.red;
+                TurnOffWarningTextName("args");
+                sequenceName.Kill();
             });
-            mySequence.Play();
+        sequenceName.Play();
+    }
+
+    private void OnWarningTextPassword()
+    {
+        sequencePassword.Kill();
+        TurnOnWarningTextPassword();
+        sequencePassword = DOTween.Sequence();
+        sequencePassword.AppendInterval(2).Append(warningTextPassword.DOFade(0, 2f))
+            .OnComplete(() =>
+            {
+                warningTextPassword.color = Color.red;
+                TurnOffWarningTextPassword("args");
+                sequencePassword.Kill();
+            });
+        sequencePassword.Play();
     }
 }
 

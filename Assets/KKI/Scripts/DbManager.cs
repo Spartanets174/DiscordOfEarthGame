@@ -1,6 +1,5 @@
 using MySql.Data.MySqlClient;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -37,14 +36,6 @@ public class DbManager : MonoBehaviour
     {
         if (playerData!=null)
         {
-            for (int i = 0; i < playerData.deckUserCharCards.Count; i++)
-            {
-                playerData.allUserCharCards.Add(playerData.deckUserCharCards[i]);
-            }
-            for (int i = 0; i < playerData.deckUserSupportCards.Count; i++)
-            {
-                playerData.allUserSupportCards.Add(playerData.deckUserSupportCards[i]);
-            }
             UpdatePlayerBalance(playerData);
 
             RemoveCardsSupportShop(playerData);
@@ -59,22 +50,26 @@ public class DbManager : MonoBehaviour
             RemoveCardsOwn(playerData);
             InsertToCardsOwn(playerData);
 
+            RemoveCardsSupportDeck(playerData);
+            InsertToCardsSupportDeck(playerData);
 
+            RemoveCardsDeck(playerData);
+            InsertToCardDeck(playerData);
 
-            closeCon();
+            CloseCon();
             Debug.Log("closed");
         }
         
     }
-    public void closeCon()
+    public void CloseCon()
     {
         con.Close();
     }
 
     #region Player
-    public int InsertToPlayers(string Name, int balance)
+    public int InsertToPlayers(string Name, string password, int balance)
     {
-        string query = $"insert into gamedb.players (p_name, balance) values ('{Name}',{balance})";
+        string query = $"insert into gamedb.players (p_name, balance, p_password) values ('{Name}',{balance}, '{password}')";
 
         var command = new MySqlCommand(query, con);
         try
@@ -194,7 +189,6 @@ public class DbManager : MonoBehaviour
     }
     #endregion
 
-
     #region AllChars
     public void IsertIntoChars(PlayerData playerData)
     {
@@ -239,97 +233,7 @@ public class DbManager : MonoBehaviour
             {
                 while (reader.Read())
                 {
-                    CharacterCard item = new CharacterCard();
-                    item.cardName = reader.GetString("char_name");
-
-                    switch (reader.GetString("race"))
-                    {
-                        case "Люди":
-                            item.race = enums.Races.Люди;
-                            break;
-                        case "Гномы":
-                            item.race = enums.Races.Гномы;
-                            break;
-                        case "Эльфы":
-                            item.race = enums.Races.Эльфы;
-                            break;
-                        case "ТёмныеЭльфы":
-                            item.race = enums.Races.ТёмныеЭльфы;
-                            break;
-                        case "МагическиеСущества":
-                            item.race = enums.Races.МагическиеСущества;
-                            break;
-                    }
-
-                    switch (reader.GetString("class"))
-                    {
-                        case "Паладин":
-                            item.Class = enums.Classes.Паладин;
-                            break;
-                        case "Лучник":
-                            item.Class = enums.Classes.Лучник;
-                            break;
-                        case "Кавалерия":
-                            item.Class = enums.Classes.Кавалерия;
-                            break;
-                        case "Маг":
-                            item.Class = enums.Classes.Маг;
-                            break;
-                    }
-
-                    switch (reader.GetString("rarity"))
-                    {
-                        case "Обычная":
-                            item.rarity = enums.Rarity.Обычная;
-                            break;
-                        case "Мифическая":
-                            item.rarity = enums.Rarity.Мифическая;
-                            break;
-                    }
-
-                    item.description = reader.GetString("desctiption");
-
-                    item.health = Convert.ToInt32(reader.GetFloat("health"));
-                    item.speed = Convert.ToInt32(reader.GetFloat("speed"));
-                    item.physAttack = reader.GetFloat("p_attack");
-                    item.magAttack = reader.GetFloat("m_attack");
-                    item.range = Convert.ToInt32(reader.GetFloat("char_range"));
-                    item.physDefence = reader.GetFloat("p_defence");
-                    item.magDefence = reader.GetFloat("m_defence");
-                    item.critChance = reader.GetFloat("crit_possibility");
-                    item.critNum = reader.GetFloat("crit");
-
-                    item.passiveAbility = reader.GetString("passive");
-                    item.attackAbility = reader.GetString("special_1");
-                    item.defenceAbility = reader.GetString("special_2");
-                    item.buffAbility = reader.GetString("special_3");
-
-                    item.Price = reader.GetInt32("price");
-
-                    item.image = Resources.Load<Sprite>($"Card images/card of char/{reader.GetString("path")}") ;
-                    item.id = reader.GetInt32("idCharacters");
-                    
-/*                    Debug.Log($"name {item.name} ({reader.GetString("char_name")})");
-                    Debug.Log($"раса {item.race} ({reader.GetString("race")})");
-                    Debug.Log($"class {item.Class} ({reader.GetString("class")})");
-                    Debug.Log($"rarity {item.rarity} ({reader.GetString("rarity")})");
-                    Debug.Log($"desctiption {item.description} ({reader.GetString("desctiption")})");
-                    Debug.Log($"health {item.health} ({reader.GetFloat("health")})");
-                    Debug.Log($"speed {item.speed} ({reader.GetFloat("speed")})");
-                    Debug.Log($"physAttack {item.physAttack} ({reader.GetFloat("p_attack")})");
-                    Debug.Log($"magAttack {item.magAttack} ({reader.GetFloat("m_attack")})");
-                    Debug.Log($"range {item.range} ({reader.GetFloat("char_range")})");
-                    Debug.Log($"physDefence {item.physDefence} ({reader.GetFloat("p_defence")})");
-                    Debug.Log($"magDefence {item.magDefence} ({reader.GetFloat("m_defence")})");
-                    Debug.Log($"critChance {item.critChance} ({reader.GetDouble("crit_possibility")})");
-                    Debug.Log($"critNum {item.critNum} ({reader.GetDouble("crit")})");
-                    Debug.Log($"passiveAbility {item.passiveAbility} ({reader.GetString("passive")})");
-                    Debug.Log($"attackAbility {item.attackAbility} ({reader.GetString("special_1")})");
-                    Debug.Log($"defenceAbility {item.defenceAbility} ({reader.GetString("special_2")})");
-                    Debug.Log($"buffAbility {item.buffAbility} ({reader.GetString("special_3")})");
-                    Debug.Log($"name {item.image}");    
- */
-
+                    CharacterCard item = CreateCharacterCard(reader);
                     cardList.Add(item);
                 }
 
@@ -349,8 +253,7 @@ public class DbManager : MonoBehaviour
     }
     #endregion
 
-
-    #region allSupport
+    #region AllSupport
     public void InsertIntoCardsSupport(PlayerData playerData)
     {
         for (int i = 0; i < playerData.allSupportCards.Count; i++)
@@ -381,54 +284,7 @@ public class DbManager : MonoBehaviour
             {
                 while (reader.Read())
                 {
-                    CardSupport item = new CardSupport();
-                    item.cardName = reader.GetString("name");
-                    switch (reader.GetString("race"))
-                    {
-                        case "Люди":
-                            item.race = enums.Races.Люди;
-                            break;
-                        case "Гномы":
-                            item.race = enums.Races.Гномы;
-                            break;
-                        case "Эльфы":
-                            item.race = enums.Races.Эльфы;
-                            break;
-                        case "ТёмныеЭльфы":
-                            item.race = enums.Races.ТёмныеЭльфы;
-                            break;
-                        case "МагическиеСущества":
-                            item.race = enums.Races.МагическиеСущества;
-                            break;
-                    }
-                    switch (reader.GetString("type"))
-                    {
-                        case "атакующая":
-                            item.type = enums.TypeOfSupport.атакующая;
-                            break;
-                        case "защитная":
-                            item.type = enums.TypeOfSupport.защитная;
-                            break;
-                        case "мобильность":
-                            item.type = enums.TypeOfSupport.мобильность;
-                            break;
-                    }
-                    item.abilityText = reader.GetString("effect");
-                    switch (reader.GetString("rarity"))
-                    {
-                        case "Обычная":
-                            item.rarity = enums.Rarity.Обычная;
-                            break;
-                        case "Мифическая":
-                            item.rarity = enums.Rarity.Мифическая;
-                            break;
-                    }
-                    item.image =Resources.Load<Sprite>($"Card images/cards of support/{reader.GetString("path")}");
-                   /* Debug.Log($"image {item.image}");*/
-
-                   item.id = reader.GetInt32("idCards");
-                    item.Price = reader.GetInt32("price");
-                    /*                    Debug.Log($"имя {item.name} ({reader.GetString("name")}), раса {item.race} ({reader.GetString("race")}), способность {item.ability} ({reader.GetString("effect")}), тип {item.type} ({reader.GetString("type")}), редкость {item.rarity} ({reader.GetString("rarity")})");*/
+                    CardSupport item = CreateCardSupport(reader);
                     CardSupportList.Add(item);
                 }
 
@@ -451,9 +307,7 @@ public class DbManager : MonoBehaviour
 
     #endregion
 
-
-    #region supportShop
-
+    #region SupportShop
 
     public void InsertToCardsSupportShop(PlayerData playerData)
     {
@@ -519,52 +373,8 @@ public class DbManager : MonoBehaviour
             {
                 while (reader.Read())
                 {
-                    CardSupport item = new CardSupport();
-                    item.cardName = reader.GetString("name");
-                    switch (reader.GetString("race"))
-                    {
-                        case "Люди":
-                            item.race = enums.Races.Люди;
-                            break;
-                        case "Гномы":
-                            item.race = enums.Races.Гномы;
-                            break;
-                        case "Эльфы":
-                            item.race = enums.Races.Эльфы;
-                            break;
-                        case "ТёмныеЭльфы":
-                            item.race = enums.Races.ТёмныеЭльфы;
-                            break;
-                        case "МагическиеСущества":
-                            item.race = enums.Races.МагическиеСущества;
-                            break;
-                    }
-                    switch (reader.GetString("type"))
-                    {
-                        case "атакующая":
-                            item.type = enums.TypeOfSupport.атакующая;
-                            break;
-                        case "защитная":
-                            item.type = enums.TypeOfSupport.защитная;
-                            break;
-                        case "мобильность":
-                            item.type = enums.TypeOfSupport.мобильность;
-                            break;
-                    }
-                    item.abilityText = reader.GetString("effect");
-                    switch (reader.GetString("rarity"))
-                    {
-                        case "Обычная":
-                            item.rarity = enums.Rarity.Обычная;
-                            break;
-                        case "Мифическая":
-                            item.rarity = enums.Rarity.Мифическая;
-                            break;
-                    }
-                    item.Price = reader.GetInt32("price");
-                    item.id = reader.GetInt32("idCards");
-/*                    Debug.Log($"имя {item.name} ({reader.GetString("name")}), раса {item.race} ({reader.GetString("race")}), способность {item.ability} ({reader.GetString("effect")}), тип {item.type} ({reader.GetString("type")}), редкость {item.rarity} ({reader.GetString("rarity")})");
-*/                    CardSupportList.Add(item);
+                    CardSupport item = CreateCardSupport(reader);
+                    CardSupportList.Add(item);
                 }
 
                 command.Dispose();
@@ -584,8 +394,7 @@ public class DbManager : MonoBehaviour
     }
     #endregion
 
-
-    #region charShop
+    #region CharShop
 
     public void InsertToCardsShop(PlayerData playerData)
     {
@@ -655,75 +464,7 @@ public class DbManager : MonoBehaviour
             {
                 while (reader.Read())
                 {
-                    CharacterCard item = new CharacterCard();
-                    item.cardName = reader.GetString("char_name");
-
-                    switch (reader.GetString("race"))
-                    {
-                        case "Люди":
-                            item.race = enums.Races.Люди;
-                            break;
-                        case "Гномы":
-                            item.race = enums.Races.Гномы;
-                            break;
-                        case "Эльфы":
-                            item.race = enums.Races.Эльфы;
-                            break;
-                        case "ТёмныеЭльфы":
-                            item.race = enums.Races.ТёмныеЭльфы;
-                            break;
-                        case "МагическиеСущества":
-                            item.race = enums.Races.МагическиеСущества;
-                            break;
-                    }
-
-                    switch (reader.GetString("class"))
-                    {
-                        case "Паладин":
-                            item.Class = enums.Classes.Паладин;
-                            break;
-                        case "Лучник":
-                            item.Class = enums.Classes.Лучник;
-                            break;
-                        case "Кавалерия":
-                            item.Class = enums.Classes.Кавалерия;
-                            break;
-                        case "Маг":
-                            item.Class = enums.Classes.Маг;
-                            break;
-                    }
-
-                    switch (reader.GetString("rarity"))
-                    {
-                        case "Обычная":
-                            item.rarity = enums.Rarity.Обычная;
-                            break;
-                        case "Мифическая":
-                            item.rarity = enums.Rarity.Мифическая;
-                            break;
-                    }
-
-                    item.description = reader.GetString("desctiption");
-
-                    item.health = Convert.ToInt32(reader.GetFloat("health"));
-                    item.speed = Convert.ToInt32(reader.GetFloat("speed"));
-                    item.physAttack = reader.GetFloat("p_attack");
-                    item.magAttack = reader.GetFloat("m_attack");
-                    item.range = Convert.ToInt32(reader.GetFloat("char_range"));
-                    item.physDefence = reader.GetFloat("p_defence");
-                    item.magDefence = reader.GetFloat("m_defence");
-                    item.critChance = reader.GetFloat("crit_possibility");
-                    item.critNum = reader.GetFloat("crit");
-
-                    item.passiveAbility = reader.GetString("passive");
-                    item.attackAbility = reader.GetString("special_1");
-                    item.defenceAbility = reader.GetString("special_2");
-                    item.buffAbility = reader.GetString("special_3");
-
-                    item.Price = reader.GetInt32("price");
-
-                    item.image = Resources.Load<Sprite>($"Card images/card of char/{reader.GetString("path")}");
-                    item.id = reader.GetInt32("idCharacters");
+                    CharacterCard item = CreateCharacterCard(reader);
                     cardList.Add(item);
                 }
 
@@ -744,8 +485,7 @@ public class DbManager : MonoBehaviour
     }
     #endregion
 
-
-    #region supportOwn
+    #region SupportOwn
 
 
     public void InsertToCardsSupportOwn(PlayerData playerData)
@@ -813,52 +553,8 @@ public class DbManager : MonoBehaviour
             {
                 while (reader.Read())
                 {
-                    CardSupport item = new CardSupport();
-                    item.cardName = reader.GetString("name");
-                    switch (reader.GetString("race"))
-                    {
-                        case "Люди":
-                            item.race = enums.Races.Люди;
-                            break;
-                        case "Гномы":
-                            item.race = enums.Races.Гномы;
-                            break;
-                        case "Эльфы":
-                            item.race = enums.Races.Эльфы;
-                            break;
-                        case "ТёмныеЭльфы":
-                            item.race = enums.Races.ТёмныеЭльфы;
-                            break;
-                        case "МагическиеСущества":
-                            item.race = enums.Races.МагическиеСущества;
-                            break;
-                    }
-                    switch (reader.GetString("type"))
-                    {
-                        case "атакующая":
-                            item.type = enums.TypeOfSupport.атакующая;
-                            break;
-                        case "защитная":
-                            item.type = enums.TypeOfSupport.защитная;
-                            break;
-                        case "мобильность":
-                            item.type = enums.TypeOfSupport.мобильность;
-                            break;
-                    }
-                    item.abilityText = reader.GetString("effect");
-                    switch (reader.GetString("rarity"))
-                    {
-                        case "Обычная":
-                            item.rarity = enums.Rarity.Обычная;
-                            break;
-                        case "Мифическая":
-                            item.rarity = enums.Rarity.Мифическая;
-                            break;
-                    }
-                    item.Price = reader.GetInt32("price");
-                    item.id = reader.GetInt32("idCards");
-/*                    Debug.Log($"имя {item.name} ({reader.GetString("name")}), раса {item.race} ({reader.GetString("race")}), способность {item.ability} ({reader.GetString("effect")}), тип {item.type} ({reader.GetString("type")}), редкость {item.rarity} ({reader.GetString("rarity")})");
-*/                    CardSupportList.Add(item);
+                    CardSupport item = CreateCardSupport(reader);
+                    CardSupportList.Add(item);
                 }
 
                 command.Dispose();
@@ -879,8 +575,7 @@ public class DbManager : MonoBehaviour
 
     #endregion
 
-
-    #region charOwn
+    #region CharOwn
 
 
     public void InsertToCardsOwn(PlayerData playerData)
@@ -949,75 +644,7 @@ public class DbManager : MonoBehaviour
             {
                 while (reader.Read())
                 {
-                    CharacterCard item = new CharacterCard();
-                    item.cardName = reader.GetString("char_name");
-
-                    switch (reader.GetString("race"))
-                    {
-                        case "Люди":
-                            item.race = enums.Races.Люди;
-                            break;
-                        case "Гномы":
-                            item.race = enums.Races.Гномы;
-                            break;
-                        case "Эльфы":
-                            item.race = enums.Races.Эльфы;
-                            break;
-                        case "ТёмныеЭльфы":
-                            item.race = enums.Races.ТёмныеЭльфы;
-                            break;
-                        case "МагическиеСущества":
-                            item.race = enums.Races.МагическиеСущества;
-                            break;
-                    }
-
-                    switch (reader.GetString("class"))
-                    {
-                        case "Паладин":
-                            item.Class = enums.Classes.Паладин;
-                            break;
-                        case "Лучник":
-                            item.Class = enums.Classes.Лучник;
-                            break;
-                        case "Кавалерия":
-                            item.Class = enums.Classes.Кавалерия;
-                            break;
-                        case "Маг":
-                            item.Class = enums.Classes.Маг;
-                            break;
-                    }
-
-                    switch (reader.GetString("rarity"))
-                    {
-                        case "Обычная":
-                            item.rarity = enums.Rarity.Обычная;
-                            break;
-                        case "Мифическая":
-                            item.rarity = enums.Rarity.Мифическая;
-                            break;
-                    }
-
-                    item.description = reader.GetString("desctiption");
-
-                    item.health = Convert.ToInt32(reader.GetFloat("health"));
-                    item.speed = Convert.ToInt32(reader.GetFloat("speed"));
-                    item.physAttack = reader.GetFloat("p_attack");
-                    item.magAttack = reader.GetFloat("m_attack");
-                    item.range = Convert.ToInt32(reader.GetFloat("char_range"));
-                    item.physDefence = reader.GetFloat("p_defence");
-                    item.magDefence = reader.GetFloat("m_defence");
-                    item.critChance = reader.GetFloat("crit_possibility");
-                    item.critNum = reader.GetFloat("crit");
-
-                    item.passiveAbility = reader.GetString("passive");
-                    item.attackAbility = reader.GetString("special_1");
-                    item.defenceAbility = reader.GetString("special_2");
-                    item.buffAbility = reader.GetString("special_3");
-
-                    item.Price = reader.GetInt32("price");
-
-                    item.image = Resources.Load<Sprite>($"Card images/card of char/{reader.GetString("path")}");
-                    item.id = reader.GetInt32("idCharacters");
+                    CharacterCard item = CreateCharacterCard(reader);
                     cardList.Add(item);
                 }
 
@@ -1037,6 +664,290 @@ public class DbManager : MonoBehaviour
 
     }
 
+    #endregion
+
+    #region SupportDeck
+    public void InsertToCardsSupportDeck(PlayerData playerData)
+    {
+        for (int i = 0; i < playerData.deckUserSupportCards.Count; i++)
+        {
+            string query = $"insert into gamedb.deck_cards(IdCard,IdPlayer) values({playerData.deckUserSupportCards[i].id},{playerData.PlayerId})";
+            var command = new MySqlCommand(query, con);
+            try
+            {
+                command.ExecuteNonQuery();
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError(ex.Message);
+            }
+            command.Dispose();
+        }
+    }
+    public void RemoveCardsSupportDeck(PlayerData playerData)
+    {
+        string query = $"DELETE FROM gamedb.deck_cards WHERE IdPlayer = {playerData.PlayerId}";
+        var command = new MySqlCommand(query, con);
+        try
+        {
+            command.ExecuteNonQuery();
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError(ex.Message);
+        }
+        command.Dispose();
+
+    }
+
+    public List<CardSupport> SelectFromDeckCardsSupport(PlayerData playerData)
+    {
+        string query = $"SELECT * FROM gamedb.cards as c inner join gamedb.deck_cards as cs on(c.idCards = cs.IdCard) where cs.IdPlayer = {playerData.PlayerId}";
+        List<CardSupport> CardSupportList = new List<CardSupport>();
+        MySqlCommand command = new MySqlCommand(query, con);
+        try
+        {
+            var reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    CardSupport item = CreateCardSupport(reader);
+                    CardSupportList.Add(item);
+                }
+
+                command.Dispose();
+            }
+            else
+            {
+                command.Dispose();
+            }
+        }
+        catch (System.Exception ex)
+        {
+            command.Dispose();
+            Debug.LogError(ex.Message);
+        }
+        return CardSupportList;
+
+    }
+    #endregion
+
+    #region CharDeck
+    public void InsertToCardDeck(PlayerData playerData)
+    {
+        for (int i = 0; i < playerData.deckUserCharCards.Count; i++)
+        {
+            string query = $"insert into gamedb.deck_characters(IdCharacter,IdPlayer) values({playerData.deckUserCharCards[i].id},{playerData.PlayerId})";
+            var command = new MySqlCommand(query, con);
+            try
+            {
+                command.ExecuteNonQuery();
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError(ex.Message);
+            }
+            command.Dispose();
+        }
+    }
+    public void RemoveCardsDeck(PlayerData playerData)
+    {
+        string query = $"DELETE FROM gamedb.deck_characters WHERE IdPlayer = {playerData.PlayerId}";
+        var command = new MySqlCommand(query, con);
+        try
+        {
+            command.ExecuteNonQuery();
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError(ex.Message);
+        }
+        command.Dispose();
+
+    }
+
+    public List<CharacterCard> SelectFromDeckCards(PlayerData playerData)
+    {
+        string query = $"SELECT * FROM gamedb.characters as c inner join gamedb.deck_characters as cs on(c.idCharacters = cs.IdCharacter) where cs.IdPlayer = {playerData.PlayerId}";
+        List<CharacterCard> cardList = new List<CharacterCard>();
+        MySqlCommand command = new MySqlCommand(query, con);
+        try
+        {
+            var reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    CharacterCard item = CreateCharacterCard(reader);                
+                    cardList.Add(item);
+                }
+                command.Dispose();
+            }
+            else
+            {
+                command.Dispose();
+            }
+        }
+        catch (System.Exception ex)
+        {
+            command.Dispose();
+            Debug.LogError(ex.Message);
+        }
+        return cardList;
+
+    }
+    #endregion
+
+    #region CreatingCards
+    private CharacterCard CreateCharacterCard(MySqlDataReader reader)
+    {
+        CharacterCard item = new CharacterCard();
+        item.cardName = reader.GetString("char_name");
+
+        switch (reader.GetString("race"))
+        {
+            case "Люди":
+                item.race = enums.Races.Люди;
+                break;
+            case "Гномы":
+                item.race = enums.Races.Гномы;
+                break;
+            case "Эльфы":
+                item.race = enums.Races.Эльфы;
+                break;
+            case "ТёмныеЭльфы":
+                item.race = enums.Races.ТёмныеЭльфы;
+                break;
+            case "МагическиеСущества":
+                item.race = enums.Races.МагическиеСущества;
+                break;
+        }
+
+        switch (reader.GetString("class"))
+        {
+            case "Паладин":
+                item.Class = enums.Classes.Паладин;
+                break;
+            case "Лучник":
+                item.Class = enums.Classes.Лучник;
+                break;
+            case "Кавалерия":
+                item.Class = enums.Classes.Кавалерия;
+                break;
+            case "Маг":
+                item.Class = enums.Classes.Маг;
+                break;
+        }
+
+        switch (reader.GetString("rarity"))
+        {
+            case "Обычная":
+                item.rarity = enums.Rarity.Обычная;
+                break;
+            case "Мифическая":
+                item.rarity = enums.Rarity.Мифическая;
+                break;
+        }
+
+        item.description = reader.GetString("desctiption");
+
+        item.health = Convert.ToInt32(reader.GetFloat("health"));
+        item.speed = Convert.ToInt32(reader.GetFloat("speed"));
+        item.physAttack = reader.GetFloat("p_attack");
+        item.magAttack = reader.GetFloat("m_attack");
+        item.range = Convert.ToInt32(reader.GetFloat("char_range"));
+        item.physDefence = reader.GetFloat("p_defence");
+        item.magDefence = reader.GetFloat("m_defence");
+        item.critChance = reader.GetFloat("crit_possibility");
+        item.critNum = reader.GetFloat("crit");
+
+        item.passiveAbility = reader.GetString("passive");
+        item.attackAbility = reader.GetString("special_1");
+        item.defenceAbility = reader.GetString("special_2");
+        item.buffAbility = reader.GetString("special_3");
+
+        item.Price = reader.GetInt32("price");
+
+        item.image = Resources.Load<Sprite>($"Card images/card of char/{reader.GetString("path")}");
+        item.id = reader.GetInt32("idCharacters");
+
+        /*                    Debug.Log($"name {item.name} ({reader.GetString("char_name")})");
+                                       Debug.Log($"раса {item.race} ({reader.GetString("race")})");
+                                       Debug.Log($"class {item.Class} ({reader.GetString("class")})");
+                                       Debug.Log($"rarity {item.rarity} ({reader.GetString("rarity")})");
+                                       Debug.Log($"desctiption {item.description} ({reader.GetString("desctiption")})");
+                                       Debug.Log($"health {item.health} ({reader.GetFloat("health")})");
+                                       Debug.Log($"speed {item.speed} ({reader.GetFloat("speed")})");
+                                       Debug.Log($"physAttack {item.physAttack} ({reader.GetFloat("p_attack")})");
+                                       Debug.Log($"magAttack {item.magAttack} ({reader.GetFloat("m_attack")})");
+                                       Debug.Log($"range {item.range} ({reader.GetFloat("char_range")})");
+                                       Debug.Log($"physDefence {item.physDefence} ({reader.GetFloat("p_defence")})");
+                                       Debug.Log($"magDefence {item.magDefence} ({reader.GetFloat("m_defence")})");
+                                       Debug.Log($"critChance {item.critChance} ({reader.GetDouble("crit_possibility")})");
+                                       Debug.Log($"critNum {item.critNum} ({reader.GetDouble("crit")})");
+                                       Debug.Log($"passiveAbility {item.passiveAbility} ({reader.GetString("passive")})");
+                                       Debug.Log($"attackAbility {item.attackAbility} ({reader.GetString("special_1")})");
+                                       Debug.Log($"defenceAbility {item.defenceAbility} ({reader.GetString("special_2")})");
+                                       Debug.Log($"buffAbility {item.buffAbility} ({reader.GetString("special_3")})");
+                                       Debug.Log($"name {item.image}");    
+                    */
+
+        return item;
+    }
+
+    private CardSupport CreateCardSupport(MySqlDataReader reader)
+    {
+        CardSupport item = new CardSupport();
+        item.cardName = reader.GetString("name");
+        switch (reader.GetString("race"))
+        {
+            case "Люди":
+                item.race = enums.Races.Люди;
+                break;
+            case "Гномы":
+                item.race = enums.Races.Гномы;
+                break;
+            case "Эльфы":
+                item.race = enums.Races.Эльфы;
+                break;
+            case "ТёмныеЭльфы":
+                item.race = enums.Races.ТёмныеЭльфы;
+                break;
+            case "МагическиеСущества":
+                item.race = enums.Races.МагическиеСущества;
+                break;
+        }
+        switch (reader.GetString("type"))
+        {
+            case "атакующая":
+                item.type = enums.TypeOfSupport.атакующая;
+                break;
+            case "защитная":
+                item.type = enums.TypeOfSupport.защитная;
+                break;
+            case "мобильность":
+                item.type = enums.TypeOfSupport.мобильность;
+                break;
+        }
+        item.abilityText = reader.GetString("effect");
+        switch (reader.GetString("rarity"))
+        {
+            case "Обычная":
+                item.rarity = enums.Rarity.Обычная;
+                break;
+            case "Мифическая":
+                item.rarity = enums.Rarity.Мифическая;
+                break;
+        }
+        item.Price = reader.GetInt32("price");
+        item.id = reader.GetInt32("idCards");
+        item.image = Resources.Load<Sprite>($"Card images/cards of support/{reader.GetString("path")}");
+
+        return item;
+        /*                    Debug.Log($"имя {item.name} ({reader.GetString("name")}), раса {item.race} ({reader.GetString("race")}), способность {item.ability} ({reader.GetString("effect")}), тип {item.type} ({reader.GetString("type")}), редкость {item.rarity} ({reader.GetString("rarity")})");
+        */
+    }
     #endregion
 }
 
