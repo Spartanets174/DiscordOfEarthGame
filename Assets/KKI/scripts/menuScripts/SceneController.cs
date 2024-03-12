@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneController : MonoBehaviour
+public static class SceneController 
 {
-    public void Exit()
+    public static void Exit()
     {
         Debug.Log("out");
         Application.Quit();
     }
-    public void ToGame()
+    public static void ToGame()
     {
-        SceneManager.LoadScene("game");
-
+        SceneManager.LoadScene("Game");
     }
-    public void ToMenu()
+    public static void ToCreatePlayer()
     {
-        SceneManager.LoadScene("menu");
+        SceneManager.LoadScene("CreatePlayer");
+    }
+    public static void ToMenu()
+    {
+        SceneManager.LoadScene("Menu");
     }
 }

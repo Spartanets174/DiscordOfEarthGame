@@ -1,6 +1,4 @@
 using HighlightPlus;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(HighlightEffect))]
@@ -17,7 +15,9 @@ public class OutlineInteractableObject : InteractableObject
         m_collider = GetComponent<Collider>();
         OnHoverEnter += EnableOutline;
         OnHoverExit += DisableOutline;
+        OnEnableChanged += x => { if (!x) DisableOutline(null); }; ;
     }
+
     private void OnDestroy()
     {
         OnHoverEnter -= EnableOutline;
@@ -31,10 +31,10 @@ public class OutlineInteractableObject : InteractableObject
 
     protected void EnableOutline(GameObject gameObject)
     {
-        highlightEffect.highlighted = true;
+        SetOutlineState(true);
     }
     protected void DisableOutline(GameObject gameObject)
     {
-        highlightEffect.highlighted = false;
+        SetOutlineState(false);
     }
 }

@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIController : MonoBehaviour, ILoadable
+public class UICoordinator : MonoBehaviour, ILoadable
 {
     [Space, Header("Buttons")]
     [SerializeField]
@@ -20,10 +20,7 @@ public class UIController : MonoBehaviour, ILoadable
     [SerializeField]
     private TextMeshProUGUI warningText;
 
-    [Space, Header("Game objects")]
-    [SerializeField]
-    private GameObject blur;
-    
+    [Space, Header("Game objects")]   
     [SerializeField]
     private GameObject bookOfCards;
     [SerializeField]
@@ -43,8 +40,6 @@ public class UIController : MonoBehaviour, ILoadable
 
     [Space, Header("Controllers")]
     [SerializeField]
-    private SceneController sceneController;
-    [SerializeField]
     private PlayerDataController PlayerManager;
 
 
@@ -54,18 +49,21 @@ public class UIController : MonoBehaviour, ILoadable
         cam = FindObjectOfType<Camera>();
 
         playButton.onClick.AddListener(ToGame);
-        exitbutton.onClick.AddListener(sceneController.Exit);
+        exitbutton.onClick.AddListener(SceneController.Exit);
         bookOfCardsButton.onClick.AddListener(TurnOnBookOfCards);
 
         shopObject.OnClick += TurnOnShop;
         shopObject.OnHover += MoveShopCaption;
         shopObject.OnHoverEnter += TurnOnShopText;
         shopObject.OnHoverExit += TurnOffShopText;
+        shopObject.OnEnableChanged += x => { if (!x) TurnOffShopText(null); };
+
 
         settingsObject.OnClick += TurnOnSettings;
-        settingsObject.OnHover += MoveSettingsCaption ;
+        settingsObject.OnHover += MoveSettingsCaption;
         settingsObject.OnHoverEnter += TurnOnSettingsText;
         settingsObject.OnHoverExit += TurnOffSettingsText;
+        settingsObject.OnEnableChanged += x => { if (!x) TurnOffSettingsText(null); };
 
         shopObject.IsEnabled = true;
         settingsObject.IsEnabled = true;
@@ -77,7 +75,7 @@ public class UIController : MonoBehaviour, ILoadable
     private void OnDestroy()
     {
         playButton.onClick.RemoveListener(ToGame);
-        exitbutton.onClick.RemoveListener(sceneController.Exit);
+        exitbutton.onClick.RemoveListener(SceneController.Exit);
         bookOfCardsButton.onClick.RemoveListener(TurnOnBookOfCards);
 
         shopObject.OnClick -= TurnOnShop;
@@ -102,14 +100,14 @@ public class UIController : MonoBehaviour, ILoadable
         }
         else
         {
-            sceneController.ToGame();
+            SceneController.ToGame();
         }
     }
 
     private void TurnOnBookOfCards()
     {
-        shopObject.Collider.enabled = false;
-        settingsObject.Collider.enabled = false;
+        shopObject.IsEnabled = false;
+        settingsObject.IsEnabled = false;
         SetState(bookOfCards, true); 
     }
     private void MoveSettingsCaption(GameObject gameObject)
@@ -125,14 +123,14 @@ public class UIController : MonoBehaviour, ILoadable
     }
     private void TurnOnShop(GameObject gameObject)
     {
-        shopObject.Collider.enabled = false;
-        settingsObject.Collider.enabled = false;
+        shopObject.IsEnabled = false;
+        settingsObject.IsEnabled = false;
         SetState(shop,true);
     }
     private void TurnOnSettings(GameObject gameObject)
     {
-        shopObject.Collider.enabled = false;
-        settingsObject.Collider.enabled = false;
+        shopObject.IsEnabled = false;
+        settingsObject.IsEnabled = false;
         SetState(settings, true);
     }
     private void TurnOnShopText(GameObject gameObject)

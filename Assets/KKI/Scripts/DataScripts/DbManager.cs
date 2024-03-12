@@ -19,8 +19,13 @@ public class DbManager : MonoBehaviour
 
     [SerializeField] private PlayerData playerData;
     public PlayerData PlayerData => playerData;
+
+    private bool m_isConnected;
+    public bool IsConnected => m_isConnected;
+
     public void Awake()
     {
+        m_isConnected = true;
         con = new MySqlConnection(connectionString);
         try
         {
@@ -29,12 +34,20 @@ public class DbManager : MonoBehaviour
         catch (System.Exception ex)
         {
             Debug.LogError(ex.Message);
+            m_isConnected = false;
         }
     }
 
     private void OnApplicationQuit()
     {
-        if (playerData!=null)
+        SavePlayer();
+        Debug.Log("closed");
+        CloseCon();
+    }
+
+    public void SavePlayer()
+    {
+        if (playerData != null)
         {
             UpdatePlayerBalance(playerData);
 
@@ -54,12 +67,8 @@ public class DbManager : MonoBehaviour
             InsertToCardsSupportDeck(playerData);
 
             RemoveCardsDeck(playerData);
-            InsertToCardDeck(playerData);
-
-            CloseCon();
-            Debug.Log("closed");
+            InsertToCardDeck(playerData);       
         }
-        
     }
     public void CloseCon()
     {
@@ -82,6 +91,41 @@ public class DbManager : MonoBehaviour
         }
         command.Dispose();
         return Convert.ToInt32(command.LastInsertedId);
+    }
+
+    public bool IsPlayerExits(string nick, string password)
+    {     
+        string query = $"select* from gamedb.players where p_name = '{nick}' and p_password = '{password}'";
+        MySqlCommand command = new MySqlCommand(query, con);
+        try
+        {
+            var reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                reader.Read();
+                PlayerCredentialsData data = new(reader.GetString("p_name"), reader.GetString("p_password"));
+                command.Dispose();
+                if (data.PlayerName != "" && data.PlayerPassword != "")
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }               
+            }
+            else
+            {
+                command.Dispose();
+                return false;
+            }
+        }
+        catch (System.Exception ex)
+        {           
+            command.Dispose();
+            Debug.LogError(ex.Message);
+            return false;
+        }
     }
 
     public List<string> SelectFromPlayers()

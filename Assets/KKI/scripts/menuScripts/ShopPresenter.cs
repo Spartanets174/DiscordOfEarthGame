@@ -1,6 +1,8 @@
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShopPresenter : CardPresenter, ILoadable
 {
@@ -9,7 +11,10 @@ public class ShopPresenter : CardPresenter, ILoadable
     private CardDisplay characterCardObjectPrefab;
     [SerializeField]
     private CardSupportDisplay supportCardObjectPrefab;
+
     [Space, Header("Buttons")]
+    [SerializeField]
+    private Button closeButton;
     [SerializeField]
     private List<ButtonRace> raceButtons;
     [SerializeField]
@@ -29,6 +34,9 @@ public class ShopPresenter : CardPresenter, ILoadable
     {
         shopController = FindObjectOfType<ShopController>();
         buyCardDisplay.BuyButton.onClick.AddListener(BuyCard);
+
+        closeButton.onClick.AddListener(CloseShop);
+
         SpawnCharacterCards();
         SpawnSupportCards();
         foreach (var raceButton in raceButtons)
@@ -42,6 +50,15 @@ public class ShopPresenter : CardPresenter, ILoadable
         foreach (var supportTypeButton in supportTypeButtons)
         {
             supportTypeButton.OnButtonClick += SupportTypeButtonCLick;
+        }
+    }
+
+    private void CloseShop()
+    {
+        gameObject.SetActive(false);
+        foreach (var outlineInteractableObject in shopController.OutlineInteractableObjects)
+        {
+            outlineInteractableObject.IsEnabled = true;
         }
     }
 

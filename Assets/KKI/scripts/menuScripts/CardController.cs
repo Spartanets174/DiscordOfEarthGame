@@ -8,6 +8,8 @@ public abstract class CardController : MonoBehaviour, ILoadable
 {
     protected PlayerDataController m_PlayerManager;
 
+    private List<OutlineInteractableObject> outlineInteractableObjects;
+    public List<OutlineInteractableObject> OutlineInteractableObjects => outlineInteractableObjects;
 
     private Races m_currentRace;
     public Races CurrentRace
@@ -26,12 +28,13 @@ public abstract class CardController : MonoBehaviour, ILoadable
         {
         get => m_currentTypeOfSupport;
     }
-    public void Init()
+    public virtual void Init()
     {
         m_currentRace = Races.Все;
         m_currentClass = Classes.Все;
         m_currentTypeOfSupport = TypeOfSupport.Все;
         m_PlayerManager = FindAnyObjectByType<PlayerDataController>();
+        outlineInteractableObjects = FindObjectsOfType<OutlineInteractableObject>().ToList();
     }
 
     public void SetCurrentClass(Classes cardClass)

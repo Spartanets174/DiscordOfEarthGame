@@ -26,6 +26,8 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
 
     [Space, Header("Action UI")]
     [SerializeField]
+    private Button closeButton;
+    [SerializeField]
     private Dropdown raceDropdown;
     [SerializeField]
     private List<ButtonClass> classButtons;
@@ -83,10 +85,21 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
         {
             supportTypeButton.OnButtonClick += SupportTypeButtonCLick;
         }
+
+        closeButton.onClick.AddListener(CloseBookOfCards);
         addToDeckCharacterButton.onClick.AddListener(AddToDeckCharacterCard);
         addToDeckSupportButton.onClick.AddListener(AddToDeckSupportCard);
         raceDropdown.AddOptions(stringRaces);
         raceDropdown.onValueChanged.AddListener(RaceDropdownCLick);
+    }
+
+    private void CloseBookOfCards()
+    {
+        gameObject.SetActive(false);
+        foreach (var outlineInteractableObject in bookOfCardsController.OutlineInteractableObjects)
+        {
+            outlineInteractableObject.IsEnabled = true;
+        }
     }
 
     private void OnEnable()

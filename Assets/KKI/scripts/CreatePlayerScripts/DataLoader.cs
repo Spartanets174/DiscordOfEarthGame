@@ -1,8 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Linq;
 
 public class DataLoader : MonoBehaviour, ILoadable
 {
@@ -12,12 +11,13 @@ public class DataLoader : MonoBehaviour, ILoadable
     public void Init()
     {
         playerData = DB.PlayerData;
-        playerData.Name = SaveSystem.LoadPlayer();
-        playerData = DB.PlayerData;
-        if (playerData.Name != "")
+        string[] creditials = SaveSystem.LoadPlayer().Split(".");
+        if (creditials.Length == 0) return;
+
+        if (creditials[0] != "" && creditials[1] != "")
         {
-            GetPlayerData();
-            SceneManager.LoadScene("menu");
+            GetPlayerData(creditials[0], creditials[1]);
+            SceneController.ToMenu();
         }
     }
     public bool IsNicknameInBase(string Nick)
@@ -32,7 +32,7 @@ public class DataLoader : MonoBehaviour, ILoadable
             }
         }
         if (nickList.Count == 0 || !hasName)
-        {           
+        {
             return true;
         }
         else
@@ -41,12 +41,15 @@ public class DataLoader : MonoBehaviour, ILoadable
         }
     }
 
-    public void CreateNewPlayer(string Nick, string password)
+    public bool CreateNewPlayer(string Nick, string password)
     {
+        if (!DB.IsConnected) return false;
+
         int id = DB.InsertToPlayers(Nick, password, 10000);
         playerData.Name = Nick;
         playerData.Password = password;
-        SaveSystem.SavePlayer(playerData.Name);
+        SaveSystem.SavePlayer(playerData.Name, playerData.Password);
+
         playerData.money = 10000;
         playerData.PlayerId = id;
         playerData.deckUserCharCards.Clear();
@@ -83,7 +86,7 @@ public class DataLoader : MonoBehaviour, ILoadable
             playerData.allCharCards[i].id = CardOfPlayer[i].id;
         }
 
-        
+
         for (int i = 0; i < playerData.allSupportCards.Count; i++)
         {
             playerData.allSupportCards[i].cardName = CardSupportOfPlayer[i].cardName;
@@ -142,10 +145,19 @@ public class DataLoader : MonoBehaviour, ILoadable
             CardSupport CardSupport = Resources.Load<CardSupport>($"cards/support/{OwnedCardSupportOfPlayer[i].cardName}");
             playerData.allUserSupportCards.Add(CardSupport);
         }
+
+        return true;
     }
 
-    private void GetPlayerData()
+    public string GetPlayerData(string Nick, string password)
     {
+        if (!DB.IsConnected) return "notConnected";
+        if (!DB.IsPlayerExits(Nick, password)) return "wrongCreditials";
+
+        playerData.Name = Nick;
+        playerData.Password = password;
+        SaveSystem.SavePlayer(playerData.Name, playerData.Password);
+
         playerData.money = DB.SelectBalancePlayer(playerData);
         playerData.PlayerId = DB.SelectIdPlayer(playerData.Name);
         playerData.money = DB.SelectBalancePlayer(playerData);
@@ -243,5 +255,7 @@ public class DataLoader : MonoBehaviour, ILoadable
             CardSupport CardSupport = Resources.Load<CardSupport>($"cards/support/{DeckCardSupportOfPlayer[i].cardName}");
             playerData.deckUserSupportCards.Add(CardSupport);
         }
+
+        return "loginned";
     }
 }
