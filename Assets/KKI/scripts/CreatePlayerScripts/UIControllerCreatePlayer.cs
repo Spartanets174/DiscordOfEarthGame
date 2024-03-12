@@ -34,16 +34,24 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
     public void Init()
     {
         validateGuidRegex = new Regex("^(?=.*?[A-Z])(?=.*?[#?!@$%^&*-]).{4,}$");
+
+        dataLoader.OnPlayerDataRecieved += CheckRecievedData;
+
         submitLogin.onClick.AddListener(CheckInputsLogin);
         submitRegistration.onClick.AddListener(CheckInputs);
         toRegistration.onClick.AddListener(SwapPanels);
         toLogin.onClick.AddListener(SwapPanels);
         Nick.onValueChanged.AddListener(TurnOffWarningTextName);
         Password.onValueChanged.AddListener(TurnOffWarningTextPassword);
+
+        dataLoader.CheckPlayerData();
     }
+
 
     private void OnDestroy()
     {
+        dataLoader.OnPlayerDataRecieved -= CheckRecievedData;
+
         submitLogin.onClick.RemoveListener(CheckInputsLogin);
         submitRegistration.onClick.RemoveListener(CheckInputs);
         toRegistration.onClick.RemoveListener(SwapPanels);
@@ -51,6 +59,24 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
         Nick.onValueChanged.RemoveListener(TurnOffWarningTextName);
         Password.onValueChanged.RemoveListener(TurnOffWarningTextPassword);
         StopAllCoroutines();
+    }
+
+    private void CheckRecievedData(string connectionAnwser)
+    {
+        if (connectionAnwser == "loginned")
+        {
+            SceneController.ToMenu();
+        }
+        if (connectionAnwser == "notConnected")
+        {
+            warningTextPassword.text = "Отсутсвует подключение к серверу!";
+            OnWarningTextPassword();
+        }
+        if (connectionAnwser == "wrongCreditials")
+        {
+            warningTextPassword.text = "Неправильный логин или пароль!";
+            OnWarningTextPassword();
+        }
     }
     private void CheckInputsLogin()
     {
@@ -63,21 +89,7 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
 
         if (isNameValid && isPasswordValid)
         {
-            string connectionAnwser = dataLoader.GetPlayerData(Nick.text, Password.text);
-            if (connectionAnwser== "loginned")
-            {
-               SceneController.ToMenu();
-            }
-            if (connectionAnwser == "notConnected")
-            {
-                warningTextPassword.text = "Отсутсвует подключение к серверу!";
-                OnWarningTextPassword();
-            }
-            if (connectionAnwser == "wrongCreditials")
-            {
-                warningTextPassword.text = "Неправильный логин или пароль!";
-                OnWarningTextPassword();
-            }
+            dataLoader.GetPlayerData(Nick.text, Password.text);
         }
     }
     public void CheckInputs()
@@ -91,16 +103,7 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
 
         if (isNameValid && isPasswordValid)
         {
-            bool isConnected = dataLoader.CreateNewPlayer(Nick.text, Password.text);
-            if (isConnected)
-            {
-                SceneController.ToMenu();
-            }
-            else
-            {
-                warningTextPassword.text = "Отсутсвует подключение к серверу!";
-                OnWarningTextPassword();
-            }        
+            dataLoader.CreateNewPlayer(Nick.text, Password.text);     
         }
     }
 

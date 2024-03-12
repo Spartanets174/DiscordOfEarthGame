@@ -2,6 +2,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static Unity.Burst.Intrinsics.X86.Avx;
 
 public static class ConnectionInfo
 {
@@ -33,8 +34,8 @@ public class DbManager : MonoBehaviour
         }
         catch (System.Exception ex)
         {
-            Debug.LogError(ex.Message);
             m_isConnected = false;
+            Debug.LogError(ex.Message);
         }
     }
 
@@ -76,29 +77,43 @@ public class DbManager : MonoBehaviour
     }
 
     #region Player
-    public int InsertToPlayers(string Name, string password, int balance)
+    public bool InsertToPlayers(string Name, string password, int balance)
     {
-        string query = $"insert into gamedb.players (p_name, balance, p_password) values ('{Name}',{balance}, '{password}')";
+        //'{Name}',{balance}, '{password}'
+        string query = $"insert into gamedb.players (p_name, balance, p_password) values (@name, @balance, @password)";
 
         var command = new MySqlCommand(query, con);
+        command.Prepare();
+
         try
         {
+            command.Parameters.AddWithValue("@name", Name);
+            command.Parameters.AddWithValue("@balance", balance);
+            command.Parameters.AddWithValue("@password", password);
+
             command.ExecuteNonQuery();
         }
         catch (System.Exception ex)
         {
             Debug.LogError(ex.Message);
+            command.Dispose();
+            return false;
         }
         command.Dispose();
-        return Convert.ToInt32(command.LastInsertedId);
+        return true;
     }
 
     public bool IsPlayerExits(string nick, string password)
     {     
-        string query = $"select* from gamedb.players where p_name = '{nick}' and p_password = '{password}'";
+        string query = $"select* from gamedb.players where p_name = @name and p_password = @password";
         MySqlCommand command = new MySqlCommand(query, con);
+        command.Prepare();
+
         try
         {
+            command.Parameters.AddWithValue("@name", nick);
+            command.Parameters.AddWithValue("@password", password);
+
             var reader = command.ExecuteReader();
             if (reader.HasRows)
             {

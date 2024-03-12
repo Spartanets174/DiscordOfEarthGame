@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,18 +9,37 @@ public class DataLoader : MonoBehaviour, ILoadable
     [SerializeField] DbManager DB;
 
     private PlayerData playerData;
+
+    public Action<string> OnPlayerDataRecieved;
     public void Init()
     {
         playerData = DB.PlayerData;
+        OnPlayerDataRecieved += LoadMenuScene;
+    }
+    private void OnDestroy()
+    {
+        OnPlayerDataRecieved -= LoadMenuScene;
+    }
+
+    public void CheckPlayerData()
+    {
         string[] creditials = SaveSystem.LoadPlayer().Split(".");
         if (creditials.Length == 0) return;
 
         if (creditials[0] != "" && creditials[1] != "")
         {
             GetPlayerData(creditials[0], creditials[1]);
+        }
+    }
+
+    private void LoadMenuScene(string connectionAnwser)
+    {
+        if (connectionAnwser == "loginned")
+        {
             SceneController.ToMenu();
         }
     }
+
     public bool IsNicknameInBase(string Nick)
     {
         bool hasName = false;
@@ -41,14 +61,16 @@ public class DataLoader : MonoBehaviour, ILoadable
         }
     }
 
-    public bool CreateNewPlayer(string Nick, string password)
+    public void CreateNewPlayer(string Nick, string password)
     {
-        if (!DB.IsConnected) return false;
+        if (!DB.IsConnected) { OnPlayerDataRecieved?.Invoke("notConnected"); return; };
+        if (!DB.InsertToPlayers(Nick, password, 10000)) { OnPlayerDataRecieved?.Invoke("wrongCreditials"); return; };
 
-        int id = DB.InsertToPlayers(Nick, password, 10000);
+        
         playerData.Name = Nick;
         playerData.Password = password;
         SaveSystem.SavePlayer(playerData.Name, playerData.Password);
+        int id = DB.SelectIdPlayer(playerData.Name);
 
         playerData.money = 10000;
         playerData.PlayerId = id;
@@ -146,19 +168,18 @@ public class DataLoader : MonoBehaviour, ILoadable
             playerData.allUserSupportCards.Add(CardSupport);
         }
 
-        return true;
+        OnPlayerDataRecieved?.Invoke("loginned");
     }
 
-    public string GetPlayerData(string Nick, string password)
+    public void GetPlayerData(string Nick, string password)
     {
-        if (!DB.IsConnected) return "notConnected";
-        if (!DB.IsPlayerExits(Nick, password)) return "wrongCreditials";
+        if (!DB.IsConnected) { OnPlayerDataRecieved?.Invoke("notConnected"); return; };
+        if (!DB.IsPlayerExits(Nick, password)) { OnPlayerDataRecieved?.Invoke("wrongCreditials"); return; }; 
 
         playerData.Name = Nick;
         playerData.Password = password;
         SaveSystem.SavePlayer(playerData.Name, playerData.Password);
 
-        playerData.money = DB.SelectBalancePlayer(playerData);
         playerData.PlayerId = DB.SelectIdPlayer(playerData.Name);
         playerData.money = DB.SelectBalancePlayer(playerData);
 
@@ -256,6 +277,6 @@ public class DataLoader : MonoBehaviour, ILoadable
             playerData.deckUserSupportCards.Add(CardSupport);
         }
 
-        return "loginned";
+        OnPlayerDataRecieved?.Invoke("loginned");
     }
 }
