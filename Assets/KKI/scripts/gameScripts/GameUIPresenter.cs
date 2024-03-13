@@ -6,14 +6,16 @@ using TMPro;
 using UniRx;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 
 public class GameUIPresenter : MonoBehaviour, ILoadable
 {
-    [Header("Model")]
+    [Header("Scripts")]
     [SerializeField]
     private PlayerController playerController;
-
+    [SerializeField]
+    private BattleSystem battleSystem;
 
     [Space, Header("UI Controllers")]
     [SerializeField]
@@ -34,10 +36,17 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
 
     [Space, Header("Action UI")]
     [SerializeField]
-    private Button m_endMoveButton;
-    public Button EndMoveButton=> m_endMoveButton;
+    private Button endMoveButton;
     [SerializeField]
     private Button toMenuButton;
+    [SerializeField]
+    private Button setPlayerTurnButton;
+    [SerializeField]
+    private Button setEnemyTurnButton;
+    [SerializeField]
+    private Button setWinButton;
+    [SerializeField]
+    private Button setLostButton;
 
     [Space, Header("Info UI")]
     [SerializeField]
@@ -62,7 +71,8 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
     private GameObject gameInterface;
     [SerializeField]
     private GameObject endGameInterface;
-
+    [SerializeField]
+    private GameObject DevButtons;
 
     private List<GameCharacterCardDisplay> m_gameCharacterCards=new();
     public List<GameCharacterCardDisplay> GameCharacterCardDisplays => m_gameCharacterCards;
@@ -73,10 +83,33 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
     public ReactiveProperty<GameSupportCardDisplay> CurrentGameSupportCardDisplay => currentGameSupportCardDisplay;
 
     private CompositeDisposable disposables = new();
+    private float timer = 1f;
     public void Init()
     {
         SetBlockersState(false);
         tipsTextParent.SetActive(false);
+        DevButtons.SetActive(false);
+
+        endMoveButton.onClick.AddListener(battleSystem.SetEnemyTurn);
+        setPlayerTurnButton.onClick.AddListener(battleSystem.SetPlayerTurn);
+        setEnemyTurnButton.onClick.AddListener(battleSystem.SetEnemyTurn);
+        setWinButton.onClick.AddListener(battleSystem.SetWin);
+        setLostButton.onClick.AddListener(battleSystem.SetLost);
+
+        Observable.EveryUpdate().Subscribe(x =>
+        {
+            timer -= Time.deltaTime;
+            if (timer<0)
+            {
+                if (Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.E) && Input.GetKey(KeyCode.V))
+                {
+                    DevButtons.SetActive(!DevButtons.activeSelf);
+                    timer = 1f;
+                    Debug.Log(DevButtons.activeSelf);
+                }
+            }
+        }).AddTo(disposables);
+
         foreach (var Card in playerController.PlayerDataController.DeckUserCharCards)
         {
             GameCharacterCardDisplay cardDisplay = Instantiate(gameCharacterCardPrefab, Vector3.zero, Quaternion.identity, gameCharacterCardsParent);
@@ -170,6 +203,12 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
 
     private void OnDestroy()
     {
+        endMoveButton.onClick.RemoveListener(battleSystem.SetEnemyTurn);
+        setPlayerTurnButton.onClick.RemoveListener(battleSystem.SetPlayerTurn);
+        setEnemyTurnButton.onClick.RemoveListener(battleSystem.SetEnemyTurn);
+        setWinButton.onClick.RemoveListener(battleSystem.SetWin);
+        setLostButton.onClick.RemoveListener(battleSystem.SetLost);
+
         disposables.Dispose();
         disposables.Clear();
         foreach (var cardDisplay in GameSupportCards)
@@ -193,7 +232,7 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
     {
         SetDragAllowToSupportCards(true);
         AddMessageToGameLog("Ваш ход.");
-        m_endMoveButton.interactable = true;
+        endMoveButton.interactable = true;
         foreach (var supportCard in GameSupportCards)
         {
             supportCard.IsEnabled = true;
@@ -211,7 +250,7 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
 
     public void OnEnemyTurnStart()
     {
-        m_endMoveButton.interactable = false;
+        endMoveButton.interactable = false;
 
         SetDragAllowToSupportCards(false);
         AddMessageToGameLog("Враг планирует свой ход...");

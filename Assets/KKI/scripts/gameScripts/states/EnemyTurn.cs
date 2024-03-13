@@ -147,7 +147,7 @@ public class EnemyTurn : State
 
             if (BattleSystem.PlayerController.PlayerCharactersObjects.Count == 0)
             {
-                BattleSystem.SetState(new Lost(BattleSystem));
+                BattleSystem.SetLost();
             }
 
             BattleSystem.PointsOfAction -= 2;

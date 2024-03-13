@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour, ILoadable
@@ -23,9 +24,21 @@ public class PlayerController : MonoBehaviour, ILoadable
 
     public event Action OnPlayerCharacterSpawned;
 
+    private CompositeDisposable disposables = new CompositeDisposable();
+
+    private KeyCode[] keyCodes = new KeyCode[5] { KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3, KeyCode.Alpha4, KeyCode.Alpha5 };
     public void Init()
     {
-        
+        Observable.EveryUpdate().Subscribe(x =>
+        {
+            foreach (var item in PlayerCharactersObjects)
+            {
+                if (Input.GetKey(keyCodes[item.Index]))
+                {
+                    item.OnClickInvoke();
+                }
+            }
+        }).AddTo(disposables);
     }
 
     public PlayerCharacter InstasiatePlayerCharacter(CharacterCard characterCard, Transform parent)
@@ -57,5 +70,10 @@ public class PlayerController : MonoBehaviour, ILoadable
             Debug.LogError("Нет персонажа");
         }
     }
-
+    public void ClearDisposables()
+    {
+        disposables.Dispose();
+        disposables.Clear();
+        disposables = new();
+    }
 }

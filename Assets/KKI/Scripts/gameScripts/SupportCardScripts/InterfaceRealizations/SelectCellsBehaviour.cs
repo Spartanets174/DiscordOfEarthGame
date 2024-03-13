@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UniRx;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,9 +10,10 @@ public class SelectCellsBehaviour : ICardSelectable
     public event Action OnSelected;
     public event Action OnCancelSelection;
 
-    private Vector2 range;
+    public Vector2 range;
     private string m_selectCardTipText;
     private string m_keyCellsColor;
+    private CompositeDisposable disposables=new();
 
     public Cell clickedCell;
     public List<Cell> highlightedCells = new();
@@ -33,12 +35,23 @@ public class SelectCellsBehaviour : ICardSelectable
 
     public void SelectCard()
     {
+        Observable.EveryUpdate().Where(x => Input.GetKeyDown(KeyCode.R)).Subscribe(x =>
+        {
+            float temp = range.x;
+            range.x = range.y;
+            range.y = temp;
+ 
+            OnHoverExit(clickedCell.gameObject);
+            OnHoverEnter(clickedCell.gameObject);
+            OnHover(clickedCell.gameObject);
+        }).AddTo(disposables);
         battleSystem.FieldController.InvokeActionOnField(Subscribe);
     }
 
     public void OnSelectedInvoke(GameObject gameObject)
     {
-        clickedCell = gameObject.GetComponent<Cell>();  
+        clickedCell = gameObject.GetComponent<Cell>();
+        ClearDisposables();
         OnSelected?.Invoke();
     }
 
@@ -80,6 +93,7 @@ public class SelectCellsBehaviour : ICardSelectable
         if (gameObject == null) return;
 
         Cell currentCell = gameObject.GetComponent<Cell>();
+        clickedCell = currentCell;
 
         Vector2 currentCellIndex = currentCell.CellIndex;
 
@@ -113,6 +127,14 @@ public class SelectCellsBehaviour : ICardSelectable
             x.SetColor("normal");
             UnSubscribe(x);
         });
+        ClearDisposables();
         OnCancelSelection?.Invoke();
+    }
+
+    private void ClearDisposables()
+    {
+        disposables.Dispose();
+        disposables.Clear();
+        disposables = new();
     }
 }

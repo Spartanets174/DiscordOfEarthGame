@@ -99,7 +99,7 @@ public class StaticEnemyCharacter : Enemy
 
         if (battleSystem.PlayerController.PlayerCharactersObjects.Count == 0)
         {
-            battleSystem.SetState(new Lost(battleSystem));
+            battleSystem.SetLost();
         }
     }
 
@@ -125,7 +125,7 @@ public class StaticEnemyCharacter : Enemy
 
         if (battleSystem.EnemyController.EnemyCharObjects.Count == 0)
         {
-            battleSystem.SetState(new Won(battleSystem));
+            battleSystem.SetWin();
         }
     }
 }

@@ -172,7 +172,7 @@ public class PlayerTurn : State
 
             if (BattleSystem.EnemyController.EnemyCharObjects.Count == 0)
             {
-                BattleSystem.SetState(new Won(BattleSystem));
+                BattleSystem.SetWin();
             }
 
             BattleSystem.PointsOfAction -= 2;

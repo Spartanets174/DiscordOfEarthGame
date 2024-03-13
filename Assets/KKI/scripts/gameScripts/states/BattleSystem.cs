@@ -28,7 +28,6 @@ public class BattleSystem : StateMachine, ILoadable
     public List<ITurnCountable> EnemyTurnCountables => m_enemyTurnCountables;
 
     private Character currentChosenCharacter;
-   
 
     private float m_pointsOfAction;
     public float PointsOfAction
@@ -43,17 +42,21 @@ public class BattleSystem : StateMachine, ILoadable
 
     public void Init()
     {
-        FieldController.InvokeActionOnField(x => { FieldController.TurnOnCells(); });
-        gameUIPresenter.EndMoveButton.onClick.AddListener(SetEnemyTurn);
+        FieldController.InvokeActionOnField(x=> x.OnClick += TurnOnCells);
         PlayerController.OnPlayerCharacterSpawned += OnPlayerCharacterSpawned;
 
         foreach (var item in gameUIPresenter.GameSupportCards)
         {
             item.DragAndDropComponent.OnDropEvent += OnSupportCardButton;
-            item.DragAndDropComponent.OnDropEvent += x=>{ FieldController.TurnOnCells(); };
+            item.DragAndDropComponent.OnDropEvent += TurnOnCells;
         }
 
         SetState(new Begin(this));
+    }
+
+    private void TurnOnCells(GameObject gameObject)
+    {
+        FieldController.TurnOnCells();
     }
 
     public void OnUnitStatementButton(GameObject character)
@@ -106,6 +109,16 @@ public class BattleSystem : StateMachine, ILoadable
     public void SetEnemyTurn()
     {
         SetState(new EnemyTurn(this));
+    }
+    public void SetWin()
+    {
+        PlayerController.ClearDisposables();
+        SetState(new Won(this));
+    }
+    public void SetLost()
+    {
+        PlayerController.ClearDisposables();
+        SetState(new Lost(this));
     }
     private void OnPlayerCharacterSpawned()
     {
