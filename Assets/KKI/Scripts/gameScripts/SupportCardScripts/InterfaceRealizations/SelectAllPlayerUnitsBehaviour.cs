@@ -28,15 +28,9 @@ public class SelectAllPlayerUnitsBehaviour : ICardSelectable
     {
         if (battleSystem.State is PlayerTurn)
         {
-            foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
-            {
-                enemyCharacter.IsEnabled = false;
-            }
+            battleSystem.EnemyController.SetEnemiesState(false);
 
-            foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
-            {
-                playerCharacter.IsChosen = true;
-            }
+            battleSystem.PlayerController.SetPlayerChosenState(true);
         }
        
         OnSelected?.Invoke();
@@ -46,15 +40,9 @@ public class SelectAllPlayerUnitsBehaviour : ICardSelectable
     {
         if (battleSystem.State is PlayerTurn)
         {
-            foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
-            {
-                enemyCharacter.IsEnabled = true;
-            }
+            battleSystem.EnemyController.SetEnemiesState(true);
 
-            foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
-            {
-                playerCharacter.IsChosen = false;
-            }
+            battleSystem.PlayerController.SetPlayerChosenState(false);
         }
         OnCancelSelection?.Invoke();
     }

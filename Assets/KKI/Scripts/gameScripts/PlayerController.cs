@@ -39,6 +39,15 @@ public class PlayerController : MonoBehaviour, ILoadable
                 }
             }
         }).AddTo(disposables);
+     
+    }
+
+    private void OnDestroy()
+    {
+        foreach (var playerCharacter in m_playerCharactersObjects)
+        {
+            playerCharacter.OnClick -= SetCurrentPlayerChosenCharacter;
+        }
     }
 
     public PlayerCharacter InstasiatePlayerCharacter(CharacterCard characterCard, Transform parent)
@@ -48,7 +57,7 @@ public class PlayerController : MonoBehaviour, ILoadable
         m_playerCharactersObjects.Add(prefab);
 
         prefab.SetData(characterCard, null, m_playerCharactersObjects.Count - 1);
-       
+        prefab.OnClick += SetCurrentPlayerChosenCharacter;
         OnPlayerCharacterSpawned?.Invoke();
         return prefab;
     }
@@ -75,5 +84,39 @@ public class PlayerController : MonoBehaviour, ILoadable
         disposables.Dispose();
         disposables.Clear();
         disposables = new();
+    }
+
+    public void SetPlayerState(bool state, Action<PlayerCharacter> subAction = null)
+    {
+        foreach (var playerCharacter in m_playerCharactersObjects)
+        {
+            playerCharacter.IsEnabled = state;
+            subAction?.Invoke(playerCharacter);
+        }
+    }
+
+    public void SetPlayerChosenState(bool state, Action<PlayerCharacter> subAction = null)
+    {
+        foreach (var playerCharacter in m_playerCharactersObjects)
+        {
+            playerCharacter.IsChosen = state;
+            subAction?.Invoke(playerCharacter);
+        }
+    }
+
+    public void ResetAllPlayerCharacters()
+    {
+        foreach (var playerCharacter in m_playerCharactersObjects)
+        {
+            playerCharacter.ResetCharacter();
+        }
+    }
+
+    public void RemoveDebuffsAllPlayerCharacters()
+    {
+        foreach (var playerCharacter in m_playerCharactersObjects)
+        {
+            playerCharacter.RemoveDebuffs();
+        }
     }
 }

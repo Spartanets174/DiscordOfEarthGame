@@ -29,15 +29,8 @@ public class PlayerTurn : State
 
         CheckPlayerTurnCountables();
 
-        foreach (var playerCharacter in BattleSystem.PlayerController.PlayerCharactersObjects)
-        {
-            playerCharacter.ResetCharacter();
-        }
-
-        foreach (var staticEnemy in BattleSystem.EnemyController.StaticEnemyCharObjects)
-        {
-            staticEnemy.AttackPlayerCharacters(BattleSystem);
-        }
+        BattleSystem.PlayerController.ResetAllPlayerCharacters();
+        BattleSystem.EnemyController.AttackAllPlayersStaticCharacters();
 
         OnStepStarted += OnPlayerTurnStarted;
         OnStepCompleted += OnPlayerTurnCompleted;
@@ -63,7 +56,7 @@ public class PlayerTurn : State
         }
 
         BattleSystem.FieldController.TurnOffCells();
-        cellsToMove = BattleSystem.GetCellsForMove(playerCharacter, playerCharacter.Speed);
+        cellsToMove = BattleSystem.FieldController.GetCellsForMove(playerCharacter, playerCharacter.Speed);
         SetEnemiesForAttack(playerCharacter);
 
         foreach (var item in cellsToMove)
@@ -91,7 +84,6 @@ public class PlayerTurn : State
         foreach (var item in enemiesToAttack)
         {
             item.OnClick -= BattleSystem.OnAttackButton;
-            playerCharacter.ParentCell.OnClick -= BattleSystem.OnAttackButton;
         }
 
         if (moveCost > BattleSystem.PointsOfAction )
@@ -107,18 +99,8 @@ public class PlayerTurn : State
         }
 
         BattleSystem.PointsOfAction -= moveCost;
-        playerCharacter.Speed -= Convert.ToInt32(moveCost);
 
-        Vector3 cellToMovePos = cellToMove.transform.position;
-        playerCharacter.transform.DOMove(new Vector3(cellToMovePos.x, playerCharacter.transform.position.y, cellToMovePos.z), 0.5f).OnComplete(() =>
-        {
-            playerCharacter.transform.SetParent(cellToMove.transform);
-            playerCharacter.transform.localPosition = new Vector3(0, 1, 0);
-            foreach (var staticEnemy in BattleSystem.EnemyController.StaticEnemyCharObjects)
-            {
-                staticEnemy.AttackPlayerCharacter(BattleSystem, playerCharacter);
-            }
-        });
+        playerCharacter.Move(moveCost, cell.transform);
 
         if (BattleSystem.PointsOfAction == 0)
         {
@@ -243,7 +225,7 @@ public class PlayerTurn : State
     }
     public void OnPlayerTurnStarted()
     {
-        Subscribe();
+        SetStateToNormal();
         foreach (var gameSupportCArdDisplay in BattleSystem.GameUIPresenter.GameSupportCards)
         {
             gameSupportCArdDisplay.GameSupportСardAbility.OnUsingCancel += OnUsingCancel;
@@ -275,11 +257,11 @@ public class PlayerTurn : State
         {
             SupportCard.DragAndDropComponent.OnDropEvent -= OnDropEvent;
         }
-        foreach (var playerCharacter in BattleSystem.PlayerController.PlayerCharactersObjects)
+        BattleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {
-            playerCharacter.OnClick -= BattleSystem.OnChooseCharacterButton;
-            playerCharacter.IsChosen = false;
-        }
+            x.OnClick -= BattleSystem.OnChooseCharacterButton;
+        });
+
         foreach (var cellToMove in cellsToMove)
         {
             cellToMove.OnClick -= BattleSystem.OnMoveButton;
@@ -296,6 +278,7 @@ public class PlayerTurn : State
     private void OnSupportCardAbilityUsed(ICardUsable usable)
     {
         SetStateToNormal();
+        BattleSystem.FieldController.TurnOnCells();
         ClearDisposables();
     }
     private void ClearDisposables()
@@ -307,10 +290,11 @@ public class PlayerTurn : State
     private void SetStateToNormal()
     {
         Subscribe();
-        if (BattleSystem.PlayerController.CurrentPlayerCharacter != null)
-        {
-            BattleSystem.PlayerController.CurrentPlayerCharacter.IsChosen = false;
-        }
+
+        BattleSystem.PlayerController.SetPlayerChosenState(false);
+        BattleSystem.PlayerController.SetPlayerState(true);
+        BattleSystem.EnemyController.SetEnemiesChosenState(false);
+        BattleSystem.EnemyController.SetEnemiesState(true);
     }
     private void Subscribe()
     {
@@ -331,13 +315,26 @@ public class PlayerTurn : State
             SupportCard.IsEnabled = false;
         }
     }
-    private void OnUsingCancel()
+    private void OnUsingCancel(BaseSupportСardAbility ability)
     {
         SetStateToNormal();
+        BattleSystem.FieldController.TurnOnCells();
         ClearDisposables();
+       
         foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
         {
             SupportCard.IsEnabled = true;
+        }
+        if (ability is ITurnCountable turnCountable)
+        {
+            if (turnCountable.IsBuff)
+            {
+                BattleSystem.PlayerTurnCountables.Remove(turnCountable);
+            }
+            else
+            {
+                BattleSystem.EnemyTurnCountables.Remove(turnCountable);
+            }
         }
     }
     private void CheckPlayerTurnCountables()
@@ -364,7 +361,7 @@ public class PlayerTurn : State
         ClearDisposables();
     }
 
-    public void SetEnemiesForAttack(Character character)
+    private void SetEnemiesForAttack(Character character)
     {
         enemiesToAttack.Clear();
         if (character.IsAttackedOnTheMove) return;
@@ -421,7 +418,7 @@ public class PlayerTurn : State
                     cell.SetColor("attack");
                     enemiesToAttack.Add(kostilEnemy.WallEnemyCharacter);
                 }
-                if (BattleSystem.PlayerController.CurrentPlayerCharacter.Class == enums.Classes.Маг)
+                if (character.Class == enums.Classes.Маг)
                 {
                     continue;
                 }

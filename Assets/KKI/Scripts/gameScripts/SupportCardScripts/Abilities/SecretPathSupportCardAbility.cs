@@ -46,15 +46,11 @@ public class SecretPathSupportCardAbility : BaseSupport—ardAbility
         {
             item.OnClick -= UseCard;
         }
-        setAbiableCellsBehaviour.cellsToMove = battleSystem.GetCellsForMove(@object.GetComponent<Character>(), 3);
+        setAbiableCellsBehaviour.cellsToMove = battleSystem.FieldController.GetCellsForMove(@object.GetComponent<Character>(), 3);
     }
     private void OnSelectCharacter()
     {
-
-        foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
-        {
-            enemyCharacter.IsEnabled = true;
-        }
+        battleSystem.EnemyController.SetEnemiesState(true);
         if (battleSystem.State is PlayerTurn)
         {
             foreach (var item in setAbiableCellsBehaviour.cellsToMove)

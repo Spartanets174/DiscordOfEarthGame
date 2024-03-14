@@ -59,11 +59,11 @@ public class ArtOfSurviveSecondSupportCardAbility : BaseSupportÑardAbility, ITur
 
         character.ChanceToAvoidDamage += 0.4f;
 
-        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
+        battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {
-            playerCharacter.OnClick -= SelectCharacter;
-            playerCharacter.IsChosen = false;
-        }
+            x.OnClick -= SelectCharacter;
+        });
+
         UseCard(null);
     }
 

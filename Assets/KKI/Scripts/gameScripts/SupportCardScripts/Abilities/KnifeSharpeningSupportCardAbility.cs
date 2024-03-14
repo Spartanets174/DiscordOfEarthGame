@@ -59,11 +59,10 @@ public class KnifeSharpeningSupportCardAbility : BaseSupportÑardAbility, ITurnCo
         character.CritChance += 0.2f;
         character.CritNum += 0.2f;
 
-        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
+        battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {
-            playerCharacter.OnClick -= SelectCharacter;
-            playerCharacter.IsChosen = false;
-        }
+            x.OnClick -= SelectCharacter;
+        });
         UseCard(null);
     }
 

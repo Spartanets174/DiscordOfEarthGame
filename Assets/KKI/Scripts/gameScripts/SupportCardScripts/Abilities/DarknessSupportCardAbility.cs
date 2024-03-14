@@ -30,7 +30,7 @@ public class DarknessSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSecondSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSelectBehaviour.OnSelected += OnSelected;
-        m_cardSelectBehaviour.OnSelected += OnSecondSelected;
+        m_cardSecondSelectBehaviour.OnSelected += OnSecondSelected;
         m_selectCharacterBehaviour.OnSelectCharacter += OnSelectCharacter;
     }
 
@@ -40,7 +40,7 @@ public class DarknessSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
         m_cardSelectBehaviour.OnCancelSelection -= OnCancelSelection;
         m_cardSecondSelectBehaviour.OnCancelSelection -= OnCancelSelection;
         m_cardSelectBehaviour.OnSelected -= OnSelected;
-        m_cardSelectBehaviour.OnSelected -= OnSecondSelected;
+        m_cardSecondSelectBehaviour.OnSelected -= OnSecondSelected;
         m_selectCharacterBehaviour.OnSelectCharacter -= OnSelectCharacter;
     }
 
@@ -67,15 +67,12 @@ public class DarknessSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
 
-        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
+        battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {
-            playerCharacter.OnClick -= SelectSecondCharacterInvoke;
-            playerCharacter.IsChosen = false;
-        }
-        foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
-        {
-            enemyCharacter.IsEnabled = true;
-        }
+            x.OnClick -= SelectSecondCharacterInvoke;
+        });
+
+        battleSystem.EnemyController.SetEnemiesState(true);
         SelectSecondCard();
     }
 
@@ -85,11 +82,10 @@ public class DarknessSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
     {
         if (battleSystem.State is PlayerTurn)
         {
-            foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
+            battleSystem.EnemyController.SetEnemiesState(false, (x) =>
             {
-                enemyCharacter.IsEnabled = false;
                 enemyCharacter.OnClick += SelectCharacter;
-            }
+            });
         }
     }
 
@@ -106,7 +102,6 @@ public class DarknessSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 
         foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
         {
-            enemyCharacter.IsChosen = false;
             enemyCharacter.OnClick -= SelectCharacter;
         }
 
@@ -118,15 +113,12 @@ public class DarknessSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 
     private void OnCancelSelection()
     {
-        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
+        battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {
-            playerCharacter.OnClick -= SelectSecondCharacterInvoke;
-        }
-        foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
-        {
-            enemyCharacter.OnClick -= SelectCharacter;
-            enemyCharacter.IsChosen = false;
-        }
+            x.OnClick -= SelectSecondCharacterInvoke;
+        });
+
+        battleSystem.EnemyController.SetEnemiesChosenState(false, x => { x.OnClick -= SelectCharacter; });
     }
 
     public void ReturnToNormal()

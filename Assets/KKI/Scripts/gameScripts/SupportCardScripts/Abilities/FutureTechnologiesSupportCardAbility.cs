@@ -64,11 +64,11 @@ public class FutureTechnologiesSupportCardAbility : BaseSupportÑardAbility, ITur
         character.MagDefence += 1;
         character.PhysDefence += 1;
 
-        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
+
+        battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {
-            playerCharacter.OnClick -= SelectCharacter;
-            playerCharacter.IsChosen = false;
-        }
+            x.OnClick -= SelectCharacter;
+        });
         UseCard(null);
     }
 

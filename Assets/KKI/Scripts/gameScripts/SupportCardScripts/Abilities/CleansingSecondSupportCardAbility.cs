@@ -17,17 +17,11 @@ public class CleansingSecondSupportCardAbility : BaseSupport—ardAbility
     {
         if (battleSystem.State is PlayerTurn)
         {
-            foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
-            {
-                playerCharacter.RemoveDebuffs();
-            }
+            battleSystem.PlayerController.RemoveDebuffsAllPlayerCharacters();
         }
         else
         {
-            foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
-            {
-                enemyCharacter.RemoveDebuffs();
-            }
+            battleSystem.EnemyController.RemoveDebuffsAllEnemyCharacters();
         }
         
         

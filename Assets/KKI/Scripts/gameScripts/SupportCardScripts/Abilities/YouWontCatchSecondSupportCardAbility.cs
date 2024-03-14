@@ -66,11 +66,10 @@ public class YouWontCatchSecondSupportCardAbility : BaseSupportÑardAbility, ITur
         character.MagAttack += magAmount;
         character.PhysAttack += physAmount;
 
-        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
+        battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {
-            playerCharacter.OnClick -= SelectCharacter;
-            playerCharacter.IsChosen = false;
-        }
+            x.OnClick -= SelectCharacter;
+        });
         UseCard(null);
     }
 

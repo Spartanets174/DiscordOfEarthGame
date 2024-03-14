@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ public class StaticEnemyCharacter : Enemy
         set => m_cellsToAttack = value;
     }
 
-    public void AttackEnemyCharacters(BattleSystem battleSystem)
+    public void AttackEnemyCharacters()
     {
         List<EnemyCharacter> enemyCharactersToAttack = new();
         foreach (var cell in CellsToAttack)
@@ -28,11 +29,11 @@ public class StaticEnemyCharacter : Enemy
         if (enemyCharactersToAttack.Count!=0)
         {
             EnemyCharacter target = enemyCharactersToAttack.OrderBy(x => x.Health).ToList()[0];
-            AttackEnemyCharacter(target, battleSystem);
+            AttackCharacter(target);
         }        
     }
 
-    public void AttackPlayerCharacters(BattleSystem battleSystem)
+    public void AttackPlayerCharacters()
     {
         List<PlayerCharacter> playerCharacterToAttack = new();
         foreach (var cell in CellsToAttack)
@@ -46,86 +47,90 @@ public class StaticEnemyCharacter : Enemy
         if (playerCharacterToAttack.Count!=0)
         {
             PlayerCharacter target = playerCharacterToAttack.OrderBy(x => x.Health).ToList()[0];
-            AttackPlayerCharacter(target, battleSystem);
+            AttackCharacter(target);
         }
-        
     }
 
-    public void AttackEnemyCharacter(BattleSystem battleSystem, EnemyCharacter enemyCharacter)
+    public void AttackEnemyCharacter(EnemyCharacter currentTarget)
     {
         foreach (var cell in CellsToAttack)
         {
-            EnemyCharacter currentTarget = cell.GetComponentInChildren<EnemyCharacter>();
-            if (currentTarget == enemyCharacter)
+            EnemyCharacter enemyCharacter = cell.GetComponentInChildren<EnemyCharacter>();
+            if (enemyCharacter == currentTarget)
             {
-                AttackEnemyCharacter(currentTarget, battleSystem);
+                AttackCharacter(currentTarget);
             }
         }
     }
 
-    public void AttackPlayerCharacter(BattleSystem battleSystem, PlayerCharacter playerCharacter)
+    public void AttackPlayerCharacter(PlayerCharacter currentTarget)
     {
         foreach (var cell in CellsToAttack)
         {
-            PlayerCharacter currentTarget = cell.GetComponentInChildren<PlayerCharacter>();
-            if (currentTarget == playerCharacter)
+            PlayerCharacter playerCharacter = cell.GetComponentInChildren<PlayerCharacter>();
+            if (playerCharacter == currentTarget)
             {
-                AttackPlayerCharacter(currentTarget, battleSystem);
+                AttackCharacter(currentTarget);
             }
         }
     }
 
-
-    public void AttackPlayerCharacter(PlayerCharacter currentTarget, BattleSystem battleSystem)
+    private void AttackCharacter(Character currentTarget)
     {
         float finalDamage = currentTarget.Damage(this);
         bool isDeath = currentTarget.Health == 0;
         if (finalDamage > 0)
         {
-            battleSystem.GameUIPresenter.AddMessageToGameLog($"{this.CharacterName} наносит  юниту {currentTarget.CharacterName} {finalDamage * 100:00.00} урона");
+            BattleSystem.Instance.GameUIPresenter.AddMessageToGameLog($"{this.CharacterName} наносит  юниту {currentTarget.CharacterName} {finalDamage * 100:00.00} урона");
         }
         else
         {
-            battleSystem.GameUIPresenter.AddMessageToGameLog($"{currentTarget.CharacterName} избежал получения урона от {this.CharacterName}");
+            BattleSystem.Instance.GameUIPresenter.AddMessageToGameLog($"{currentTarget.CharacterName} избежал получения урона от {this.CharacterName}");
         }
-
-
-        if (isDeath)
+        if (BattleSystem.Instance.State is PlayerTurn)
         {
-            battleSystem.PlayerController.PlayerCharactersObjects.Remove(currentTarget);
-            battleSystem.GameUIPresenter.AddMessageToGameLog($"Союзный юнит {currentTarget.CharacterName} убит");
-            GameObject.Destroy(currentTarget.gameObject);
+            if (currentTarget is PlayerCharacter playerCharacter)
+            {
+                CheckPlayerDeath(playerCharacter, isDeath);
+            }
+            
         }
-
-        if (battleSystem.PlayerController.PlayerCharactersObjects.Count == 0)
+        else
         {
-            battleSystem.SetLost();
+            if (currentTarget is EnemyCharacter enemyCharacter)
+            {
+                CheckEnemyDeath(enemyCharacter, isDeath);
+            }         
         }
     }
 
-    public void AttackEnemyCharacter(EnemyCharacter currentTarget, BattleSystem battleSystem)
-    {
-        float finalDamage = currentTarget.Damage(this);
-        bool isDeath = currentTarget.Health == 0;
-        if (finalDamage > 0)
-        {
-            battleSystem.GameUIPresenter.AddMessageToGameLog($"{this.CharacterName} наносит  юниту {currentTarget.CharacterName} {finalDamage * 100:00.00} урона");
-        }
-        else
-        {
-            battleSystem.GameUIPresenter.AddMessageToGameLog($"{currentTarget.CharacterName} избежал получения урона от {this.CharacterName}");
-        };
-
+    private void CheckPlayerDeath(PlayerCharacter currentTarget, bool isDeath)
+    {     
         if (isDeath)
         {
-            battleSystem.EnemyController.EnemyCharObjects.Remove(currentTarget);
+            BattleSystem.Instance.PlayerController.PlayerCharactersObjects.Remove(currentTarget);
+            BattleSystem.Instance.GameUIPresenter.AddMessageToGameLog($"Союзный юнит {currentTarget.CharacterName} убит");
             GameObject.Destroy(currentTarget.gameObject);
-            battleSystem.GameUIPresenter.AddMessageToGameLog($"Вражеский юнит {currentTarget.name} убит");
         }
 
-        if (battleSystem.EnemyController.EnemyCharObjects.Count == 0)
+        if (BattleSystem.Instance.PlayerController.PlayerCharactersObjects.Count == 0)
         {
-            battleSystem.SetWin();
+            BattleSystem.Instance.SetLost();
+        }
+    }
+
+    public void CheckEnemyDeath(EnemyCharacter currentTarget, bool isDeath)
+    {
+        if (isDeath)
+        {
+            BattleSystem.Instance.EnemyController.EnemyCharObjects.Remove(currentTarget);
+            GameObject.Destroy(currentTarget.gameObject);
+            BattleSystem.Instance.GameUIPresenter.AddMessageToGameLog($"Вражеский юнит {currentTarget.name} убит");
+        }
+
+        if (BattleSystem.Instance.EnemyController.EnemyCharObjects.Count == 0)
+        {
+            BattleSystem.Instance.SetWin();
         }
     }
 }

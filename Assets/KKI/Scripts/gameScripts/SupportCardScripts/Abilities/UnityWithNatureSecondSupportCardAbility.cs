@@ -58,11 +58,10 @@ public class UnityWithNatureSecondSupportCardAbility : BaseSupportÑardAbility, I
         character.HealMoreThenMax(2);
         character.PhysDefence += 2;
 
-        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
+        battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {
-            playerCharacter.OnClick -= SelectCharacter;
-            playerCharacter.IsChosen = false;
-        }
+            x.OnClick -= SelectCharacter;
+        });
         UseCard(null);
     }
 

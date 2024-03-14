@@ -2,7 +2,6 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static Unity.Burst.Intrinsics.X86.Avx;
 
 public static class ConnectionInfo
 {

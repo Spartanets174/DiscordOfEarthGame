@@ -136,8 +136,68 @@ public class FieldController : MonoBehaviour, ILoadable
         return moveCost;
     }   
 
-   public Cell GetCell(int i, int j)
+    public Cell GetCell(int i, int j)
     {
         return CellsOfFieled[i, j];
+    }
+
+
+    private Cell GetCellForMove(int i, int j, Vector2 pos)
+    {
+        float newI = pos.x + i;
+        float newJ = pos.y + j;
+        if (newI >= 7 || newI < 0)
+        {
+            return null;
+        }
+        if (newJ >= 11 || newJ < 0)
+        {
+            return null;
+        }
+        if (GetCell((int)newI, (int)newJ).transform.childCount > 0)
+        {
+            return null;
+        }
+
+        return GetCell((int)newI, (int)newJ);
+    }
+
+    public List<Cell> GetCellsForMove(Character character, int numberOfCells)
+    {
+        List<Cell> cellsToMove = new();
+        bool top = true;
+        bool bottom = true;
+        bool left = true;
+        bool rigth = true;
+        for (int i = 1; i <= numberOfCells; i++)
+        {
+            Cell topCell = GetCellForMove(-i, 0, character.PositionOnField);
+            Cell bottomCell = GetCellForMove(0, -i, character.PositionOnField);
+            Cell leftCell = GetCellForMove(i, 0, character.PositionOnField);
+            Cell rigtCell = GetCellForMove(0, i, character.PositionOnField);
+
+            top = topCell != null && top;
+            bottom = bottomCell != null && bottom;
+            rigth = rigtCell != null && rigth;
+            left = leftCell != null && left;
+
+            SetActiveCell(topCell, top, cellsToMove);
+            SetActiveCell(bottomCell, bottom, cellsToMove);
+            SetActiveCell(rigtCell, rigth, cellsToMove);
+            SetActiveCell(leftCell, left, cellsToMove);
+        }
+        return cellsToMove;
+    }
+
+    private void SetActiveCell(Cell cell, bool isAllowed, List<Cell> cellsToMove)
+    {
+        if (cell != null && isAllowed)
+        {
+            if (BattleSystem.Instance.State is PlayerTurn)
+            {
+                cell.SetCellMovable();
+            }
+            cellsToMove.Add(cell);
+        }
     }
 }

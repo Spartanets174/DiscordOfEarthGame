@@ -43,10 +43,7 @@ public class SecretPathSecondSupportCardAbility : BaseSupport—ardAbility
 
     private void OnSelectCharacter()
     {
-        foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
-        {
-            enemyCharacter.IsEnabled = true;
-        }
+        battleSystem.EnemyController.SetEnemiesState(true);
 
         if (battleSystem.State is PlayerTurn)
         {
@@ -63,7 +60,7 @@ public class SecretPathSecondSupportCardAbility : BaseSupport—ardAbility
         {
             item.OnClick -= UseCard;
         }
-        setAbiableCellsBehaviour.cellsToMove = battleSystem.GetCellsForMove(gameObject.GetComponent<Character>(), 5);
+        setAbiableCellsBehaviour.cellsToMove = battleSystem.FieldController.GetCellsForMove(gameObject.GetComponent<Character>(), 5);
     }
     private void OnCardUse()
     {

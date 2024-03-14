@@ -1,5 +1,7 @@
 using BehaviourTree;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 using Tree = BehaviourTree.Tree;
@@ -90,7 +92,7 @@ public class EnemyController : Tree
     {
         while (m_enemyCharCards.Count < 5)
         {
-            CharacterCard EnemyMan = playerData.allCharCards[Random.Range(0, playerData.allCharCards.Count)];
+            CharacterCard EnemyMan = playerData.allCharCards[UnityEngine.Random.Range(0, playerData.allCharCards.Count)];
             if (!m_enemyCharCards.Contains(EnemyMan))
             {
                 m_enemyCharCards.Add(EnemyMan);
@@ -127,7 +129,7 @@ public class EnemyController : Tree
         //Спавн двигающихся врагов
         while (count < 5)
         {
-            Cell Cell = fieldController.GetCell(Random.Range(0, fieldController.CellsOfFieled.GetLength(0)), Random.Range(0, 2));
+            Cell Cell = fieldController.GetCell(UnityEngine.Random.Range(0, fieldController.CellsOfFieled.GetLength(0)), UnityEngine.Random.Range(0, 2));
             if (!IsEnemyOnCell(Cell))
             {
                 EnemyCharacter enemyCharacter = Instantiate(enemyPrefab, Vector3.zero, Quaternion.identity, Cell.transform);
@@ -229,5 +231,84 @@ public class EnemyController : Tree
         }
     }
 
-   
+    public void SetEnemiesState(bool state, Action<EnemyCharacter> subAction=null)
+    {
+        foreach (var enemyCharacter in m_enemyCharObjects)
+        {
+            enemyCharacter.IsEnabled = state;
+            subAction?.Invoke(enemyCharacter);
+        }
+    }
+
+    public void SetEnemiesChosenState(bool state, Action<EnemyCharacter> subAction = null)
+    {
+        foreach (var enemyCharacter in m_enemyCharObjects)
+        {
+            enemyCharacter.IsChosen = state;
+            subAction?.Invoke(enemyCharacter);
+        }
+    }
+
+    public void SetStaticEnemiesState(bool state, Action<StaticEnemyCharacter> subAction = null)
+    {
+        foreach (var staticEnemyCharacter in m_staticEnemyCharObjects)
+        {
+            staticEnemyCharacter.IsEnabled = state;
+            subAction?.Invoke(staticEnemyCharacter);
+        }
+    }
+
+    public void ResetEnemyCharacters()
+    {
+        foreach (var enemyCharacter in m_enemyCharObjects)
+        {
+            enemyCharacter.ResetCharacter();
+        }
+    }
+
+    public void RemoveDebuffsAllEnemyCharacters()
+    {
+        foreach (var enemyCharacter in m_enemyCharObjects)
+        {
+            enemyCharacter.RemoveDebuffs();
+        }
+    }
+
+    public void AttackEnemyCharacterOnMove(Character character)
+    {
+        /*StaticEnemyCharacter staticEnemyCharacter = m_staticEnemyCharObjects.OrderBy(go => (character.transform.position - go.transform.position).sqrMagnitude).First();
+        staticEnemyCharacter.AttackEnemyCharacter((EnemyCharacter)character);*/
+
+        foreach (var staticEnemy in m_staticEnemyCharObjects)
+        {
+            staticEnemy.AttackEnemyCharacter((EnemyCharacter)character);
+        }
+    }
+
+    public void AttackPlayerCharacterOnMove(Character character)
+    {
+       /* StaticEnemyCharacter staticEnemyCharacter = m_staticEnemyCharObjects.OrderBy(go => (character.transform.position - go.transform.position).sqrMagnitude).First();
+        staticEnemyCharacter.AttackPlayerCharacter((PlayerCharacter)character);*/
+
+        foreach (var staticEnemy in m_staticEnemyCharObjects)
+        {
+            staticEnemy.AttackPlayerCharacter((PlayerCharacter)character);
+        }
+    }
+
+    public void AttackAllEnemiesStaticCharacters()
+    {
+        foreach (var staticEnemy in m_staticEnemyCharObjects)
+        {
+            staticEnemy.AttackEnemyCharacters();
+        }
+    }
+
+    public void AttackAllPlayersStaticCharacters()
+    {
+        foreach (var staticEnemy in m_staticEnemyCharObjects)
+        {
+            staticEnemy.AttackPlayerCharacters();
+        }
+    }
 }

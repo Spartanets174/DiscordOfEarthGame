@@ -36,12 +36,11 @@ public class CleansingSupportCardAbility : BaseSupportÑardAbility
         {
             battleSystem.EnemyController.CurrentEnemyCharacter.RemoveDebuffs();
         }
-        
-        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
+        battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {
-            playerCharacter.OnClick -= SelectCharacter;
-            playerCharacter.IsChosen = false;
-        }
+            x.OnClick -= SelectCharacter;
+        });
+
         UseCard(null);
     }
 

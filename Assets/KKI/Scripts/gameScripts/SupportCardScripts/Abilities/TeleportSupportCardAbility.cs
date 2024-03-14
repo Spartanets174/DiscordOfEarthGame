@@ -58,12 +58,7 @@ public class TeleportSupportCardAbility : BaseSupport—ardAbility
 
     private void OnSelectCharacter()
     {
-        foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
-        {
-            enemyCharacter.IsEnabled = true;
-        }
-
-
+        battleSystem.EnemyController.SetEnemiesState(true);
         foreach (var cell in setAbiableCellsBehaviour.cellsToMove)
         {
             cell.OnClick += UseCard;

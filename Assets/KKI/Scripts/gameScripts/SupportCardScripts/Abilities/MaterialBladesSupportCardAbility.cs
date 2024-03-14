@@ -68,12 +68,11 @@ public class MaterialBladesSupportCardAbility : BaseSupportÑardAbility, ITurnCou
 
     private void OnCancelSelection()
     {
-        foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
+        battleSystem.EnemyController.SetEnemiesState(true, x =>
         {
-            enemyCharacter.OnClick += SelectCharacter;
-            enemyCharacter.IsChosen = false;
-            enemyCharacter.IsEnabled = true;
-        }
+            x.OnClick += SelectCharacter;
+            x.IsChosen = false;
+        });
     }
     public void ReturnToNormal()
     {

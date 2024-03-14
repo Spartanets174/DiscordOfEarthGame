@@ -30,7 +30,7 @@ public class DarknessSecondSupportCardAbility : BaseSupportÑardAbility, ITurnCou
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSecondSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSelectBehaviour.OnSelected += OnSelected;
-        m_cardSelectBehaviour.OnSelected += OnSecondSelected;
+        m_cardSecondSelectBehaviour.OnSelected += OnSecondSelected;
         m_selectCharacterBehaviour.OnSelectCharacter += OnSelectCharacter;
     }
 
@@ -40,7 +40,7 @@ public class DarknessSecondSupportCardAbility : BaseSupportÑardAbility, ITurnCou
         m_cardSelectBehaviour.OnCancelSelection -= OnCancelSelection;
         m_cardSecondSelectBehaviour.OnCancelSelection -= OnCancelSelection;
         m_cardSelectBehaviour.OnSelected -= OnSelected;
-        m_cardSelectBehaviour.OnSelected -= OnSecondSelected;
+        m_cardSecondSelectBehaviour.OnSelected -= OnSecondSelected;
         m_selectCharacterBehaviour.OnSelectCharacter -= OnSelectCharacter;
     }
 
@@ -66,16 +66,13 @@ public class DarknessSecondSupportCardAbility : BaseSupportÑardAbility, ITurnCou
         {
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
+        battleSystem.PlayerController.SetPlayerChosenState(false, x =>
+        {
+            x.OnClick -= SelectSecondCharacterInvoke;
+        });
 
-        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
-        {
-            playerCharacter.OnClick -= SelectSecondCharacterInvoke;
-            playerCharacter.IsChosen = false;
-        }
-        foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
-        {
-            enemyCharacter.IsEnabled = true;
-        }
+        battleSystem.EnemyController.SetEnemiesState(true);
+
         SelectSecondCard();
     }
 
@@ -111,18 +108,16 @@ public class DarknessSecondSupportCardAbility : BaseSupportÑardAbility, ITurnCou
 
     private void OnCancelSelection()
     {
-        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
+        battleSystem.PlayerController.SetPlayerState(true, x =>
         {
-            playerCharacter.IsChosen = false;
-            playerCharacter.IsEnabled = true;
-            playerCharacter.OnClick -= SelectSecondCharacterInvoke;
-        }
-        foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
-        {
-            enemyCharacter.IsChosen = false;
-            enemyCharacter.IsEnabled = true;
-            enemyCharacter.OnClick -= SelectCharacter;
-        }
+            x.IsEnabled = true;
+            x.OnClick -= SelectSecondCharacterInvoke;
+        });
+
+        battleSystem.EnemyController.SetEnemiesState(true, (x) => {
+            x.IsChosen = false;
+            x.OnClick -= SelectCharacter;
+        });
     }
 
     public void ReturnToNormal()

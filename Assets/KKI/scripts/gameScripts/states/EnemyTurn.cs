@@ -22,16 +22,9 @@ public class EnemyTurn : State
 
         CheckEnemyTurnCountables();
 
-        foreach (var staticEnemy in BattleSystem.EnemyController.StaticEnemyCharObjects)
-        {
-            staticEnemy.AttackEnemyCharacters(BattleSystem);
-        }
-        
-        foreach (var enemyCharacter in BattleSystem.EnemyController.EnemyCharObjects)
-        {
-            enemyCharacter.ResetCharacter();
-        }
+        BattleSystem.EnemyController.AttackAllEnemiesStaticCharacters();
 
+        BattleSystem.EnemyController.ResetEnemyCharacters();      
         BattleSystem.EnemyController.SetupTree();
         BattleSystem.EnemyController.RestartTree();
         
@@ -87,19 +80,7 @@ public class EnemyTurn : State
         }
 
         BattleSystem.PointsOfAction -= moveCost;
-        enemyCharacter.Speed -= Convert.ToInt32(moveCost);
-
-        Vector3 cellToMovePos = cellToMove.transform.position;
-        enemyCharacter.transform.SetParent(cellToMove.transform);
-        enemyCharacter.transform.DOMove(new Vector3(cellToMovePos.x, enemyCharacter.transform.position.y, cellToMovePos.z), 0.5f).OnComplete(() =>
-        {
-            enemyCharacter.transform.localPosition = new Vector3(0, 1, 0);
-
-            foreach (var staticEnemy in BattleSystem.EnemyController.StaticEnemyCharObjects)
-            {
-                staticEnemy.AttackEnemyCharacter(BattleSystem, enemyCharacter);
-            }
-        });
+        enemyCharacter.Move(moveCost, cellToMove.transform);
 
         if (BattleSystem.PointsOfAction == 0)
         {

@@ -47,6 +47,8 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
     private Button setWinButton;
     [SerializeField]
     private Button setLostButton;
+    [SerializeField]
+    private Button toMenuButtonEndGame;
 
     [Space, Header("Info UI")]
     [SerializeField]
@@ -95,6 +97,8 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
         setEnemyTurnButton.onClick.AddListener(battleSystem.SetEnemyTurn);
         setWinButton.onClick.AddListener(battleSystem.SetWin);
         setLostButton.onClick.AddListener(battleSystem.SetLost);
+        toMenuButton.onClick.AddListener(SceneController.ToMenu);
+        toMenuButtonEndGame.onClick.AddListener(SceneController.ToMenu);
 
         Observable.EveryUpdate().Subscribe(x =>
         {
@@ -142,12 +146,18 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
         
     }
 
+    public void SetEndGame(string endGameText)
+    {
+        this.endGameText.text = endGameText.Trim();
+        endGameInterface.SetActive(true);
+        gameInterface.SetActive(false);
+    }
     private void OnSecondSupportCardAbilitySelected(ICardSelectable selectable)
     {
         SetTipsText($"{selectable.SelectCardTipText}");
     }
 
-    private void OnUsingCancel()
+    private void OnUsingCancel(BaseSupport—ardAbility ability)
     {
         tipsTextParent.SetActive(false);
         SetTipsText("");
@@ -208,6 +218,8 @@ public class GameUIPresenter : MonoBehaviour, ILoadable
         setEnemyTurnButton.onClick.RemoveListener(battleSystem.SetEnemyTurn);
         setWinButton.onClick.RemoveListener(battleSystem.SetWin);
         setLostButton.onClick.RemoveListener(battleSystem.SetLost);
+        toMenuButton.onClick.RemoveListener(SceneController.ToMenu);
+        toMenuButtonEndGame.onClick.RemoveListener(SceneController.ToMenu);
 
         disposables.Dispose();
         disposables.Clear();

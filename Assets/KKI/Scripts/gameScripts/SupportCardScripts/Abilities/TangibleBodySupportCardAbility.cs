@@ -59,11 +59,10 @@ public class TangibleBodySupportCardAbility : BaseSupportÑardAbility, ITurnCount
         character.PhysDefence += 1;
         character.PhysAttack += 1;
 
-        foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
+        battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {
-            playerCharacter.OnClick -= SelectCharacter;
-            playerCharacter.IsChosen = false;
-        }
+            x.OnClick -= SelectCharacter;
+        });
         UseCard(null);
     }
 

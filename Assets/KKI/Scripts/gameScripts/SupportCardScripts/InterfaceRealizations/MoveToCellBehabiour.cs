@@ -21,23 +21,7 @@ public class MoveToCellBehaviour : ICardUsable
         Character character = battleSystem.State is PlayerTurn?battleSystem.PlayerController.CurrentPlayerCharacter: battleSystem.EnemyController.CurrentEnemyCharacter;
         Vector2 pos = character.PositionOnField;
 
-        Vector3 currentCellPos = currentCell.transform.position;
-        character.transform.DOMove(new Vector3(currentCellPos.x, character.transform.position.y, currentCellPos.z), 0.5f).OnComplete(() =>
-        {
-            character.transform.SetParent(currentCell.transform);
-            character.transform.localPosition = new Vector3(0, 1, 0);
-            foreach (var staticEnemy in battleSystem.EnemyController.StaticEnemyCharObjects)
-            {
-                if (battleSystem.State is PlayerTurn)
-                {
-                    staticEnemy.AttackPlayerCharacter(battleSystem, (PlayerCharacter)character);
-                }
-                else
-                {
-                    staticEnemy.AttackEnemyCharacter(battleSystem, (EnemyCharacter)character);
-                }
-            }
-        });
+        character.Move(0, currentCell.transform);
 
         OnCardUse?.Invoke();
     }

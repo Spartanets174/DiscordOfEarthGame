@@ -76,12 +76,11 @@ public class MaterialBladesSecondSupportCardAbility : BaseSupportÑardAbility, IT
 
     private void OnCancelSelection()
     {
-        foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
+        battleSystem.EnemyController.SetEnemiesState(false, x =>
         {
-            enemyCharacter.OnClick += SelectCharacter;
-            enemyCharacter.IsChosen = false;
-            enemyCharacter.IsEnabled = true;
-        }
+            x.OnClick += SelectCharacter;
+            x.IsChosen = false;
+        });
     }
     public void ReturnToNormal()
     {

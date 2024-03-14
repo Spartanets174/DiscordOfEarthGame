@@ -40,8 +40,22 @@ public class BattleSystem : StateMachine, ILoadable
         }
     }
 
+    private static BattleSystem m_instance;
+    public static BattleSystem Instance
+    {
+        get
+        {
+            if (m_instance == null)
+            {
+                m_instance = FindObjectOfType<BattleSystem>();
+            }
+            return m_instance;
+        }
+    }
+
     public void Init()
     {
+        m_instance = this;
         FieldController.InvokeActionOnField(x=> x.OnClick += TurnOnCells);
         PlayerController.OnPlayerCharacterSpawned += OnPlayerCharacterSpawned;
 
@@ -52,11 +66,6 @@ public class BattleSystem : StateMachine, ILoadable
         }
 
         SetState(new Begin(this));
-    }
-
-    private void TurnOnCells(GameObject gameObject)
-    {
-        FieldController.TurnOnCells();
     }
 
     public void OnUnitStatementButton(GameObject character)
@@ -112,13 +121,19 @@ public class BattleSystem : StateMachine, ILoadable
     }
     public void SetWin()
     {
+        EnemyController.StopTree();
         PlayerController.ClearDisposables();
         SetState(new Won(this));
     }
     public void SetLost()
     {
+        EnemyController.StopTree();
         PlayerController.ClearDisposables();
         SetState(new Lost(this));
+    }
+    private void TurnOnCells(GameObject gameObject)
+    {
+        FieldController.TurnOnCells();
     }
     private void OnPlayerCharacterSpawned()
     {
@@ -132,27 +147,22 @@ public class BattleSystem : StateMachine, ILoadable
 
     private void StartGame()
     {
+        PlayerController.SetPlayerState(true, x =>
+        {
+            x.OnClick += SetCurrentChosenCharacter;
+            x.OnPositionOnFieldChanged += EnemyController.AttackPlayerCharacterOnMove;
+        });
+
+        EnemyController.SetEnemiesState(true, (x) => {
+            x.OnClick += SetCurrentChosenCharacter;
+            x.OnPositionOnFieldChanged += EnemyController.AttackEnemyCharacterOnMove;
+        });
+        EnemyController.SetStaticEnemiesState(true, (x) => { x.OnClick += SetCurrentChosenCharacter; });
+
         int cubeValue = UnityEngine.Random.Range(1, 6);
 
         GameUIPresenter.SetPointsOfActionAndÑube(cubeValue);
         GameUIPresenter.AddMessageToGameLog($"Íà êóáèöå âûïàëî {cubeValue}");
-
-        foreach (var playerChar in PlayerController.PlayerCharactersObjects)
-        {
-            playerChar.OnClick += SetCurrentChosenCharacter;
-            playerChar.OnClick += PlayerController.SetCurrentPlayerChosenCharacter;
-            playerChar.IsEnabled = true;
-        }
-        foreach (var enemyChar in EnemyController.EnemyCharObjects)
-        {
-            enemyChar.OnClick += SetCurrentChosenCharacter;
-            enemyChar.IsEnabled = true;
-        }
-        foreach (var staticEnemyChar in EnemyController.StaticEnemyCharObjects)
-        {
-            staticEnemyChar.OnClick += SetCurrentChosenCharacter;
-            staticEnemyChar.IsEnabled = true;
-        }
 
         if (cubeValue % 2 == 0)
         {
@@ -163,7 +173,6 @@ public class BattleSystem : StateMachine, ILoadable
             SetEnemyTurn();
         }
     }
-
 
     public void SetCurrentChosenCharacter(GameObject character)
     {
@@ -182,64 +191,4 @@ public class BattleSystem : StateMachine, ILoadable
             Debug.LogError("Íåò ïåðñîíàæà");
         }
     }
-
-    private Cell GetCellForMove(int i, int j, Vector2 pos)
-    {
-        float newI = pos.x + i;
-        float newJ = pos.y + j;
-        if (newI >= 7 || newI < 0)
-        {
-            return null;
-        }
-        if (newJ >= 11 || newJ < 0)
-        {
-            return null;
-        }
-        if (FieldController.GetCell((int)newI, (int)newJ).transform.childCount > 0)
-        {
-            return null;
-        }
-
-        return FieldController.GetCell((int)newI, (int)newJ);
-    }
-
-    public List<Cell> GetCellsForMove(Character character, int numberOfCells)
-    {
-        List<Cell> cellsToMove = new();
-        bool top = true;
-        bool bottom = true;
-        bool left = true;
-        bool rigth = true;
-        for (int i = 1; i <= numberOfCells; i++)
-        {
-            Cell topCell = GetCellForMove(-i, 0, character.PositionOnField);
-            Cell bottomCell = GetCellForMove(0, -i, character.PositionOnField);
-            Cell leftCell = GetCellForMove(i, 0, character.PositionOnField);
-            Cell rigtCell = GetCellForMove(0, i, character.PositionOnField);
-
-            top = topCell != null && top;
-            bottom = bottomCell != null && bottom;
-            rigth = rigtCell != null && rigth;
-            left = leftCell != null && left;
-
-            SetActiveCell(topCell, top, cellsToMove);
-            SetActiveCell(bottomCell, bottom, cellsToMove);
-            SetActiveCell(rigtCell, rigth, cellsToMove);
-            SetActiveCell(leftCell, left, cellsToMove);
-        }
-        return cellsToMove;
-    }
-
-    private void SetActiveCell(Cell cell, bool isAllowed, List<Cell> cellsToMove)
-    {
-        if (cell != null && isAllowed)
-        {
-            if (State is PlayerTurn)
-            {
-                cell.SetCellMovable();
-            }           
-            cellsToMove.Add(cell);
-        }
-    }
-    
 }

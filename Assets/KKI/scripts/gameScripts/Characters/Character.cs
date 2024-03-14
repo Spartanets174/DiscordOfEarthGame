@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using UnityEngine;
 
@@ -183,6 +184,7 @@ public abstract class Character : OutlineInteractableObject
     public event Action<Character> OnAttackAbilityUsed;
     public event Action<Character> OnDefenceAbilityUsed;
     public event Action<Character> OnBuffAbilityUsed;
+    public event Action<Character> OnPositionOnFieldChanged;
 
     public void ResetCharacter()
     {
@@ -317,6 +319,19 @@ public abstract class Character : OutlineInteractableObject
     {
         Health += amount;
         OnHeal?.Invoke(this);
+    }
+
+    public void Move(int moveCost, Transform positionToMove)
+    {
+        Speed -= Convert.ToInt32(moveCost);
+
+        Vector3 cellToMovePos = positionToMove.position;
+        transform.DOMove(new Vector3(cellToMovePos.x, transform.position.y, cellToMovePos.z), 0.5f).OnComplete(() =>
+        {
+            transform.SetParent(positionToMove);
+            transform.localPosition = new Vector3(0, 1, 0);           
+            OnPositionOnFieldChanged?.Invoke(this);
+        });      
     }
 
     public void UseAtackAbility()

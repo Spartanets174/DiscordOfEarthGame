@@ -25,7 +25,7 @@ public abstract class BaseSupportСardAbility: MonoBehaviour
     public event Action<ICharacterSelectable> OnSupportCardAbilityCharacterSelected;
     public event Action<ICardUsable> OnSupportCardAbilityUsed;
 
-    public event Action OnUsingCancel;
+    public event Action<BaseSupportСardAbility> OnUsingCancel;
 
     protected void SetCardSelectBehaviour(ICardSelectable behaviour)
     {
@@ -88,7 +88,7 @@ public abstract class BaseSupportСardAbility: MonoBehaviour
         {
             m_cardSelectBehaviour.CancelSelection();
         }
-        OnUsingCancel?.Invoke();
+        OnUsingCancel?.Invoke(this);
     }
 
     protected virtual void Start()
