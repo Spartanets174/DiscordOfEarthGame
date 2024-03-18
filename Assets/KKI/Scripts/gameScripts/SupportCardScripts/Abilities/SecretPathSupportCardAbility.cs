@@ -1,11 +1,16 @@
+using System;
 using UnityEngine;
 
+[Serializable]
 public class SecretPathSupportCardAbility : BaseSupportÑardAbility
 {
+    [SerializeField]
+    private int cellsCount;
+
     private SetAbiableCellsBehaviour setAbiableCellsBehaviour;
-    protected override void Start()
+    public override void Init(BattleSystem battleSystem)
     {
-        base.Start();
+        this.battleSystem = battleSystem;
         SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Âûáåğèòå ïåğñîíàæà", battleSystem));
         SetSelectCharacterBehaviour(new SetAbiableCellsBehaviour("Âûáåğèòå êëåòêó äëÿ ïåğåìåùåíèÿ", battleSystem));
         SetUseCardBehaviour(new MoveToCellBehaviour(battleSystem));
@@ -46,7 +51,7 @@ public class SecretPathSupportCardAbility : BaseSupportÑardAbility
         {
             item.OnClick -= UseCard;
         }
-        setAbiableCellsBehaviour.cellsToMove = battleSystem.FieldController.GetCellsForMove(@object.GetComponent<Character>(), 3);
+        setAbiableCellsBehaviour.cellsToMove = battleSystem.FieldController.GetCellsForMove(@object.GetComponent<Character>(), cellsCount);
     }
     private void OnSelectCharacter()
     {

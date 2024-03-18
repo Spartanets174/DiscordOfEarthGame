@@ -20,10 +20,18 @@ MonoBehaviour:
   rarity: 2
   Price: 213
   id: 0
+  prefab: {fileID: 0}
   type: 0
   abilityText: 
-  "m_gameSupport\u0421ardAbility":
-    GuidAssignmentFailed: 0
-    GUID: 31b642368cee2cb4dbd4e9d0e610ea4f
-    _typeNameAndAssembly: KnifeSharpeningSecondSupportCardAbility, Assembly-CSharp
-    _suppressLogs: 0
+  "GameSupport\u0421ardAbility":
+    rid: 6947752826724679721
+  references:
+    version: 2
+    RefIds:
+    - rid: 6947752826724679721
+      type: {class: KnifeSharpeningSupportCardAbility, ns: , asm: Assembly-CSharp}
+      data:
+        critChance: 0.35
+        critNum: 0.35
+        m_turnCount: 2
+        m_isBuff: 1

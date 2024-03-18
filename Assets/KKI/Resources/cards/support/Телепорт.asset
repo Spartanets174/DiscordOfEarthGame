@@ -12,17 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f07b7677596d73a42b7bae752aea67b3, type: 3}
   m_Name: "\u0422\u0435\u043B\u0435\u043F\u043E\u0440\u0442"
   m_EditorClassIdentifier: 
-  characterName: 
+  cardName: 
   description: 
   race: 0
   image: {fileID: 21300000, guid: dcf669d51c17c224f8bbcdf70507e267, type: 3}
   rarity: 2
   Price: 675
   id: 0
+  prefab: {fileID: 0}
   type: 2
   abilityText: 
-  "m_gameSupport\u0421ardAbility":
-    GuidAssignmentFailed: 0
-    GUID: ea24112abcbf5514399b5b60bfea2d7e
-    _typeNameAndAssembly: TeleportSupportCardAbility, Assembly-CSharp
-    _suppressLogs: 0
+  "GameSupport\u0421ardAbility":
+    rid: 6947752828746596356
+  references:
+    version: 2
+    RefIds:
+    - rid: 6947752828746596356
+      type: {class: TeleportSupportCardAbility, ns: , asm: Assembly-CSharp}

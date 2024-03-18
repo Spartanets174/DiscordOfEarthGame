@@ -20,10 +20,18 @@ MonoBehaviour:
   rarity: 2
   Price: 123
   id: 0
+  prefab: {fileID: 0}
   type: 1
   abilityText: 
-  "m_gameSupport\u0421ardAbility":
-    GuidAssignmentFailed: 0
-    GUID: 97165c1c3a58d824abe025bfb504db35
-    _typeNameAndAssembly: TangibleBodySecondSupportCardAbility, Assembly-CSharp
-    _suppressLogs: 0
+  "GameSupport\u0421ardAbility":
+    rid: 6947752826724679733
+  references:
+    version: 2
+    RefIds:
+    - rid: 6947752826724679733
+      type: {class: TangibleBodySupportCardAbility, ns: , asm: Assembly-CSharp}
+      data:
+        healAmount: 1
+        physAmount: 2
+        m_turnCount: 2
+        m_isBuff: 1

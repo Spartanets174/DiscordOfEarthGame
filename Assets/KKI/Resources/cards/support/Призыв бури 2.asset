@@ -19,10 +19,16 @@ MonoBehaviour:
   rarity: 2
   Price: 675
   id: 0
+  prefab: {fileID: 0}
   type: 0
   abilityText: 
-  "m_gameSupport\u0421ardAbility":
-    GuidAssignmentFailed: 0
-    GUID: de09522deea9a4b408342401b718ff34
-    _typeNameAndAssembly: StormCallSecondSupportCardAbility, Assembly-CSharp
-    _suppressLogs: 0
+  "GameSupport\u0421ardAbility":
+    rid: 6947752826724679731
+  references:
+    version: 2
+    RefIds:
+    - rid: 6947752826724679731
+      type: {class: StormCallSupportCardAbility, ns: , asm: Assembly-CSharp}
+      data:
+        damage: 0.5
+        area: {x: 7, y: 3}

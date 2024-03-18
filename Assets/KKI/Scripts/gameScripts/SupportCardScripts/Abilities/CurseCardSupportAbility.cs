@@ -4,11 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[Serializable]
 public class CurseCardSupportAbility : BaseSupportÑardAbility, ITurnCountable
 {
+    [SerializeField]
+    private int pointsOfAction;
+
+    [SerializeField]
     private int m_turnCount;
     public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
 
+    [SerializeField]
     private bool m_isBuff;
     public bool IsBuff { get => m_isBuff;}
 
@@ -17,24 +23,17 @@ public class CurseCardSupportAbility : BaseSupportÑardAbility, ITurnCountable
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
-    protected override void Start()
+    public override void Init(BattleSystem battleSystem)
     {
-        
-        base.Start();
-
+        this.battleSystem = battleSystem;
         SetCardSelectBehaviour(new EmptySelectBehaviour("Èñïîëüçóéòå êàðòó"));
-        TurnCount = 1;
-        m_isBuff = false;
+
         m_cardSelectBehaviour.OnSelected += OnSelected;
     }
 
-    private void OnDestroy()
-    {
-        m_cardSelectBehaviour.OnSelected -= OnSelected;
-    }
     private void OnSelected()
     {
-        battleSystem.PointsOfAction += 1;
+        battleSystem.PointsOfAction += pointsOfAction;
 
         if (battleSystem.State is PlayerTurn)
         {

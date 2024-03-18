@@ -1,10 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UniRx;
-using UniRx.Triggers;
 using UnityEngine;
-public abstract class BaseSupportСardAbility: MonoBehaviour
+
+[Serializable]
+public abstract class BaseSupportСardAbility 
 {
     protected BattleSystem battleSystem;
 
@@ -66,10 +64,10 @@ public abstract class BaseSupportСardAbility: MonoBehaviour
 
     public virtual void UseCard(GameObject gameObject)
     {
-        if (m_useCardBehaviour!=null)
+        if (m_useCardBehaviour != null)
         {
             m_useCardBehaviour.UseAbility(gameObject);
-        }       
+        }
         OnSupportCardAbilityUsed?.Invoke(m_useCardBehaviour);
     }
 
@@ -78,7 +76,7 @@ public abstract class BaseSupportСardAbility: MonoBehaviour
         if (m_selectCharacterBehaviour != null)
         {
             m_selectCharacterBehaviour.SelectCharacter(gameObject);
-        }      
+        }
         OnSupportCardAbilityCharacterSelected?.Invoke(m_selectCharacterBehaviour);
     }
 
@@ -91,8 +89,5 @@ public abstract class BaseSupportСardAbility: MonoBehaviour
         OnUsingCancel?.Invoke(this);
     }
 
-    protected virtual void Start()
-    {
-        battleSystem = FindObjectOfType<BattleSystem>();
-    }
+    public abstract void Init(BattleSystem battleSystem);
 }

@@ -19,10 +19,17 @@ MonoBehaviour:
   rarity: 2
   Price: 456
   id: 0
+  prefab: {fileID: 0}
   type: 0
   abilityText: 
-  "m_gameSupport\u0421ardAbility":
-    GuidAssignmentFailed: 0
-    GUID: cb3688d347fe80943ae887d9f4a6687a
-    _typeNameAndAssembly: YouWontCatchSecondSupportCardAbility, Assembly-CSharp
-    _suppressLogs: 0
+  "GameSupport\u0421ardAbility":
+    rid: 6947752828746596357
+  references:
+    version: 2
+    RefIds:
+    - rid: 6947752828746596357
+      type: {class: YouWontCatchSupportCardAbility, ns: , asm: Assembly-CSharp}
+      data:
+        encreacePercent: 0.5
+        m_turnCount: 1
+        m_isBuff: 1

@@ -1,36 +1,35 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class TangibleBodySupportCardAbility : BaseSupport—ardAbility, ITurnCountable
 {
+    [SerializeField]
+    private float healAmount;
+
+    [SerializeField]
+    private float physAmount;
+
+    [SerializeField]
     private int m_turnCount;
     public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
 
+    [SerializeField]
     private bool m_isBuff;
     public bool IsBuff { get => m_isBuff; }
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
     private Character character;
-    protected override void Start()
+    public override void Init(BattleSystem battleSystem)
     {
-        base.Start();
+        this.battleSystem = battleSystem;
         SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("¬˚·ÂËÚÂ ÔÂÒÓÌ‡Ê‡", battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
-
-        m_isBuff = true;
-        TurnCount = 1;
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSelectBehaviour.OnSelected += OnSelected;
         m_selectCharacterBehaviour.OnSelectCharacter += OnSelectCharacter;
-    }
-
-    private void OnDestroy()
-    {
-        m_cardSelectBehaviour.OnCancelSelection -= OnCancelSelection;
-        m_cardSelectBehaviour.OnSelected -= OnSelected;
-        m_selectCharacterBehaviour.OnSelectCharacter -= OnSelectCharacter;
     }
 
     private void OnSelected()
@@ -56,8 +55,8 @@ public class TangibleBodySupportCardAbility : BaseSupport—ardAbility, ITurnCount
         }
 
         character.HealMoreThenMax(1);
-        character.PhysDefence += 1;
-        character.PhysAttack += 1;
+        character.PhysDefence += physAmount;
+        character.PhysAttack += physAmount;
 
         battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {
@@ -76,9 +75,9 @@ public class TangibleBodySupportCardAbility : BaseSupport—ardAbility, ITurnCount
 
     public void ReturnToNormal()
     {
-        character.PhysDefence -= 1;
-        character.PhysAttack -= 1;
-        float finalDamage = character.Damage(1);
+        character.PhysDefence -= physAmount;
+        character.PhysAttack -= physAmount;
+        float finalDamage = character.Damage(healAmount);
         bool isDeath = character.Health == 0;
 
         if (isDeath)

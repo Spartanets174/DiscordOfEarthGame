@@ -1,17 +1,15 @@
-using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 
 public class BattleSystem : StateMachine, ILoadable
 {
+
     [Header("Controllers")]
     [SerializeField]
     private PlayerController m_playerController;
     public PlayerController PlayerController => m_playerController;
-    [SerializeField] 
+    [SerializeField]
     private EnemyController enemyController;
     public EnemyController EnemyController => enemyController;
     [SerializeField]
@@ -21,11 +19,11 @@ public class BattleSystem : StateMachine, ILoadable
     private GameUIPresenter gameUIPresenter;
     public GameUIPresenter GameUIPresenter => gameUIPresenter;
 
-    private List<ITurnCountable> m_playerTurnCountables=new();
-    public List<ITurnCountable> PlayerTurnCountables => m_playerTurnCountables;
+    private Dictionary<ITurnCountable, int> m_playerTurnCountables = new();
+    public Dictionary<ITurnCountable, int> PlayerTurnCountables => m_playerTurnCountables;
 
-    private List<ITurnCountable> m_enemyTurnCountables=new();
-    public List<ITurnCountable> EnemyTurnCountables => m_enemyTurnCountables;
+    private Dictionary<ITurnCountable, int> m_enemyTurnCountables = new();
+    public Dictionary<ITurnCountable, int> EnemyTurnCountables => m_enemyTurnCountables;
 
     private Character currentChosenCharacter;
 
@@ -56,7 +54,7 @@ public class BattleSystem : StateMachine, ILoadable
     public void Init()
     {
         m_instance = this;
-        FieldController.InvokeActionOnField(x=> x.OnClick += TurnOnCells);
+        FieldController.InvokeActionOnField(x => x.OnClick += TurnOnCells);
         PlayerController.OnPlayerCharacterSpawned += OnPlayerCharacterSpawned;
 
         foreach (var item in gameUIPresenter.GameSupportCards)
@@ -153,7 +151,8 @@ public class BattleSystem : StateMachine, ILoadable
             x.OnPositionOnFieldChanged += EnemyController.AttackPlayerCharacterOnMove;
         });
 
-        EnemyController.SetEnemiesState(true, (x) => {
+        EnemyController.SetEnemiesState(true, (x) =>
+        {
             x.OnClick += SetCurrentChosenCharacter;
             x.OnPositionOnFieldChanged += EnemyController.AttackEnemyCharacterOnMove;
         });
@@ -181,7 +180,7 @@ public class BattleSystem : StateMachine, ILoadable
             if (currentChosenCharacter != null)
             {
                 currentChosenCharacter.IsChosen = false;
-            }           
+            }
             currentChosenCharacter = character.GetComponent<Character>();
             currentChosenCharacter.IsChosen = true;
             GameUIPresenter.SetChosenCharDeatils(currentChosenCharacter);

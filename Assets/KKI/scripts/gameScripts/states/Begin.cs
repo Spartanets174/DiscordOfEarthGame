@@ -59,7 +59,7 @@ public class Begin : State
 
     private void SetActiveCells(Cell cell)
     {
-        if (cell.CellIndex.y == BattleSystem.FieldController.CellsOfFieled.GetLength(1) - 1 || cell.CellIndex.y == BattleSystem.FieldController.CellsOfFieled.GetLength(1) - 2)
+        if (cell.transform.childCount <=0 &&( cell.CellIndex.y == BattleSystem.FieldController.CellsOfFieled.GetLength(1) - 1 || cell.CellIndex.y == BattleSystem.FieldController.CellsOfFieled.GetLength(1) - 2))
         {
             cell.SetCellMovable();
         }

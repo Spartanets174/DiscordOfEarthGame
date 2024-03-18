@@ -1,13 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
 
+[Serializable]
 public class AthleticTrainingSupportCardAbility : BaseSupportÑardAbility
 {
-    protected override void Start()
+    [SerializeField]
+    private int pointsOfAction;
+    public override void Init(BattleSystem battleSystem)
     {
-        base.Start();
+       this.battleSystem = battleSystem;
 
         SetCardSelectBehaviour(new EmptySelectBehaviour("Èñïîëüçóéòå êàðòó"));
 
@@ -16,7 +17,7 @@ public class AthleticTrainingSupportCardAbility : BaseSupportÑardAbility
 
     private void OnSelected()
     {
-        battleSystem.PointsOfAction += 3;
+        battleSystem.PointsOfAction += pointsOfAction;
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(null);
     }

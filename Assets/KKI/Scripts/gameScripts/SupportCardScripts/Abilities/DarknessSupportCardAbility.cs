@@ -1,14 +1,19 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
+[Serializable]
 public class DarknessSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 {
+    [SerializeField]
+    private float characterMagAttack;
+    [SerializeField]
+    private float enemyCharacterMagDefence;
+
+    [SerializeField]
     private int m_turnCount;
     public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
 
+    [SerializeField]
     private bool m_isBuff;
     public bool IsBuff { get => m_isBuff; }
 
@@ -17,31 +22,18 @@ public class DarknessSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
     private Character character;
 
     private Character enemyCharacter;
-    protected override void Start()
+    public override void Init(BattleSystem battleSystem)
     {
-        base.Start();
+        this.battleSystem = battleSystem;
         SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Âûáåðèòå ñîþçíîãî ïåðñîíàæà", battleSystem));
         SetSecondCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("Âûáåðèòå âðàæåñêîãî ïåðñîíàæà", battleSystem));
         SetSelectCharacterBehaviour(new SetCurrentEnemyCharacterBehaviour("", battleSystem));
-
-        m_isBuff = true;
-        TurnCount = 1;
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSecondSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSelectBehaviour.OnSelected += OnSelected;
         m_cardSecondSelectBehaviour.OnSelected += OnSecondSelected;
         m_selectCharacterBehaviour.OnSelectCharacter += OnSelectCharacter;
-    }
-
-
-    private void OnDestroy()
-    {
-        m_cardSelectBehaviour.OnCancelSelection -= OnCancelSelection;
-        m_cardSecondSelectBehaviour.OnCancelSelection -= OnCancelSelection;
-        m_cardSelectBehaviour.OnSelected -= OnSelected;
-        m_cardSecondSelectBehaviour.OnSelected -= OnSecondSelected;
-        m_selectCharacterBehaviour.OnSelectCharacter -= OnSelectCharacter;
     }
 
     private void OnSelected()
@@ -52,7 +44,7 @@ public class DarknessSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
             {
                 playerCharacter.OnClick += SelectSecondCharacterInvoke;
             }
-            
+
         }
     }
 
@@ -105,8 +97,8 @@ public class DarknessSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
             enemyCharacter.OnClick -= SelectCharacter;
         }
 
-        character.MagAttack += 1;
-        enemyCharacter.MagDefence -= 1;
+        character.MagAttack += characterMagAttack;
+        enemyCharacter.MagDefence -= enemyCharacterMagDefence;
 
         UseCard(null);
     }
@@ -123,8 +115,8 @@ public class DarknessSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 
     public void ReturnToNormal()
     {
-        character.MagAttack -= 1;
-        enemyCharacter.MagDefence += 1;
+        character.MagAttack -= characterMagAttack;
+        enemyCharacter.MagDefence += enemyCharacterMagDefence;
 
         OnReturnToNormal?.Invoke(this);
     }

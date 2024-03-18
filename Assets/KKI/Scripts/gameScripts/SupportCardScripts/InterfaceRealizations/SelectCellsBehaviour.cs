@@ -27,7 +27,7 @@ public class SelectCellsBehaviour : ICardSelectable
 
     public SelectCellsBehaviour(string text, BattleSystem battleSystem, Vector2 range, string keyCellsColor)
     {
-        m_selectCardTipText = text;
+        m_selectCardTipText = text + ". Для поворота области нажмите \"R\" на клавиатуре";
         this.battleSystem = battleSystem;
         this.range = range;
         m_keyCellsColor = keyCellsColor;

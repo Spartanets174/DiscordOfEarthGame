@@ -19,13 +19,21 @@ MonoBehaviour:
   rarity: 2
   Price: 1431423
   id: 30
+  prefab: {fileID: 0}
   type: 1
   abilityText: "\u041F\u043E\u0432\u044B\u0448\u0430\u0435\u0442 \u043C\u0430\u0433\u0438\u0447\u0435\u0441\u043A\u044E
     \u0430\u0442\u0430\u043A\u0443 \u043D\u0430 2 \u0438 \u0440\u0430\u0437\u0440\u0443\u0448\u0430\u0435\u0442
     \u043C\u0430\u0433\u0438\u0447\u0435\u0441\u043A\u0443\u044E \u0437\u0430\u0449\u0438\u0442\u0443
     \u0432\u0440\u0430\u0433\u0430 \u0434\u043E 1 \u043D\u0430 1 \u0445\u043E\u0434"
-  "m_gameSupport\u0421ardAbility":
-    GuidAssignmentFailed: 0
-    GUID: 5315b1c7abbb9b94eaa1816bf85993fd
-    _typeNameAndAssembly: DarknessSecondSupportCardAbility, Assembly-CSharp
-    _suppressLogs: 0
+  "GameSupport\u0421ardAbility":
+    rid: 6947752826724679713
+  references:
+    version: 2
+    RefIds:
+    - rid: 6947752826724679713
+      type: {class: DarknessSupportCardAbility, ns: , asm: Assembly-CSharp}
+      data:
+        characterMagAttack: 2
+        enemyCharacterMagDefence: 1
+        m_turnCount: 1
+        m_isBuff: 1

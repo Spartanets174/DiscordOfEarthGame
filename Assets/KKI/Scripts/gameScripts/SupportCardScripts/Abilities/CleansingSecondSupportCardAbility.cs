@@ -1,12 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class CleansingSecondSupportCardAbility : BaseSupportÑardAbility
 {
-    protected override void Start()
+    public override void Init(BattleSystem battleSystem)
     {
-        base.Start();
+        this.battleSystem = battleSystem;
 
         SetCardSelectBehaviour(new EmptySelectBehaviour("Èñïîëüçóéòå êàğòó"));
 

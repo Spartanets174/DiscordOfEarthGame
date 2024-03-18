@@ -19,12 +19,18 @@ MonoBehaviour:
   rarity: 1
   Price: 234
   id: 12
+  prefab: {fileID: 0}
   type: 2
   abilityText: "\u0414\u0430\u0435\u0442 1 \u0445\u043F, \u043F\u043E\u0432\u044B\u0448\u0430\u0435\u0442
     \u0444\u0438\u0437\u0438\u0447\u0435\u0441\u043A\u0438\u0435 \u0445\u0430\u0440\u0430\u043A\u0442\u0435\u0440\u0438\u0441\u0442\u0438\u043A\u0438
     \u043D\u0430 1 \u043D\u0430 1 \u0445\u043E\u0434"
-  "m_gameSupport\u0421ardAbility":
-    GuidAssignmentFailed: 0
-    GUID: 74388928bc355e44c97b1c7f941dc462
-    _typeNameAndAssembly: StormCallSupportCardAbility, Assembly-CSharp
-    _suppressLogs: 0
+  "GameSupport\u0421ardAbility":
+    rid: 6947752826724679732
+  references:
+    version: 2
+    RefIds:
+    - rid: 6947752826724679732
+      type: {class: StormCallSupportCardAbility, ns: , asm: Assembly-CSharp}
+      data:
+        damage: 0.5
+        area: {x: 3, y: 3}

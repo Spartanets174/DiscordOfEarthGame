@@ -19,11 +19,17 @@ MonoBehaviour:
   rarity: 2
   Price: 132
   id: 32
+  prefab: {fileID: 0}
   type: 1
   abilityText: "\u0411\u044C\u0435\u0442 \u0432\u0441\u0435\u0445 \u0432 \u043E\u0431\u043B\u0430\u0441\u0442\u044C
     2\u04452 \u0438 \u043D\u0430\u043D\u043E\u0441\u0438\u0442 1 \u0445\u043F"
-  "m_gameSupport\u0421ardAbility":
-    GuidAssignmentFailed: 0
-    GUID: 55a03da7ee9b12f45b5082bd21c871cf
-    _typeNameAndAssembly: LightningStrikeSecondSupportCardAbility, Assembly-CSharp
-    _suppressLogs: 0
+  "GameSupport\u0421ardAbility":
+    rid: 6947752826724679723
+  references:
+    version: 2
+    RefIds:
+    - rid: 6947752826724679723
+      type: {class: LightningStrikeSupportCardAbility, ns: , asm: Assembly-CSharp}
+      data:
+        damage: 1
+        area: {x: 2, y: 2}

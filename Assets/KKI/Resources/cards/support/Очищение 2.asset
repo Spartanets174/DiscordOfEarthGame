@@ -19,12 +19,15 @@ MonoBehaviour:
   rarity: 2
   Price: 345
   id: 15
+  prefab: {fileID: 0}
   type: 2
   abilityText: "\u0421\u043D\u0438\u043C\u0430\u0435\u0442 \u0432\u0441\u0435 \u043D\u0435\u0433\u0430\u0442\u0438\u0432\u043D\u044B\u0435
     \u044D\u0444\u0444\u0435\u043A\u0442\u044B \u0441\u043E \u0432\u0441\u0435\u0445
     \u0441\u043E\u044E\u0437\u043D\u044B\u0445 \u0433\u0435\u0440\u043E\u0435\u0432"
-  "m_gameSupport\u0421ardAbility":
-    GuidAssignmentFailed: 0
-    GUID: 4711cdf1c61ba104c9807e79a1ee407c
-    _typeNameAndAssembly: CleansingSecondSupportCardAbility, Assembly-CSharp
-    _suppressLogs: 0
+  "GameSupport\u0421ardAbility":
+    rid: 6947752828746596353
+  references:
+    version: 2
+    RefIds:
+    - rid: 6947752828746596353
+      type: {class: CleansingSecondSupportCardAbility, ns: , asm: Assembly-CSharp}

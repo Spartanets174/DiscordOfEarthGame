@@ -1,11 +1,13 @@
+using System;
 using UnityEngine;
 
+[Serializable]
 public class TeleportSupportCardAbility : BaseSupportСardAbility
 {
     private SetAbiableCellsBehaviour setAbiableCellsBehaviour;
-    protected override void Start()
+    public override void Init(BattleSystem battleSystem)
     {
-        base.Start();
+        this.battleSystem = battleSystem;
         SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Выберите персонажа", battleSystem));
         SetSelectCharacterBehaviour(new SetAbiableCellsBehaviour("Выберите клетку для перемещения", battleSystem));
         SetUseCardBehaviour(new MoveToCellBehaviour(battleSystem));

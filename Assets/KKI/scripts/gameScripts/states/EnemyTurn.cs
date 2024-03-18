@@ -33,18 +33,23 @@ public class EnemyTurn : State
 
     private void CheckEnemyTurnCountables()
     {
+        List<ITurnCountable> enemyTurnCountables = new List<ITurnCountable>();
         foreach (var enemyTurnCountable in BattleSystem.EnemyTurnCountables)
         {
-            if (enemyTurnCountable.TurnCount == 0)
+            enemyTurnCountables.Add(enemyTurnCountable.Key);
+        }
+        foreach (var key in enemyTurnCountables)
+        {
+            if (BattleSystem.EnemyTurnCountables[key] == 0)
             {
-                enemyTurnCountable.ReturnToNormal();
-                BattleSystem.EnemyTurnCountables.Remove(enemyTurnCountable);
+                key.ReturnToNormal();
+                BattleSystem.EnemyTurnCountables.Remove(key);
                 CheckEnemyTurnCountables();
                 break;
             }
             else
             {
-                enemyTurnCountable.TurnCount--;
+                BattleSystem.EnemyTurnCountables[key]--;
             }
         }
     }
@@ -151,12 +156,12 @@ public class EnemyTurn : State
         {
             if (turnCountable.IsBuff)
             {
-                BattleSystem.EnemyTurnCountables.Add(turnCountable);
-                turnCountable.TurnCount--;
+                BattleSystem.EnemyTurnCountables.Add(turnCountable, turnCountable.TurnCount);
+                BattleSystem.EnemyTurnCountables[turnCountable]--;
             }
             else
             {               
-                BattleSystem.PlayerTurnCountables.Add(turnCountable);
+                BattleSystem.PlayerTurnCountables.Add(turnCountable, turnCountable.TurnCount);
             }
         }
 

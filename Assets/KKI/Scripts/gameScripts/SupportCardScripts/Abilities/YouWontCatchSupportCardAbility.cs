@@ -1,13 +1,17 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class YouWontCatchSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 {
+    [SerializeField]
+    private float encreacePercent;
+
+    [SerializeField]
     private int m_turnCount;
     public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
 
+    [SerializeField]
     private bool m_isBuff;
     public bool IsBuff { get => m_isBuff; }
 
@@ -16,26 +20,19 @@ public class YouWontCatchSupportCardAbility : BaseSupportÑardAbility, ITurnCount
     private Character character;
     private float physAmount;
     private float magAmount;
-    protected override void Start()
+    public override void Init(BattleSystem battleSystem)
     {
-        base.Start();
+        this.battleSystem = battleSystem;
+
         SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Âûáåðèòå ïåðñîíàæà", battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
-        m_isBuff = true;
-        TurnCount = 1;
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSelectBehaviour.OnSelected += OnSelected;
         m_selectCharacterBehaviour.OnSelectCharacter += OnSelectCharacter;
     }
 
-    private void OnDestroy()
-    {
-        m_cardSelectBehaviour.OnCancelSelection -= OnCancelSelection;
-        m_cardSelectBehaviour.OnSelected -= OnSelected;
-        m_selectCharacterBehaviour.OnSelectCharacter -= OnSelectCharacter;
-    }
 
     private void OnSelected()
     {
@@ -59,8 +56,8 @@ public class YouWontCatchSupportCardAbility : BaseSupportÑardAbility, ITurnCount
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
 
-        physAmount = (float)(character.Card.physAttack * 0.3);
-        magAmount = (float)(character.Card.magAttack * 0.3);
+        physAmount = (float)(character.Card.physAttack * encreacePercent);
+        magAmount = (float)(character.Card.magAttack * encreacePercent);
 
 
         character.MagAttack += magAmount;

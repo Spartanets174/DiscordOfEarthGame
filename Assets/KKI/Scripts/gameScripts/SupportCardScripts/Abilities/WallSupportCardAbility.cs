@@ -1,9 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[Serializable]
 public class WallSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 {
     public event Action<ITurnCountable> OnReturnToNormal;
@@ -20,9 +20,9 @@ public class WallSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
     private GameObject wall;
 
     private List<GameObject> kostilGameObjects = new();
-    protected override void Start()
+    public override void Init(BattleSystem battleSystem)
     {
-        base.Start();
+        this.battleSystem = battleSystem;
 
         TurnCount = 2;
         m_isBuff = true;
@@ -50,7 +50,7 @@ public class WallSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 
         if (selectCellsBehaviour.highlightedCells.Where(x => x.transform.childCount > 0).ToList().Count == 0 && selectCellsBehaviour.highlightedCells.Count == 3)
         {
-            spawnObjectBehaviour.rotation = selectCellsBehaviour.range.x > selectCellsBehaviour.range.y ? Vector3.zero : new Vector3(0,90,0);
+            spawnObjectBehaviour.rotation = selectCellsBehaviour.range.x > selectCellsBehaviour.range.y ? Vector3.zero : new Vector3(0, 90, 0);
             UseCard(selectCellsBehaviour.clickedCell.gameObject);
         }
         else
@@ -84,10 +84,10 @@ public class WallSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
     {
         foreach (var kostilGameObject in kostilGameObjects)
         {
-            Destroy(kostilGameObject);
+            GameObject.Destroy(kostilGameObject);
         }
         kostilGameObjects.Clear();
 
-        Destroy(wall);
+        GameObject.Destroy(wall);
     }
 }

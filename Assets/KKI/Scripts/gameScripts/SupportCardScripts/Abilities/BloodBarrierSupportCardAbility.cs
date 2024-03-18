@@ -1,38 +1,29 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class BloodBarrierSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 {
+    [SerializeField]
     private int m_turnCount;
     public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
 
+    [SerializeField]
     private bool m_isBuff;
     public bool IsBuff { get => m_isBuff; }
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
     private Character character;
-    protected override void Start()
+    public override void Init(BattleSystem battleSystem)
     {
-        base.Start();
+        this.battleSystem = battleSystem;
         SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Âûáåðèòå ïåðñîíàæà", battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
-
-        m_isBuff = true;
-        TurnCount = 1;
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSelectBehaviour.OnSelected += OnSelected;
         m_selectCharacterBehaviour.OnSelectCharacter += OnSelectCharacter;
-    }
-
-    private void OnDestroy()
-    {
-        m_cardSelectBehaviour.OnCancelSelection -= OnCancelSelection;
-        m_cardSelectBehaviour.OnSelected -= OnSelected;
-        m_selectCharacterBehaviour.OnSelectCharacter -= OnSelectCharacter;
     }
 
     private void OnSelected()

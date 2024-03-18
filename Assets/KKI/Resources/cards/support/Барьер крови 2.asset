@@ -20,13 +20,19 @@ MonoBehaviour:
   rarity: 2
   Price: 465
   id: 36
+  prefab: {fileID: 0}
   type: 2
   abilityText: "\u0421\u043E\u0437\u0434\u0430\u0435\u0442 \u0431\u0430\u0440\u044C\u0435\u0440,
     \u043A\u043E\u0442\u043E\u0440\u044B\u0439 \u0432\u043F\u0438\u0442\u044B\u0432\u0430\u0435\u0442
     \u0432\u0435\u0441\u044C \u0443\u0440\u043E\u043D \u043D\u0430 \u043F\u0440\u043E\u0442\u044F\u0436\u0435\u043D\u0438\u0438
     2 \u0445\u043E\u0434\u043E\u0432"
-  "m_gameSupport\u0421ardAbility":
-    GuidAssignmentFailed: 0
-    GUID: 2bdb3ac7669a593458257482b6853d9f
-    _typeNameAndAssembly: BloodBarrierSecondSupportCardAbility, Assembly-CSharp
-    _suppressLogs: 0
+  "GameSupport\u0421ardAbility":
+    rid: 6947752826724679703
+  references:
+    version: 2
+    RefIds:
+    - rid: 6947752826724679703
+      type: {class: BloodBarrierSupportCardAbility, ns: , asm: Assembly-CSharp}
+      data:
+        m_turnCount: 2
+        m_isBuff: 1

@@ -1,45 +1,40 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
+[Serializable]
 public class FutureTechnologiesSupportCardAbility : BaseSupport—ardAbility, ITurnCountable
 {
+    [SerializeField]
+    private int defenceAmount;
+
+    [SerializeField]
     private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set 
+    public int TurnCount
+    {
+        get => m_turnCount; set
         {
             m_turnCount = value;
-        } }
+        }
+    }
 
+    [SerializeField]
     private bool m_isBuff;
     public bool IsBuff { get => m_isBuff; }
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
     private Character character;
-    protected override void Start()
+    public override void Init(BattleSystem battleSystem)
     {
-        base.Start();
+        this.battleSystem = battleSystem;
         SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("¬˚·ÂËÚÂ ÔÂÒÓÌ‡Ê‡", battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
-
-        TurnCount = 2;
-        m_isBuff = true;
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSelectBehaviour.OnSelected += OnSelected;
         m_selectCharacterBehaviour.OnSelectCharacter += OnSelectCharacter;
     }
 
-
-    private void OnDestroy()
-    {
-        m_cardSelectBehaviour.OnCancelSelection -= OnCancelSelection;
-        m_cardSelectBehaviour.OnSelected -= OnSelected;
-        m_selectCharacterBehaviour.OnSelectCharacter -= OnSelectCharacter;
-    }
     private void OnSelected()
     {
         if (battleSystem.State is PlayerTurn)
@@ -61,8 +56,8 @@ public class FutureTechnologiesSupportCardAbility : BaseSupport—ardAbility, ITur
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
 
-        character.MagDefence += 1;
-        character.PhysDefence += 1;
+        character.MagDefence += defenceAmount;
+        character.PhysDefence += defenceAmount;
 
 
         battleSystem.PlayerController.SetPlayerChosenState(false, x =>
@@ -82,8 +77,8 @@ public class FutureTechnologiesSupportCardAbility : BaseSupport—ardAbility, ITur
 
     public void ReturnToNormal()
     {
-        character.MagDefence -= 1;
-        character.PhysDefence -= 1;
+        character.MagDefence -= defenceAmount;
+        character.PhysDefence -= defenceAmount;
 
         OnReturnToNormal?.Invoke(this);
     }

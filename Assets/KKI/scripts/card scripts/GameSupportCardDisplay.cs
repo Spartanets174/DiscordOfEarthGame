@@ -42,7 +42,7 @@ public class GameSupportCardDisplay : OutlineClicableUI
         m_dragAndDropComponent.OnEndDragEvent -= OnEndDrag;
     }
 
-    public void SetData(CardSupport cardSupport)
+    public void SetData(CardSupport cardSupport, BattleSystem battleSystem)
     {
         m_currentCardSupport = cardSupport;
         supportImage.sprite = cardSupport.image;
@@ -61,13 +61,8 @@ public class GameSupportCardDisplay : OutlineClicableUI
 
         if (cardSupport.GameSupportÑardAbility != null)
         {
-
-            if (cardSupport.GameSupportÑardAbility.Type != null)
-            {
-                gameObject.AddComponent(cardSupport.GameSupportÑardAbility.Type);
-                m_gameSupportÑardAbility = (BaseSupportÑardAbility)gameObject.GetComponent(cardSupport.GameSupportÑardAbility.Type);
-            }
-
+            m_gameSupportÑardAbility = cardSupport.GameSupportÑardAbility;
+            m_gameSupportÑardAbility.Init(battleSystem);
         }
 
     }

@@ -18,11 +18,13 @@ public class CardSupportAbilitiesController : MonoBehaviour, ILoadable
     [SerializeField]
     private GameSupportCardDisplay gameSupportCardPrefab;
 
+    [SerializeField]
+    private BattleSystem battleSystem;
 
     private List<GameSupportCardDisplay> m_gameSupportCards = new();
     public List<GameSupportCardDisplay> GameSupportCards => m_gameSupportCards;
 
-
+    
     public void Init()
     {
         foreach (var SupportCard in playerController.PlayerDataController.DeckUserSupportCards)
@@ -31,7 +33,7 @@ public class CardSupportAbilitiesController : MonoBehaviour, ILoadable
             cardDisplay.transform.localPosition = Vector3.zero;
 
 
-            cardDisplay.SetData(SupportCard);
+            cardDisplay.SetData(SupportCard, battleSystem);
             cardDisplay.DragAndDropComponent.StartPos = cardDisplay.transform.localPosition;
 
             StartCoroutine(SetPosDelayed(cardDisplay.DragAndDropComponent));

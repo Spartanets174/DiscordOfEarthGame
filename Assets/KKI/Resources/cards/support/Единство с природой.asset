@@ -19,10 +19,18 @@ MonoBehaviour:
   rarity: 1
   Price: 132
   id: 1
+  prefab: {fileID: 0}
   type: 1
   abilityText: 
-  "m_gameSupport\u0421ardAbility":
-    GuidAssignmentFailed: 0
-    GUID: d306d6bfcd89f0b4aab304ab8db54096
-    _typeNameAndAssembly: UnityWithNatureSupportCardAbility, Assembly-CSharp
-    _suppressLogs: 0
+  "GameSupport\u0421ardAbility":
+    rid: 6947752826724679736
+  references:
+    version: 2
+    RefIds:
+    - rid: 6947752826724679736
+      type: {class: UnityWithNatureSupportCardAbility, ns: , asm: Assembly-CSharp}
+      data:
+        physDefence: 1
+        healAmount: 1
+        m_turnCount: 1
+        m_isBuff: 1

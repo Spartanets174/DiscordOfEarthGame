@@ -21,10 +21,15 @@ MonoBehaviour:
   rarity: 1
   Price: 543
   id: 35
+  prefab: {fileID: 0}
   type: 3
   abilityText: "\u0414\u0430\u0435\u0442 +3 \u041E\u0414"
-  "m_gameSupport\u0421ardAbility":
-    GuidAssignmentFailed: 0
-    GUID: 
-    _typeNameAndAssembly: AthleticTrainingSupportCardAbility, Assembly-CSharp
-    _suppressLogs: 0
+  "GameSupport\u0421ardAbility":
+    rid: 6947752826724679701
+  references:
+    version: 2
+    RefIds:
+    - rid: 6947752826724679701
+      type: {class: AthleticTrainingSupportCardAbility, ns: , asm: Assembly-CSharp}
+      data:
+        pointsOfAction: 3

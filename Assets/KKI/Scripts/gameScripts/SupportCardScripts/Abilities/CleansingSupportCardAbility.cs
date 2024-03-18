@@ -1,13 +1,11 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
+[Serializable]
 public class CleansingSupportCardAbility : BaseSupportÑardAbility
 {
-    protected override void Start()
+    public override void Init(BattleSystem battleSystem)
     {
-        base.Start();
+        this.battleSystem = battleSystem;
         SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Âûáåğèòå ïåğñîíàæà äëÿ î÷èùåíèÿ", battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
@@ -24,7 +22,7 @@ public class CleansingSupportCardAbility : BaseSupportÑardAbility
                 playerCharacter.OnClick += SelectCharacter;
             }
         }
-       
+
     }
     private void OnSelectCharacter()
     {

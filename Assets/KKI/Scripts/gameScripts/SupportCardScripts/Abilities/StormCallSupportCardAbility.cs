@@ -1,19 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using UniRx;
 using UnityEngine;
 
+[Serializable]
 public class StormCallSupportCardAbility : BaseSupportÑardAbility
 {
+    [SerializeField]
+    private float damage;
+
+    [SerializeField]
+    private Vector2 area;
+
     private SelectCellsBehaviour selectCellsBehaviour;
     private AttackAllCharactersInAreaBehaviour attackAllCharactersInAreaBehaviour;
-    protected override void Start()
+    public override void Init(BattleSystem battleSystem)
     {
-        base.Start();
-        SetCardSelectBehaviour(new SelectCellsBehaviour("Âûáåðèòå îáëàñòü äëÿ íàíåñåíèÿ óäàðà", battleSystem,new Vector2(3,3), "attack"));
+        this.battleSystem = battleSystem;
+        SetCardSelectBehaviour(new SelectCellsBehaviour("Âûáåðèòå îáëàñòü äëÿ íàíåñåíèÿ óäàðà", battleSystem, area, "attack"));
 
-        SetUseCardBehaviour(new AttackAllCharactersInAreaBehaviour(0.5f,battleSystem, "\"Ïðèçûâ áóðè\""));
+        SetUseCardBehaviour(new AttackAllCharactersInAreaBehaviour(damage, battleSystem, "\"Ïðèçûâ áóðè\""));
 
         selectCellsBehaviour = (SelectCellsBehaviour)CardSelectBehaviour;
         attackAllCharactersInAreaBehaviour = (AttackAllCharactersInAreaBehaviour)UseCardBehaviour;
@@ -31,14 +37,14 @@ public class StormCallSupportCardAbility : BaseSupportÑardAbility
         battleSystem.FieldController.InvokeActionOnField(selectCellsBehaviour.UnSubscribe);
         attackAllCharactersInAreaBehaviour.cellsToAttack = selectCellsBehaviour.highlightedCells.Where(x => x.GetComponentInChildren<Character>() != null).ToList();
 
-        if (attackAllCharactersInAreaBehaviour.cellsToAttack.Count==0)
+        if (attackAllCharactersInAreaBehaviour.cellsToAttack.Count == 0)
         {
             SelectCard();
         }
         else
         {
             UseCard(null);
-        }    
+        }
     }
 
 

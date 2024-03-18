@@ -1,12 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
+[Serializable]
 public class ForestFriendsCardSupportAbility : BaseSupportÑardAbility
 {
-    protected override void Start()
+    [SerializeField]
+    private int transitionCost;
+    public override void Init(BattleSystem battleSystem)
     {
-        base.Start();
+        this.battleSystem = battleSystem;
 
         SetCardSelectBehaviour(new EmptySelectBehaviour("Èñïîëüçóéòå êàðòó"));
 
@@ -17,23 +19,25 @@ public class ForestFriendsCardSupportAbility : BaseSupportÑardAbility
     {
         if (battleSystem.State is PlayerTurn)
         {
-            battleSystem.FieldController.InvokeActionOnField((x) => {
+            battleSystem.FieldController.InvokeActionOnField((x) =>
+            {
                 if (x.IsSwamp)
                 {
-                    x.TransitionCostEnemy++;
-                }               
+                    x.TransitionCostEnemy += transitionCost;
+                }
             });
         }
         else
         {
-            battleSystem.FieldController.InvokeActionOnField((x) => {
+            battleSystem.FieldController.InvokeActionOnField((x) =>
+            {
                 if (x.IsSwamp)
                 {
-                    x.TransitionCostPlayer++;
+                    x.TransitionCostPlayer += transitionCost;
                 }
             });
         }
-        
+
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(null);
     }

@@ -1,30 +1,30 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
+[Serializable]
 public class MaterialBladesSupportCardAbility : BaseSupportСardAbility, ITurnCountable
-{
-    public event Action<ITurnCountable> OnReturnToNormal;
+{ 
+    [SerializeField]
+    private float damage;
 
+    [SerializeField]
     private int m_turnCount;
     public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
 
+    [SerializeField]
     private bool m_isBuff;
     public bool IsBuff { get => m_isBuff; }
 
     private Character character;
-    protected override void Start()
+
+    public event Action<ITurnCountable> OnReturnToNormal;
+
+    public override void Init(BattleSystem battleSystem)
     {
-        base.Start();
+        this.battleSystem = battleSystem;
         SetCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("Выберите вражеского персонажа для атаки", battleSystem));
         SetSelectCharacterBehaviour(new SetCurrentEnemyCharacterBehaviour("Выберите второго вражеского персонажа для атаки", battleSystem));
-        SetUseCardBehaviour(new AttackSelectedСharactersBehaviour(1f, battleSystem, "\"Материальные клинки\""));
-
-        TurnCount = 1;
-        m_isBuff = false;
+        SetUseCardBehaviour(new AttackSelectedСharactersBehaviour(damage, battleSystem, "\"Материальные клинки\""));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -53,7 +53,7 @@ public class MaterialBladesSupportCardAbility : BaseSupportСardAbility, ITurnCou
         }
         else
         {
-            character = battleSystem.PlayerController.CurrentPlayerCharacter;           
+            character = battleSystem.PlayerController.CurrentPlayerCharacter;
         }
 
         character.IsFreezed = true;

@@ -19,10 +19,17 @@ MonoBehaviour:
   rarity: 2
   Price: 543
   id: 0
+  prefab: {fileID: 0}
   type: 2
   abilityText: 
-  "m_gameSupport\u0421ardAbility":
-    GuidAssignmentFailed: 0
-    GUID: 5b26b12164c0b194eb0ea0f30d8896fa
-    _typeNameAndAssembly: CurseSecondCardSupportAbility, Assembly-CSharp
-    _suppressLogs: 0
+  "GameSupport\u0421ardAbility":
+    rid: 6947752826724679709
+  references:
+    version: 2
+    RefIds:
+    - rid: 6947752826724679709
+      type: {class: CurseCardSupportAbility, ns: , asm: Assembly-CSharp}
+      data:
+        pointsOfAction: 3
+        m_turnCount: 1
+        m_isBuff: 0

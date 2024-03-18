@@ -1,9 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[Serializable]
 public class WallSecondSupportCardAbility : BaseSupport—ardAbility
 {
     private SelectCellsBehaviour selectCellsBehaviour;
@@ -12,10 +12,9 @@ public class WallSecondSupportCardAbility : BaseSupport—ardAbility
     private WallEnemyCharacter wallEnemyCharacter;
 
     private List<GameObject> kostilGameObjects = new();
-    protected override void Start()
+    public override void Init(BattleSystem battleSystem)
     {
-        base.Start();
-
+        this.battleSystem = battleSystem;
         SetCardSelectBehaviour(new SelectCellsBehaviour("¬˚·ÂËÚÂ Ó·Î‡ÒÚ¸ ‰Îˇ ‡ÁÏÂ˘ÂÌËˇ", battleSystem, new Vector2(3, 1), "allowed"));
         SetUseCardBehaviour(new SpawnObjectBehaviour(battleSystem));
 
@@ -34,12 +33,12 @@ public class WallSecondSupportCardAbility : BaseSupport—ardAbility
             item.OnClick -= selectCellsBehaviour.OnSelectedInvoke;
         }
         battleSystem.FieldController.InvokeActionOnField(selectCellsBehaviour.UnSubscribe);
-        
+
         spawnObjectBehaviour.prefab = battleSystem.GameUIPresenter.CurrentGameSupportCardDisplay.Value.CurrentCardSupport.prefab;
 
 
 
-        if (selectCellsBehaviour.highlightedCells.Where(x=>x.transform.childCount>0).ToList().Count==0&& selectCellsBehaviour.highlightedCells.Count==3)
+        if (selectCellsBehaviour.highlightedCells.Where(x => x.transform.childCount > 0).ToList().Count == 0 && selectCellsBehaviour.highlightedCells.Count == 3)
         {
             spawnObjectBehaviour.rotation = selectCellsBehaviour.range.x > selectCellsBehaviour.range.y ? Vector3.zero : new Vector3(0, 90, 0);
             UseCard(selectCellsBehaviour.clickedCell.gameObject);
@@ -54,7 +53,7 @@ public class WallSecondSupportCardAbility : BaseSupport—ardAbility
     {
         foreach (var kostilGameObject in kostilGameObjects)
         {
-            Destroy(kostilGameObject);
+            GameObject.Destroy(kostilGameObject);
         }
         kostilGameObjects.Clear();
     }

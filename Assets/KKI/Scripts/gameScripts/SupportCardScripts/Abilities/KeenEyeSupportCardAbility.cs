@@ -1,15 +1,19 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
+[Serializable]
 public class KeenEyeSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 {
+    [SerializeField]
+    private float critChance;
+
+    [SerializeField]
     private int m_turnCount;
     public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
 
+    [SerializeField]
     private bool m_isBuff;
     public bool IsBuff { get => m_isBuff; }
 
@@ -18,19 +22,13 @@ public class KeenEyeSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
-    protected override void Start()
+    public override void Init(BattleSystem battleSystem)
     {
-
-        base.Start();
+        this.battleSystem = battleSystem;
 
         SetCardSelectBehaviour(new EmptySelectBehaviour("Èñïîëüçóéòå êàğòó"));
-        TurnCount = 1;
-        m_isBuff = true;
+
         m_cardSelectBehaviour.OnSelected += OnSelected;
-    }
-    private void OnDestroy()
-    {
-        m_cardSelectBehaviour.OnSelected -= OnSelected;
     }
 
     private void OnSelected()
@@ -40,7 +38,7 @@ public class KeenEyeSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
             playerCharacters = battleSystem.PlayerController.PlayerCharactersObjects.Where(x => x.Class == enums.Classes.Ëó÷íèê).ToList();
             foreach (var playerCharacter in playerCharacters)
             {
-                playerCharacter.CritChance = 0.6f;
+                playerCharacter.CritChance = critChance;
             }
         }
         else
@@ -48,7 +46,7 @@ public class KeenEyeSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
             enemyCharacters = battleSystem.EnemyController.EnemyCharObjects.Where(x => x.Class == enums.Classes.Ëó÷íèê).ToList();
             foreach (var enemyCharacter in enemyCharacters)
             {
-                enemyCharacter.CritChance = 0.6f;
+                enemyCharacter.CritChance = critChance;
             }
         }
 
