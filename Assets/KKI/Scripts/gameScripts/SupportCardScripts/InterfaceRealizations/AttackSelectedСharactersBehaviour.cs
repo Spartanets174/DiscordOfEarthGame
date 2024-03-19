@@ -23,36 +23,20 @@ public class AttackSelectedСharactersBehaviour : ICardUsable
             character = kostilEnemy.WallEnemyCharacter;
         }
 
-        float finalDamage = character.Damage(damage);
-        if (finalDamage > 0)
-        {
-            battleSystem.GameUIPresenter.AddMessageToGameLog($"{character.CharacterName} получил урон в количестве {finalDamage * 100:00.00} от {abilityName}");
-        }
-        else
-        {
-            battleSystem.GameUIPresenter.AddMessageToGameLog($"{character.CharacterName} избежал получения урона от {abilityName}");
-        }       
-        bool isDeath = character.Health == 0;
+        bool isDeath = character.Damage(damage, abilityName);
 
         if (isDeath)
         {
             string characterType = "";
-            if (character is StaticEnemyCharacter staticEnemyCharacter)
+            if (character is PlayerCharacter)
             {
-                battleSystem.EnemyController.StaticEnemyCharObjects.Remove(staticEnemyCharacter);
-                characterType = "Юнит";
+                characterType = "Союзный";
             }
-            if (character is PlayerCharacter playerCharacter)
+            if (character is EnemyCharacter)
             {
-                battleSystem.PlayerController.PlayerCharactersObjects.Remove(playerCharacter);
-                characterType = "Союзный юнит";
+                characterType = "Вражеский";
             }
-            if (character is EnemyCharacter enemyCharacter)
-            {
-                battleSystem.EnemyController.EnemyCharObjects.Remove(enemyCharacter);
-                characterType = "вражеский юнит";
-            }
-            battleSystem.GameUIPresenter.AddMessageToGameLog($"{characterType} {character.CharacterName} убит");
+            battleSystem.gameLogCurrentText.Value = $"{characterType} персонаж {character.CharacterName} погибает от эффекта карты \"{abilityName}\"";
             GameObject.Destroy(character.gameObject);
         }
 

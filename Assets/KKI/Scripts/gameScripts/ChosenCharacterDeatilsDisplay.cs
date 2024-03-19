@@ -43,6 +43,8 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour
 
     public void SetData(Character character)
     {
+        if (character == null) return;
+
         characterNameText.text = character.CharacterName;
         healthBar.SetMaxHealth(character.Card.health);
         healthBar.SetHealth(character.Health);

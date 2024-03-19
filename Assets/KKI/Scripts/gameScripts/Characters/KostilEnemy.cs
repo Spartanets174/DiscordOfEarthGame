@@ -10,7 +10,7 @@ public class KostilEnemy : StaticEnemyCharacter
         IsEnabled = true;
         CanBeDamaged = true;
     }
-    public override float Damage(Character chosenCharacter)
+    public override bool Damage(Character chosenCharacter)
     {
         return WallEnemyCharacter.Damage(chosenCharacter);
     }

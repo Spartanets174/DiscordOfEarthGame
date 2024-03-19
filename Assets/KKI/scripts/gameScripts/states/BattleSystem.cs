@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 
@@ -15,9 +17,9 @@ public class BattleSystem : StateMachine, ILoadable
     [SerializeField]
     private FieldController m_fieldController;
     public FieldController FieldController => m_fieldController;
-    [SerializeField]
-    private GameUIPresenter gameUIPresenter;
-    public GameUIPresenter GameUIPresenter => gameUIPresenter;
+   /* [SerializeField]
+    private GameUICoordinator gameUIPresenter;
+    public GameUICoordinator GameUIPresenter => gameUIPresenter;*/
 
     private Dictionary<ITurnCountable, int> m_playerTurnCountables = new();
     public Dictionary<ITurnCountable, int> PlayerTurnCountables => m_playerTurnCountables;
@@ -25,19 +27,18 @@ public class BattleSystem : StateMachine, ILoadable
     private Dictionary<ITurnCountable, int> m_enemyTurnCountables = new();
     public Dictionary<ITurnCountable, int> EnemyTurnCountables => m_enemyTurnCountables;
 
-    private Character currentChosenCharacter;
+    public ReactiveProperty<Character> CurrentChosenCharacter = new ReactiveProperty<Character>();
 
-    private float m_pointsOfAction;
-    public float PointsOfAction
-    {
-        get => m_pointsOfAction;
-        set
-        {
-            m_pointsOfAction = value;
-            gameUIPresenter.SetPointsOfActionAnd—ube(m_pointsOfAction);
-        }
-    }
+    public ReactiveProperty<int> PointsOfAction = new ReactiveProperty<int>();
 
+    public ReactiveProperty<string> gameLogCurrentText = new ReactiveProperty<string>();
+
+    public event Action<Begin> OnGameStarted;
+    public event Action OnGameEnded;
+    public event Action<PlayerTurn> OnPlayerTurnStarted;
+    public event Action<EnemyTurn> OnEnemyTurnStarted;
+
+    private CompositeDisposable disposables = new();
     private static BattleSystem m_instance;
     public static BattleSystem Instance
     {
@@ -54,22 +55,38 @@ public class BattleSystem : StateMachine, ILoadable
     public void Init()
     {
         m_instance = this;
-        FieldController.InvokeActionOnField(x => x.OnClick += TurnOnCells);
-        PlayerController.OnPlayerCharacterSpawned += OnPlayerCharacterSpawned;
-
-        foreach (var item in gameUIPresenter.GameSupportCards)
+        FieldController.InvokeActionOnField(x => x.OnClick += x=> FieldController.TurnOnCells());
+        PlayerController.PlayerCharactersObjects.ObserveCountChanged().Subscribe(x =>
         {
-            item.DragAndDropComponent.OnDropEvent += OnSupportCardButton;
-            item.DragAndDropComponent.OnDropEvent += TurnOnCells;
-        }
+            if (x == 5)
+            {
+                StartGame();
+            }
+            if (x == 0)
+            {
+                SetLost();
+            }
+        }).AddTo(disposables);
 
-        SetState(new Begin(this));
+        EnemyController.EnemyCharObjects.ObserveCountChanged().Subscribe(x =>
+        {
+            if (x==0)
+            {
+                SetWin();
+            }
+        }).AddTo(disposables);
+
+        Begin begin = new(this);
+        SetState(begin);
+        OnGameStarted?.Invoke(begin);
     }
 
-    public void OnUnitStatementButton(GameObject character)
+    private void OnDestroy()
     {
-        StartCoroutine(State.UnitStatement(character));
+        disposables.Dispose();
+        disposables.Clear();
     }
+
     public void OnChooseCharacterButton(GameObject character)
     {
         StartCoroutine(State.ChooseCharacter(character));
@@ -110,37 +127,30 @@ public class BattleSystem : StateMachine, ILoadable
     public void SetPlayerTurn()
     {
         EnemyController.StopTree();
-        SetState(new PlayerTurn(this));
+        PlayerTurn playerTurn = new(this);
+        OnPlayerTurnStarted?.Invoke(playerTurn);
+        SetState(playerTurn);
     }
     [ContextMenu("SetEnemyTurn")]
     public void SetEnemyTurn()
     {
-        SetState(new EnemyTurn(this));
+        EnemyTurn enemyTurn = new(this);
+        OnEnemyTurnStarted?.Invoke(enemyTurn);
+        SetState(enemyTurn);
     }
     public void SetWin()
     {
         EnemyController.StopTree();
         PlayerController.ClearDisposables();
         SetState(new Won(this));
+        OnGameEnded?.Invoke();
     }
     public void SetLost()
     {
         EnemyController.StopTree();
         PlayerController.ClearDisposables();
         SetState(new Lost(this));
-    }
-    private void TurnOnCells(GameObject gameObject)
-    {
-        FieldController.TurnOnCells();
-    }
-    private void OnPlayerCharacterSpawned()
-    {
-        GameUIPresenter.SetChosenStateToCards(false);
-        GameUIPresenter.EbableUnspawnedCards();
-        if (PlayerController.PlayerCharactersObjects.Count == 5)
-        {
-            StartGame();
-        }
+        OnGameEnded?.Invoke();
     }
 
     private void StartGame()
@@ -160,8 +170,7 @@ public class BattleSystem : StateMachine, ILoadable
 
         int cubeValue = UnityEngine.Random.Range(1, 6);
 
-        GameUIPresenter.SetPointsOfActionAnd—ube(cubeValue);
-        GameUIPresenter.AddMessageToGameLog($"Õ‡ ÍÛ·ËˆÂ ‚˚Ô‡ÎÓ {cubeValue}");
+        gameLogCurrentText.Value = $"Õ‡ ÍÛ·ËˆÂ ‚˚Ô‡ÎÓ {cubeValue}";
 
         if (cubeValue % 2 == 0)
         {
@@ -177,13 +186,12 @@ public class BattleSystem : StateMachine, ILoadable
     {
         if (character != null)
         {
-            if (currentChosenCharacter != null)
+            if (CurrentChosenCharacter.Value != null)
             {
-                currentChosenCharacter.IsChosen = false;
+                CurrentChosenCharacter.Value.IsChosen = false;
             }
-            currentChosenCharacter = character.GetComponent<Character>();
-            currentChosenCharacter.IsChosen = true;
-            GameUIPresenter.SetChosenCharDeatils(currentChosenCharacter);
+            CurrentChosenCharacter.Value = character.GetComponent<Character>();
+            CurrentChosenCharacter.Value.IsChosen = true;
         }
         else
         {

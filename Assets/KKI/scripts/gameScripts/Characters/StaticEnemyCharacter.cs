@@ -77,60 +77,7 @@ public class StaticEnemyCharacter : Enemy
 
     private void AttackCharacter(Character currentTarget)
     {
-        float finalDamage = currentTarget.Damage(this);
-        bool isDeath = currentTarget.Health == 0;
-        if (finalDamage > 0)
-        {
-            BattleSystem.Instance.GameUIPresenter.AddMessageToGameLog($"{this.CharacterName} наносит  юниту {currentTarget.CharacterName} {finalDamage * 100:00.00} урона");
-        }
-        else
-        {
-            BattleSystem.Instance.GameUIPresenter.AddMessageToGameLog($"{currentTarget.CharacterName} избежал получения урона от {this.CharacterName}");
-        }
-        if (BattleSystem.Instance.State is PlayerTurn)
-        {
-            if (currentTarget is PlayerCharacter playerCharacter)
-            {
-                CheckPlayerDeath(playerCharacter, isDeath);
-            }
-            
-        }
-        else
-        {
-            if (currentTarget is EnemyCharacter enemyCharacter)
-            {
-                CheckEnemyDeath(enemyCharacter, isDeath);
-            }         
-        }
+        currentTarget.Damage(this);
     }
 
-    private void CheckPlayerDeath(PlayerCharacter currentTarget, bool isDeath)
-    {     
-        if (isDeath)
-        {
-            BattleSystem.Instance.PlayerController.PlayerCharactersObjects.Remove(currentTarget);
-            BattleSystem.Instance.GameUIPresenter.AddMessageToGameLog($"Союзный юнит {currentTarget.CharacterName} убит");
-            GameObject.Destroy(currentTarget.gameObject);
-        }
-
-        if (BattleSystem.Instance.PlayerController.PlayerCharactersObjects.Count == 0)
-        {
-            BattleSystem.Instance.SetLost();
-        }
-    }
-
-    public void CheckEnemyDeath(EnemyCharacter currentTarget, bool isDeath)
-    {
-        if (isDeath)
-        {
-            BattleSystem.Instance.EnemyController.EnemyCharObjects.Remove(currentTarget);
-            GameObject.Destroy(currentTarget.gameObject);
-            BattleSystem.Instance.GameUIPresenter.AddMessageToGameLog($"Вражеский юнит {currentTarget.name} убит");
-        }
-
-        if (BattleSystem.Instance.EnemyController.EnemyCharObjects.Count == 0)
-        {
-            BattleSystem.Instance.SetWin();
-        }
-    }
 }

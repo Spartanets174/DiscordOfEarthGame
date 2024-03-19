@@ -7,7 +7,7 @@ public class UnityWithNatureSupportCardAbility : BaseSupportСardAbility, ITurnCo
     [SerializeField]
     private float physDefence;
 
-    [SerializeField] 
+    [SerializeField]
     private int healAmount;
 
     [SerializeField]
@@ -75,27 +75,20 @@ public class UnityWithNatureSupportCardAbility : BaseSupportСardAbility, ITurnCo
     public void ReturnToNormal()
     {
         character.PhysDefence -= physDefence;
-        float finalDamage = character.Damage(healAmount);
-        bool isDeath = character.Health == 0;
+        bool isDeath = character.Damage(healAmount, "Единство с природой 2");
 
         if (isDeath)
         {
             string characterType = "";
-            if (character is StaticEnemyCharacter staticEnemyCharacter)
+            if (character is PlayerCharacter)
             {
-                battleSystem.EnemyController.StaticEnemyCharObjects.Remove(staticEnemyCharacter);
-            }
-            if (character is PlayerCharacter playerCharacter)
-            {
-                battleSystem.PlayerController.PlayerCharactersObjects.Remove(playerCharacter);
                 characterType = "союзный";
             }
-            if (character is EnemyCharacter enemyCharacter)
+            if (character is EnemyCharacter)
             {
-                battleSystem.EnemyController.EnemyCharObjects.Remove(enemyCharacter);
                 characterType = "вражеский";
             }
-            battleSystem.GameUIPresenter.AddMessageToGameLog($"Эффект дополнительного здоровья от карты \"Единство с природой 2\" заканчивается, {characterType} персонаж {character.CharacterName} погибает");
+            battleSystem.gameLogCurrentText.Value = $"Эффект дополнительного здоровья от карты \"Единство с природой 2\" заканчивается, {characterType} персонаж {character.CharacterName} погибает";
             GameObject.Destroy(character.gameObject);
         }
         OnReturnToNormal?.Invoke(this);

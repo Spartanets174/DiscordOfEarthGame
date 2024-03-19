@@ -10,6 +10,8 @@ using UnityEngine;
 [Serializable]
 public class PlayerTurn : State
 {
+    public event Action OnPlayerReseted;
+
     private List<Cell> cellsToMove = new();
     private List<Enemy> enemiesToAttack = new();
     private CompositeDisposable disposables = new();
@@ -22,21 +24,19 @@ public class PlayerTurn : State
     {
         /*Логика при выборе старте*/
         new WaitForSecondsRealtime(1f);
-
-        BattleSystem.GameUIPresenter.OnPlayerTurnStart();
-        
-        BattleSystem.PointsOfAction = 20;
+     
+        BattleSystem.PointsOfAction.Value = 20;
 
         CheckPlayerTurnCountables();
 
         BattleSystem.PlayerController.ResetAllPlayerCharacters();
         BattleSystem.EnemyController.AttackAllPlayersStaticCharacters();
 
-        OnStepStarted += OnPlayerTurnStarted;
-        OnStepCompleted += OnPlayerTurnCompleted;
+        OnStateStarted += OnPlayerTurnStarted;
+        OnStateCompleted += OnPlayerTurnCompleted;
 
      
-        OnStepStartedInvoke();
+        OnStateStartedInvoke();
         yield break;
     }
 
@@ -86,23 +86,23 @@ public class PlayerTurn : State
             item.OnClick -= BattleSystem.OnAttackButton;
         }
 
-        if (moveCost > BattleSystem.PointsOfAction )
+        if (moveCost > BattleSystem.PointsOfAction.Value )
         {
-            BattleSystem.GameUIPresenter.AddMessageToGameLog("Недостаточно очков действий");
+            BattleSystem.gameLogCurrentText.Value = "Недостаточно очков действий";
             yield break;
         }
 
         if (moveCost > playerCharacter.Speed)
         {
-            BattleSystem.GameUIPresenter.AddMessageToGameLog("Недостаточно скорости у персонажа");
+            BattleSystem.gameLogCurrentText.Value = "Недостаточно скорости у персонажа";
             yield break;
-        }
+        }   
 
-        BattleSystem.PointsOfAction -= moveCost;
+        BattleSystem.PointsOfAction.Value -= moveCost;
 
         playerCharacter.Move(moveCost, cell.transform);
 
-        if (BattleSystem.PointsOfAction == 0)
+        if (BattleSystem.PointsOfAction.Value == 0)
         {
             BattleSystem.SetEnemyTurn();
         }
@@ -110,65 +110,41 @@ public class PlayerTurn : State
     }
     public override IEnumerator Attack(GameObject target)
     {
-        if (2 <= BattleSystem.PointsOfAction)
+        if (BattleSystem.PointsOfAction.Value < 2)
         {
-            PlayerCharacter playerCharacter = BattleSystem.PlayerController.CurrentPlayerCharacter;
-            Enemy currentTarget = target.GetComponent<Enemy>();
-
-            playerCharacter.IsAttackedOnTheMove = true;
-
-            float finalDamage = currentTarget.Damage(playerCharacter);
-            bool isDeath = currentTarget.Health == 0;
-            if (finalDamage > 0)
-            {
-                BattleSystem.GameUIPresenter.AddMessageToGameLog($"{playerCharacter.CharacterName} наносит  юниту {currentTarget.CharacterName} {finalDamage * 100:00.00} урона");
-            }
-            else
-            {
-                BattleSystem.GameUIPresenter.AddMessageToGameLog($"{currentTarget.CharacterName} избежал получения урона от {playerCharacter.CharacterName}");
-            }
-
-            if (isDeath)
-            {
-                if (currentTarget is StaticEnemyCharacter)
-                {
-                    BattleSystem.EnemyController.StaticEnemyCharObjects.Remove((StaticEnemyCharacter)currentTarget);
-                }
-                else
-                {
-                    BattleSystem.EnemyController.EnemyCharObjects.Remove((EnemyCharacter)currentTarget);
-                }
-
-                BattleSystem.GameUIPresenter.AddMessageToGameLog($"Вражеский юнит {currentTarget.CharacterName} убит");
-                GameObject.Destroy(currentTarget.gameObject);             
-            }
-
-            foreach (var item in cellsToMove)
-            {
-                item.OnClick -= BattleSystem.OnMoveButton;
-            }
-            foreach (var item in enemiesToAttack)
-            {
-                item.OnClick -= BattleSystem.OnAttackButton;
-            }
-
-            if (BattleSystem.EnemyController.EnemyCharObjects.Count == 0)
-            {
-                BattleSystem.SetWin();
-            }
-
-            BattleSystem.PointsOfAction -= 2;
-            if (BattleSystem.PointsOfAction == 0)
-            {
-                BattleSystem.SetEnemyTurn();
-            }
-            BattleSystem.FieldController.TurnOnCells();
+            BattleSystem.gameLogCurrentText.Value = "Недостаточно очков действий";
+            yield break;
         }
-        else
+
+        PlayerCharacter playerCharacter = BattleSystem.PlayerController.CurrentPlayerCharacter;
+        Enemy currentTarget = target.GetComponent<Enemy>();
+
+        playerCharacter.IsAttackedOnTheMove = true;
+
+        currentTarget.Damage(playerCharacter);
+
+
+        foreach (var item in cellsToMove)
         {
-            BattleSystem.GameUIPresenter.AddMessageToGameLog("Недостаточно очков действий");
+            item.OnClick -= BattleSystem.OnMoveButton;
         }
-       
+        foreach (var item in enemiesToAttack)
+        {
+            item.OnClick -= BattleSystem.OnAttackButton;
+        }
+
+        if (BattleSystem.EnemyController.EnemyCharObjects.Count == 0)
+        {
+            BattleSystem.SetWin();
+        }
+
+        BattleSystem.PointsOfAction.Value -= 2;
+        if (BattleSystem.PointsOfAction.Value == 0)
+        {
+            BattleSystem.SetEnemyTurn();
+        }
+        BattleSystem.FieldController.TurnOnCells();
+
         yield break;
     }
     public override IEnumerator UseSupportCard(GameObject gameObject)
@@ -226,37 +202,19 @@ public class PlayerTurn : State
     public void OnPlayerTurnStarted()
     {
         SetStateToNormal();
-        foreach (var gameSupportCArdDisplay in BattleSystem.GameUIPresenter.GameSupportCards)
-        {
-            gameSupportCArdDisplay.GameSupportСardAbility.OnUsingCancel += OnUsingCancel;
-            gameSupportCArdDisplay.GameSupportСardAbility.OnSupportCardAbilityUsed += OnSupportCardAbilityUsed;
-            gameSupportCArdDisplay.GameSupportСardAbility.OnSupportCardAbilityCharacterSelected += OnSupportCardAbilityCharacterSelected;
-        }
-
 
         BattleSystem.FieldController.TurnOnCells();
     }
 
-    public void OnPlayerTurnCompleted()
+    public void OnPlayerTurnCompleted(State state)
     {
         ResetPlayer();
-        foreach (var gameSupportCArdDisplay in BattleSystem.GameUIPresenter.GameSupportCards)
-        {
-            gameSupportCArdDisplay.GameSupportСardAbility.OnUsingCancel -= OnUsingCancel;
-            gameSupportCArdDisplay.GameSupportСardAbility.OnSupportCardAbilityUsed -= OnSupportCardAbilityUsed;
-            gameSupportCArdDisplay.GameSupportСardAbility.OnSupportCardAbilityCharacterSelected -= OnSupportCardAbilityCharacterSelected;
-        }
-
         BattleSystem.FieldController.TurnOnCells();
     }
 
 
     private void ResetPlayer()
     {
-        foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
-        {
-            SupportCard.DragAndDropComponent.OnDropEvent -= OnDropEvent;
-        }
         BattleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {
             x.OnClick -= BattleSystem.OnChooseCharacterButton;
@@ -272,71 +230,28 @@ public class PlayerTurn : State
         }
         cellsToMove.Clear();
         enemiesToAttack.Clear();
+        OnPlayerReseted?.Invoke();
     }
 
-
-    private void OnSupportCardAbilityUsed(ICardUsable usable)
-    {
-        SetStateToNormal();
-        BattleSystem.FieldController.TurnOnCells();
-        ClearDisposables();
-    }
-    private void ClearDisposables()
+    public void ClearDisposables()
     {
         disposables.Dispose();
         disposables.Clear();
         disposables = new();
     }
-    private void SetStateToNormal()
+    public void SetStateToNormal()
     {
-        Subscribe();
+        foreach (var playerCharacter in BattleSystem.PlayerController.PlayerCharactersObjects)
+        {
+            playerCharacter.OnClick += BattleSystem.OnChooseCharacterButton;
+        }
 
         BattleSystem.PlayerController.SetPlayerChosenState(false);
         BattleSystem.PlayerController.SetPlayerState(true);
         BattleSystem.EnemyController.SetEnemiesChosenState(false);
         BattleSystem.EnemyController.SetEnemiesState(true);
     }
-    private void Subscribe()
-    {
-        foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
-        {
-            SupportCard.DragAndDropComponent.OnDropEvent += OnDropEvent;           
-        }
-        foreach (var playerCharacter in BattleSystem.PlayerController.PlayerCharactersObjects)
-        {
-            playerCharacter.OnClick += BattleSystem.OnChooseCharacterButton;
-        }
 
-    }
-    private void OnDropEvent(GameObject gameObject)
-    {
-        foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
-        {
-            SupportCard.IsEnabled = false;
-        }
-    }
-    private void OnUsingCancel(BaseSupportСardAbility ability)
-    {
-        SetStateToNormal();
-        BattleSystem.FieldController.TurnOnCells();
-        ClearDisposables();
-       
-        foreach (var SupportCard in BattleSystem.GameUIPresenter.GameSupportCards)
-        {
-            SupportCard.IsEnabled = true;
-        }
-        if (ability is ITurnCountable turnCountable)
-        {
-            if (turnCountable.IsBuff)
-            {
-                BattleSystem.PlayerTurnCountables.Remove(turnCountable);
-            }
-            else
-            {
-                BattleSystem.EnemyTurnCountables.Remove(turnCountable);
-            }
-        }
-    }
     private void CheckPlayerTurnCountables()
     {       
         List<ITurnCountable> playerTurnCountables = new List<ITurnCountable>();
@@ -358,11 +273,6 @@ public class PlayerTurn : State
                 BattleSystem.PlayerTurnCountables[key]--;
             }
         }
-    }
-
-    private void OnSupportCardAbilityCharacterSelected(ICharacterSelectable selectable)
-    {
-        ClearDisposables();
     }
 
     private void SetEnemiesForAttack(Character character)

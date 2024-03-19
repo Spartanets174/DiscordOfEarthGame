@@ -131,8 +131,6 @@ public class FieldController : MonoBehaviour, ILoadable
                 error += dx;
             }
         }
-
-        Debug.Log(moveCost);
         return moveCost;
     }   
 

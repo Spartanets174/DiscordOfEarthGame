@@ -77,27 +77,20 @@ public class TangibleBodySupportCardAbility : BaseSupportСardAbility, ITurnCount
     {
         character.PhysDefence -= physAmount;
         character.PhysAttack -= physAmount;
-        float finalDamage = character.Damage(healAmount);
-        bool isDeath = character.Health == 0;
+        bool isDeath = character.Damage(healAmount, "Осязаемое тело");
 
         if (isDeath)
         {
             string characterType = "";
-            if (character is StaticEnemyCharacter staticEnemyCharacter)
+            if (character is PlayerCharacter)
             {
-                battleSystem.EnemyController.StaticEnemyCharObjects.Remove(staticEnemyCharacter);
-            }
-            if (character is PlayerCharacter playerCharacter)
-            {
-                battleSystem.PlayerController.PlayerCharactersObjects.Remove(playerCharacter);
                 characterType = "союзный";
             }
-            if (character is EnemyCharacter enemyCharacter)
+            else
             {
-                battleSystem.EnemyController.EnemyCharObjects.Remove(enemyCharacter);
                 characterType = "вражеский";
             }
-            battleSystem.GameUIPresenter.AddMessageToGameLog($"Эффект дополнительного здоровья от карты \"Осязаемое тело\" заканчивается, {characterType} персонаж {character.CharacterName} погибает");
+            battleSystem.gameLogCurrentText.Value = $"Эффект дополнительного здоровья от карты \"Осязаемое тело\" заканчивается, {characterType} персонаж {character.CharacterName} погибает";
             GameObject.Destroy(character.gameObject);
         }
         OnReturnToNormal?.Invoke(this);

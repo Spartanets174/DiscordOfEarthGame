@@ -12,5 +12,4 @@ public abstract class Card : ScriptableObject
     public enums.Rarity rarity;
     public int Price;
     public int id;
-    public GameObject prefab;
 }

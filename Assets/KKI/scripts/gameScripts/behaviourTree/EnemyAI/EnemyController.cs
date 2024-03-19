@@ -2,6 +2,7 @@ using BehaviourTree;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UniRx;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 using Tree = BehaviourTree.Tree;
@@ -40,11 +41,11 @@ public class EnemyController : Tree
     [SerializeField]
     private Material elementalMaterial;
 
-    private List<EnemyCharacter> m_enemyCharObjects = new();
-    public List<EnemyCharacter> EnemyCharObjects => m_enemyCharObjects;
+    private ReactiveCollection<EnemyCharacter> m_enemyCharObjects = new();
+    public ReactiveCollection<EnemyCharacter> EnemyCharObjects => m_enemyCharObjects;
 
-    private List<StaticEnemyCharacter> m_staticEnemyCharObjects = new();
-    public List<StaticEnemyCharacter> StaticEnemyCharObjects => m_staticEnemyCharObjects;
+    private ReactiveCollection<StaticEnemyCharacter> m_staticEnemyCharObjects = new();
+    public ReactiveCollection<StaticEnemyCharacter> StaticEnemyCharObjects => m_staticEnemyCharObjects;
 
     private List<CharacterCard> m_enemyCharCards=new();
     public List<CharacterCard> EnemyCharCards => m_enemyCharCards;
@@ -134,9 +135,12 @@ public class EnemyController : Tree
             {
                 EnemyCharacter enemyCharacter = Instantiate(enemyPrefab, Vector3.zero, Quaternion.identity, Cell.transform);
                 enemyCharacter.transform.localPosition = new Vector3(0, 1, 0);
-                m_enemyCharObjects.Add(enemyCharacter);
+                enemyCharacter.OnDeath += OnEnemyCharacterDeath;
 
                 enemyCharacter.SetData(m_enemyCharCards[count], redMaterial, count);
+
+                m_enemyCharObjects.Add(enemyCharacter);
+               
                 count++;
             }
             count2++;
@@ -162,15 +166,28 @@ public class EnemyController : Tree
     {
         StaticEnemyCharacter staticEnemyCharacter = Instantiate(staticEnemyPrefab, Vector3.zero, Quaternion.identity, cell.transform);
         staticEnemyCharacter.transform.localPosition = new Vector3(0, 1, 0);
-        m_staticEnemyCharObjects.Add(staticEnemyCharacter);
 
-        staticEnemyCharacter.SetData(characterCard, material, m_staticEnemyCharObjects.Count-1);
+        staticEnemyCharacter.SetData(characterCard, material, m_staticEnemyCharObjects.Count - 1);
+        staticEnemyCharacter.OnDeath += OnStaticEnemyCharacterDeath;
 
         SetAttackableCells(enums.Directions.top, staticEnemyCharacter);
         SetAttackableCells(enums.Directions.bottom, staticEnemyCharacter);
         SetAttackableCells(enums.Directions.right, staticEnemyCharacter);
         SetAttackableCells(enums.Directions.left, staticEnemyCharacter);
+
+        m_staticEnemyCharObjects.Add(staticEnemyCharacter);
     }
+    private void OnEnemyCharacterDeath(Character character)
+    {
+        EnemyCharObjects.Remove((EnemyCharacter)character);
+        Destroy(character.gameObject);
+    }
+    private void OnStaticEnemyCharacterDeath(Character character)
+    {
+        StaticEnemyCharObjects.Remove((StaticEnemyCharacter)character);
+        Destroy(character.gameObject);
+    }
+
     private void SetAttackableCells(enums.Directions direction, StaticEnemyCharacter staticEnemyCharacter )
     {
         int newI = (int)staticEnemyCharacter.PositionOnField.x;
@@ -276,9 +293,6 @@ public class EnemyController : Tree
 
     public void AttackEnemyCharacterOnMove(Character character)
     {
-        /*StaticEnemyCharacter staticEnemyCharacter = m_staticEnemyCharObjects.OrderBy(go => (character.transform.position - go.transform.position).sqrMagnitude).First();
-        staticEnemyCharacter.AttackEnemyCharacter((EnemyCharacter)character);*/
-
         foreach (var staticEnemy in m_staticEnemyCharObjects)
         {
             staticEnemy.AttackEnemyCharacter((EnemyCharacter)character);
@@ -287,8 +301,6 @@ public class EnemyController : Tree
 
     public void AttackPlayerCharacterOnMove(Character character)
     {
-       /* StaticEnemyCharacter staticEnemyCharacter = m_staticEnemyCharObjects.OrderBy(go => (character.transform.position - go.transform.position).sqrMagnitude).First();
-        staticEnemyCharacter.AttackPlayerCharacter((PlayerCharacter)character);*/
 
         foreach (var staticEnemy in m_staticEnemyCharObjects)
         {

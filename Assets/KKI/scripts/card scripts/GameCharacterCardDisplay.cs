@@ -65,7 +65,7 @@ public class GameCharacterCardDisplay : OutlineClicableUI
         character.OnAttackAbilityUsed += OnAttackAbilityUsed;
         character.OnDefenceAbilityUsed += OnDefenceAbilityUsed;
         character.OnBuffAbilityUsed += OnBuffAbilityUsed;
-        character.OnDamaged += SetHealth;
+        character.OnDamaged += (x,y,z)=> SetHealth(x);
         character.OnHeal += SetHealth;
         character.OnDeath += OnDeath;
     }

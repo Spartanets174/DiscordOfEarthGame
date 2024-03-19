@@ -42,7 +42,7 @@ public class CheckCellsForMove : Node
             currentCell = possibleCells[Random.Range(0, possibleCells.Count)];
             Vector2 pos = enemyCharacter.PositionOnField;
             float numOfCells = Mathf.Abs((pos.x + pos.y) - (currentCell.CellIndex.x + currentCell.CellIndex.y));
-            if (numOfCells<=m_battleSystem.PointsOfAction)
+            if (numOfCells<=m_battleSystem.PointsOfAction.Value)
             {
                 isCellValid = true;
             }

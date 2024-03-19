@@ -6,6 +6,9 @@ using UnityEngine;
 [Serializable]
 public class WallSupportCardAbility : BaseSupport—ardAbility, ITurnCountable
 {
+    [SerializeField]
+    private GameObject prefab;
+
     public event Action<ITurnCountable> OnReturnToNormal;
 
     private int m_turnCount;
@@ -28,7 +31,7 @@ public class WallSupportCardAbility : BaseSupport—ardAbility, ITurnCountable
         m_isBuff = true;
 
         SetCardSelectBehaviour(new SelectCellsBehaviour("¬˚·ÂËÚÂ Ó·Î‡ÒÚ¸ ‰Îˇ ‡ÁÏÂ˘ÂÌËˇ", battleSystem, new Vector2(3, 1), "allowed"));
-        SetUseCardBehaviour(new SpawnObjectBehaviour(battleSystem));
+        SetUseCardBehaviour(new SpawnObjectBehaviour(prefab));
 
         selectCellsBehaviour = (SelectCellsBehaviour)CardSelectBehaviour;
         spawnObjectBehaviour = (SpawnObjectBehaviour)UseCardBehaviour;
@@ -45,8 +48,6 @@ public class WallSupportCardAbility : BaseSupport—ardAbility, ITurnCountable
             item.OnClick -= selectCellsBehaviour.OnSelectedInvoke;
         }
         battleSystem.FieldController.InvokeActionOnField(selectCellsBehaviour.UnSubscribe);
-
-        spawnObjectBehaviour.prefab = battleSystem.GameUIPresenter.CurrentGameSupportCardDisplay.Value.CurrentCardSupport.prefab;
 
         if (selectCellsBehaviour.highlightedCells.Where(x => x.transform.childCount > 0).ToList().Count == 0 && selectCellsBehaviour.highlightedCells.Count == 3)
         {

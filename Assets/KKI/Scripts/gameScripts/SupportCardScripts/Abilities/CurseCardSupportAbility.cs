@@ -33,7 +33,7 @@ public class CurseCardSupportAbility : BaseSupport—ardAbility, ITurnCountable
 
     private void OnSelected()
     {
-        battleSystem.PointsOfAction += pointsOfAction;
+        battleSystem.PointsOfAction.Value += pointsOfAction;
 
         if (battleSystem.State is PlayerTurn)
         {

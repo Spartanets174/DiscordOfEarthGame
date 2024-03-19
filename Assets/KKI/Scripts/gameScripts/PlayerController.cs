@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
@@ -16,13 +15,15 @@ public class PlayerController : MonoBehaviour, ILoadable
     private PlayerCharacter charPrefab;
     public PlayerCharacter CharPrefab => charPrefab;
 
-    private List<PlayerCharacter> m_playerCharactersObjects = new();
-    public List<PlayerCharacter> PlayerCharactersObjects => m_playerCharactersObjects;
+    private ReactiveCollection<PlayerCharacter> m_playerCharactersObjects = new();
+    public ReactiveCollection<PlayerCharacter> PlayerCharactersObjects => m_playerCharactersObjects;
 
     private PlayerCharacter currentPlayerCharacter;
     public PlayerCharacter CurrentPlayerCharacter => currentPlayerCharacter;
 
     public event Action OnPlayerCharacterSpawned;
+
+    public PlayerTurn PlayerTurn { get; set; }
 
     private CompositeDisposable disposables = new CompositeDisposable();
 
@@ -39,7 +40,7 @@ public class PlayerController : MonoBehaviour, ILoadable
                 }
             }
         }).AddTo(disposables);
-     
+
     }
 
     private void OnDestroy()
@@ -54,14 +55,21 @@ public class PlayerController : MonoBehaviour, ILoadable
     {
         PlayerCharacter prefab = Instantiate(CharPrefab, Vector3.zero, Quaternion.identity, parent);
         prefab.transform.localPosition = new Vector3(0, 1, 0);
-        m_playerCharactersObjects.Add(prefab);
-
-        prefab.SetData(characterCard, null, m_playerCharactersObjects.Count - 1);
+        
+        prefab.SetData(characterCard, null, m_playerCharactersObjects.Count);
         prefab.OnClick += SetCurrentPlayerChosenCharacter;
+        prefab.OnDeath += OnCharacterDeath;
+
+        m_playerCharactersObjects.Add(prefab);
         OnPlayerCharacterSpawned?.Invoke();
         return prefab;
     }
 
+    private void OnCharacterDeath(Character character)
+    {
+        PlayerCharactersObjects.Remove((PlayerCharacter)character);
+        Destroy(character.gameObject);
+    }
 
     public void SetCurrentPlayerChosenCharacter(GameObject character)
     {

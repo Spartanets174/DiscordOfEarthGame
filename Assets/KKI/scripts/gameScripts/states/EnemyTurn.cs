@@ -16,9 +16,8 @@ public class EnemyTurn : State
     {
         new WaitForSecondsRealtime(1f);
 
-        BattleSystem.GameUIPresenter.OnEnemyTurnStart();
         BattleSystem.FieldController.TurnOnCells();
-        BattleSystem.PointsOfAction = 20;
+        BattleSystem.PointsOfAction.Value = 20;
 
         CheckEnemyTurnCountables();
 
@@ -70,7 +69,7 @@ public class EnemyTurn : State
         Cell currentCell = enemyCharacter.GetComponentInParent<Cell>();
         int moveCost = BattleSystem.FieldController.GetMoveCost(currentCell, cellToMove,BattleSystem.State);
 
-        if (moveCost > BattleSystem.PointsOfAction)
+        if (moveCost > BattleSystem.PointsOfAction.Value)
         {
             Debug.Log("Недостаточно очков действий");
             new WaitForSecondsRealtime(1f);
@@ -84,10 +83,10 @@ public class EnemyTurn : State
             yield break;
         }
 
-        BattleSystem.PointsOfAction -= moveCost;
+        BattleSystem.PointsOfAction.Value -= moveCost;
         enemyCharacter.Move(moveCost, cellToMove.transform);
 
-        if (BattleSystem.PointsOfAction == 0)
+        if (BattleSystem.PointsOfAction.Value == 0)
         {
             BattleSystem.SetPlayerTurn();
         }
@@ -98,46 +97,22 @@ public class EnemyTurn : State
     public override IEnumerator Attack(GameObject target)
     {
         /*Логика при атаке*/
-        if (2 <= BattleSystem.PointsOfAction)
+        if (2 <= BattleSystem.PointsOfAction.Value)
         {
             EnemyCharacter enemyCharacter = BattleSystem.EnemyController.CurrentEnemyCharacter;
             Character currentTarget = target.GetComponent<Character>();
 
             enemyCharacter.IsAttackedOnTheMove = true;
 
-            float finalDamage = currentTarget.Damage(enemyCharacter);
-            bool isDeath = currentTarget.Health == 0;
-            if (finalDamage > 0)
-            {
-                BattleSystem.GameUIPresenter.AddMessageToGameLog($"{enemyCharacter.CharacterName} наносит  юниту {currentTarget.CharacterName} {finalDamage * 100:00.00} урона");
-            }
-            else
-            {
-                BattleSystem.GameUIPresenter.AddMessageToGameLog($"{currentTarget.CharacterName} избежал получения урона от {enemyCharacter.CharacterName}");
-            }
-
-            if (isDeath)
-            {
-                if (currentTarget is StaticEnemyCharacter)
-                {
-                    BattleSystem.EnemyController.StaticEnemyCharObjects.Remove((StaticEnemyCharacter)currentTarget);
-                    BattleSystem.GameUIPresenter.AddMessageToGameLog($"Юнит {currentTarget.CharacterName} убит");
-                }
-                else
-                {
-                    BattleSystem.PlayerController.PlayerCharactersObjects.Remove((PlayerCharacter)currentTarget);
-                    BattleSystem.GameUIPresenter.AddMessageToGameLog($"Союзный юнит {currentTarget.CharacterName} убит");
-                }
-                GameObject.Destroy(currentTarget.gameObject);               
-            }
+             currentTarget.Damage(enemyCharacter);
 
             if (BattleSystem.PlayerController.PlayerCharactersObjects.Count == 0)
             {
                 BattleSystem.SetLost();
             }
 
-            BattleSystem.PointsOfAction -= 2;
-            if (BattleSystem.PointsOfAction == 0)
+            BattleSystem.PointsOfAction.Value -= 2;
+            if (BattleSystem.PointsOfAction.Value == 0)
             {
                 BattleSystem.SetPlayerTurn();
             }

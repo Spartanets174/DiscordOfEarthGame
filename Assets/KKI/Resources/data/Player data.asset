@@ -139,6 +139,11 @@ MonoBehaviour:
   deckUserSupportCards:
   - {fileID: 11400000, guid: 8f5cbf164e1efd545bbc328802f0b632, type: 2}
   - {fileID: 11400000, guid: df0aedd72128a1544ae2cc75ab6768fb, type: 2}
+  - {fileID: 11400000, guid: 4356bed165dbfaa448f3e1fb04adada3, type: 2}
+  - {fileID: 11400000, guid: db21915f334f3154280ff419b29fd575, type: 2}
+  - {fileID: 11400000, guid: 1ee5f89ca1b8b0c44a78b4c0d1dad92f, type: 2}
+  - {fileID: 11400000, guid: 8b4677ba62c957e44a32c1eaf62909f1, type: 2}
+  - {fileID: 11400000, guid: 53179920743f8c441b620df47da4bbb4, type: 2}
   money: 9868
   Name: sdfds
   Password: fdfdsS@

@@ -94,7 +94,7 @@ public abstract class Character : OutlineInteractableObject
         set => m_critNum = value;
     }
 
-    protected int m_index;
+    protected int m_index=0;
     public int Index => m_index;
 
     protected float m_chanceToAvoidDamage = 0;
@@ -180,7 +180,7 @@ public abstract class Character : OutlineInteractableObject
     public event Action<Character> OnAttack;
     public event Action<Character> OnHeal;
     public event Action<Character> OnDeath;
-    public event Action<Character> OnDamaged;
+    public event Action<Character, string, float> OnDamaged;
     public event Action<Character> OnAttackAbilityUsed;
     public event Action<Character> OnDefenceAbilityUsed;
     public event Action<Character> OnBuffAbilityUsed;
@@ -229,11 +229,11 @@ public abstract class Character : OutlineInteractableObject
         IsChosen = false;
         CanBeDamaged = true;
     }
-    public virtual float Damage(Character chosenCharacter)
+    public virtual bool Damage(Character chosenCharacter)
     {
-        if (!CanBeDamaged) return 0;
+        if (!CanBeDamaged) return false;
 
-        if (IsDamageAvoided()) return 0;
+        if (IsDamageAvoided()) return false;
 
         float crit = IsCrit(chosenCharacter.CritChance,chosenCharacter.CritNum);
         float finalPhysDamage = ((11 + chosenCharacter.PhysAttack) * chosenCharacter.PhysAttack * crit * (chosenCharacter.PhysAttack - PhysDefence + Card.health)) / 256;
@@ -249,35 +249,34 @@ public abstract class Character : OutlineInteractableObject
         LastDamageAmount = finalDamage;
         LastAttackedCharacter = chosenCharacter;
 
-        OnDamagedInvoke();
+        OnDamaged?.Invoke(this, chosenCharacter.CharacterName, finalDamage);
         if (Health == 0)
         {
-            OnDeathInvoke();
+            OnDeath?.Invoke(this);
         }
         
-        return finalDamage;
+        return Health == 0;
     }
 
-    public float Damage(float damage)
+    public bool Damage(float damage, string nameObject)
     {
-        if (!CanBeDamaged) return 0;
+        if (!CanBeDamaged) return false;
 
-        if (IsDamageAvoided()) return 0;
+        if (IsDamageAvoided()) return false;
 
         Health = Math.Max(0, Health - damage);
 
-        OnDamagedInvoke();
+        OnDamaged?.Invoke(this, nameObject, damage);
         if (Health == 0)
         {
-            OnDeathInvoke();
+            OnDeath?.Invoke(this);
         }
-        return damage;
+        return Health == 0;
     }
 
     protected bool IsDamageAvoided()
     {
         float chance = UnityEngine.Random.Range(0f, 1f);
-        Debug.Log(chance);
         if (chance < ChanceToAvoidDamage)
         {
             return true;
@@ -351,16 +350,6 @@ public abstract class Character : OutlineInteractableObject
     {
         m_isAttackedOnTheMove = true;
         OnAttack?.Invoke(this);
-    }
-
-    protected void OnDeathInvoke()
-    {
-        OnDeath?.Invoke(this);
-    }
-
-    protected void OnDamagedInvoke()
-    {
-        OnDamaged?.Invoke(this);
     }
 
     protected override void OnMouseExit()

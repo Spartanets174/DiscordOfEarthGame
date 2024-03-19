@@ -1,40 +1,31 @@
+using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 public class Begin : State
-{ 
+{
     public Begin(BattleSystem battleSystem) : base(battleSystem)
     {
     }
 
     public override IEnumerator Start()
     {
-        BattleSystem.GameUIPresenter.AddMessageToGameLog($"Начните расстановку юнитов.");        
+        BattleSystem.gameLogCurrentText.Value = $"Начните расстановку юнитов.";        
        
-        OnStepStarted += AddUnitStatementAction;
-        OnStepCompleted += RemoveUnitStatementAction;
-        BattleSystem.GameUIPresenter.SetDragAllowToSupportCards(false);        
-
+        OnStateStarted += AddUnitStatementAction;
+        OnStateCompleted += RemoveUnitStatementAction;
+     
         BattleSystem.FieldController.TurnOffCells();
-        OnStepStartedInvoke();
+        OnStateStartedInvoke();
         yield break;
     }
 
     private void AddUnitStatementAction()
-    {
-        foreach (var gameCards in BattleSystem.GameUIPresenter.GameCharacterCardDisplays)
-        {
-            gameCards.OnClick += BattleSystem.OnUnitStatementButton;
-        }
+    {       
         BattleSystem.FieldController.InvokeActionOnField(AddOnCellsClick);
     }
 
-    private void RemoveUnitStatementAction()
+    private void RemoveUnitStatementAction(State state)
     {
-        foreach (var gameCards in BattleSystem.GameUIPresenter.GameCharacterCardDisplays)
-        {
-            gameCards.OnClick -= BattleSystem.OnUnitStatementButton;
-        }
         BattleSystem.FieldController.InvokeActionOnField(RemoveOnCellsClick);
     }
 
@@ -48,10 +39,10 @@ public class Begin : State
         cell.OnClick -= BattleSystem.OnMoveButton;
     }
 
-    public override IEnumerator UnitStatement(GameObject character)
+    public override IEnumerator ChooseCharacter(GameObject character)
     {
-        GameCharacterCardDisplay cardDisplay = character.GetComponent<GameCharacterCardDisplay>();        
-        BattleSystem.GameUIPresenter.SetChosenCard(cardDisplay);
+        GameCharacterCardDisplay cardDisplay = character.GetComponent<GameCharacterCardDisplay>();
+        OnCharacterChosenInvoke(cardDisplay);
         BattleSystem.FieldController.TurnOffCells();
         BattleSystem.FieldController.InvokeActionOnField(SetActiveCells);
         yield break;
@@ -69,8 +60,7 @@ public class Begin : State
     {
         if (cell.transform.childCount == 0)
         {
-           
-            GameCharacterCardDisplay cardDisplay = BattleSystem.GameUIPresenter.GetChosenCard();           
+            GameCharacterCardDisplay cardDisplay = OnCharacterMovedInvoke();           
             if (cardDisplay!=null)
             {
                 cardDisplay.IsCharacterSpawned = true;

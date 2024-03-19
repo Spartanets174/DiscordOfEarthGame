@@ -6,6 +6,9 @@ using UnityEngine;
 [Serializable]
 public class WallSecondSupportCardAbility : BaseSupportÑardAbility
 {
+    [SerializeField]
+    private GameObject prefab;
+
     private SelectCellsBehaviour selectCellsBehaviour;
     private SpawnObjectBehaviour spawnObjectBehaviour;
 
@@ -16,7 +19,7 @@ public class WallSecondSupportCardAbility : BaseSupportÑardAbility
     {
         this.battleSystem = battleSystem;
         SetCardSelectBehaviour(new SelectCellsBehaviour("Âûáåðèòå îáëàñòü äëÿ ðàçìåùåíèÿ", battleSystem, new Vector2(3, 1), "allowed"));
-        SetUseCardBehaviour(new SpawnObjectBehaviour(battleSystem));
+        SetUseCardBehaviour(new SpawnObjectBehaviour(prefab));
 
         selectCellsBehaviour = (SelectCellsBehaviour)CardSelectBehaviour;
         spawnObjectBehaviour = (SpawnObjectBehaviour)UseCardBehaviour;
@@ -33,10 +36,6 @@ public class WallSecondSupportCardAbility : BaseSupportÑardAbility
             item.OnClick -= selectCellsBehaviour.OnSelectedInvoke;
         }
         battleSystem.FieldController.InvokeActionOnField(selectCellsBehaviour.UnSubscribe);
-
-        spawnObjectBehaviour.prefab = battleSystem.GameUIPresenter.CurrentGameSupportCardDisplay.Value.CurrentCardSupport.prefab;
-
-
 
         if (selectCellsBehaviour.highlightedCells.Where(x => x.transform.childCount > 0).ToList().Count == 0 && selectCellsBehaviour.highlightedCells.Count == 3)
         {

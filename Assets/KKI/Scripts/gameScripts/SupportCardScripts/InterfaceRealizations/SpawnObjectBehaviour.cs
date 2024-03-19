@@ -6,14 +6,13 @@ using UnityEngine;
 
 public class SpawnObjectBehaviour : ICardUsable
 {
-    public GameObject prefab;
     public GameObject spawnedPrefab;
-    private BattleSystem battleSystem;
     public Vector3 rotation;
+    private GameObject prefab;
 
-    public SpawnObjectBehaviour(BattleSystem battleSystem)
+    public SpawnObjectBehaviour(GameObject prefab)
     {
-        this.battleSystem = battleSystem;
+        this.prefab = prefab;
     }
 
     public event Action OnCardUse;

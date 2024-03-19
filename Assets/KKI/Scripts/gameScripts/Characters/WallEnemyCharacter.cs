@@ -13,13 +13,14 @@ public class WallEnemyCharacter : StaticEnemyCharacter
         SetData(Card,GetComponent<MeshRenderer>().material,-1);
         OnDamaged += AttackAttackedCharacter;
     }
+
+    private void AttackAttackedCharacter(Character character, string name, float damage)
+    {
+        LastAttackedCharacter.Damage(LastDamageAmount * 0.3f, name);
+    }
+
     private void OnDestroy()
     {
         OnDamaged -= AttackAttackedCharacter;
-    }
-
-    private void AttackAttackedCharacter(Character character)
-    {
-        LastAttackedCharacter.Damage(LastDamageAmount*0.3f);
     }
 }

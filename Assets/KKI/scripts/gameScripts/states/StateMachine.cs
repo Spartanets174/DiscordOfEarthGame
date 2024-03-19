@@ -8,7 +8,7 @@ public abstract class StateMachine: MonoBehaviour
 
     public void SetState(State state)
     {
-        State?.OnStepCompletedInvoke();
+        State?.OnStateCompletedInvoke();
         State = state;
         StartCoroutine(State.Start());
     }

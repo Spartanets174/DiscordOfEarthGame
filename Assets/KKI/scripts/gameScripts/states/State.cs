@@ -8,30 +8,37 @@ public abstract class State
 {
     protected BattleSystem BattleSystem;
 
+    public event Action<GameCharacterCardDisplay> OnCharacterChosen;
+    public event Func<GameCharacterCardDisplay> OnCharacterMoved;
 
-    public event Action OnStepStarted;
-    public event Action OnStepCompleted;
+    public event Action OnStateStarted;
+    public event Action<State> OnStateCompleted;
     public State(BattleSystem battleSystem)
     {
         BattleSystem = battleSystem;
     }
-
-    public void OnStepStartedInvoke()
+    protected void OnCharacterChosenInvoke(GameCharacterCardDisplay gameCharacterCardDisplay)
     {
-        OnStepStarted?.Invoke();
+        OnCharacterChosen?.Invoke(gameCharacterCardDisplay);
     }
 
-    public void OnStepCompletedInvoke()
+    protected GameCharacterCardDisplay OnCharacterMovedInvoke()
     {
-        OnStepCompleted?.Invoke();
+        return OnCharacterMoved?.Invoke();
+    }
+
+    public void OnStateStartedInvoke()
+    {
+        OnStateStarted?.Invoke();
+    }
+
+    public void OnStateCompletedInvoke()
+    {
+        OnStateCompleted?.Invoke(this);
     }
 
 
     public virtual IEnumerator Start()
-    {
-        yield break;
-    }
-    public virtual IEnumerator UnitStatement(GameObject character)
     {
         yield break;
     }

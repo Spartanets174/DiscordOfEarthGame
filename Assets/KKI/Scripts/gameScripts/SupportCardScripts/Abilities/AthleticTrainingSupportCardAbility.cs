@@ -17,7 +17,7 @@ public class AthleticTrainingSupportCardAbility : BaseSupport—ardAbility
 
     private void OnSelected()
     {
-        battleSystem.PointsOfAction += pointsOfAction;
+        battleSystem.PointsOfAction.Value += pointsOfAction;
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(null);
     }
