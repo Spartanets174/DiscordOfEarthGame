@@ -1,9 +1,10 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore;
 
 [Serializable]
-public class MaterialBladesSecondSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
+public class MaterialBladesSecondSupportCardAbility : BaseSupportĞ¡ardAbility, ITurnCountable
 {
     [SerializeField]
     private float damage;
@@ -16,21 +17,25 @@ public class MaterialBladesSecondSupportCardAbility : BaseSupportÑardAbility, IT
     private bool m_isBuff;
     public bool IsBuff { get => m_isBuff; }
 
-    private List<Character> characters = new();
-
     public event Action<ITurnCountable> OnReturnToNormal;
+
+    private List<Character> characters = new();
     public override void Init(BattleSystem battleSystem)
     {
+        characters.Clear();
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("Âûáåğèòå âğàæåñêîãî ïåğñîíàæà äëÿ àòàêè", battleSystem));
-        SetSecondCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("Âûáåğèòå âğàæåñêîãî ïåğñîíàæà", battleSystem));
+        SetCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("Ğ’Ñ‹Ğ±ĞµÑ€Ğ¸Ñ‚Ğµ Ğ²Ñ€Ğ°Ğ¶ĞµÑĞºĞ¾Ğ³Ğ¾ Ğ¿ĞµÑ€ÑĞ¾Ğ½Ğ°Ğ¶Ğ° Ğ´Ğ»Ñ Ğ°Ñ‚Ğ°ĞºĞ¸", battleSystem));
+        SetSecondCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("Ğ’Ñ‹Ğ±ĞµÑ€Ğ¸Ñ‚Ğµ Ğ²Ñ‚Ğ¾Ñ€Ğ¾Ğ³Ğ¾ Ğ²Ñ€Ğ°Ğ¶ĞµÑĞºĞ¾Ğ³Ğ¾ Ğ¿ĞµÑ€ÑĞ¾Ğ½Ğ°Ğ¶Ğ° Ğ´Ğ»Ñ Ğ°Ñ‚Ğ°ĞºĞ¸", battleSystem));
         SetSelectCharacterBehaviour(new SetCurrentEnemyCharacterBehaviour("", battleSystem));
-        SetUseCardBehaviour(new AttackSelectedÑharactersBehaviour(damage, battleSystem, "\"Ìàòåğèàëüíûå êëèíêè\""));
+        SetUseCardBehaviour(new AttackSelectedĞ¡haractersBehaviour(damage, battleSystem, "\"ĞœĞ°Ñ‚ĞµÑ€Ğ¸Ğ°Ğ»ÑŒĞ½Ñ‹Ğµ ĞºĞ»Ğ¸Ğ½ĞºĞ¸ 2\""));
 
-        m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSelectBehaviour.OnSelected += OnSelected;
+        m_cardSecondSelectBehaviour.OnSelected += OnSecondSelected;
         m_selectCharacterBehaviour.OnSelectCharacter += OnSelectCharacter;
         m_useCardBehaviour.OnCardUse += OnCardUse;
+
+        m_cardSecondSelectBehaviour.OnCancelSelection += OnCancelSelection;
+        m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
     }
 
     private void OnSelected()
@@ -39,8 +44,31 @@ public class MaterialBladesSecondSupportCardAbility : BaseSupportÑardAbility, IT
         {
             foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
             {
-                enemyCharacter.OnClick += SelectCharacter;
+                enemyCharacter.OnClick += SelectSecondCharacterInvoke;
             }
+
+        }
+    }
+
+    private void SelectSecondCharacterInvoke(GameObject gameObject)
+    {
+        characters.Add(gameObject.GetComponent<Character>());
+
+        battleSystem.EnemyController.SetEnemiesChosenState(false, x =>
+        {
+            x.OnClick -= SelectSecondCharacterInvoke;
+        });
+
+        SelectSecondCard();
+    }
+
+
+
+    private void OnSecondSelected()
+    {
+        foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
+        {
+            enemyCharacter.OnClick += SelectCharacter;
         }
     }
 
@@ -55,8 +83,7 @@ public class MaterialBladesSecondSupportCardAbility : BaseSupportÑardAbility, IT
         {
             characters.Add(battleSystem.PlayerController.CurrentPlayerCharacter);
         }
-
-        if (characters.Count >= 2)
+        if (characters.Count == 2)
         {
             foreach (var character in characters)
             {
@@ -64,31 +91,36 @@ public class MaterialBladesSecondSupportCardAbility : BaseSupportÑardAbility, IT
                 UseCard(character.gameObject);
             }
         }
-        else
-        {
-            SelectSecondCard();
-        }
     }
 
     private void OnCardUse()
     {
-        OnCancelSelection();
+        Uncubscribe();
     }
 
     private void OnCancelSelection()
     {
-        battleSystem.EnemyController.SetEnemiesState(false, x =>
-        {
-            x.OnClick += SelectCharacter;
-            x.IsChosen = false;
-        });
+        characters.Clear();
+        Uncubscribe();
     }
+
+    private void Uncubscribe()
+    {
+        battleSystem.EnemyController.SetEnemiesStates(true, false, x =>
+        {
+            x.OnClick -= SelectSecondCharacterInvoke;
+            x.OnClick -= SelectCharacter;
+        });
+
+        battleSystem.PlayerController.SetPlayerStates(true, false);
+    }
+
     public void ReturnToNormal()
     {
         foreach (var character in characters)
         {
             character.IsFreezed = false;
         }
-
+        OnReturnToNormal?.Invoke(this);
     }
 }

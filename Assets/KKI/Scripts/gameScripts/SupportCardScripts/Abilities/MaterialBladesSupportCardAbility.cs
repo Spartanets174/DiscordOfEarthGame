@@ -23,7 +23,7 @@ public class MaterialBladesSupportCardAbility : BaseSupportÑardAbility, ITurnCou
     {
         this.battleSystem = battleSystem;
         SetCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("Âûáåðèòå âðàæåñêîãî ïåðñîíàæà äëÿ àòàêè", battleSystem));
-        SetSelectCharacterBehaviour(new SetCurrentEnemyCharacterBehaviour("Âûáåðèòå âòîðîãî âðàæåñêîãî ïåðñîíàæà äëÿ àòàêè", battleSystem));
+        SetSelectCharacterBehaviour(new SetCurrentEnemyCharacterBehaviour("", battleSystem));
         SetUseCardBehaviour(new AttackSelectedÑharactersBehaviour(damage, battleSystem, "\"Ìàòåðèàëüíûå êëèíêè\""));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
@@ -68,14 +68,15 @@ public class MaterialBladesSupportCardAbility : BaseSupportÑardAbility, ITurnCou
 
     private void OnCancelSelection()
     {
-        battleSystem.EnemyController.SetEnemiesState(true, x =>
+        battleSystem.EnemyController.SetEnemiesStates(true,false, x =>
         {
-            x.OnClick += SelectCharacter;
-            x.IsChosen = false;
+            x.OnClick -= SelectCharacter;
         });
+        battleSystem.PlayerController.SetPlayerStates(true, false);
     }
     public void ReturnToNormal()
     {
         character.IsFreezed = false;
+        OnReturnToNormal?.Invoke(this);
     }
 }

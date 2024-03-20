@@ -94,17 +94,17 @@ public class CardSupportAbilitiesController : MonoBehaviour, ILoadable
     {
         foreach (var cardDisplay in m_gameSupportCards)
         {
-            cardDisplay.DragAndDropComponent.OnBeginDragEvent += OnBeginDrag;
-            cardDisplay.DragAndDropComponent.OnEndDragEvent += OnEndDrag;
-            cardDisplay.DragAndDropComponent.OnDropEvent += OnDropEvent;
+            cardDisplay.DragAndDropComponent.OnBeginDragEvent -= OnBeginDrag;
+            cardDisplay.DragAndDropComponent.OnEndDragEvent -= OnEndDrag;
+            cardDisplay.DragAndDropComponent.OnDropEvent -= OnDropEvent;
 
 
             if (cardDisplay.GameSupportÑardAbility != null)
             {
-                cardDisplay.GameSupportÑardAbility.OnUsingCancel += OnUsingCancel;
-                cardDisplay.GameSupportÑardAbility.OnSecondSupportCardAbilitySelected += OnSecondSupportCardAbilitySelected;
-                cardDisplay.GameSupportÑardAbility.OnSupportCardAbilityCharacterSelected += OnSupportCardAbilityCharacterSelected;
-                cardDisplay.GameSupportÑardAbility.OnSupportCardAbilityUsed += OnSupportCardAbilityUsed;
+                cardDisplay.GameSupportÑardAbility.OnUsingCancel -= OnUsingCancel;
+                cardDisplay.GameSupportÑardAbility.OnSecondSupportCardAbilitySelected -= OnSecondSupportCardAbilitySelected;
+                cardDisplay.GameSupportÑardAbility.OnSupportCardAbilityCharacterSelected -= OnSupportCardAbilityCharacterSelected;
+                cardDisplay.GameSupportÑardAbility.OnSupportCardAbilityUsed -= OnSupportCardAbilityUsed;
             }
         }
 
@@ -122,6 +122,7 @@ public class CardSupportAbilitiesController : MonoBehaviour, ILoadable
         tipsTextParent.SetActive(false);
         SetTipsText("");
         currentGameSupportCardDisplay.Value.gameObject.SetActive(true);
+        currentGameSupportCardDisplay.Value = null;
     }
 
     private void OnSupportCardAbilityCharacterSelected(ICharacterSelectable uharacterSelectable)

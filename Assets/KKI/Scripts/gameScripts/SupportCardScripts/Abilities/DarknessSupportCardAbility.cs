@@ -64,7 +64,6 @@ public class DarknessSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
             x.OnClick -= SelectSecondCharacterInvoke;
         });
 
-        battleSystem.EnemyController.SetEnemiesState(true);
         SelectSecondCard();
     }
 
@@ -74,9 +73,9 @@ public class DarknessSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
     {
         if (battleSystem.State is PlayerTurn)
         {
-            battleSystem.EnemyController.SetEnemiesState(false, (x) =>
+            battleSystem.EnemyController.SetEnemiesState(true, (x) =>
             {
-                enemyCharacter.OnClick += SelectCharacter;
+                x.OnClick += SelectCharacter;
             });
         }
     }

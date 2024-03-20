@@ -220,7 +220,7 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
         }
         else
         {
-            AddMessageToGameLog($"Вражеский юнит {character.name} убит");
+            AddMessageToGameLog($"Вражеский юнит {character.CharacterName} убит");
         }
     }
     private void LogCharacterDamage(Character character, string enemyName, float finalDamage)

@@ -235,9 +235,9 @@ public class EnemyController : Tree
     {
         if (character != null)
         {
-            if (m_currentEnemyCharacter != null)
+            foreach (var enemyCharacter in EnemyCharObjects)
             {
-                m_currentEnemyCharacter.IsCurrentEnemyCharacter = false;
+                enemyCharacter.IsCurrentEnemyCharacter = false;
             }
             m_currentEnemyCharacter = character;
             m_currentEnemyCharacter.IsCurrentEnemyCharacter = true;
@@ -245,6 +245,16 @@ public class EnemyController : Tree
         else
         {
             Debug.LogError("Нет персонажа");
+        }
+    }
+
+    public void SetEnemiesStates(bool state, bool chosenState, Action<EnemyCharacter> subAction = null)
+    {
+        foreach (var enemyCharacter in m_enemyCharObjects)
+        {
+            enemyCharacter.IsEnabled = state;
+            enemyCharacter.IsChosen = chosenState;
+            subAction?.Invoke(enemyCharacter);
         }
     }
 

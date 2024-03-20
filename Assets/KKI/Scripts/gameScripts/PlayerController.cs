@@ -94,6 +94,16 @@ public class PlayerController : MonoBehaviour, ILoadable
         disposables = new();
     }
 
+    public void SetPlayerStates(bool state,bool chosenState, Action<PlayerCharacter> subAction = null)
+    {
+        foreach (var playerCharacter in m_playerCharactersObjects)
+        {
+            playerCharacter.IsEnabled = state;
+            playerCharacter.IsChosen = chosenState;
+            subAction?.Invoke(playerCharacter);
+        }
+    }
+
     public void SetPlayerState(bool state, Action<PlayerCharacter> subAction = null)
     {
         foreach (var playerCharacter in m_playerCharactersObjects)

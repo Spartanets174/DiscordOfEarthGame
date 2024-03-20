@@ -50,6 +50,7 @@ public class WallSecondSupportCardAbility : BaseSupport—ardAbility
 
     private void OnWallDeath(Character character)
     {
+        GameObject.Destroy(wallEnemyCharacter.gameObject);
         foreach (var kostilGameObject in kostilGameObjects)
         {
             GameObject.Destroy(kostilGameObject);

@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using TMPro;
+using UniRx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -20,6 +21,7 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
     [Header("Panels")]
     [SerializeField] private GameObject registrationPanel;
     [SerializeField] private GameObject loginPanel;
+    [SerializeField] private ChangeConncetionInfo changeConncetionInfo;
 
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI warningTextNick;
@@ -31,8 +33,26 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
     private Sequence sequenceName;
     private Sequence sequencePassword;
     private Regex validateGuidRegex;
+
+    private float timer = 1f;
+    private CompositeDisposable disposables = new();
     public void Init()
     {
+        changeConncetionInfo.gameObject.SetActive(false);
+        Observable.EveryUpdate().Subscribe(x =>
+        {
+            timer -= Time.deltaTime;
+            if (timer < 0)
+            {
+                if (Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.E) && Input.GetKey(KeyCode.V))
+                {
+                    changeConncetionInfo.gameObject.SetActive(!changeConncetionInfo.gameObject.activeSelf);
+                    timer = 1f;
+                    Debug.Log(changeConncetionInfo.gameObject.activeSelf);
+                }
+            }
+        }).AddTo(disposables);
+
         validateGuidRegex = new Regex("^(?=.*?[A-Z])(?=.*?[#?!@$%^&*-]).{4,}$");
 
         dataLoader.OnPlayerDataRecieved += CheckRecievedData;
@@ -59,6 +79,10 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
         Nick.onValueChanged.RemoveListener(TurnOffWarningTextName);
         Password.onValueChanged.RemoveListener(TurnOffWarningTextPassword);
         StopAllCoroutines();
+
+        disposables.Dispose();
+        disposables.Clear();
+        disposables = new();
     }
 
     private void CheckRecievedData(string connectionAnwser)

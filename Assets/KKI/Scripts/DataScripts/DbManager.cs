@@ -5,16 +5,24 @@ using UnityEngine;
 
 public static class ConnectionInfo
 {
-    public static string ip = "127.0.0.1";
-    public static string uid = "root";
-    public static string pwd = "12345";
-    public static string database = "gamedb";
+    public static string ip { get; private set; } = "127.0.0.1";
+    public static string uid { get; private set; } = "root";
+    public static string pwd { get; private set; } = "12345";
+    public static string database { get; private set; } = "gamedb";
+
+    public static void ChangeConncetionInfo(string Ip, string Uid, string Pwd, string Database)
+    {
+        ip = Ip;
+        uid = Uid;
+        pwd = Pwd;
+        database = Database;
+    }
 }
 
 public class DbManager : MonoBehaviour
 {
-    static string connectionString = $"server = {ConnectionInfo.ip}; uid = {ConnectionInfo.uid}; pwd = {ConnectionInfo.pwd}; Database = {ConnectionInfo.database}; SSLMode = none";
-    
+    public static string connectionString;
+
     public static MySqlConnection con;
 
     [SerializeField] private PlayerData playerData;
@@ -25,11 +33,18 @@ public class DbManager : MonoBehaviour
 
     public void Awake()
     {
+        OpenCon();
+    }
+
+    public void OpenCon()
+    {
+        connectionString = $"server = {ConnectionInfo.ip}; uid = {ConnectionInfo.uid}; pwd = {ConnectionInfo.pwd}; Database = {ConnectionInfo.database}";
         m_isConnected = true;
         con = new MySqlConnection(connectionString);
         try
         {
             con.Open();
+            Debug.Log("opened");
         }
         catch (System.Exception ex)
         {
@@ -41,7 +56,7 @@ public class DbManager : MonoBehaviour
     private void OnApplicationQuit()
     {
         SavePlayer();
-        Debug.Log("closed");
+        
         CloseCon();
     }
 
@@ -67,12 +82,13 @@ public class DbManager : MonoBehaviour
             InsertToCardsSupportDeck(playerData);
 
             RemoveCardsDeck(playerData);
-            InsertToCardDeck(playerData);       
+            InsertToCardDeck(playerData);
         }
     }
     public void CloseCon()
     {
         con.Close();
+        Debug.Log("closed");
     }
 
     #region Player
@@ -103,7 +119,7 @@ public class DbManager : MonoBehaviour
     }
 
     public bool IsPlayerExits(string nick, string password)
-    {     
+    {
         string query = $"select* from gamedb.players where p_name = @name and p_password = @password";
         MySqlCommand command = new MySqlCommand(query, con);
         command.Prepare();
@@ -126,7 +142,7 @@ public class DbManager : MonoBehaviour
                 else
                 {
                     return false;
-                }               
+                }
             }
             else
             {
@@ -135,7 +151,7 @@ public class DbManager : MonoBehaviour
             }
         }
         catch (System.Exception ex)
-        {           
+        {
             command.Dispose();
             Debug.LogError(ex.Message);
             return false;
@@ -230,7 +246,7 @@ public class DbManager : MonoBehaviour
                 reader.Read();
                 id = reader.GetInt32("idPlayers");
                 reader.Read();
-               /* Debug.Log(reader.GetInt32("idPlayers"));*/
+                /* Debug.Log(reader.GetInt32("idPlayers"));*/
                 command.Dispose();
             }
             else
@@ -397,7 +413,7 @@ public class DbManager : MonoBehaviour
             Debug.LogError(ex.Message);
         }
         command.Dispose();
-       
+
     }
 
 
@@ -583,7 +599,7 @@ public class DbManager : MonoBehaviour
 
     public void InsertToOwnCardsSupportStart(PlayerData playerData)
     {
-        for (int i = playerData.allSupportCards.Count - 7; i < playerData.allSupportCards.Count ; i++)
+        for (int i = playerData.allSupportCards.Count - 7; i < playerData.allSupportCards.Count; i++)
         {
             string query = $"insert into gamedb.owned_cards(card_id,player_id) values({playerData.allSupportCards[i].id},{playerData.PlayerId})";
             var command = new MySqlCommand(query, con);
@@ -837,7 +853,7 @@ public class DbManager : MonoBehaviour
             {
                 while (reader.Read())
                 {
-                    CharacterCard item = CreateCharacterCard(reader);                
+                    CharacterCard item = CreateCharacterCard(reader);
                     cardList.Add(item);
                 }
                 command.Dispose();

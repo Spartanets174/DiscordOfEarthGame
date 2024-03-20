@@ -231,9 +231,17 @@ public abstract class Character : OutlineInteractableObject
     }
     public virtual bool Damage(Character chosenCharacter)
     {
-        if (!CanBeDamaged) return false;
+        if (!CanBeDamaged)
+        {
+            OnDamaged?.Invoke(this, chosenCharacter.CharacterName, 0);
+            return false;
+        }
 
-        if (IsDamageAvoided()) return false;
+        if (IsDamageAvoided())
+        {
+            OnDamaged?.Invoke(this, chosenCharacter.CharacterName, 0);
+            return false;
+        }
 
         float crit = IsCrit(chosenCharacter.CritChance,chosenCharacter.CritNum);
         float finalPhysDamage = ((11 + chosenCharacter.PhysAttack) * chosenCharacter.PhysAttack * crit * (chosenCharacter.PhysAttack - PhysDefence + Card.health)) / 256;
