@@ -1,6 +1,7 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 public static class ConnectionInfo
@@ -26,13 +27,28 @@ public class DbManager : MonoBehaviour
     public static MySqlConnection con;
 
     [SerializeField] private PlayerData playerData;
+    [SerializeField] private CanvasGroup debugConsole;
     public PlayerData PlayerData => playerData;
 
     private bool m_isConnected;
     public bool IsConnected => m_isConnected;
-
+    private float timer = 1f;
+    private CompositeDisposable disposables = new();
     public void Awake()
     {
+        debugConsole.alpha = 0;
+        Observable.EveryUpdate().Subscribe(x =>
+        {
+            timer -= Time.deltaTime;
+            if (timer < 0)
+            {
+                if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.F1))
+                {
+                    debugConsole.alpha = debugConsole.alpha == 0 ?  1 : 0;
+                    timer = 1f;
+                }
+            }
+        }).AddTo(disposables);
         OpenCon();
     }
 
@@ -60,6 +76,12 @@ public class DbManager : MonoBehaviour
         CloseCon();
     }
 
+    private void OnDestroy()
+    {
+        disposables.Dispose();
+        disposables.Clear();
+        disposables = new();
+    }
     public void SavePlayer()
     {
         if (playerData != null)
