@@ -35,6 +35,13 @@ public static class enums
         мобильность
     }
 
+    public enum TypeOfAbility
+    {
+        attack,
+        defence,
+        buff
+    }
+
     public enum Directions
     {
         top,

@@ -125,36 +125,19 @@ public class EnemyTurn : State
     public override IEnumerator UseSupportCard(GameObject cardSupport)
     {
 
-        GameSupportCardDisplay supportCardDisplay = cardSupport.GetComponent<GameSupportCardDisplay>();
-
-        if (supportCardDisplay.GameSupportСardAbility is ITurnCountable turnCountable)
-        {
-            if (turnCountable.IsBuff)
-            {
-                BattleSystem.EnemyTurnCountables.Add(turnCountable, turnCountable.TurnCount);
-                BattleSystem.EnemyTurnCountables[turnCountable]--;
-            }
-            else
-            {               
-                BattleSystem.PlayerTurnCountables.Add(turnCountable, turnCountable.TurnCount);
-            }
-        }
-
-        supportCardDisplay.GameSupportСardAbility.SelectCard();
         yield break;
     }
 
-    public override IEnumerator UseAttackAbility()
+    public override IEnumerator UseAttackAbility(GameObject gameObject)
     {
-        /*Логика при применении способности 1*/
         yield break;
     }
-    public override IEnumerator UseDefensiveAbility()
+    public override IEnumerator UseDefensiveAbility(GameObject gameObject)
     {
         /*Логика при применении способности 2*/
         yield break;
     }
-    public override IEnumerator UseBuffAbility()
+    public override IEnumerator UseBuffAbility(GameObject gameObject)
     {
         /*Логика при применении способности 3*/
         yield break;

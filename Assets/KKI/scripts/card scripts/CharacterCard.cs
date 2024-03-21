@@ -22,4 +22,17 @@ public class CharacterCard: Card
     public string attackAbility;
     public string defenceAbility;
     public string buffAbility;
+
+    [Header("Abilities")]
+    [SerializeReference, SubclassSelector]
+    public BasePassiveCharacterAbility passiveCharacterAbility;
+
+    [SerializeReference, SubclassSelector]
+    public BaseCharacterAbility attackCharacterAbility;
+
+    [SerializeReference, SubclassSelector]
+    public BaseCharacterAbility defenceCharacterAbility;
+
+    [SerializeReference, SubclassSelector]
+    public BaseCharacterAbility buffCharacterAbility;
 }

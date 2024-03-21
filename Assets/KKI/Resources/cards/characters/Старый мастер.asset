@@ -12,11 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f652d45b50f5d142bbb5af89b9ad55a, type: 3}
   m_Name: "\u0421\u0442\u0430\u0440\u044B\u0439 \u043C\u0430\u0441\u0442\u0435\u0440"
   m_EditorClassIdentifier: 
-  name: "\u0421\u0442\u0430\u0440\u044B\u0439 \u043C\u0430\u0441\u0442\u0435\u0440"
-  race: 2
-  Class: 0
-  rarity: 0
+  cardName: 
   description: "\u0433\u043D\u043E\u043C"
+  race: 2
+  image: {fileID: 21300000, guid: aaa67bf25b555f5409217c309b0eca40, type: 3}
+  rarity: 0
+  Price: 213
+  id: 0
+  Class: 0
   health: 1
   speed: 4
   physAttack: 2
@@ -45,5 +48,37 @@ MonoBehaviour:
     \u0441\u043B\u0443\u0447\u0430\u0439\u043D\u044B\u0435 2 \u0441\u043E\u044E\u0437\u043D\u0438\u043A\u0430
     \u043F\u043E\u043B\u0443\u0447\u0430\u044E\u0442, 15% \u043E\u0447\u043A\u043E\u0432
     \u0437\u0434\u043E\u0440\u043E\u0432\u044C\u044F"
-  image: {fileID: 21300000, guid: aaa67bf25b555f5409217c309b0eca40, type: 3}
-  Price: 213
+  passiveCharacterAbility:
+    rid: -2
+  attackCharacterAbility:
+    rid: 6947752895263801362
+  defenceCharacterAbility:
+    rid: 6947752895263801383
+  buffCharacterAbility:
+    rid: 6947752895263801404
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 6947752895263801362
+      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+      data:
+        m_typeOfAbility: 0
+        damage: 1
+        m_turnCount: 1
+        m_isBuff: 1
+    - rid: 6947752895263801383
+      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+      data:
+        m_typeOfAbility: 1
+        damage: 1
+        m_turnCount: 1
+        m_isBuff: 1
+    - rid: 6947752895263801404
+      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+      data:
+        m_typeOfAbility: 2
+        damage: 1
+        m_turnCount: 1
+        m_isBuff: 1

@@ -143,6 +143,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7c51c4de9e922d746a9886dabd133727, type: 2}
   - {fileID: 11400000, guid: 01051d735d44b6d4d882ae4ff2cd2912, type: 2}
   - {fileID: 11400000, guid: 119a4b4fc355b564cab1cb2438170384, type: 2}
+  - {fileID: 11400000, guid: 85b14afbb58319748b746b388869d25f, type: 2}
   money: 9868
   Name: sdfds
   Password: fdfdsS@

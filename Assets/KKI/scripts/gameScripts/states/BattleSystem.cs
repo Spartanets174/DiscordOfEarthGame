@@ -17,9 +17,6 @@ public class BattleSystem : StateMachine, ILoadable
     [SerializeField]
     private FieldController m_fieldController;
     public FieldController FieldController => m_fieldController;
-   /* [SerializeField]
-    private GameUICoordinator gameUIPresenter;
-    public GameUICoordinator GameUIPresenter => gameUIPresenter;*/
 
     private Dictionary<ITurnCountable, int> m_playerTurnCountables = new();
     public Dictionary<ITurnCountable, int> PlayerTurnCountables => m_playerTurnCountables;
@@ -104,25 +101,26 @@ public class BattleSystem : StateMachine, ILoadable
     {
         StartCoroutine(State.UseSupportCard(cardSupport));
     }
-    public void OnAttackAbilityButton()
+    public void OnAttackAbilityButton(GameObject gameObject)
     {
-        StartCoroutine(State.UseAttackAbility());
+        StartCoroutine(State.UseAttackAbility(gameObject));
     }
 
-    public void OnDefensiveAbilityButton()
+    public void OnDefensiveAbilityButton(GameObject gameObject)
     {
-        StartCoroutine(State.UseDefensiveAbility());
+        StartCoroutine(State.UseDefensiveAbility(gameObject));
     }
 
-    public void OnBuffAbilityButton()
+    public void OnBuffAbilityButton(GameObject gameObject)
     {
-        StartCoroutine(State.UseBuffAbility());
+        StartCoroutine(State.UseBuffAbility(gameObject));
     }
 
     public void OnUseItemButton()
     {
         StartCoroutine(State.UseItem());
     }
+
     [ContextMenu("SetPlayerTurn")]
     public void SetPlayerTurn()
     {

@@ -42,8 +42,9 @@ public class CardSupportAbilitiesController : MonoBehaviour, ILoadable
     public List<GameSupportCardDisplay> GameSupportCards => m_gameSupportCards;
 
     private ReactiveProperty<GameSupportCardDisplay> currentGameSupportCardDisplay = new();
-    public ReactiveProperty<GameSupportCardDisplay> CurrentGameSupportCardDisplay => currentGameSupportCardDisplay;
-
+    public event Action OnSupportAbilitySelected;
+    public event Action OnSupportAbilityUsed;
+    public event Action OnSupportAbilityUsingCancel;
     public void Init()
     {
         foreach (var SupportCard in playerController.PlayerDataController.DeckUserSupportCards)
@@ -84,6 +85,7 @@ public class CardSupportAbilitiesController : MonoBehaviour, ILoadable
         currentGameSupportCardDisplay.Where(x => x != null).Subscribe(x =>
         {
             SetTipsText(x.GameSupport—ardAbility.CardSelectBehaviour.SelectCardTipText);
+            OnSupportAbilitySelected?.Invoke();
         }).AddTo(disposables);
 
         SetBlockersState(false);
@@ -123,6 +125,7 @@ public class CardSupportAbilitiesController : MonoBehaviour, ILoadable
         SetTipsText("");
         currentGameSupportCardDisplay.Value.gameObject.SetActive(true);
         currentGameSupportCardDisplay.Value = null;
+        OnSupportAbilityUsingCancel?.Invoke();
     }
 
     private void OnSupportCardAbilityCharacterSelected(ICharacterSelectable uharacterSelectable)
@@ -141,13 +144,11 @@ public class CardSupportAbilitiesController : MonoBehaviour, ILoadable
         {
             cardDisplay.DragAndDropComponent.StartPos = cardDisplay.DragAndDropComponent.transform.localPosition;
         }
+        OnSupportAbilityUsed?.Invoke();
     }
     private void OnDropEvent(GameObject gameObject)
     {
-        foreach (var SupportCard in GameSupportCards)
-        {
-            SupportCard.IsEnabled = false;
-        }
+        SetEnabledToSupportCards(false);
         gameObject.SetActive(false);
         SetBlockersState(false);
         currentGameSupportCardDisplay.Value = gameObject.GetComponent<GameSupportCardDisplay>();
@@ -176,7 +177,13 @@ public class CardSupportAbilitiesController : MonoBehaviour, ILoadable
         bottomBlocker.SetActive(state);
         centerBlocker.SetActive(state);
     }
-
+    public void SetEnabledToSupportCards(bool state)
+    {
+        foreach (var SupportCard in GameSupportCards)
+        {
+            SupportCard.IsEnabled = state;
+        }
+    }
     public void SetDragAllowToSupportCards(bool state)
     {
         foreach (var cardDisplay in GameSupportCards)

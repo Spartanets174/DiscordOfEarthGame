@@ -178,20 +178,73 @@ public class PlayerTurn : State
     }
 
 
-    public override IEnumerator UseAttackAbility()
+    public override IEnumerator UseAttackAbility(GameObject gameObject)
     {
-        /*Логика при применении способности 1*/
+        if (BattleSystem.PointsOfAction.Value < 11)
+        {
+            BattleSystem.gameLogCurrentText.Value = "Недостаточно очков действий для применения способности";
+            yield break;
+        }
+
+        PlayerCharacter playerCharacter = gameObject.GetComponent<PlayerCharacter>();
+
+        UseAbility(playerCharacter.AttackCharacterAbility);
+
+        playerCharacter.UseAtackAbility();
         yield break;
     }
-    public override IEnumerator UseDefensiveAbility()
+    public override IEnumerator UseDefensiveAbility(GameObject gameObject)
     {
-        /*Логика при применении способности 2*/
+        if (BattleSystem.PointsOfAction.Value < 11)
+        {
+            BattleSystem.gameLogCurrentText.Value = "Недостаточно очков действий для применения способности";
+            yield break;
+        }
+
+        PlayerCharacter playerCharacter = gameObject.GetComponent<PlayerCharacter>();
+
+        UseAbility(playerCharacter.DefenceCharacterAbility);
+
+        playerCharacter.UseDefenceAbility();
         yield break;
     }
-    public override IEnumerator UseBuffAbility()
+    public override IEnumerator UseBuffAbility(GameObject gameObject)
     {
-        /*Логика при применении способности 3*/
+        if (BattleSystem.PointsOfAction.Value < 11)
+        {
+            BattleSystem.gameLogCurrentText.Value = "Недостаточно очков действий для применения способности";
+            yield break;
+        }
+
+        PlayerCharacter playerCharacter = gameObject.GetComponent<PlayerCharacter>();
+
+        UseAbility(playerCharacter.BuffCharacterAbility);
+
+        playerCharacter.UseBuffAbility();
         yield break;
+    }
+
+    private void UseAbility(BaseCharacterAbility baseCharacterAbility)
+    {
+        ResetPlayer();
+
+        Observable.EveryUpdate().Where(x => Input.GetKey(KeyCode.Escape)).Subscribe(x =>
+        {
+            baseCharacterAbility.CancelUsingCard();
+        }).AddTo(disposables);
+
+        if (baseCharacterAbility is ITurnCountable turnCountable)
+        {
+            if (turnCountable.IsBuff)
+            {
+                BattleSystem.PlayerTurnCountables.Add(turnCountable, turnCountable.TurnCount);
+                BattleSystem.PlayerTurnCountables[turnCountable]--;
+            }
+            else
+            {
+                BattleSystem.EnemyTurnCountables.Add(turnCountable, turnCountable.TurnCount);
+            }
+        }
     }
 
     public override IEnumerator UseItem()
@@ -228,6 +281,7 @@ public class PlayerTurn : State
         {
             enemyToAttack.OnClick -= BattleSystem.OnAttackButton;
         }
+        BattleSystem.FieldController.TurnOffCells();
         cellsToMove.Clear();
         enemiesToAttack.Clear();
         OnPlayerReseted?.Invoke();

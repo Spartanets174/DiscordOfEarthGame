@@ -81,10 +81,7 @@ public abstract class Character : OutlineInteractableObject
     public float CritChance
     {
         get => m_critChance;
-        set
-        {         
-            m_critChance = value;
-        }
+        set => m_critChance = value;
     }
 
     protected float m_critNum;
@@ -94,9 +91,6 @@ public abstract class Character : OutlineInteractableObject
         set => m_critNum = value;
     }
 
-    protected int m_index=0;
-    public int Index => m_index;
-
     protected float m_chanceToAvoidDamage = 0;
     public float ChanceToAvoidDamage
     {
@@ -104,20 +98,32 @@ public abstract class Character : OutlineInteractableObject
         set => m_chanceToAvoidDamage = value;
     }
 
-    public Vector2 PositionOnField
+    private bool m_canBeDamaged;
+    public bool CanBeDamaged
     {
-        get
-        {
-            return transform.GetComponentInParent<Cell>().CellIndex;
-        }
+        get => m_canBeDamaged;
+        set => m_canBeDamaged = value;
     }
 
-    public Cell ParentCell
+    protected bool m_isAttackedOnTheMove = false;
+    public bool IsAttackedOnTheMove
     {
-        get
-        {
-            return transform.GetComponentInParent<Cell>();
-        }
+        get => m_isAttackedOnTheMove;
+        set => m_isAttackedOnTheMove = value;
+    }
+
+    protected float m_lastDamageAmount;
+    public float LastDamageAmount
+    {
+        get => m_lastDamageAmount;
+        private set => m_lastDamageAmount = value;
+    }
+
+    protected Character m_lastAttackedCharacter;
+    public Character LastAttackedCharacter
+    {
+        get => m_lastAttackedCharacter;
+        private set => m_lastAttackedCharacter = value;
     }
 
     protected bool m_isChosen = false;
@@ -137,53 +143,76 @@ public abstract class Character : OutlineInteractableObject
     private bool m_IsFreezed;
     public bool IsFreezed
     {
-        get=> m_IsFreezed;
-        set {
+        get => m_IsFreezed;
+        set
+        {
             m_IsFreezed = value;
             if (m_IsFreezed)
             {
                 Speed = 0;
-            }                      
+            }
         }
     }
 
-    private bool m_canBeDamaged;
-    public bool CanBeDamaged
+    protected bool m_isAttackAbilityUsed = false;
+    public bool IsAttackAbilityUsed
     {
-        get => m_canBeDamaged;
-        set
+        get => m_isAttackAbilityUsed;
+        set => m_isAttackAbilityUsed = value;
+    }
+
+    protected bool m_isDefenceAbilityUsed = false;
+    public bool IsDefenceAbilityUsed
+    {
+        get => m_isDefenceAbilityUsed;
+        set => m_isDefenceAbilityUsed = value;
+    }
+    protected bool m_isBuffAbilityUsed = false;
+    public bool IsBuffAbilityUsed
+    {
+        get => m_isBuffAbilityUsed;
+        set => m_isBuffAbilityUsed = value;
+    }
+
+    protected int m_useAbilityCost = 11;
+    public int UseAbilityCost
+    {
+        get => m_useAbilityCost;
+        set => m_useAbilityCost = value;
+    }
+
+    protected int m_index = 0;
+    public int Index => m_index;
+    public Vector2 PositionOnField
+    {
+        get
         {
-            m_canBeDamaged = value;
+            return transform.GetComponentInParent<Cell>().CellIndex;
         }
     }
 
-    protected bool m_isAttackedOnTheMove = false;
-    public bool IsAttackedOnTheMove
+    public Cell ParentCell
     {
-        get => m_isAttackedOnTheMove;
-        set => m_isAttackedOnTheMove = value;
+        get
+        {
+            return transform.GetComponentInParent<Cell>();
+        }
     }
 
-    protected float m_lastDamageAmount;
-    public float LastDamageAmount
-    {
-        get => m_lastDamageAmount;
-        private set => m_lastDamageAmount = value;
-    }
-    protected Character m_lastAttackedCharacter;
-    public Character LastAttackedCharacter
-    {
-        get => m_lastAttackedCharacter;
-        private set => m_lastAttackedCharacter = value;
-    }
+    private BaseCharacterAbility m_attackCharacterAbility;
+    public BaseCharacterAbility AttackCharacterAbility => m_attackCharacterAbility;
+
+    private BaseCharacterAbility m_defenceCharacterAbility;
+    public BaseCharacterAbility DefenceCharacterAbility => m_defenceCharacterAbility;
+
+    private BaseCharacterAbility m_buffCharacterAbility;
+    public BaseCharacterAbility BuffCharacterAbility => m_buffCharacterAbility;
 
     public event Action<Character> OnAttack;
     public event Action<Character> OnHeal;
     public event Action<Character> OnDeath;
     public event Action<Character, string, float> OnDamaged;
-    public event Action<Character> OnAttackAbilityUsed;
-    public event Action<Character> OnDefenceAbilityUsed;
-    public event Action<Character> OnBuffAbilityUsed;
+
     public event Action<Character> OnPositionOnFieldChanged;
 
     public void ResetCharacter()
@@ -224,6 +253,12 @@ public abstract class Character : OutlineInteractableObject
         m_magDefence = m_card.magDefence;
         m_critChance = m_card.critChance;
         m_critNum = m_card.critNum;
+
+        m_attackCharacterAbility = m_card.attackCharacterAbility;
+        m_defenceCharacterAbility = m_card.defenceCharacterAbility;
+        m_buffCharacterAbility = m_card.buffCharacterAbility;
+
+        m_useAbilityCost = 11;
 
         OnClick += OnCharacterClickedInvoke;
         IsChosen = false;
@@ -343,15 +378,15 @@ public abstract class Character : OutlineInteractableObject
 
     public void UseAtackAbility()
     {
-        OnAttackAbilityUsed?.Invoke(this);
+        m_attackCharacterAbility.SelectCard();
     }
     public void UseDefenceAbility()
     {
-        OnDefenceAbilityUsed?.Invoke(this);
+        m_defenceCharacterAbility.SelectCard();
     }
     public void UseBuffAbility()
     {
-        OnBuffAbilityUsed?.Invoke(this);
+        m_buffCharacterAbility.SelectCard();
     }
 
     protected void OnAttackInvoke()

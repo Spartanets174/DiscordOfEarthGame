@@ -54,15 +54,15 @@ public abstract class State
     {
         yield break;
     }
-    public virtual IEnumerator UseAttackAbility()
+    public virtual IEnumerator UseAttackAbility(GameObject gameObject)
     {
         yield break;
     }
-    public virtual IEnumerator UseDefensiveAbility()
+    public virtual IEnumerator UseDefensiveAbility(GameObject gameObject)
     {
         yield break;
     }
-    public virtual IEnumerator UseBuffAbility()
+    public virtual IEnumerator UseBuffAbility(GameObject gameObject)
     {
         yield break;
     }

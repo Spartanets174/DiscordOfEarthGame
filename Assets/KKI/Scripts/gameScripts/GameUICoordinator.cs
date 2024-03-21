@@ -56,7 +56,6 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
     {
         cardSupportAbilitiesController.Init();
         playerControllerPresenter.Init();
-        
 
         battleSystem.gameLogCurrentText.Subscribe(x =>
         {
@@ -88,6 +87,17 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
         toMenuButton.onClick.AddListener(SceneController.ToMenu);
         toMenuButtonEndGame.onClick.AddListener(SceneController.ToMenu);
 
+
+
+        cardSupportAbilitiesController.OnSupportAbilitySelected += OnSupportAbilitySelected;
+        cardSupportAbilitiesController.OnSupportAbilityUsed += OnSupportAbilityUsed;
+        cardSupportAbilitiesController.OnSupportAbilityUsingCancel += OnSupportAbilityUsed;
+
+        chosenCharacterDeatilsDisplay.OnAbilitySelected += OnAbilitySelected;
+        chosenCharacterDeatilsDisplay.OnAbilityUsed += OnAbilityUsed;
+        chosenCharacterDeatilsDisplay.OnAbilityUsingCancel += OnAbilityUsed;
+
+
         Observable.EveryUpdate().Subscribe(x =>
         {
             timer -= Time.deltaTime;
@@ -101,6 +111,30 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
                 }
             }
         }).AddTo(disposables);
+    }
+
+    private void OnAbilityUsed()
+    {
+        cardSupportAbilitiesController.SetEnabledToSupportCards(true);
+        cardSupportAbilitiesController.SetDragAllowToSupportCards(true);
+    }
+
+    private void OnAbilitySelected()
+    {
+        cardSupportAbilitiesController.SetEnabledToSupportCards(false);
+        cardSupportAbilitiesController.SetDragAllowToSupportCards(false);
+    }
+
+    private void OnSupportAbilityUsed()
+    {
+        chosenCharacterDeatilsDisplay.SetRulesAbilityButtonsState();
+    }
+
+    private void OnSupportAbilitySelected()
+    {
+        chosenCharacterDeatilsDisplay.SetAbilityButtonsState(false);
+        chosenCharacterDeatilsDisplay.currentCharacter.Value = null;
+        battleSystem.CurrentChosenCharacter.Value = null;
     }
 
     private void OnGameStarted(Begin begin)
@@ -141,6 +175,8 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
             staticEnemyCharacter.OnDamaged += LogCharacterDamage;
             staticEnemyCharacter.OnDeath += LogDeath;
         }
+
+        chosenCharacterDeatilsDisplay.Init();
     }
 
     private void SetEndGame()

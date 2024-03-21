@@ -62,25 +62,25 @@ public class GameCharacterCardDisplay : OutlineClicableUI
     {
         m_currentCharacter = character;
 
-        character.OnAttackAbilityUsed += OnAttackAbilityUsed;
-        character.OnDefenceAbilityUsed += OnDefenceAbilityUsed;
-        character.OnBuffAbilityUsed += OnBuffAbilityUsed;
+        character.AttackCharacterAbility.OnCardAbilityUsed += OnAttackAbilityUsed;
+        character.DefenceCharacterAbility.OnCardAbilityUsed += OnDefenceAbilityUsed;
+        character.BuffCharacterAbility.OnCardAbilityUsed += OnBuffAbilityUsed;
         character.OnDamaged += (x,y,z)=> SetHealth(x);
         character.OnHeal += SetHealth;
         character.OnDeath += OnDeath;
     }
 
-    public void OnAttackAbilityUsed(Character character)
+    public void OnAttackAbilityUsed(BaseCharacterAbility baseCharacterAbility)
     {
-        charAttackAbilityImage.DOFade(0.5f,1);
+        charAttackAbilityImage.DOColor(Color.white,1);
     }
-    public void OnDefenceAbilityUsed(Character character)
+    public void OnDefenceAbilityUsed(BaseCharacterAbility baseCharacterAbility)
     {
-        charDefenceAbilityImage.DOFade(0.5f, 1);
+        charDefenceAbilityImage.DOColor(Color.white, 1);
     }
-    public void OnBuffAbilityUsed(Character character)
+    public void OnBuffAbilityUsed(BaseCharacterAbility baseCharacterAbility)
     {
-        charBuffAbilityImage.DOFade(0.5f, 1);
+        charBuffAbilityImage.DOColor(Color.white, 1);
     }
 
     private void SetHealth(Character character)
