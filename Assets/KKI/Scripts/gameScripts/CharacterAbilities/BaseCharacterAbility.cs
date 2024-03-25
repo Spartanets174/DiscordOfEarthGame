@@ -25,6 +25,8 @@ public abstract class BaseCharacterAbility
     protected ICharacterSelectable m_selectCharacterBehaviour;
     public ICharacterSelectable SelectCharacterBehaviour => m_selectCharacterBehaviour;
 
+    protected Character abilityOwner;
+
     public event Action<ICardSelectable> OnCardAbilitySelected;
     public event Action<ICardSelectable> OnSecondCardAbilitySelected;
     public event Action<ICardSelectable> OnThirdCardAbilitySelected;
@@ -112,5 +114,5 @@ public abstract class BaseCharacterAbility
         OnUsingCancel?.Invoke(this);
     }
 
-    public abstract void Init(BattleSystem battleSystem);
+    public abstract void Init(BattleSystem battleSystem, Character owner);
 }

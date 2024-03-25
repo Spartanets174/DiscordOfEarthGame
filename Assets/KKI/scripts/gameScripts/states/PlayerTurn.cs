@@ -300,10 +300,9 @@ public class PlayerTurn : State
             playerCharacter.OnClick += BattleSystem.OnChooseCharacterButton;
         }
 
-        BattleSystem.PlayerController.SetPlayerChosenState(false);
-        BattleSystem.PlayerController.SetPlayerState(true);
-        BattleSystem.EnemyController.SetEnemiesChosenState(false);
-        BattleSystem.EnemyController.SetEnemiesState(true);
+        BattleSystem.PlayerController.SetPlayerStates(true, false);
+        BattleSystem.EnemyController.SetEnemiesStates(true, false);
+        BattleSystem.EnemyController.SetStaticEnemiesState(true);
     }
 
     private void CheckPlayerTurnCountables()

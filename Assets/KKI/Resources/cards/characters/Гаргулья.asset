@@ -63,23 +63,16 @@ MonoBehaviour:
   passiveCharacterAbility:
     rid: -2
   attackCharacterAbility:
-    rid: 6947752895263801346
+    rid: 6947752984539037703
   defenceCharacterAbility:
     rid: 6947752895263801367
   buffCharacterAbility:
-    rid: 6947752895263801388
+    rid: 6947752984539037702
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 6947752895263801346
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
-      data:
-        m_typeOfAbility: 0
-        damage: 1
-        m_turnCount: 1
-        m_isBuff: 1
     - rid: 6947752895263801367
       type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
       data:
@@ -87,10 +80,16 @@ MonoBehaviour:
         damage: 1
         m_turnCount: 1
         m_isBuff: 1
-    - rid: 6947752895263801388
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+    - rid: 6947752984539037702
+      type: {class: GargoyleCharacterBuffAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 2
-        damage: 1
-        m_turnCount: 1
+        physDefenceToIcrease: 4
+        m_turnCount: 3
         m_isBuff: 1
+    - rid: 6947752984539037703
+      type: {class: GargoyleCharacterAttackAbility, ns: , asm: Assembly-CSharp}
+      data:
+        m_typeOfAbility: 0
+        damageSpread: {x: 0.25, y: 0.35}
+        range: 2

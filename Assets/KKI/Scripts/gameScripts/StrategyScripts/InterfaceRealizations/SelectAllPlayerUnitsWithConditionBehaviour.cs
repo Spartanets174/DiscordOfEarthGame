@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SelectAllEnemyUnitsBehaviour : ICardSelectable
+
+public class SelectAllPlayerUnitsWithConditionBehaviour : ICardSelectable
 {
     private BattleSystem battleSystem;
     public event Action OnSelected;
@@ -18,36 +19,54 @@ public class SelectAllEnemyUnitsBehaviour : ICardSelectable
         }
     }
 
-    public SelectAllEnemyUnitsBehaviour(string text, BattleSystem battleSystem)
+    private Func<Character,bool> conditionAction;
+    public SelectAllPlayerUnitsWithConditionBehaviour(string text, BattleSystem battleSystem, Func<Character, bool> conditionAction)
     {
         m_selectCardTipText = text;
         this.battleSystem = battleSystem;
+        this.conditionAction = conditionAction;
     }
 
     public void SelectCard()
     {
         if (battleSystem.State is PlayerTurn)
         {
-            battleSystem.EnemyController.SetEnemiesStates(true,true);
-
+            battleSystem.EnemyController.SetEnemiesStates(false, false);
+           
             battleSystem.EnemyController.SetStaticEnemiesState(false);
 
-            battleSystem.PlayerController.SetPlayerStates(false,false);
+            foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
+            {
+                if (conditionAction.Invoke(playerCharacter))
+                {
+                    playerCharacter.IsEnabled = true;
+                    playerCharacter.IsChosen = true;
+                }
+                else
+                {
+                    playerCharacter.IsEnabled = false;
+                    playerCharacter.IsChosen = false;
+                }
+            }        
         }
 
+        conditionAction = null;
         OnSelected?.Invoke();
     }
 
     public void CancelSelection()
     {
+        conditionAction = null;
         if (battleSystem.State is PlayerTurn)
         {
             battleSystem.EnemyController.SetEnemiesStates(true, false);
 
             battleSystem.EnemyController.SetStaticEnemiesState(true);
 
+
             battleSystem.PlayerController.SetPlayerStates(true, false);
         }
         OnCancelSelection?.Invoke();
     }
 }
+

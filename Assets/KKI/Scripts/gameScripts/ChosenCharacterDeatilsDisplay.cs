@@ -87,7 +87,7 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
             playerCharacter.AttackCharacterAbility.OnCardAbilityCharacterSelected += OnCardAbilityCharacterSelected;
             playerCharacter.AttackCharacterAbility.OnCardAbilityUsed += OnCardAbilityUsed;
             playerCharacter.AttackCharacterAbility.OnUsingCancel += OnUsingCancel;
-            playerCharacter.AttackCharacterAbility.Init(battleSystem);
+            playerCharacter.AttackCharacterAbility.Init(battleSystem, playerCharacter);
 
             playerCharacter.DefenceCharacterAbility.OnCardAbilitySelected += OnCardAbilitySelected;
             playerCharacter.DefenceCharacterAbility.OnSecondCardAbilitySelected += OnCardAbilitySelected;
@@ -95,7 +95,7 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
             playerCharacter.DefenceCharacterAbility.OnCardAbilityCharacterSelected += OnCardAbilityCharacterSelected;
             playerCharacter.DefenceCharacterAbility.OnCardAbilityUsed += OnCardAbilityUsed;
             playerCharacter.DefenceCharacterAbility.OnUsingCancel += OnUsingCancel;
-            playerCharacter.DefenceCharacterAbility.Init(battleSystem);
+            playerCharacter.DefenceCharacterAbility.Init(battleSystem, playerCharacter);
 
             playerCharacter.BuffCharacterAbility.OnCardAbilitySelected += OnCardAbilitySelected;
             playerCharacter.BuffCharacterAbility.OnSecondCardAbilitySelected += OnCardAbilitySelected;
@@ -103,7 +103,7 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
             playerCharacter.BuffCharacterAbility.OnCardAbilityCharacterSelected += OnCardAbilityCharacterSelected;
             playerCharacter.BuffCharacterAbility.OnCardAbilityUsed += OnCardAbilityUsed;
             playerCharacter.BuffCharacterAbility.OnUsingCancel += OnUsingCancel;
-            playerCharacter.BuffCharacterAbility.Init(battleSystem);
+            playerCharacter.BuffCharacterAbility.Init(battleSystem, playerCharacter);
         }
     }
     private void OnDestroy()
@@ -250,18 +250,18 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
 
     private void UseAttackAbility(GameObject gameObject)
     {
-        battleSystem.OnAttackAbilityButton(currentCharacter.Value.gameObject);
         usingAbilityCharacter.Value = currentCharacter.Value;
+        battleSystem.OnAttackAbilityButton(currentCharacter.Value.gameObject);      
     }
     private void UseDefencebility(GameObject gameObject)
     {
-        battleSystem.OnDefensiveAbilityButton(currentCharacter.Value.gameObject);
         usingAbilityCharacter.Value = currentCharacter.Value;
+        battleSystem.OnDefensiveAbilityButton(currentCharacter.Value.gameObject);       
     }
     private void UseBuffAbility(GameObject gameObject)
     {
-        battleSystem.OnBuffAbilityButton(currentCharacter.Value.gameObject);
         usingAbilityCharacter.Value = currentCharacter.Value;
+        battleSystem.OnBuffAbilityButton(currentCharacter.Value.gameObject);        
     }
 
     public void SetRulesAbilityButtonsState()

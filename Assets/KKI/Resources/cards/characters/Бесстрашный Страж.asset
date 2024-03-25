@@ -48,34 +48,30 @@ MonoBehaviour:
   passiveCharacterAbility:
     rid: -2
   attackCharacterAbility:
-    rid: 6947752895263801407
+    rid: 6947752984539037696
   defenceCharacterAbility:
-    rid: 6947752895263801365
+    rid: 6947752984539037697
   buffCharacterAbility:
-    rid: 6947752895263801409
+    rid: 6947752984539037698
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 6947752895263801365
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
-      data:
-        m_typeOfAbility: 1
-        damage: 1
-        m_turnCount: 1
-        m_isBuff: 1
-    - rid: 6947752895263801407
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+    - rid: 6947752984539037696
+      type: {class: FearlessGuardianCharacterAttackAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 0
-        damage: 1
-        m_turnCount: 1
-        m_isBuff: 1
-    - rid: 6947752895263801409
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+        damage: 2
+    - rid: 6947752984539037697
+      type: {class: FearlessGuardianCharacterDefenceAbility, ns: , asm: Assembly-CSharp}
+      data:
+        m_typeOfAbility: 1
+        magDefenceAmount: 1
+        physDefenceAmount: 1
+    - rid: 6947752984539037698
+      type: {class: FearlessGuardianCharacterBuffAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 2
-        damage: 1
-        m_turnCount: 1
-        m_isBuff: 1
+        magDefenceAmount: 1
+        physDefenceAmount: 1

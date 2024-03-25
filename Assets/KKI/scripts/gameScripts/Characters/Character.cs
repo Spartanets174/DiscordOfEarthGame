@@ -42,6 +42,13 @@ public abstract class Character : OutlineInteractableObject
         set => m_speed = value;
     }
 
+    protected float m_maxSpeed;
+    public float MaxSpeed
+    {
+        get => m_maxSpeed;
+        set => m_maxSpeed = value;
+    }
+
     protected float m_physAttack;
     public float PhysAttack
     {
@@ -219,7 +226,7 @@ public abstract class Character : OutlineInteractableObject
     {
         if (!IsFreezed)
         {
-            m_speed = m_card.speed;
+            m_speed = (int)m_maxSpeed;
         }       
         m_isAttackedOnTheMove = false;
     }
@@ -246,6 +253,7 @@ public abstract class Character : OutlineInteractableObject
         m_rarity = m_card.rarity;
         Health = m_card.health;
         m_speed = m_card.speed;
+        m_maxSpeed = m_card.speed;
         m_physAttack = m_card.physAttack;
         m_magAttack = m_card.magAttack;
         m_range = m_card.range;
@@ -301,6 +309,43 @@ public abstract class Character : OutlineInteractableObject
         return Health == 0;
     }
 
+    public virtual bool Damage(Character chosenCharacter, string abilityName, float damage)
+    {
+        if (!CanBeDamaged)
+        {
+            OnDamaged?.Invoke(this, abilityName, 0);
+            return false;
+        }
+
+        if (IsDamageAvoided())
+        {
+            OnDamaged?.Invoke(this, abilityName, 0);
+            return false;
+        }
+
+        float crit = IsCrit(chosenCharacter.CritChance, chosenCharacter.CritNum);
+        float finalPhysDamage = ((11 + damage) * damage * crit * (damage - PhysDefence + Card.health)) / 256;
+        float finalMagDamage = ((11 + damage) * damage * crit * (damage - MagDefence + Card.health)) / 256;
+        float finalDamage = Math.Max(finalMagDamage, finalPhysDamage);
+
+        if (finalDamage == 0)
+        {
+            finalDamage = UnityEngine.Random.Range(0.01f, 0.1f);
+        }
+        Health = Math.Max(0, Health - finalDamage);
+
+        LastDamageAmount = finalDamage;
+        LastAttackedCharacter = chosenCharacter;
+
+        OnDamaged?.Invoke(this, abilityName, finalDamage);
+        if (Health == 0)
+        {
+            OnDeath?.Invoke(this);
+        }
+
+        return Health == 0;
+    }
+
     public bool Damage(float damage, string nameObject)
     {
         if (!CanBeDamaged) return false;
@@ -343,7 +388,7 @@ public abstract class Character : OutlineInteractableObject
         }
     }
 
-    public void Heal(int amount)
+    public void Heal(float amount)
     {
         float temp = Health + amount;
         if (temp>Card.health)

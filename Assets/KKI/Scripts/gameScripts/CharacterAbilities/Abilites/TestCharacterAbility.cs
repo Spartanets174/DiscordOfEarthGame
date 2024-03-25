@@ -21,8 +21,9 @@ public class TestCharacterAbility : BaseCharacterAbility, ITurnCountable
 
     private List<Character> characters = new();
     private SetAbiableCellsBehaviour setAbiableCellsBehaviour;
-    public override void Init(BattleSystem battleSystem)
+    public override void Init(BattleSystem battleSystem, Character owner)
     {
+        this.abilityOwner = owner;
         characters.Clear();
         this.battleSystem = battleSystem;
         SetCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("¬ыберите вражеского персонажа дл€ атаки", battleSystem));
