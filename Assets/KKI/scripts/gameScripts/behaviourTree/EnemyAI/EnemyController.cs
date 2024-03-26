@@ -170,10 +170,10 @@ public class EnemyController : Tree
         staticEnemyCharacter.SetData(characterCard, material, m_staticEnemyCharObjects.Count - 1);
         staticEnemyCharacter.OnDeath += OnStaticEnemyCharacterDeath;
 
-        SetAttackableCells(enums.Directions.top, staticEnemyCharacter);
-        SetAttackableCells(enums.Directions.bottom, staticEnemyCharacter);
-        SetAttackableCells(enums.Directions.right, staticEnemyCharacter);
-        SetAttackableCells(enums.Directions.left, staticEnemyCharacter);
+        SetAttackableCells(Enums.Directions.top, staticEnemyCharacter);
+        SetAttackableCells(Enums.Directions.bottom, staticEnemyCharacter);
+        SetAttackableCells(Enums.Directions.right, staticEnemyCharacter);
+        SetAttackableCells(Enums.Directions.left, staticEnemyCharacter);
 
         m_staticEnemyCharObjects.Add(staticEnemyCharacter);
     }
@@ -188,7 +188,7 @@ public class EnemyController : Tree
         Destroy(character.gameObject);
     }
 
-    private void SetAttackableCells(enums.Directions direction, StaticEnemyCharacter staticEnemyCharacter )
+    private void SetAttackableCells(Enums.Directions direction, StaticEnemyCharacter staticEnemyCharacter )
     {
         int newI = (int)staticEnemyCharacter.PositionOnField.x;
         int newJ = (int)staticEnemyCharacter.PositionOnField.y;
@@ -197,16 +197,16 @@ public class EnemyController : Tree
         {
             switch (direction)
             {
-                case enums.Directions.top:
+                case Enums.Directions.top:
                     newI--;
                     break;
-                case enums.Directions.bottom:
+                case Enums.Directions.bottom:
                     newJ--;
                     break;
-                case enums.Directions.right:
+                case Enums.Directions.right:
                     newI++;
                     break;
-                case enums.Directions.left:
+                case Enums.Directions.left:
                     newJ++;
                     break;
             }

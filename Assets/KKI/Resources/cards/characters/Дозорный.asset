@@ -52,34 +52,33 @@ MonoBehaviour:
   passiveCharacterAbility:
     rid: -2
   attackCharacterAbility:
-    rid: 6947752895263801348
+    rid: 6947753006087536644
   defenceCharacterAbility:
-    rid: 6947752895263801369
+    rid: 6947753006087536645
   buffCharacterAbility:
-    rid: 6947752895263801390
+    rid: 6947753006087536646
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 6947752895263801348
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+    - rid: 6947753006087536644
+      type: {class: SentinelCharacterAttackAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 0
         damage: 1
-        m_turnCount: 1
-        m_isBuff: 1
-    - rid: 6947752895263801369
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+        range: 3
+    - rid: 6947753006087536645
+      type: {class: SentinelCharacterDefenceAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 1
-        damage: 1
-        m_turnCount: 1
-        m_isBuff: 1
-    - rid: 6947752895263801390
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+        magDefenceAmount: 1
+        physDefenceAmount: 1
+        critChanceAmount: 0.1
+    - rid: 6947753006087536646
+      type: {class: SentinelCharacteBuffAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 2
-        damage: 1
-        m_turnCount: 1
-        m_isBuff: 1
+        magDefenceAmount: 1
+        physDefenceAmount: 1
+        healAmount: 1

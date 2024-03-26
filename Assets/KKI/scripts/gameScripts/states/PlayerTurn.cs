@@ -332,13 +332,14 @@ public class PlayerTurn : State
     {
         enemiesToAttack.Clear();
         if (character.IsAttackedOnTheMove) return;
+        if (!character.CanDamage) return;
 
-        SetAttackableCells(character.PositionOnField, enums.Directions.top, character);
-        SetAttackableCells(character.PositionOnField, enums.Directions.bottom, character);
-        SetAttackableCells(character.PositionOnField, enums.Directions.right, character);
-        SetAttackableCells(character.PositionOnField, enums.Directions.left, character);
+        SetAttackableCells(character.PositionOnField, Enums.Directions.top, character);
+        SetAttackableCells(character.PositionOnField, Enums.Directions.bottom, character);
+        SetAttackableCells(character.PositionOnField, Enums.Directions.right, character);
+        SetAttackableCells(character.PositionOnField, Enums.Directions.left, character);
     }
-    private void SetAttackableCells(Vector2 pos, enums.Directions direction, Character character)
+    private void SetAttackableCells(Vector2 pos, Enums.Directions direction, Character character)
     {
         int newI = (int)pos.x;
         int newJ = (int)pos.y;
@@ -347,16 +348,16 @@ public class PlayerTurn : State
         {
             switch (direction)
             {
-                case enums.Directions.top:
+                case Enums.Directions.top:
                     newI--;
                     break;
-                case enums.Directions.bottom:
+                case Enums.Directions.bottom:
                     newJ--;
                     break;
-                case enums.Directions.right:
+                case Enums.Directions.right:
                     newI++;
                     break;
-                case enums.Directions.left:
+                case Enums.Directions.left:
                     newJ++;
                     break;
             }
@@ -385,7 +386,7 @@ public class PlayerTurn : State
                     cell.SetColor("attack");
                     enemiesToAttack.Add(kostilEnemy.WallEnemyCharacter);
                 }
-                if (character.Class == enums.Classes.Маг)
+                if (character.Class == Enums.Classes.Маг)
                 {
                     continue;
                 }

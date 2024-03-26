@@ -6,7 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Card",menuName = "Card")]
 public class CharacterCard: Card
 {   
-    public enums.Classes Class;
+    public Enums.Classes Class;
 
     [Space, Header("Characteristics")]
     public float health;

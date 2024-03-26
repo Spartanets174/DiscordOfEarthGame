@@ -60,16 +60,16 @@ public class DeckCharacterCardDisplay : MonoBehaviour
         characterName.text = characterCard.cardName;
         switch (characterCard.Class)
         {
-            case enums.Classes.Паладин:
+            case Enums.Classes.Паладин:
                 classImage.sprite = warriorSprite;
                 break;
-            case enums.Classes.Лучник:
+            case Enums.Classes.Лучник:
                 classImage.sprite = archerSprite;
                 break;
-            case enums.Classes.Маг:
+            case Enums.Classes.Маг:
                 classImage.sprite = wizardSprite;
                 break;
-            case enums.Classes.Кавалерия:
+            case Enums.Classes.Кавалерия:
                 classImage.sprite = сavalrySprite;
                 break;
         }

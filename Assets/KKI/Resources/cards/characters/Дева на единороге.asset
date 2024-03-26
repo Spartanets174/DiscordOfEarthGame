@@ -53,34 +53,33 @@ MonoBehaviour:
   passiveCharacterAbility:
     rid: -2
   attackCharacterAbility:
-    rid: 6947752895263801347
+    rid: 6947753006087536641
   defenceCharacterAbility:
-    rid: 6947752895263801368
+    rid: 6947753006087536642
   buffCharacterAbility:
-    rid: 6947752895263801389
+    rid: 6947753006087536643
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 6947752895263801347
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+    - rid: 6947753006087536641
+      type: {class: MaidenOnUnicornCharacterAttackBehaviour, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 0
-        damage: 1
-        m_turnCount: 1
-        m_isBuff: 1
-    - rid: 6947752895263801368
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+        damage: 0.2
+        area: {x: 3, y: 3}
+        direction: 0
+    - rid: 6947753006087536642
+      type: {class: MaidenOnUnicornCharacterDefenceBehaviour, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 1
-        damage: 1
         m_turnCount: 1
         m_isBuff: 1
-    - rid: 6947752895263801389
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+    - rid: 6947753006087536643
+      type: {class: MaidenOnUnicornCharacterBuffBehaviour, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 2
-        damage: 1
-        m_turnCount: 1
+        buffAttackAmount: 1
+        m_turnCount: 2
         m_isBuff: 1

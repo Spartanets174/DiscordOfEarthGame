@@ -73,11 +73,6 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
     public event Action OnAbilityUsingCancel;
     public void Init()
     {
-        currentCharacter.Subscribe(x =>
-        {
-            SetRulesAbilityButtonsState();
-        }).AddTo(disposables);
-
         foreach (var playerCharacter in playerController.PlayerCharactersObjects)
         {
             
@@ -115,7 +110,7 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
     {
         SetAbilityButtonsState(false);
         tipsTextParent.SetActive(true);
-        SetTipsText($"{selectable.SelectCardTipText}");
+        SetTipsText($"{selectable.SelectCardTipText}");       
         OnAbilitySelected?.Invoke();
     }
 
@@ -126,23 +121,29 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
     }
     private void OnCardAbilityUsed(BaseCharacterAbility ability)
     {
-        if (ability.TypeOfAbility == enums.TypeOfAbility.attack)
+        StartCoroutine(OnCardAbilityUsedDelayed(ability));
+    }
+
+    private IEnumerator OnCardAbilityUsedDelayed(BaseCharacterAbility ability)
+    {
+        yield return new WaitForEndOfFrame();
+        if (ability.TypeOfAbility == Enums.TypeOfAbility.attack)
         {
             attackAbilityButton.IsEnabled = false;
             usingAbilityCharacter.Value.IsAttackAbilityUsed = true;
         }
-        if (ability.TypeOfAbility == enums.TypeOfAbility.defence)
+        if (ability.TypeOfAbility == Enums.TypeOfAbility.defence)
         {
             defenceAbilityButton.IsEnabled = false;
             usingAbilityCharacter.Value.IsDefenceAbilityUsed = true;
         }
-        if (ability.TypeOfAbility == enums.TypeOfAbility.buff)
+        if (ability.TypeOfAbility == Enums.TypeOfAbility.buff)
         {
             buffAbilityButton.IsEnabled = false;
             usingAbilityCharacter.Value.IsBuffAbilityUsed = true;
         }
 
-        SetRulesAbilityButtonsState();
+        SetRulesAbilityButtonsState(usingAbilityCharacter.Value);
 
         playerController.PlayerTurn.SetStateToNormal();
         battleSystem.FieldController.TurnOnCells();
@@ -153,14 +154,16 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
         tipsTextParent.SetActive(false);
         SetTipsText("");
         OnAbilityUsed?.Invoke();
+        StopCoroutine(OnCardAbilityUsedDelayed(ability));
     }
+
     private void OnUsingCancel(BaseCharacterAbility ability)
     {       
         playerController.PlayerTurn.SetStateToNormal();
         battleSystem.FieldController.TurnOnCells();
         playerController.PlayerTurn.ClearDisposables();
 
-        SetRulesAbilityButtonsState();
+        SetRulesAbilityButtonsState(usingAbilityCharacter.Value);
         if (ability is ITurnCountable turnCountable)
         {
             if (turnCountable.IsBuff)
@@ -202,42 +205,42 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
         cardImage.sprite = currentCharacter.Value.Card.image;
         switch (currentCharacter.Value.Card.Class)
         {
-            case enums.Classes.Паладин:
+            case Enums.Classes.Паладин:
                 cardClassImage.sprite = warriorSprite;
                 break;
-            case enums.Classes.Лучник:
+            case Enums.Classes.Лучник:
                 cardClassImage.sprite = archerSprite;
                 break;
-            case enums.Classes.Маг:
+            case Enums.Classes.Маг:
                 cardClassImage.sprite = wizardSprite;
                 break;
-            case enums.Classes.Кавалерия:
+            case Enums.Classes.Кавалерия:
                 cardClassImage.sprite = сavalrySprite;
                 break;
         }
 
         switch (currentCharacter.Value.Card.race)
         {
-            case enums.Races.Гномы:
+            case Enums.Races.Гномы:
                 cardRaceText.text = "Г";
                 break;
-            case enums.Races.Люди:
+            case Enums.Races.Люди:
                 cardRaceText.text = "Л";
                 break;
-            case enums.Races.МагическиеСущества:
+            case Enums.Races.МагическиеСущества:
                 cardRaceText.text = "МС";
                 break;
-            case enums.Races.ТёмныеЭльфы:
+            case Enums.Races.ТёмныеЭльфы:
                 cardRaceText.text = "ТЭ";
                 break;
-            case enums.Races.Эльфы:
+            case Enums.Races.Эльфы:
                 cardRaceText.text = "Э";
                 break;
         }
 
         if (currentCharacter.Value is PlayerCharacter && battleSystem.State is PlayerTurn)
         {
-            SetRulesAbilityButtonsState();
+            SetRulesAbilityButtonsState(currentCharacter.Value);
             attackAbilityButton.OnClick += UseAttackAbility;
             defenceAbilityButton.OnClick += UseDefencebility;
             buffAbilityButton.OnClick += UseBuffAbility;            
@@ -264,16 +267,26 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
         battleSystem.OnBuffAbilityButton(currentCharacter.Value.gameObject);        
     }
 
-    public void SetRulesAbilityButtonsState()
+    public void SetRulesAbilityButtonsState(Character character)
     {
         if (currentCharacter.Value == null) return;
-        attackAbilityButton.IsEnabled = !currentCharacter.Value.IsAttackAbilityUsed;
-        defenceAbilityButton.IsEnabled = !currentCharacter.Value.IsDefenceAbilityUsed;
-        buffAbilityButton.IsEnabled = !currentCharacter.Value.IsBuffAbilityUsed;
+        if (!currentCharacter.Value.CanUseAbilities)
+        {
+            SetAbilityButtonsState(false);
+            return;
+        }
+        attackAbilityButton.IsEnabled = !character.IsAttackAbilityUsed;
+        defenceAbilityButton.IsEnabled = !character.IsDefenceAbilityUsed;
+        buffAbilityButton.IsEnabled = !character.IsBuffAbilityUsed;
     }
 
     public void SetAbilityButtonsState(bool state)
     {
+        if (currentCharacter.Value == null) return;
+        if (!currentCharacter.Value.CanUseAbilities)
+        {
+            state = false;
+        }
         attackAbilityButton.IsEnabled = state;
         defenceAbilityButton.IsEnabled = state;
         buffAbilityButton.IsEnabled = state;

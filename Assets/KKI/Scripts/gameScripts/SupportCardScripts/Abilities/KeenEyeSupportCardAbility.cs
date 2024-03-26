@@ -35,7 +35,7 @@ public class KeenEyeSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
     {
         if (battleSystem.State is PlayerTurn)
         {
-            playerCharacters = battleSystem.PlayerController.PlayerCharactersObjects.Where(x => x.Class == enums.Classes.Ëó÷íèê).ToList();
+            playerCharacters = battleSystem.PlayerController.PlayerCharactersObjects.Where(x => x.Class == Enums.Classes.Ëó÷íèê).ToList();
             foreach (var playerCharacter in playerCharacters)
             {
                 playerCharacter.CritChance = critChance;
@@ -43,7 +43,7 @@ public class KeenEyeSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
         }
         else
         {
-            enemyCharacters = battleSystem.EnemyController.EnemyCharObjects.Where(x => x.Class == enums.Classes.Ëó÷íèê).ToList();
+            enemyCharacters = battleSystem.EnemyController.EnemyCharObjects.Where(x => x.Class == Enums.Classes.Ëó÷íèê).ToList();
             foreach (var enemyCharacter in enemyCharacters)
             {
                 enemyCharacter.CritChance = critChance;

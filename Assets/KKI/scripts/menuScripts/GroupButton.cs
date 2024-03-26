@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static enums;
+using static Enums;
 
 public class GroupButton : MonoBehaviour
 {

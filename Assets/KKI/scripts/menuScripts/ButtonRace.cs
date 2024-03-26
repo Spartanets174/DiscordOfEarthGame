@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-using static enums;
+using static Enums;
 
 public class ButtonRace : GroupButton
 {

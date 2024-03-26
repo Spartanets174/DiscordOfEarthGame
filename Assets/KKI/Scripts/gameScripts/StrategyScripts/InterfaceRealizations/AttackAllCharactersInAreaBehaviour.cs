@@ -6,11 +6,14 @@ using UnityEngine;
 public class AttackAllCharactersInAreaBehaviour : ICardUsable
 {
     public List<Cell> cellsToAttack;
+    public List<Character> attackedCharacters;
     private float damage;
     private BattleSystem battleSystem;
     private string abilityName;
     public AttackAllCharactersInAreaBehaviour(float damage, BattleSystem battleSystem, string abilityName)
     {
+        cellsToAttack = new();
+        attackedCharacters = new();
         this.damage = damage;
         this.battleSystem = battleSystem;
         this.abilityName = abilityName;
@@ -22,11 +25,13 @@ public class AttackAllCharactersInAreaBehaviour : ICardUsable
         foreach (var cell in cellsToAttack)
         {
             Character character = cell.GetComponentInChildren<Character>();
+            if (character == null) continue;
             if (character is KostilEnemy kostilEnemy)
             {
                 character = kostilEnemy.WallEnemyCharacter;
             }
 
+            attackedCharacters.Add(character);
             bool isDeath = character.Damage(damage, abilityName);           
 
             if (isDeath)

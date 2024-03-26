@@ -30,7 +30,7 @@ public class TestCharacterAbility : BaseCharacterAbility, ITurnCountable
         SetSecondCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("Выберите второго вражеского персонажа для атаки", battleSystem));
         SetThirdCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("Выберите третьего вражеского персонажа для атаки", battleSystem));
         SetSelectCharacterBehaviour(new SetAbiableCellsBehaviour("Выберите клетку", battleSystem));
-        SetUseCardBehaviour(new AttackSelectedСharactersBehaviour(damage, battleSystem, "\"Тестовая\""));
+        SetUseCardBehaviour(new AttackSelectedСharacterBehaviour(damage, battleSystem, "\"Тестовая\""));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
         m_cardSecondSelectBehaviour.OnSelected += OnSecondSelected;

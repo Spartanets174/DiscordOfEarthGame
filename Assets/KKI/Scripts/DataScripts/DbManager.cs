@@ -904,45 +904,45 @@ public class DbManager : MonoBehaviour
         switch (reader.GetString("race"))
         {
             case "Люди":
-                item.race = enums.Races.Люди;
+                item.race = Enums.Races.Люди;
                 break;
             case "Гномы":
-                item.race = enums.Races.Гномы;
+                item.race = Enums.Races.Гномы;
                 break;
             case "Эльфы":
-                item.race = enums.Races.Эльфы;
+                item.race = Enums.Races.Эльфы;
                 break;
             case "ТёмныеЭльфы":
-                item.race = enums.Races.ТёмныеЭльфы;
+                item.race = Enums.Races.ТёмныеЭльфы;
                 break;
             case "МагическиеСущества":
-                item.race = enums.Races.МагическиеСущества;
+                item.race = Enums.Races.МагическиеСущества;
                 break;
         }
 
         switch (reader.GetString("class"))
         {
             case "Паладин":
-                item.Class = enums.Classes.Паладин;
+                item.Class = Enums.Classes.Паладин;
                 break;
             case "Лучник":
-                item.Class = enums.Classes.Лучник;
+                item.Class = Enums.Classes.Лучник;
                 break;
             case "Кавалерия":
-                item.Class = enums.Classes.Кавалерия;
+                item.Class = Enums.Classes.Кавалерия;
                 break;
             case "Маг":
-                item.Class = enums.Classes.Маг;
+                item.Class = Enums.Classes.Маг;
                 break;
         }
 
         switch (reader.GetString("rarity"))
         {
             case "Обычная":
-                item.rarity = enums.Rarity.Обычная;
+                item.rarity = Enums.Rarity.Обычная;
                 break;
             case "Мифическая":
-                item.rarity = enums.Rarity.Мифическая;
+                item.rarity = Enums.Rarity.Мифическая;
                 break;
         }
 
@@ -999,41 +999,41 @@ public class DbManager : MonoBehaviour
         switch (reader.GetString("race"))
         {
             case "Люди":
-                item.race = enums.Races.Люди;
+                item.race = Enums.Races.Люди;
                 break;
             case "Гномы":
-                item.race = enums.Races.Гномы;
+                item.race = Enums.Races.Гномы;
                 break;
             case "Эльфы":
-                item.race = enums.Races.Эльфы;
+                item.race = Enums.Races.Эльфы;
                 break;
             case "ТёмныеЭльфы":
-                item.race = enums.Races.ТёмныеЭльфы;
+                item.race = Enums.Races.ТёмныеЭльфы;
                 break;
             case "МагическиеСущества":
-                item.race = enums.Races.МагическиеСущества;
+                item.race = Enums.Races.МагическиеСущества;
                 break;
         }
         switch (reader.GetString("type"))
         {
             case "атакующая":
-                item.type = enums.TypeOfSupport.атакующая;
+                item.type = Enums.TypeOfSupport.атакующая;
                 break;
             case "защитная":
-                item.type = enums.TypeOfSupport.защитная;
+                item.type = Enums.TypeOfSupport.защитная;
                 break;
             case "мобильность":
-                item.type = enums.TypeOfSupport.мобильность;
+                item.type = Enums.TypeOfSupport.мобильность;
                 break;
         }
         item.abilityText = reader.GetString("effect");
         switch (reader.GetString("rarity"))
         {
             case "Обычная":
-                item.rarity = enums.Rarity.Обычная;
+                item.rarity = Enums.Rarity.Обычная;
                 break;
             case "Мифическая":
-                item.rarity = enums.Rarity.Мифическая;
+                item.rarity = Enums.Rarity.Мифическая;
                 break;
         }
         item.Price = reader.GetInt32("price");

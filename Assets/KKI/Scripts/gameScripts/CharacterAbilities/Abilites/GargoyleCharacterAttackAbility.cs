@@ -12,8 +12,6 @@ public class GargoyleCharacterAttackAbility : BaseCharacterAbility
     [SerializeField]
     private int range;
 
-    private Character character;
-
     private SelectCellsToAttackInRangeBehaviour selectCellsToAttackInRangeBehaviour;
 
     public override void Init(BattleSystem battleSystem, Character owner)
@@ -21,7 +19,7 @@ public class GargoyleCharacterAttackAbility : BaseCharacterAbility
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
         SetCardSelectBehaviour(new SelectCellsToAttackInRangeBehaviour("Íàæìèòå íà ïåğñîíàæà â êğàñíîé êëåòêå äëÿ àòàêè", battleSystem, abilityOwner, range));
-        SetUseCardBehaviour(new AttackSelectedÑharactersBehaviour(UnityEngine.Random.Range(damageSpread.x, damageSpread.y), battleSystem, "\"Äûõàíèå îãí¸ì\""));
+        SetUseCardBehaviour(new AttackSelectedÑharacterBehaviour(UnityEngine.Random.Range(damageSpread.x, damageSpread.y), battleSystem, "\"Äûõàíèå îãí¸ì\""));
 
         selectCellsToAttackInRangeBehaviour = (SelectCellsToAttackInRangeBehaviour)CardSelectBehaviour;
 
@@ -39,7 +37,6 @@ public class GargoyleCharacterAttackAbility : BaseCharacterAbility
                 enemyCharacter.OnClick += UseCard;
             }
         }
-
     }
 
 

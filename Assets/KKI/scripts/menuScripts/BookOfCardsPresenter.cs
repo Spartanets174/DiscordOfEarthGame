@@ -64,7 +64,7 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
         {
             SpawnSupportDeckCard(item);
         }
-        List<string> stringRaces = Enum.GetNames(typeof(enums.Races)).ToList();
+        List<string> stringRaces = Enum.GetNames(typeof(Enums.Races)).ToList();
         for (int i = 0; i < stringRaces.Count; i++)
         {
             if (stringRaces[i] == "ТёмныеЭльфы")
@@ -120,13 +120,13 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
         {
             switch (characterCardDisplay.ChosenCharCard.Class)
             {       
-                case enums.Classes.Лучник:
+                case Enums.Classes.Лучник:
                     tooMuchCardCaption.text = "В колоде уже максимум лучников (2)";
                     break;
-                case enums.Classes.Маг:
+                case Enums.Classes.Маг:
                     tooMuchCardCaption.text = "В колоде уже максимум магов (2)";
                     break;
-                case enums.Classes.Кавалерия:
+                case Enums.Classes.Кавалерия:
                     tooMuchCardCaption.text = "В колоде уже максимум кавалерии (1)";
                     break;
                 default:
@@ -152,7 +152,7 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
     }
     private void RaceDropdownCLick(int value)
     {
-        bookOfCardsController.SetCurrentRace((enums.Races)value);
+        bookOfCardsController.SetCurrentRace((Enums.Races)value);
         SpawnCharacterCards();
     }
     private void ClassButtonCLick(ButtonClass buttonClass)

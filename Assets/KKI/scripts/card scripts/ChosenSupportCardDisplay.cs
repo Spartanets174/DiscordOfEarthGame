@@ -26,7 +26,7 @@ public class ChosenSupportCardDisplay : MonoBehaviour
         CardSupport cardSupport = cardSupportObject.GetComponent<CardSupportDisplay>().CardSupport;
         m_chosenCardSupport = cardSupport;
         supportCardImage.sprite = cardSupport.image;
-        if (cardSupport.rarity==enums.Rarity.Мифическая)
+        if (cardSupport.rarity==Enums.Rarity.Мифическая)
         {
             supportCardRarity.color = new Color(126, 0, 255);
         }

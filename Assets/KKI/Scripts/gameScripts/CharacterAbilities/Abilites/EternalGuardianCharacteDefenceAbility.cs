@@ -25,15 +25,8 @@ public class EternalGuardianCharacteDefenceAbility : BaseCharacterAbility, ITurn
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
         SetCardSelectBehaviour(new EmptySelectBehaviour("Используйте карту"));
-        SetUseCardBehaviour(new EmptyUseAbilityBehaviour());
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
-        m_useCardBehaviour.OnCardUse += OnCardUse;
-    }
-
-    private void OnCardUse()
-    {
-        battleSystem.StopCoroutine(UseCardDelayed());
     }
 
     private void OnSelected()
@@ -41,14 +34,8 @@ public class EternalGuardianCharacteDefenceAbility : BaseCharacterAbility, ITurn
         abilityOwner.PhysDefence += physDefenceAmount;
 
         m_cardSelectBehaviour.OnSelected -= OnSelected;
-        battleSystem.StartCoroutine(UseCardDelayed());
-        
-    }
-
-    private IEnumerator UseCardDelayed()
-    {
-        yield return new WaitForEndOfFrame();
         UseCard(abilityOwner.gameObject);
+
     }
 
     public void ReturnToNormal()

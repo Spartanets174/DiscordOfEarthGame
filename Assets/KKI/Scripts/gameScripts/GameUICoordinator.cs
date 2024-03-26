@@ -127,7 +127,7 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
 
     private void OnSupportAbilityUsed()
     {
-        chosenCharacterDeatilsDisplay.SetRulesAbilityButtonsState();
+        chosenCharacterDeatilsDisplay.SetRulesAbilityButtonsState(chosenCharacterDeatilsDisplay.currentCharacter.Value);
     }
 
     private void OnSupportAbilitySelected()

@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Card Support", menuName = "Card support")]
 public class CardSupport : Card
 {
-    public enums.TypeOfSupport type;
+    public Enums.TypeOfSupport type;
     public string abilityText;
 
     [SerializeReference, SubclassSelector]

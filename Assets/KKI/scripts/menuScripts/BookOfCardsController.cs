@@ -25,11 +25,11 @@ public class BookOfCardsController : CardController
                 count++;
             }
         }
-        if (card.Class == enums.Classes.Маг || card.Class == enums.Classes.Лучник)
+        if (card.Class == Enums.Classes.Маг || card.Class == Enums.Classes.Лучник)
         {
             max = 2;
         }
-        if (card.Class == enums.Classes.Кавалерия)
+        if (card.Class == Enums.Classes.Кавалерия)
         {
             max = 1;
         }

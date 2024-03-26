@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static enums;
+using static Enums;
 
 public class ButtonClass : GroupButton
 {

@@ -47,7 +47,7 @@ public class GameSupportCardDisplay : OutlineClicableUI
         m_currentCardSupport = cardSupport;
         supportImage.sprite = cardSupport.image;
 
-        if (cardSupport.rarity == enums.Rarity.Мифическая)
+        if (cardSupport.rarity == Enums.Rarity.Мифическая)
         {
             supportCardRarity.color = new Color(126, 0, 255);
         }

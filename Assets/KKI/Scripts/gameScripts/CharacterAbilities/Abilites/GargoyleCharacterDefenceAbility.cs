@@ -2,13 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [Serializable]
-public class GargoyleCharacterBuffAbility : BaseCharacterAbility, ITurnCountable
+public class GargoyleCharacterDefenceAbility : BaseCharacterAbility, ITurnCountable
 {
-    [SerializeField]
-    private float physDefenceToIcrease;
-
     [SerializeField]
     private int m_turnCount;
     public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
@@ -19,29 +17,33 @@ public class GargoyleCharacterBuffAbility : BaseCharacterAbility, ITurnCountable
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
-    private float amount;
     public override void Init(BattleSystem battleSystem, Character owner)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new EmptySelectBehaviour("Используйте карту"));
+        SetCardSelectBehaviour(new EmptySelectBehaviour(""));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
     }
 
     private void OnSelected()
     {
-        amount = physDefenceToIcrease - abilityOwner.PhysDefence;
+        abilityOwner.IsFreezed = true;
+        abilityOwner.CanDamage = false;
+        abilityOwner.CanUseAbilities = false;
+        abilityOwner.IgnorePhysDamage = true;
 
-        abilityOwner.PhysDefence += amount;
-
-        m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(abilityOwner.gameObject);
     }
 
+
     public void ReturnToNormal()
     {
-        abilityOwner.PhysDefence -= amount;
+        abilityOwner.IsFreezed = false;
+        abilityOwner.CanDamage = true;
+        abilityOwner.CanUseAbilities = true;
+        abilityOwner.IgnorePhysDamage = false;
+
         OnReturnToNormal?.Invoke(this);
     }
 }

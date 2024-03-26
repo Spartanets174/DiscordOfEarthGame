@@ -24,7 +24,7 @@ public class MaterialBladesSupportCardAbility : BaseSupportÑardAbility, ITurnCou
         this.battleSystem = battleSystem;
         SetCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("Âûáåğèòå âğàæåñêîãî ïåğñîíàæà äëÿ àòàêè", battleSystem));
         SetSelectCharacterBehaviour(new SetCurrentEnemyCharacterBehaviour("", battleSystem));
-        SetUseCardBehaviour(new AttackSelectedÑharactersBehaviour(damage, battleSystem, "\"Ìàòåğèàëüíûå êëèíêè\""));
+        SetUseCardBehaviour(new AttackSelectedÑharacterBehaviour(damage, battleSystem, "\"Ìàòåğèàëüíûå êëèíêè\""));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSelectBehaviour.OnSelected += OnSelected;

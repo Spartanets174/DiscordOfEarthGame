@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class enums 
+public static class Enums 
 {
     public enum Races
     {
@@ -48,5 +48,6 @@ public static class enums
         bottom,
         left,
         right,
+        all
     }
 }

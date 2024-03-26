@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static enums;
+using static Enums;
 
 public abstract class CardController : MonoBehaviour, ILoadable
 {

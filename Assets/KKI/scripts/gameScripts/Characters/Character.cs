@@ -15,14 +15,14 @@ public abstract class Character : OutlineInteractableObject
     protected string m_characterName;
     public string CharacterName => m_characterName;
 
-    protected enums.Races m_race;
-    public enums.Races Race => m_race;
+    protected Enums.Races m_race;
+    public Enums.Races Race => m_race;
 
-    protected enums.Classes m_Class;
-    public enums.Classes Class => m_Class;
+    protected Enums.Classes m_Class;
+    public Enums.Classes Class => m_Class;
 
-    protected enums.Rarity m_rarity;
-    public enums.Rarity Êarity => m_rarity;
+    protected Enums.Rarity m_rarity;
+    public Enums.Rarity Êarity => m_rarity;
 
     protected float m_health;
     public float Health
@@ -53,14 +53,28 @@ public abstract class Character : OutlineInteractableObject
     public float PhysAttack
     {
         get => m_physAttack;
-        set => m_physAttack = value;
+        set
+        {
+            m_physAttack = value;
+            if (m_physAttack < 1 )
+            {
+                m_physAttack = 1;
+            }
+        }
     }
 
     protected float m_magAttack;
     public float MagAttack
     {
         get => m_magAttack;
-        set => m_magAttack = value;
+        set
+        {
+            m_magAttack = value;
+            if (m_magAttack < 1)
+            {
+                m_magAttack = 1;
+            }
+        }
     }
 
     protected int m_range;
@@ -74,14 +88,28 @@ public abstract class Character : OutlineInteractableObject
     public float PhysDefence
     {
         get => m_physDefence;
-        set => m_physDefence = value;
+        set
+        {
+            m_physDefence = value;
+            if (m_physDefence < 1)
+            {
+                m_physDefence = 1;
+            }
+        }
     }
 
     protected float m_magDefence;
     public float MagDefence
     {
         get => m_magDefence;
-        set => m_magDefence = value;
+        set
+        {
+            m_magDefence = value;
+            if (m_magDefence < 1)
+            {
+                m_magDefence = 1;
+            }
+        }
     }
 
     protected float m_critChance;
@@ -110,6 +138,13 @@ public abstract class Character : OutlineInteractableObject
     {
         get => m_canBeDamaged;
         set => m_canBeDamaged = value;
+    }
+
+    private bool m_canDamage;
+    public bool CanDamage
+    {
+        get => m_canDamage;
+        set => m_canDamage = value;
     }
 
     protected bool m_isAttackedOnTheMove = false;
@@ -147,6 +182,20 @@ public abstract class Character : OutlineInteractableObject
         }
     }
 
+    private bool m_ignorePhysDamage;
+    public bool IgnorePhysDamage
+    {
+        get => m_ignorePhysDamage;
+        set => m_ignorePhysDamage = value;
+    }
+
+    private bool m_ignoreMagDamage;
+    public bool IgnoreMagDamage
+    {
+        get => m_ignoreMagDamage;
+        set => m_ignoreMagDamage = value;
+    }
+
     private bool m_IsFreezed;
     public bool IsFreezed
     {
@@ -159,6 +208,13 @@ public abstract class Character : OutlineInteractableObject
                 Speed = 0;
             }
         }
+    }
+
+    protected bool m_canUseAbilities = false;
+    public bool CanUseAbilities
+    {
+        get => m_canUseAbilities;
+        set => m_canUseAbilities = value;
     }
 
     protected bool m_isAttackAbilityUsed = false;
@@ -235,6 +291,9 @@ public abstract class Character : OutlineInteractableObject
     {
         Debug.Log("Stats is normal");
         IsFreezed = false;
+        CanDamage = true;
+        CanUseAbilities = true;
+
         if (m_physAttack< m_card.physAttack) m_physAttack = m_card.physAttack;
         if (m_magAttack< m_card.magAttack) m_magAttack = m_card.magAttack;
         if (m_range < m_card.range) m_range = m_card.range;
@@ -271,6 +330,10 @@ public abstract class Character : OutlineInteractableObject
         OnClick += OnCharacterClickedInvoke;
         IsChosen = false;
         CanBeDamaged = true;
+        CanDamage = true;
+        CanUseAbilities = true;
+        IgnorePhysDamage = false;
+        IgnoreMagDamage = false;
     }
     public virtual bool Damage(Character chosenCharacter)
     {
@@ -287,14 +350,10 @@ public abstract class Character : OutlineInteractableObject
         }
 
         float crit = IsCrit(chosenCharacter.CritChance,chosenCharacter.CritNum);
-        float finalPhysDamage = ((11 + chosenCharacter.PhysAttack) * chosenCharacter.PhysAttack * crit * (chosenCharacter.PhysAttack - PhysDefence + Card.health)) / 256;
-        float finalMagDamage = ((11 + chosenCharacter.MagAttack) * chosenCharacter.MagAttack * crit * (chosenCharacter.MagAttack - MagDefence + Card.health)) / 256;
+        float finalPhysDamage = IgnorePhysDamage? 0 :((11 + chosenCharacter.PhysAttack) * chosenCharacter.PhysAttack * crit * (chosenCharacter.PhysAttack - PhysDefence + Card.health)) / 256;
+        float finalMagDamage = IgnoreMagDamage?0 : ((11 + chosenCharacter.MagAttack) * chosenCharacter.MagAttack * crit * (chosenCharacter.MagAttack - MagDefence + Card.health)) / 256;
         float finalDamage = Math.Max(finalMagDamage, finalPhysDamage);
 
-        if (finalDamage == 0)
-        {
-            finalDamage = UnityEngine.Random.Range(0.01f, 0.1f);
-        }
         Health = Math.Max(0, Health - finalDamage);
 
         LastDamageAmount = finalDamage;

@@ -5,8 +5,8 @@ using UnityEngine;
 public abstract class BaseCharacterAbility
 {
     [SerializeField]
-    private enums.TypeOfAbility m_typeOfAbility;
-    public enums.TypeOfAbility TypeOfAbility=> m_typeOfAbility;
+    private Enums.TypeOfAbility m_typeOfAbility;
+    public Enums.TypeOfAbility TypeOfAbility=> m_typeOfAbility;
 
     protected BattleSystem battleSystem;
 

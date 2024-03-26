@@ -7,9 +7,9 @@ public abstract class Card : ScriptableObject
     [Space, Header("Info")]
     public string cardName;
     public string description;
-    public enums.Races race;
+    public Enums.Races race;
     public Sprite image;
-    public enums.Rarity rarity;
+    public Enums.Rarity rarity;
     public int Price;
     public int id;
 }

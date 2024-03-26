@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TextCore;
+using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class MaterialBladesSecondSupportCardAbility : BaseSupportСardAbility, ITurnCountable
@@ -20,6 +21,7 @@ public class MaterialBladesSecondSupportCardAbility : BaseSupportСardAbility, I
     public event Action<ITurnCountable> OnReturnToNormal;
 
     private List<Character> characters = new();
+    AttackSelectedСharactersBehaviour attackSelectedСharactersBehaviour;
     public override void Init(BattleSystem battleSystem)
     {
         characters.Clear();
@@ -28,6 +30,8 @@ public class MaterialBladesSecondSupportCardAbility : BaseSupportСardAbility, I
         SetSecondCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("Выберите второго вражеского персонажа для атаки", battleSystem));
         SetSelectCharacterBehaviour(new SetCurrentEnemyCharacterBehaviour("", battleSystem));
         SetUseCardBehaviour(new AttackSelectedСharactersBehaviour(damage, battleSystem, "\"Материальные клинки 2\""));
+
+        attackSelectedСharactersBehaviour = (AttackSelectedСharactersBehaviour)UseCardBehaviour;
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
         m_cardSecondSelectBehaviour.OnSelected += OnSecondSelected;
@@ -83,13 +87,13 @@ public class MaterialBladesSecondSupportCardAbility : BaseSupportСardAbility, I
         {
             characters.Add(battleSystem.PlayerController.CurrentPlayerCharacter);
         }
-        if (characters.Count == 2)
+
+        attackSelectedСharactersBehaviour.charactersToAttack = characters;
+        UseCard(null);
+        foreach (var character in characters)
         {
-            foreach (var character in characters)
-            {
-                character.IsFreezed = true;
-                UseCard(character.gameObject);
-            }
+            character.IsFreezed = true;
+
         }
     }
 

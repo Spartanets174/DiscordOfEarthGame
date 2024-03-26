@@ -32,7 +32,7 @@ public class ColdSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
     {
         if (battleSystem.State is PlayerTurn)
         {
-            enemyCharacters = battleSystem.EnemyController.EnemyCharObjects.Where(x => x.Class == enums.Classes.Ëó÷íèê).ToList();
+            enemyCharacters = battleSystem.EnemyController.EnemyCharObjects.Where(x => x.Class == Enums.Classes.Ëó÷íèê).ToList();
             foreach (var enemyCharacter in enemyCharacters)
             {
                 enemyCharacter.IsFreezed = true;
@@ -40,7 +40,7 @@ public class ColdSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
         }
         else
         {
-            playerCharacters = battleSystem.PlayerController.PlayerCharactersObjects.Where(x => x.Class == enums.Classes.Ëó÷íèê).ToList();
+            playerCharacters = battleSystem.PlayerController.PlayerCharactersObjects.Where(x => x.Class == Enums.Classes.Ëó÷íèê).ToList();
             foreach (var playerCharacter in playerCharacters)
             {
                 playerCharacter.IsFreezed = true;

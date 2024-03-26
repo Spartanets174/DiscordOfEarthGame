@@ -1,6 +1,4 @@
 using BehaviourTree;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,14 +19,14 @@ public class CheckCellsForAttack : Node
         EnemyCharacter enemyCharacter = m_EnemyBT.CurrentEnemyCharacter;
         SetEnemiesForAttack(enemyCharacter);
 
-        if (enemyCharacter.IsAttackedOnTheMove)
+        if (enemyCharacter.IsAttackedOnTheMove || !enemyCharacter.CanDamage)
         {
             state = NodeState.FAILURE;
             return state;
         }
         else
         {
-            Debug.Log($"{enemiesToAttack.Count}" );
+            Debug.Log($"{enemiesToAttack.Count}");
             if (enemiesToAttack.Count > 0)
             {
                 parent.parent.SetData("enemy", enemiesToAttack[UnityEngine.Random.Range(0, enemiesToAttack.Count)]);
@@ -48,12 +46,12 @@ public class CheckCellsForAttack : Node
     public void SetEnemiesForAttack(Character character)
     {
         enemiesToAttack.Clear();
-        SetAttackableCells(character.PositionOnField, enums.Directions.top, character);
-        SetAttackableCells(character.PositionOnField, enums.Directions.bottom, character);
-        SetAttackableCells(character.PositionOnField, enums.Directions.right, character);
-        SetAttackableCells(character.PositionOnField, enums.Directions.left, character);
+        SetAttackableCells(character.PositionOnField, Enums.Directions.top, character);
+        SetAttackableCells(character.PositionOnField, Enums.Directions.bottom, character);
+        SetAttackableCells(character.PositionOnField, Enums.Directions.right, character);
+        SetAttackableCells(character.PositionOnField, Enums.Directions.left, character);
     }
-    private void SetAttackableCells(Vector2 pos, enums.Directions direction, Character character)
+    private void SetAttackableCells(Vector2 pos, Enums.Directions direction, Character character)
     {
         int newI = (int)pos.x;
         int newJ = (int)pos.y;
@@ -62,16 +60,16 @@ public class CheckCellsForAttack : Node
         {
             switch (direction)
             {
-                case enums.Directions.top:
+                case Enums.Directions.top:
                     newI--;
                     break;
-                case enums.Directions.bottom:
+                case Enums.Directions.bottom:
                     newJ--;
                     break;
-                case enums.Directions.right:
+                case Enums.Directions.right:
                     newI++;
                     break;
-                case enums.Directions.left:
+                case Enums.Directions.left:
                     newJ++;
                     break;
             }
@@ -88,22 +86,22 @@ public class CheckCellsForAttack : Node
             Cell cell = m_battleSystem.FieldController.GetCell(newI, newJ);
             PlayerCharacter enemy = cell.GetComponentInChildren<PlayerCharacter>();
             StaticEnemyCharacter staticEnemy = cell.GetComponentInChildren<StaticEnemyCharacter>();
-            KostilEnemy kostilEnemy = cell .GetComponentInChildren<KostilEnemy>();
+            KostilEnemy kostilEnemy = cell.GetComponentInChildren<KostilEnemy>();
             if (cell.transform.childCount > 0)
             {
                 if (enemy != null)
                 {
                     enemiesToAttack.Add(enemy);
                 }
-                if (staticEnemy != null&& staticEnemy is not KostilEnemy)
+                if (staticEnemy != null && staticEnemy is not KostilEnemy)
                 {
                     enemiesToAttack.Add(staticEnemy);
                 }
-                if (kostilEnemy!=null)
+                if (kostilEnemy != null)
                 {
                     enemiesToAttack.Add(kostilEnemy.WallEnemyCharacter);
                 }
-                if (m_EnemyBT.CurrentEnemyCharacter.Class == enums.Classes.Маг)
+                if (m_EnemyBT.CurrentEnemyCharacter.Class == Enums.Classes.Маг)
                 {
                     continue;
                 }

@@ -37,7 +37,7 @@ public class CurseCardSupportAbility : BaseSupportÑardAbility, ITurnCountable
 
         if (battleSystem.State is PlayerTurn)
         {
-            enemyCharacters = battleSystem.EnemyController.EnemyCharObjects.Where(x => x.Class == enums.Classes.Ïàëàäèí).ToList();
+            enemyCharacters = battleSystem.EnemyController.EnemyCharObjects.Where(x => x.Class == Enums.Classes.Ïàëàäèí).ToList();
             foreach (var enemyCharacter in enemyCharacters)
             {
                 enemyCharacter.IsFreezed = true;
@@ -45,7 +45,7 @@ public class CurseCardSupportAbility : BaseSupportÑardAbility, ITurnCountable
         }
         else
         {
-            playerCharacters = battleSystem.PlayerController.PlayerCharactersObjects.Where(x => x.Class == enums.Classes.Ïàëàäèí).ToList();
+            playerCharacters = battleSystem.PlayerController.PlayerCharactersObjects.Where(x => x.Class == Enums.Classes.Ïàëàäèí).ToList();
             foreach (var playerCharacter in playerCharacters)
             {
                 playerCharacter.IsFreezed = true;
