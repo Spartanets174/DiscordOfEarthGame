@@ -59,34 +59,37 @@ MonoBehaviour:
   passiveCharacterAbility:
     rid: -2
   attackCharacterAbility:
-    rid: 6947752895263801349
+    rid: 6947753029802917888
   defenceCharacterAbility:
-    rid: 6947752895263801370
+    rid: 6947753029802917889
   buffCharacterAbility:
-    rid: 6947752895263801391
+    rid: 6947753029802917890
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 6947752895263801349
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+    - rid: 6947753029802917888
+      type: {class: ProtectedDonkeyCharacterAttackAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 0
-        damage: 1
-        m_turnCount: 1
-        m_isBuff: 1
-    - rid: 6947752895263801370
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+        damage: 2
+        range: 1
+    - rid: 6947753029802917889
+      type: {class: ProtectedDonkeyCharacterDefenceAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 1
-        damage: 1
-        m_turnCount: 1
+        physAttackAmount: 1
+        magAttackAmount: 1
+        magDefenceAmount: 1
+        m_turnCount: 2
         m_isBuff: 1
-    - rid: 6947752895263801391
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+    - rid: 6947753029802917890
+      type: {class: ProtectedDonkeyCharacterBuffAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 2
-        damage: 1
-        m_turnCount: 1
+        physDefenceAmount: 1
+        magDefenceAmount: 1
+        rangeAmount: 1
+        m_turnCount: 2
         m_isBuff: 1

@@ -45,34 +45,31 @@ MonoBehaviour:
   passiveCharacterAbility:
     rid: -2
   attackCharacterAbility:
-    rid: 6947752895263801350
+    rid: 6947753029802917891
   defenceCharacterAbility:
-    rid: 6947752895263801371
+    rid: 6947753029802917892
   buffCharacterAbility:
-    rid: 6947752895263801392
+    rid: 6947753029802917893
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 6947752895263801350
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+    - rid: 6947753029802917891
+      type: {class: PeasantWithPitchforkCharacterAttackAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 0
         damage: 1
-        m_turnCount: 1
-        m_isBuff: 1
-    - rid: 6947752895263801371
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+        range: 4
+    - rid: 6947753029802917892
+      type: {class: PeasantWithPitchforkCharacterDefenceAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 1
-        damage: 1
-        m_turnCount: 1
-        m_isBuff: 1
-    - rid: 6947752895263801392
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+        range: 4
+        prefab: {fileID: 7333318791917978713, guid: b02d7371af70ee840b9f47061281437e, type: 3}
+    - rid: 6947753029802917893
+      type: {class: PeasantWithPitchforkCharacterBuffAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 2
-        damage: 1
-        m_turnCount: 1
-        m_isBuff: 1
+        physDefenceAmount: 1
+        range: 1

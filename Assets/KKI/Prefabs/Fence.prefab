@@ -281,7 +281,7 @@ GameObject:
   - component: {fileID: 7333318791917978715}
   - component: {fileID: 3732392837949954476}
   m_Layer: 0
-  m_Name: CoolWall
+  m_Name: Fence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -501,9 +501,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4703655aad987f1468c8c169aad456fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_card: {fileID: 11400000, guid: 59788a8e6ba1ce0479169c5fc5f81a7e, type: 2}
+  m_card: {fileID: 11400000, guid: 3e5e519842507cb459f6062c0a4395f0, type: 2}
   healthBar: {fileID: 7333318792139405572}
-  canDamage: 1
+  canDamage: 0
 --- !u!1 &7333318792139405573
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SelectCellsToAttackInRangeBehaviour : ICardSelectable
+public class SelectCellsWithCharactersInRangeBehaviour : ICardSelectable
 {
     public Cell clickedCell;
-    public List<Character> enemiesToAttack = new();
+    public List<Character> charactersOnCells = new();
 
     private BattleSystem battleSystem;
     private int range;
+    private string materialKey;
     private string m_selectCardTipText;
     private Character chosenCharacter;
     private List<Cell> cells = new();
@@ -25,11 +26,12 @@ public class SelectCellsToAttackInRangeBehaviour : ICardSelectable
         }
     }
 
-    public SelectCellsToAttackInRangeBehaviour(string text, BattleSystem battleSystem, Character character, int range)
+    public SelectCellsWithCharactersInRangeBehaviour(string text, BattleSystem battleSystem, Character character, int range, string materialKey)
     {
         m_selectCardTipText = text;
         this.battleSystem = battleSystem;
         this.range = range;
+        this.materialKey = materialKey;
         chosenCharacter = character;
     }
 
@@ -41,7 +43,7 @@ public class SelectCellsToAttackInRangeBehaviour : ICardSelectable
 
     private void SetEnemiesForAttack(Character character)
     {
-        enemiesToAttack.Clear();
+        charactersOnCells.Clear();
 
         SetAttackableCells(character.PositionOnField, Enums.Directions.top, character);
         SetAttackableCells(character.PositionOnField, Enums.Directions.bottom, character);
@@ -82,27 +84,43 @@ public class SelectCellsToAttackInRangeBehaviour : ICardSelectable
 
             Cell cell = battleSystem.FieldController.GetCell(newI, newJ);
             Character enemy;
-            if (battleSystem.State is PlayerTurn)
+            if (materialKey == "allowed")
             {
-                enemy = cell.GetComponentInChildren<Enemy>();
+                if (battleSystem.State is PlayerTurn)
+                {
+                    enemy = cell.GetComponentInChildren<PlayerCharacter>();
+                }
+                else
+                {
+                    enemy = cell.GetComponentInChildren<Enemy>();                  
+                }
             }
             else
             {
-                enemy = cell.GetComponentInChildren<PlayerCharacter>();
+                if (battleSystem.State is PlayerTurn)
+                {
+                    enemy = cell.GetComponentInChildren<Enemy>();
+                }
+                else
+                {
+                    enemy = cell.GetComponentInChildren<PlayerCharacter>();
+                }
             }
+            
 
             KostilEnemy kostilEnemy = cell.GetComponentInChildren<KostilEnemy>();
             if (cell.transform.childCount > 0)
             {
+                
                 if (enemy != null && enemy is not KostilEnemy)
                 {
-                    cell.SetColor("attack");
-                    enemiesToAttack.Add(enemy);
+                    cell.SetColor(materialKey);
+                    charactersOnCells.Add(enemy);
                 }
                 if (kostilEnemy != null)
                 {
-                    cell.SetColor("attack");
-                    enemiesToAttack.Add(kostilEnemy.WallEnemyCharacter);
+                    cell.SetColor(materialKey);
+                    charactersOnCells.Add(kostilEnemy.WallEnemyCharacter);
                 }
                 if (character.Class == Enums.Classes.Маг)
                 {

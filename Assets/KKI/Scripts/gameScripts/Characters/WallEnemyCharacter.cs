@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class WallEnemyCharacter : StaticEnemyCharacter
 {
-    // Start is called before the first frame update
+    [SerializeField]
+    private bool canDamage;
     void Start()
     {
         IsEnabled = true;
@@ -16,7 +17,11 @@ public class WallEnemyCharacter : StaticEnemyCharacter
 
     private void AttackAttackedCharacter(Character character, string name, float damage)
     {
-        LastAttackedCharacter.Damage(LastDamageAmount * 0.3f, name);
+        if (canDamage)
+        {
+            LastAttackedCharacter.Damage(LastDamageAmount * 0.3f, name);
+        }
+        
     }
 
     private void OnDestroy()

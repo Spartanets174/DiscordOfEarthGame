@@ -12,26 +12,26 @@ public class SentinelCharacterAttackAbility : BaseCharacterAbility
     [SerializeField]
     private int range;
 
-    private SelectCellsToAttackInRangeBehaviour selectCellsToAttackInRangeBehaviour;
-    private AttackSelected—haractersBehaviour attackSelected—haractersBehaviour;
+    private SelectCellsWithCharactersInRangeBehaviour selectCellsToAttackInRangeBehaviour;
+    private FormulaAttackSelected—haractersBehaviour attackSelected—haractersBehaviour;
 
     public override void Init(BattleSystem battleSystem, Character owner)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectCellsToAttackInRangeBehaviour("",battleSystem, abilityOwner, range));
-        SetUseCardBehaviour(new AttackSelected—haractersBehaviour(damage, battleSystem, "\"“ˇÊÂÎ‡ˇ ÛÍ‡\""));
+        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour("",battleSystem, abilityOwner, range, "attack"));
+        SetUseCardBehaviour(new FormulaAttackSelected—haractersBehaviour(damage, battleSystem, abilityOwner, "\"“ˇÊÂÎ‡ˇ ÛÍ‡\""));
 
-        selectCellsToAttackInRangeBehaviour = (SelectCellsToAttackInRangeBehaviour)CardSelectBehaviour;
-        attackSelected—haractersBehaviour = (AttackSelected—haractersBehaviour)UseCardBehaviour;
+        selectCellsToAttackInRangeBehaviour = (SelectCellsWithCharactersInRangeBehaviour)CardSelectBehaviour;
+        attackSelected—haractersBehaviour = (FormulaAttackSelected—haractersBehaviour)UseCardBehaviour;
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
         m_useCardBehaviour.OnCardUse += OnCardUse;
     }
     private void OnSelected()
     {
-        attackSelected—haractersBehaviour.charactersToAttack= selectCellsToAttackInRangeBehaviour.enemiesToAttack;
-        foreach (var character in attackSelected—haractersBehaviour.charactersToAttack)
+        attackSelected—haractersBehaviour.characters= selectCellsToAttackInRangeBehaviour.charactersOnCells;
+        foreach (var character in attackSelected—haractersBehaviour.characters)
         {
             character.PhysDefence--;
         }
@@ -41,7 +41,7 @@ public class SentinelCharacterAttackAbility : BaseCharacterAbility
 
     private void OnCardUse()
     {
-        selectCellsToAttackInRangeBehaviour.enemiesToAttack.Clear();
-        attackSelected—haractersBehaviour.charactersToAttack.Clear();
+        selectCellsToAttackInRangeBehaviour.charactersOnCells.Clear();
+        attackSelected—haractersBehaviour.characters.Clear();
     }
 }

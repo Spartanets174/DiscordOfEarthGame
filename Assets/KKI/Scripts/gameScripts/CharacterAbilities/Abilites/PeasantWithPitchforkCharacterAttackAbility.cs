@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class GargoyleCharacterAttackAbility : BaseCharacterAbility
+public class PeasantWithPitchforkCharacterAttackAbility : BaseCharacterAbility
 {
     [SerializeField]
-    private Vector2 damageSpread;
+    private float damage;
 
     [SerializeField]
     private int range;
@@ -19,7 +19,7 @@ public class GargoyleCharacterAttackAbility : BaseCharacterAbility
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
         SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour("Íàæìèòå íà ïåğñîíàæà â êğàñíîé êëåòêå äëÿ àòàêè", battleSystem, abilityOwner, range, "attack"));
-        SetUseCardBehaviour(new AttackSelectedÑharacterBehaviour(UnityEngine.Random.Range(damageSpread.x, damageSpread.y), battleSystem, "\"Äûõàíèå îãí¸ì\""));
+        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(damage, battleSystem, abilityOwner, "\"Áğîñîê ãğÿçüş\""));
 
         selectCellsToAttackInRangeBehaviour = (SelectCellsWithCharactersInRangeBehaviour)CardSelectBehaviour;
 
