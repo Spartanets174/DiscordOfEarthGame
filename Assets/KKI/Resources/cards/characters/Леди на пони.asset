@@ -46,34 +46,32 @@ MonoBehaviour:
   passiveCharacterAbility:
     rid: -2
   attackCharacterAbility:
-    rid: 6947752895263801351
+    rid: 6947753051471478784
   defenceCharacterAbility:
-    rid: 6947752895263801372
+    rid: 6947753051471478785
   buffCharacterAbility:
-    rid: 6947752895263801393
+    rid: 6947753051471478786
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 6947752895263801351
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+    - rid: 6947753051471478784
+      type: {class: LadyOnPonyCharacterAttackAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 0
         damage: 1
-        m_turnCount: 1
-        m_isBuff: 1
-    - rid: 6947752895263801372
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+        range: 1
+    - rid: 6947753051471478785
+      type: {class: LadyOnPonyCharacterDefenceAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 1
-        damage: 1
-        m_turnCount: 1
-        m_isBuff: 1
-    - rid: 6947752895263801393
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+        range: 2
+        physDefenceAmount: 1
+    - rid: 6947753051471478786
+      type: {class: LadyOnPonyCharacterBuffAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 2
         damage: 1
-        m_turnCount: 1
-        m_isBuff: 1
+        physDefenceAmount: 2
+        magDefenceAmount: 2
