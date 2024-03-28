@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.nobi.roundedcorners": "https://github.com/FFaUniHan/Unity_UI_Rounded_Corners.git",
+    
     "com.solidalloy.type-references": "2.16.0",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.collab-proxy": "2.0.7",
