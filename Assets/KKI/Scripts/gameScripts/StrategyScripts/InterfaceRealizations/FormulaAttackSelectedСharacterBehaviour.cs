@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class FormulaAttackSelectedСharacterBehaviour : ICardUsable
 {
-    private float damage;
+    public float damage;
     private BattleSystem battleSystem;
     private string abilityName;
     private Character owner;

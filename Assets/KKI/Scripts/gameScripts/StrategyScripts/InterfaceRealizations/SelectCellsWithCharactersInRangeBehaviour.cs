@@ -6,6 +6,7 @@ public class SelectCellsWithCharactersInRangeBehaviour : ICardSelectable
 {
     public Cell clickedCell;
     public List<Character> charactersOnCells = new();
+    public Dictionary<Enums.Directions,Character> charactersDirectionsOnCells = new();
 
     private BattleSystem battleSystem;
     private int range;
@@ -116,11 +117,13 @@ public class SelectCellsWithCharactersInRangeBehaviour : ICardSelectable
                 {
                     cell.SetColor(materialKey);
                     charactersOnCells.Add(enemy);
+                    charactersDirectionsOnCells.Add(direction, enemy);
                 }
                 if (kostilEnemy != null)
                 {
                     cell.SetColor(materialKey);
                     charactersOnCells.Add(kostilEnemy.WallEnemyCharacter);
+                    charactersDirectionsOnCells.Add(direction, enemy);
                 }
                 if (character.Class == Enums.Classes.Маг)
                 {
