@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f652d45b50f5d142bbb5af89b9ad55a, type: 3}
-  m_Name: "\u041C\u0430\u0433\u0438\u0447\u0435\u0441\u043A\u0430\u044F \u0436\u0430\u0431\u0430"
+  m_Name: "\u0412\u043E\u0438\u043D \u0441\u0432\u0435\u0442\u0430"
   m_EditorClassIdentifier: 
-  cardName: 
+  cardName: "\u041C\u0430\u0433\u0438\u0447\u0435\u0441\u043A\u0430\u044F \u0436\u0430\u0431\u0430"
   description: "\u043C\u0430\u0433\u0441\u0443\u0449"
   race: 5
   image: {fileID: 21300000, guid: 33e6c9648cb02f84893315330852565c, type: 3}
-  rarity: 0
-  Price: 54
-  id: 0
-  Class: 3
+  rarity: 1
+  Price: 123
+  id: 40
+  Class: 4
   health: 1
   speed: 3
   physAttack: 1
@@ -27,7 +27,7 @@ MonoBehaviour:
   range: 3
   physDefence: 2
   magDefence: 1
-  critChance: 0
+  critChance: 0.35
   critNum: 0
   passiveAbility: "\"\u0414\u0440\u0443\u0433 \u0436\u0438\u0432\u043E\u0442\u043D\u044B\u0445\"
     - \u043A\u0430\u0432\u0430\u043B\u0435\u0440\u0438\u044F \u043D\u0430\u043D\u043E\u0441\u0438\u0442
@@ -51,34 +51,32 @@ MonoBehaviour:
   passiveCharacterAbility:
     rid: -2
   attackCharacterAbility:
-    rid: 2085506413921828868
+    rid: 2085506413921828871
   defenceCharacterAbility:
-    rid: 2085506413921828869
+    rid: 2085506413921828872
   buffCharacterAbility:
-    rid: 2085506413921828870
+    rid: 2085506413921828874
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 2085506413921828868
-      type: {class: MagicToadCharacterAttackAbility, ns: , asm: Assembly-CSharp}
+    - rid: 2085506413921828871
+      type: {class: WarriorOfLightCharacterAttackAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 0
-        damage: 1.5
-        range: 5
-    - rid: 2085506413921828869
-      type: {class: MagicToadCharacterDefenceAbility, ns: , asm: Assembly-CSharp}
+        damage: 2
+        range: 3
+    - rid: 2085506413921828872
+      type: {class: WarriorOfLightCharacterDefenceAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 1
+        range: 1
         m_turnCount: 2
-        m_isBuff: 0
-    - rid: 2085506413921828870
-      type: {class: MagicToadCharacterBuffAbility, ns: , asm: Assembly-CSharp}
+        m_isBuff: 1
+    - rid: 2085506413921828874
+      type: {class: WarriorOfLightCharacterBuffAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 2
-        healthAmount: 1
-        magDefenceAmount: 1
-        physDefenceAmount: 1
-        m_turnCount: 3
-        m_isBuff: 1
+        healAmount: 1
+        physDamageAmount: 1

@@ -50,13 +50,11 @@ public class SelectAllPlayerUnitsWithConditionBehaviour : ICardSelectable
             }        
         }
 
-        conditionAction = null;
         OnSelected?.Invoke();
     }
 
     public void CancelSelection()
     {
-        conditionAction = null;
         if (battleSystem.State is PlayerTurn)
         {
             battleSystem.EnemyController.SetEnemiesStates(true, false);

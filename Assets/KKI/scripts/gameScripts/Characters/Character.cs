@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Character : OutlineInteractableObject
@@ -23,6 +24,16 @@ public abstract class Character : OutlineInteractableObject
 
     protected Enums.Rarity m_rarity;
     public Enums.Rarity Êarity => m_rarity;
+
+    protected float m_maxHealth;
+    public float MaxHealth
+    {
+        get => m_maxHealth;
+        set
+        {
+            m_maxHealth = value;
+        }
+    }
 
     protected float m_health;
     public float Health
@@ -154,6 +165,13 @@ public abstract class Character : OutlineInteractableObject
         set => m_isAttackedOnTheMove = value;
     }
 
+    protected float m_lastHealmount;
+    public float LastHealAmount
+    {
+        get => m_lastHealmount;
+        private set => m_lastHealmount = value;
+    }
+
     protected float m_lastDamageAmount;
     public float LastDamageAmount
     {
@@ -271,6 +289,9 @@ public abstract class Character : OutlineInteractableObject
     private BaseCharacterAbility m_buffCharacterAbility;
     public BaseCharacterAbility BuffCharacterAbility => m_buffCharacterAbility;
 
+    private Dictionary<Enums.Classes, bool> m_canBeDamagedByClassesDict = new();
+    public Dictionary<Enums.Classes, bool> CanBeDamagedByClassesDict => m_canBeDamagedByClassesDict;
+
     public event Action<Character> OnAttack;
     public event Action<Character> OnHeal;
     public event Action<Character> OnDeath;
@@ -278,30 +299,7 @@ public abstract class Character : OutlineInteractableObject
 
     public event Action<Character> OnPositionOnFieldChanged;
 
-    public void ResetCharacter()
-    {
-        if (!IsFreezed)
-        {
-            m_speed = (int)m_maxSpeed;
-        }       
-        m_isAttackedOnTheMove = false;
-    }
 
-    public void RemoveDebuffs()
-    {
-        Debug.Log("Stats is normal");
-        IsFreezed = false;
-        CanDamage = true;
-        CanUseAbilities = true;
-
-        if (m_physAttack< m_card.physAttack) m_physAttack = m_card.physAttack;
-        if (m_magAttack< m_card.magAttack) m_magAttack = m_card.magAttack;
-        if (m_range < m_card.range) m_range = m_card.range;
-        if (m_physDefence< m_card.physDefence) m_physDefence = m_card.physDefence;
-        if (m_magDefence< m_card.magDefence) m_magDefence = m_card.magDefence;
-        if (m_critChance< m_card.critChance) m_critChance = m_card.critChance;
-        if (m_critNum< m_card.critNum) m_critNum = m_card.critNum;        
-    }
 
     public virtual void SetData(CharacterCard card, Material material, int currentIndex)
     {
@@ -310,6 +308,7 @@ public abstract class Character : OutlineInteractableObject
         m_race = m_card.race;
         m_Class = m_card.Class;
         m_rarity = m_card.rarity;
+        m_maxHealth = m_card.health;
         Health = m_card.health;
         m_speed = m_card.speed;
         m_maxSpeed = m_card.speed;
@@ -327,6 +326,11 @@ public abstract class Character : OutlineInteractableObject
 
         m_useAbilityCost = 11;
 
+        foreach (Enums.Classes characterClass in Enum.GetValues(typeof(Enums.Classes)))
+        {
+            m_canBeDamagedByClassesDict.Add(characterClass, true);
+        }
+
         OnClick += OnCharacterClickedInvoke;
         IsChosen = false;
         CanBeDamaged = true;
@@ -337,27 +341,37 @@ public abstract class Character : OutlineInteractableObject
     }
     public virtual bool Damage(Character chosenCharacter)
     {
+        LastAttackedCharacter = chosenCharacter;
+
         if (!CanBeDamaged)
         {
             OnDamaged?.Invoke(this, chosenCharacter.CharacterName, 0);
+            LastDamageAmount = 0;
             return false;
         }
 
         if (IsDamageAvoided())
         {
             OnDamaged?.Invoke(this, chosenCharacter.CharacterName, 0);
+            LastDamageAmount = 0;
+            return false;
+        }
+
+        if (!CanBeDamagedByClass(chosenCharacter.Class))
+        {
+            OnDamaged?.Invoke(this, chosenCharacter.CharacterName, 0);
+            LastDamageAmount = 0;
             return false;
         }
 
         float crit = IsCrit(chosenCharacter.CritChance,chosenCharacter.CritNum);
-        float finalPhysDamage = IgnorePhysDamage? 0 :((11 + chosenCharacter.PhysAttack) * chosenCharacter.PhysAttack * crit * (chosenCharacter.PhysAttack - PhysDefence + Card.health)) / 256;
-        float finalMagDamage = IgnoreMagDamage?0 : ((11 + chosenCharacter.MagAttack) * chosenCharacter.MagAttack * crit * (chosenCharacter.MagAttack - MagDefence + Card.health)) / 256;
+        float finalPhysDamage = IgnorePhysDamage? 0 :((11 + chosenCharacter.PhysAttack) * chosenCharacter.PhysAttack * crit * (chosenCharacter.PhysAttack - PhysDefence + m_maxHealth)) / 256;
+        float finalMagDamage = IgnoreMagDamage?0 : ((11 + chosenCharacter.MagAttack) * chosenCharacter.MagAttack * crit * (chosenCharacter.MagAttack - MagDefence + m_maxHealth)) / 256;
         float finalDamage = Math.Max(finalMagDamage, finalPhysDamage);
 
         Health = Math.Max(0, Health - finalDamage);
 
         LastDamageAmount = finalDamage;
-        LastAttackedCharacter = chosenCharacter;
 
         OnDamaged?.Invoke(this, chosenCharacter.CharacterName, finalDamage);
         if (Health == 0)
@@ -370,21 +384,24 @@ public abstract class Character : OutlineInteractableObject
 
     public virtual bool Damage(Character chosenCharacter, string abilityName, float damage)
     {
+        LastAttackedCharacter = chosenCharacter;
+
         if (!CanBeDamaged)
         {
             OnDamaged?.Invoke(this, abilityName, 0);
+            LastDamageAmount = 0;
             return false;
         }
 
         if (IsDamageAvoided())
         {
-            OnDamaged?.Invoke(this, abilityName, 0);
+            LastDamageAmount = 0;
             return false;
         }
 
         float crit = IsCrit(chosenCharacter.CritChance, chosenCharacter.CritNum);
-        float finalPhysDamage = ((11 + damage) * damage * crit * (damage - PhysDefence + Card.health)) / 256;
-        float finalMagDamage = ((11 + damage) * damage * crit * (damage - MagDefence + Card.health)) / 256;
+        float finalPhysDamage = ((11 + damage) * damage * crit * (damage - PhysDefence + m_maxHealth)) / 256;
+        float finalMagDamage = ((11 + damage) * damage * crit * (damage - MagDefence + m_maxHealth)) / 256;
         float finalDamage = Math.Max(finalMagDamage, finalPhysDamage);
 
         if (finalDamage == 0)
@@ -393,8 +410,7 @@ public abstract class Character : OutlineInteractableObject
         }
         Health = Math.Max(0, Health - finalDamage);
 
-        LastDamageAmount = finalDamage;
-        LastAttackedCharacter = chosenCharacter;
+        LastDamageAmount = finalDamage;       
 
         OnDamaged?.Invoke(this, abilityName, finalDamage);
         if (Health == 0)
@@ -407,10 +423,21 @@ public abstract class Character : OutlineInteractableObject
 
     public bool Damage(float damage, string nameObject)
     {
-        if (!CanBeDamaged) return false;
+        if (!CanBeDamaged)
+        {
+            OnDamaged?.Invoke(this, nameObject, 0);
+            LastDamageAmount = 0;
+            return false;
+        }
 
-        if (IsDamageAvoided()) return false;
+        if (IsDamageAvoided())
+        {
+            OnDamaged?.Invoke(this, nameObject, 0);
+            LastDamageAmount = 0;
+            return false;
+        }
 
+        LastDamageAmount = damage;
         Health = Math.Max(0, Health - damage);
 
         OnDamaged?.Invoke(this, nameObject, damage);
@@ -421,6 +448,17 @@ public abstract class Character : OutlineInteractableObject
         return Health == 0;
     }
 
+    private bool CanBeDamagedByClass(Enums.Classes characterClass)
+    {
+        if (m_canBeDamagedByClassesDict[characterClass])
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     protected bool IsDamageAvoided()
     {
         float chance = UnityEngine.Random.Range(0f, 1f);
@@ -450,18 +488,21 @@ public abstract class Character : OutlineInteractableObject
     public void Heal(float amount)
     {
         float temp = Health + amount;
-        if (temp>Card.health)
+        if (temp> m_maxHealth)
         {
-            Health = Card.health;
+            m_lastHealmount = m_maxHealth - Health;
+            Health = m_maxHealth;
         }
         else
         {
             Health = temp;
+            m_lastHealmount = amount;
         }
+        
         OnHeal?.Invoke(this);
     }
 
-    public void HealMoreThenMax(int amount)
+    public void HealMoreThenMax(float amount)
     {
         Health += amount;
         OnHeal?.Invoke(this);
@@ -479,7 +520,31 @@ public abstract class Character : OutlineInteractableObject
             OnPositionOnFieldChanged?.Invoke(this);
         });      
     }
+    public void ResetCharacter()
+    {
+        if (!IsFreezed)
+        {
+            m_speed = (int)m_maxSpeed;
+        }
+        m_isAttackedOnTheMove = false;
+    }
 
+    public void RemoveDebuffs()
+    {
+        Debug.Log("Stats is normal");
+        IsFreezed = false;
+        CanDamage = true;
+        CanUseAbilities = true;
+
+
+        if (m_physAttack < m_card.physAttack) m_physAttack = m_card.physAttack;
+        if (m_magAttack < m_card.magAttack) m_magAttack = m_card.magAttack;
+        if (m_range < m_card.range) m_range = m_card.range;
+        if (m_physDefence < m_card.physDefence) m_physDefence = m_card.physDefence;
+        if (m_magDefence < m_card.magDefence) m_magDefence = m_card.magDefence;
+        if (m_critChance < m_card.critChance) m_critChance = m_card.critChance;
+        if (m_critNum < m_card.critNum) m_critNum = m_card.critNum;
+    }
     public void UseAtackAbility()
     {
         m_attackCharacterAbility.SelectCard();

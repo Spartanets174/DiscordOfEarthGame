@@ -34,7 +34,7 @@ public class EternalGuardianCharacterBuffAbility : BaseCharacterAbility
 
     private bool CanBeHealed(Character character)
     {
-        return character.Health != character.Card.health;
+        return character.Health != character.MaxHealth;
     }
 
     private void OnSelected()

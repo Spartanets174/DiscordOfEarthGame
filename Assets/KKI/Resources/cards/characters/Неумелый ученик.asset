@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f652d45b50f5d142bbb5af89b9ad55a, type: 3}
   m_Name: "\u041D\u0435\u0443\u043C\u0435\u043B\u044B\u0439 \u0443\u0447\u0435\u043D\u0438\u043A"
   m_EditorClassIdentifier: 
-  cardName: 
+  cardName: "\u041D\u0435\u0443\u043C\u0435\u043B\u044B\u0439 \u0443\u0447\u0435\u043D\u0438\u043A"
   description: "\u0433\u043D\u043E\u043C"
   race: 2
   image: {fileID: 21300000, guid: 0f5c7de9b6c8e7d44817634f81544b75, type: 3}
-  rarity: 0
-  Price: 213
-  id: 0
-  Class: 3
+  rarity: 1
+  Price: 1312
+  id: 42
+  Class: 4
   health: 1
   speed: 3
   physAttack: 1
@@ -54,34 +54,33 @@ MonoBehaviour:
   passiveCharacterAbility:
     rid: -2
   attackCharacterAbility:
-    rid: 6947752895263801356
+    rid: 2085506413921828875
   defenceCharacterAbility:
-    rid: 6947752895263801377
+    rid: 2085506413921828876
   buffCharacterAbility:
-    rid: 6947752895263801398
+    rid: 2085506413921828877
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 6947752895263801356
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+    - rid: 2085506413921828875
+      type: {class: UnskillfullStudentCharacterAttackAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 0
         damage: 1
-        m_turnCount: 1
-        m_isBuff: 1
-    - rid: 6947752895263801377
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+        range: 5
+    - rid: 2085506413921828876
+      type: {class: UnskillfullStudentCharacterDefenceAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 1
-        damage: 1
-        m_turnCount: 1
+        physDefenceAmount: 2
+        m_turnCount: 2
         m_isBuff: 1
-    - rid: 6947752895263801398
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+    - rid: 2085506413921828877
+      type: {class: UnskillfullStudentCharacterBuffAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 2
-        damage: 1
-        m_turnCount: 1
-        m_isBuff: 1
+        speedAmount: 1
+        rangeToMove: 1
+        directionToMove: 1
