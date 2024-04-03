@@ -57,34 +57,33 @@ MonoBehaviour:
   passiveCharacterAbility:
     rid: -2
   attackCharacterAbility:
-    rid: 6947752895263801361
+    rid: 2085506459617460235
   defenceCharacterAbility:
-    rid: 6947752895263801382
+    rid: 2085506459617460236
   buffCharacterAbility:
-    rid: 6947752895263801403
+    rid: 2085506459617460238
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 6947752895263801361
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+    - rid: 2085506459617460235
+      type: {class: SergeantMajorCharacterAttackAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 0
-        damage: 1
-        m_turnCount: 1
-        m_isBuff: 1
-    - rid: 6947752895263801382
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+        increaseDamageAmount: 0.15
+        damage: 2
+        range: 5
+    - rid: 2085506459617460236
+      type: {class: SergeantMajorCharacterDefenceAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 1
-        damage: 1
-        m_turnCount: 1
-        m_isBuff: 1
-    - rid: 6947752895263801403
-      type: {class: TestCharacterAbility, ns: , asm: Assembly-CSharp}
+        magDefenceAmount: 1
+    - rid: 2085506459617460238
+      type: {class: SergeantMajorCharacterBuffAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 2
-        damage: 1
-        m_turnCount: 1
-        m_isBuff: 1
+        physDamageAmount: 2
+        physDefenceAmount: 1
+        magDefenceAmount: 1
+        chanceToIncreaseDamage: 0.25

@@ -9,6 +9,8 @@ public class FormulaAttackSelectedСharacterBehaviour : ICardUsable
     private BattleSystem battleSystem;
     private string abilityName;
     private Character owner;
+
+    public Character attackedCharacter;
     public FormulaAttackSelectedСharacterBehaviour(float damage, BattleSystem battleSystem, Character character, string abilityName)
     {
         this.damage = damage;
@@ -26,6 +28,7 @@ public class FormulaAttackSelectedСharacterBehaviour : ICardUsable
             character = kostilEnemy.WallEnemyCharacter;
         }
 
+        attackedCharacter = character;
         bool isDeath = character.Damage(owner, abilityName, damage);
 
         if (isDeath)

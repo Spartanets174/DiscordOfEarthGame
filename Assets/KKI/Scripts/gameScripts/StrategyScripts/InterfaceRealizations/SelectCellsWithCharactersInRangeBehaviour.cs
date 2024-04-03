@@ -154,6 +154,7 @@ public class SelectCellsWithCharactersInRangeBehaviour : ICardSelectable
     public void CancelSelection()
     {
         cells.Clear();
+        charactersDirectionsOnCells.Clear();
         battleSystem.FieldController.InvokeActionOnField(x =>
         {
             x.SetCellState(true);
