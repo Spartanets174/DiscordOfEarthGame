@@ -73,7 +73,7 @@ MonoBehaviour:
         m_typeOfAbility: 0
         increaseDamageAmount: 0.15
         damage: 2
-        range: 5
+        range: 4
     - rid: 2085506459617460236
       type: {class: SergeantMajorCharacterDefenceAbility, ns: , asm: Assembly-CSharp}
       data:

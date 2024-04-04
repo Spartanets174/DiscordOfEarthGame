@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class SergeantMajorCharacterAttackAbility : BaseCharacterAbility
@@ -13,27 +16,37 @@ public class SergeantMajorCharacterAttackAbility : BaseCharacterAbility
     [SerializeField]
     private int range;
 
+    List<Character> characters ;
+
     private SelectCellsWithCharactersInRangeBehaviour selectCellsToAttackInRangeBehaviour;
-    private FormulaAttackSelectedÑharacterBehaviour formulaAttackSelectedÑharacterBehaviour;
+    private SelectCellsWithCharactersInRangeBehaviour secondSelectCellsToAttackInRangeBehaviour;
+
+    private FormulaAttackSelectedÑharactersBehaviour formulaAttackSelectedÑharactersBehaviour;
 
     public override void Init(BattleSystem battleSystem, Character owner)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
+        characters = new();
         SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour("Íàæìèòå íà ïåğñîíàæà â êğàñíîé êëåòêå äëÿ àòàêè", battleSystem, abilityOwner, range, "attack"));
+        SetSecondCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour("Íàæìèòå íà ïåğñîíàæà â êğàñíîé êëåòêå äëÿ äîïîëíèòåëüíîé àòàêè", battleSystem, abilityOwner, 1, "attack"));
         SetSelectCharacterBehaviour(new SetCurrentEnemyCharacterBehaviour("", battleSystem));
-        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(damage, battleSystem, abilityOwner, "\"Äàâàé Äâà\""));
+        SetUseCardBehaviour(new FormulaAttackSelectedÑharactersBehaviour(damage, battleSystem, abilityOwner, "\"Äàâàé Äâà\"", increaseDamageAmount));
 
         selectCellsToAttackInRangeBehaviour = (SelectCellsWithCharactersInRangeBehaviour)CardSelectBehaviour;
-        formulaAttackSelectedÑharacterBehaviour = (FormulaAttackSelectedÑharacterBehaviour)UseCardBehaviour;
+        secondSelectCellsToAttackInRangeBehaviour = (SelectCellsWithCharactersInRangeBehaviour)CardSecondSelectBehaviour;
+        formulaAttackSelectedÑharactersBehaviour = (FormulaAttackSelectedÑharactersBehaviour)UseCardBehaviour;
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
 
+        m_cardSecondSelectBehaviour.OnSelected += OnSecondSelected;
         m_cardSelectBehaviour.OnSelected += OnSelected;
         m_selectCharacterBehaviour.OnSelectCharacter += OnSelectCharacter;
 
         m_useCardBehaviour.OnCardUse += OnCardUse;
     }
+
+
 
     private void OnSelected()
     {
@@ -41,32 +54,60 @@ public class SergeantMajorCharacterAttackAbility : BaseCharacterAbility
         {
             foreach (var enemyCharacter in selectCellsToAttackInRangeBehaviour.charactersOnCells)
             {
-                enemyCharacter.OnClick += SelectCharacter;
+                enemyCharacter.OnClick += SelectSecondInvoke;
             }
         }
     }
 
+    private void SelectSecondInvoke(GameObject gameObject)
+    {
+        foreach (var enemyCharacter in selectCellsToAttackInRangeBehaviour.charactersOnCells)
+        {
+            enemyCharacter.OnClick -= SelectSecondInvoke;
+        }
+        characters.Add(gameObject.GetComponent<Character>());
+        secondSelectCellsToAttackInRangeBehaviour.chosenCharacter = characters.FirstOrDefault();
+
+
+        SelectSecondCard();
+    }
+
+
+    private void OnSecondSelected()
+    {
+        if (battleSystem.State is PlayerTurn)
+        {
+            if (secondSelectCellsToAttackInRangeBehaviour.charactersOnCells.Count>0)
+            {
+                foreach (var enemyCharacter in secondSelectCellsToAttackInRangeBehaviour.charactersOnCells)
+                {
+                    enemyCharacter.OnClick += SelectCharacter;
+                }
+            }
+            else
+            {
+                OnSelectCharacter();
+            }
+            
+        }
+
+    }
+
     private void OnSelectCharacter()
     {
-        Character firstCharacter = battleSystem.CurrentChosenCharacter.Value;
-
-        Character secondCharacter = GetNextCharacterByDirection(firstCharacter.PositionOnField, Enums.Directions.top, 1);
-        if (secondCharacter == null)
+        foreach (var enemyCharacter in secondSelectCellsToAttackInRangeBehaviour.charactersOnCells)
         {
-            secondCharacter = GetNextCharacterByDirection(firstCharacter.PositionOnField, Enums.Directions.left, 1);
-        }
-        if (secondCharacter == null)
-        {
-            secondCharacter = GetNextCharacterByDirection(firstCharacter.PositionOnField, Enums.Directions.right, 1);
+            enemyCharacter.OnClick -= SelectCharacter;
         }
 
-        UseCard(firstCharacter.gameObject);
-        if (secondCharacter != null)
+        if (secondSelectCellsToAttackInRangeBehaviour.charactersOnCells.Count > 0)
         {
-            formulaAttackSelectedÑharacterBehaviour.damage = abilityOwner.PhysAttack * (1 + increaseDamageAmount);
-            UseCard(secondCharacter.gameObject);
-            battleSystem.PointsOfAction.Value += 11;
-        }
+            characters.Add(battleSystem.CurrentChosenCharacter.Value);
+        }      
+
+        formulaAttackSelectedÑharactersBehaviour.characters.AddRange(characters);
+
+        UseCard(abilityOwner.gameObject);
     }
 
 
@@ -79,70 +120,15 @@ public class SergeantMajorCharacterAttackAbility : BaseCharacterAbility
     {
         foreach (var enemyCharacter in selectCellsToAttackInRangeBehaviour.charactersOnCells)
         {
+            enemyCharacter.OnClick -= SelectSecondInvoke;
+        }
+        foreach (var enemyCharacter in secondSelectCellsToAttackInRangeBehaviour.charactersOnCells)
+        {
             enemyCharacter.OnClick -= SelectCharacter;
         }
+        characters.Clear();
+        selectCellsToAttackInRangeBehaviour.charactersOnCells.Clear();
+        secondSelectCellsToAttackInRangeBehaviour.charactersOnCells.Clear();
     }
 
-
-    private Character GetNextCharacterByDirection(Vector2 pos, Enums.Directions direction, int localRange)
-    {
-        int newI = (int)pos.x;
-        int newJ = (int)pos.y;
-
-        for (int i = 0; i < localRange; i++)
-        {
-            switch (direction)
-            {
-                case Enums.Directions.top:
-                    newI--;
-                    break;
-                case Enums.Directions.bottom:
-                    newJ--;
-                    break;
-                case Enums.Directions.right:
-                    newI++;
-                    break;
-                case Enums.Directions.left:
-                    newJ++;
-                    break;
-            }
-
-            if (newI >= 7 || newI < 0)
-            {
-                break;
-            }
-            if (newJ >= 11 || newJ < 0)
-            {
-                break;
-            }
-
-            Cell cell = battleSystem.FieldController.GetCell(newI, newJ);
-            Character enemy;
-            if (battleSystem.State is PlayerTurn)
-            {
-                enemy = cell.GetComponentInChildren<Enemy>();
-            }
-            else
-            {
-                enemy = cell.GetComponentInChildren<PlayerCharacter>();
-            }
-
-
-            KostilEnemy kostilEnemy = cell.GetComponentInChildren<KostilEnemy>();
-            if (cell.transform.childCount > 0)
-            {
-
-                if (enemy != null && enemy is not KostilEnemy)
-                {
-                    return enemy;
-                }
-                if (kostilEnemy != null)
-                {
-                    return enemy;
-                }
-            }
-
-        }
-        return null;
-    }
 }

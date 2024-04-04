@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: "\u0422\u0430\u0439\u043D\u044B\u0435 \u0437\u043D\u0430\u043D\u0438\u044F
     2"
   m_EditorClassIdentifier: 
-  name: "\u0422\u0430\u0439\u043D\u044B\u0435 \u0437\u043D\u0430\u043D\u0438\u044F
-    2"
+  cardName: 
   description: 
   race: 0
   image: {fileID: 21300000, guid: 1a7de551cf8a4994eb79d3e20f9d0179, type: 3}
@@ -22,7 +21,13 @@ MonoBehaviour:
   Price: 456
   id: 0
   type: 2
-  ability: "\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0442\u0435\u043A\u0443\u0449\u0435\u0433\u043E
-    \u043F\u0440\u0438\u043C\u0435\u043D\u0435\u043D\u0438\u044F \u0441\u043F\u0435\u0446.
-    \u0443\u043C\u0435\u043D\u0438\u044F \u0441\u043D\u0438\u0436\u0430\u0435\u0442\u0441\u044F
-    \u0434\u043E 7 \u041E\u0414"
+  abilityText: 
+  "GameSupport\u0421ardAbility":
+    rid: 2085506480921116683
+  references:
+    version: 2
+    RefIds:
+    - rid: 2085506480921116683
+      type: {class: SecretKnowledgesCardSupportAbility, ns: , asm: Assembly-CSharp}
+      data:
+        pointsOfUsingAbility: 7

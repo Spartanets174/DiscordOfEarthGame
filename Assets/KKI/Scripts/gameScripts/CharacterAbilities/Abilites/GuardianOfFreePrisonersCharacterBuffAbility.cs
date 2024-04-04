@@ -1,8 +1,11 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [Serializable]
-public class MaidenOnUnicornCharacterBuffBehaviour : BaseCharacterAbility, ITurnCountable
+public class GuardianOfFreePrisonersCharacterBuffAbility : BaseCharacterAbility, ITurnCountable
 {
     [SerializeField]
     private float buffAttackAmount;
@@ -25,10 +28,18 @@ public class MaidenOnUnicornCharacterBuffBehaviour : BaseCharacterAbility, ITurn
         this.battleSystem = battleSystem;
         SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Выберите союзного персонажа для услиения", battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
+        SetUseCardBehaviour(new EmptyUseAbilityBehaviour());
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSelectBehaviour.OnSelected += OnSelected;
         m_selectCharacterBehaviour.OnSelectCharacter += OnSelectCharacter;
+
+        m_useCardBehaviour.OnCardUse += OnCardUse;
+    }
+
+    private void OnCardUse()
+    {
+        OnCancelSelection();
     }
 
     private void OnSelected()
@@ -56,11 +67,9 @@ public class MaidenOnUnicornCharacterBuffBehaviour : BaseCharacterAbility, ITurn
         }
 
         character.PhysAttack+= buffAttackAmount;
-        character.MagAttack += buffAttackAmount;
-
+        character.IsFreezed = true;
         UseCard(character.gameObject);
     }
-
 
     private void OnCancelSelection()
     {
@@ -73,8 +82,9 @@ public class MaidenOnUnicornCharacterBuffBehaviour : BaseCharacterAbility, ITurn
 
     public void ReturnToNormal()
     {
-        character.PhysAttack-= buffAttackAmount;
-        character.MagAttack-= buffAttackAmount;
+        character.PhysAttack -= buffAttackAmount;
+        character.IsFreezed = false;
+
         OnReturnToNormal?.Invoke(this);
         character = null;
     }

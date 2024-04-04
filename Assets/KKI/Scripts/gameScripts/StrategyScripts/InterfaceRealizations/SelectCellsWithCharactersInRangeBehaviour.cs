@@ -12,7 +12,7 @@ public class SelectCellsWithCharactersInRangeBehaviour : ICardSelectable
     private int range;
     private string materialKey;
     private string m_selectCardTipText;
-    private Character chosenCharacter;
+    public Character chosenCharacter;
     private List<Cell> cells = new();
 
 
@@ -33,7 +33,7 @@ public class SelectCellsWithCharactersInRangeBehaviour : ICardSelectable
         this.battleSystem = battleSystem;
         this.range = range;
         this.materialKey = materialKey;
-        chosenCharacter = character;
+        chosenCharacter = character;        
     }
 
     public void SelectCard()
@@ -45,6 +45,8 @@ public class SelectCellsWithCharactersInRangeBehaviour : ICardSelectable
     private void SetEnemiesForAttack(Character character)
     {
         charactersOnCells.Clear();
+        battleSystem.FieldController.TurnOffCells();
+        charactersDirectionsOnCells.Clear();
 
         SetAttackableCells(character.PositionOnField, Enums.Directions.top, character);
         SetAttackableCells(character.PositionOnField, Enums.Directions.bottom, character);

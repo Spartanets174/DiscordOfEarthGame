@@ -1,11 +1,15 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class MaidenOnUnicornCharacterBuffBehaviour : BaseCharacterAbility, ITurnCountable
+public class OldMasterCharacterDefenceAbility : BaseCharacterAbility, ITurnCountable
 {
     [SerializeField]
-    private float buffAttackAmount;
+    private float physAttackAmount;
+    [SerializeField]
+    private float physDefenceAmount;
 
     private Character character;
 
@@ -55,9 +59,11 @@ public class MaidenOnUnicornCharacterBuffBehaviour : BaseCharacterAbility, ITurn
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
 
-        character.PhysAttack+= buffAttackAmount;
-        character.MagAttack += buffAttackAmount;
+        character.PhysAttack += physAttackAmount;
+        character.PhysDefence -= physDefenceAmount;
 
+
+        OnCancelSelection();
         UseCard(character.gameObject);
     }
 
@@ -73,8 +79,9 @@ public class MaidenOnUnicornCharacterBuffBehaviour : BaseCharacterAbility, ITurn
 
     public void ReturnToNormal()
     {
-        character.PhysAttack-= buffAttackAmount;
-        character.MagAttack-= buffAttackAmount;
+        character.PhysAttack -= physAttackAmount;
+        character.PhysDefence += physDefenceAmount;
+
         OnReturnToNormal?.Invoke(this);
         character = null;
     }

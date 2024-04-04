@@ -7,16 +7,18 @@ using UnityEngine;
 public class FormulaAttackSelectedСharactersBehaviour : ICardUsable
 {
     public List<Character> characters = new List<Character>();
+    public float damageMultiplier;
     private float damage;
     private BattleSystem battleSystem;
     private string abilityName;
     private Character owner;
-    public FormulaAttackSelectedСharactersBehaviour(float damage, BattleSystem battleSystem, Character character, string abilityName)
+    public FormulaAttackSelectedСharactersBehaviour(float damage, BattleSystem battleSystem, Character character, string abilityName, float damageMultiplier = 0)
     {
         this.damage = damage;
         this.battleSystem = battleSystem;
         this.abilityName = abilityName;
         this.owner = character;
+        this.damageMultiplier = damageMultiplier;
     }
 
     public event Action OnCardUse;
@@ -30,7 +32,9 @@ public class FormulaAttackSelectedСharactersBehaviour : ICardUsable
                 character = kostilEnemy.WallEnemyCharacter;
             }
 
-            bool isDeath = character.Damage(owner, abilityName, damage);
+            float tempDamage = characters.IndexOf(tempCharacter) > 0 ? damage * (1 + damageMultiplier) : damage;
+
+            bool isDeath = character.Damage(owner, abilityName, tempDamage);
 
             if (isDeath)
             {

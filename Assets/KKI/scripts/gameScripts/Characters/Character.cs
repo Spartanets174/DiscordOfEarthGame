@@ -527,6 +527,7 @@ public abstract class Character : OutlineInteractableObject
             m_speed = (int)m_maxSpeed;
         }
         m_isAttackedOnTheMove = false;
+        m_useAbilityCost = 11;
     }
 
     public void RemoveDebuffs()
