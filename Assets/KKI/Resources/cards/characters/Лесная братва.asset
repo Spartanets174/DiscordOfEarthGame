@@ -51,8 +51,8 @@ MonoBehaviour:
   buffAbility: "\"\u041B\u0435\u0441\u043D\u0430\u044F \u0430\u0443\u0440\u0430\"
     \u0414\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u044C \u0430\u0442\u0430\u043A\u0438
     \u0441\u043E\u044E\u0437\u043D\u0438\u043A\u043E\u0432 +1. \u041D\u0430 2 \u0445\u043E\u0434\u0430"
-  passiveCharacterAbility:
-    rid: -2
+  passiveCharacterAbilityData:
+    rid: 2085506571047272458
   attackCharacterAbility:
     rid: 6947753051471478787
   defenceCharacterAbility:
@@ -62,8 +62,18 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+    - rid: 2085506571047272458
+      type: {class: ForestLadsPassiveAbilityData, ns: , asm: Assembly-CSharp}
+      data:
+        passiveCharacterAbility:
+          GuidAssignmentFailed: 0
+          GUID: 71d4e63f1317f584fb9b2ed803ba2473
+          _typeNameAndAssembly: ForestLadsPassiveAbility, Assembly-CSharp
+          _suppressLogs: 0
+        abilityName: "\u041F\u0440\u0438\u0440\u043E\u0434\u043D\u0430\u044F \u0437\u0430\u0449\u0438\u0442\u0430"
+        range: 1
+        physDefenceAmount: 1
+        magDefenceAmount: 1
     - rid: 6947753051471478787
       type: {class: ForestLadsAttackAbility, ns: , asm: Assembly-CSharp}
       data:

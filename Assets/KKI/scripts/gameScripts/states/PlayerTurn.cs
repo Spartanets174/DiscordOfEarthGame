@@ -76,7 +76,8 @@ public class PlayerTurn : State
         PlayerCharacter playerCharacter = BattleSystem.PlayerController.CurrentPlayerCharacter;
         Cell currentCell = playerCharacter.GetComponentInParent<Cell>();
 
-        int moveCost = BattleSystem.FieldController.GetMoveCost(currentCell,cellToMove, BattleSystem.State);
+        int moveCost = BattleSystem.FieldController.GetMoveCost(currentCell,cellToMove, BattleSystem.State, playerCharacter);
+
         foreach (var item in cellsToMove)
         {
             item.OnClick -= BattleSystem.OnMoveButton;
@@ -119,7 +120,7 @@ public class PlayerTurn : State
         PlayerCharacter playerCharacter = BattleSystem.PlayerController.CurrentPlayerCharacter;
         Enemy currentTarget = target.GetComponent<Enemy>();
 
-        playerCharacter.IsAttackedOnTheMove = true;
+        playerCharacter.OnAttackInvoke();
 
         currentTarget.Damage(playerCharacter);
 

@@ -1,5 +1,7 @@
+using Org.BouncyCastle.Bcpg.Sig;
 using System.Collections;
 using System.Collections.Generic;
+using TypeReferences;
 using UnityEngine;
 
 //scriptable object для карт со всеми параметрами карты
@@ -25,7 +27,7 @@ public class CharacterCard: Card
 
     [Header("Abilities")]
     [SerializeReference, SubclassSelector]
-    public BasePassiveCharacterAbility passiveCharacterAbility;
+    public BasePassiveCharacterAbilityData passiveCharacterAbilityData;   
 
     [SerializeReference, SubclassSelector]
     public BaseCharacterAbility attackCharacterAbility;

@@ -84,7 +84,7 @@ public class FieldController : MonoBehaviour, ILoadable
         }
     }
 
-    public int GetMoveCost(Cell startCell, Cell endCell, State gameState)
+    public int GetMoveCost(Cell startCell, Cell endCell, State gameState, Character character)
     {
         int moveCost = 0;
 
@@ -122,14 +122,22 @@ public class FieldController : MonoBehaviour, ILoadable
         for (int x = x0; x <= x1; x++)
         {
             Cell cell =  GetCell((steep ? y : x), (steep ? x : y));
-            if (cell == startCell) continue; 
-            moveCost += gameState is PlayerTurn? cell.TransitionCostPlayer:cell.TransitionCostEnemy;
+            if (cell == startCell) continue;            
             error = error - dy;
             if (error < 0)
             {
                 y += ystep;
                 error += dx;
             }
+            if (character.IgnoreMoveCostTroughtSwamp && cell.IsSwamp)
+            {
+                continue;
+            }
+            if (character.IgnoreMoveCost && !cell.IsSwamp)
+            {
+                continue;
+            }
+            moveCost += gameState is PlayerTurn ? cell.TransitionCostPlayer : cell.TransitionCostEnemy;
         }
         return moveCost;
     }   

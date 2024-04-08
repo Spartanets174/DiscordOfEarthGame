@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class Character : OutlineInteractableObject
@@ -162,7 +163,6 @@ public abstract class Character : OutlineInteractableObject
     public bool IsAttackedOnTheMove
     {
         get => m_isAttackedOnTheMove;
-        set => m_isAttackedOnTheMove = value;
     }
 
     protected float m_lastHealmount;
@@ -212,6 +212,18 @@ public abstract class Character : OutlineInteractableObject
     {
         get => m_ignoreMagDamage;
         set => m_ignoreMagDamage = value;
+    }
+    private bool m_ignoreMoveCost;
+    public bool IgnoreMoveCost
+    {
+        get => m_ignoreMoveCost;
+        set => m_ignoreMoveCost = value;
+    }
+    private bool m_ignoreMoveCostTroughtSwamp;
+    public bool IgnoreMoveCostTroughtSwamp
+    {
+        get => m_ignoreMoveCostTroughtSwamp;
+        set => m_ignoreMoveCostTroughtSwamp = value;
     }
 
     private bool m_IsFreezed;
@@ -280,6 +292,9 @@ public abstract class Character : OutlineInteractableObject
         }
     }
 
+    private BasePassiveCharacterAbility m_passiveCharacterAbility;
+    public BasePassiveCharacterAbility PassiveCharacterAbility => m_passiveCharacterAbility;
+
     private BaseCharacterAbility m_attackCharacterAbility;
     public BaseCharacterAbility AttackCharacterAbility => m_attackCharacterAbility;
 
@@ -288,6 +303,13 @@ public abstract class Character : OutlineInteractableObject
 
     private BaseCharacterAbility m_buffCharacterAbility;
     public BaseCharacterAbility BuffCharacterAbility => m_buffCharacterAbility;
+
+    private Dictionary<Enums.Classes, float> m_attackMultiplierByClassesDict = new();
+    public Dictionary<Enums.Classes, float> AttackMultiplierByClassesDict => m_attackMultiplierByClassesDict;
+
+    private Dictionary<Enums.Races, float> m_damageMultiplierByRacesDict = new();
+    public Dictionary<Enums.Races, float> DamageMultiplierByRacesDict => m_damageMultiplierByRacesDict;
+
 
     private Dictionary<Enums.Classes, bool> m_canBeDamagedByClassesDict = new();
     public Dictionary<Enums.Classes, bool> CanBeDamagedByClassesDict => m_canBeDamagedByClassesDict;
@@ -320,6 +342,18 @@ public abstract class Character : OutlineInteractableObject
         m_critChance = m_card.critChance;
         m_critNum = m_card.critNum;
 
+        if (card.passiveCharacterAbilityData!=null)
+        {
+            Type type = card.passiveCharacterAbilityData.passiveCharacterAbility.Type;
+            m_passiveCharacterAbility = (BasePassiveCharacterAbility)gameObject.AddComponent(type);
+            if (card.passiveCharacterAbilityData!=null)
+            {
+                m_passiveCharacterAbility.baseAbilityData = card.passiveCharacterAbilityData;
+            }
+            
+        }
+        
+
         m_attackCharacterAbility = m_card.attackCharacterAbility;
         m_defenceCharacterAbility = m_card.defenceCharacterAbility;
         m_buffCharacterAbility = m_card.buffCharacterAbility;
@@ -330,7 +364,14 @@ public abstract class Character : OutlineInteractableObject
         {
             m_canBeDamagedByClassesDict.Add(characterClass, true);
         }
-
+        foreach (Enums.Races characterRace in Enum.GetValues(typeof(Enums.Races)))
+        {
+            m_damageMultiplierByRacesDict.Add(characterRace,1);
+        }
+        foreach (Enums.Classes characterClass in Enum.GetValues(typeof(Enums.Classes)))
+        {
+            m_attackMultiplierByClassesDict.Add(characterClass, 1);
+        }
         OnClick += OnCharacterClickedInvoke;
         IsChosen = false;
         CanBeDamaged = true;
@@ -365,8 +406,8 @@ public abstract class Character : OutlineInteractableObject
         }
 
         float crit = IsCrit(chosenCharacter.CritChance,chosenCharacter.CritNum);
-        float finalPhysDamage = IgnorePhysDamage? 0 :((11 + chosenCharacter.PhysAttack) * chosenCharacter.PhysAttack * crit * (chosenCharacter.PhysAttack - PhysDefence + m_maxHealth)) / 256;
-        float finalMagDamage = IgnoreMagDamage?0 : ((11 + chosenCharacter.MagAttack) * chosenCharacter.MagAttack * crit * (chosenCharacter.MagAttack - MagDefence + m_maxHealth)) / 256;
+        float finalPhysDamage = IgnorePhysDamage? 0 :((11 + chosenCharacter.PhysAttack) * chosenCharacter.PhysAttack * crit * (chosenCharacter.PhysAttack - PhysDefence + m_maxHealth)) / 256 * GetDamageMultiplierByRace(chosenCharacter.Race) * chosenCharacter.GetAttackMultiplierByClass(Class);
+        float finalMagDamage = IgnoreMagDamage?0 : ((11 + chosenCharacter.MagAttack) * chosenCharacter.MagAttack * crit * (chosenCharacter.MagAttack - MagDefence + m_maxHealth)) / 256 * GetDamageMultiplierByRace(chosenCharacter.Race) * chosenCharacter.GetAttackMultiplierByClass(Class);
         float finalDamage = Math.Max(finalMagDamage, finalPhysDamage);
 
         Health = Math.Max(0, Health - finalDamage);
@@ -447,7 +488,14 @@ public abstract class Character : OutlineInteractableObject
         }
         return Health == 0;
     }
-
+    public float GetAttackMultiplierByClass(Enums.Classes characterClass)
+    {
+        return m_attackMultiplierByClassesDict[characterClass];
+    }
+    private float GetDamageMultiplierByRace(Enums.Races characterRace)
+    {
+        return m_damageMultiplierByRacesDict[characterRace];
+    }
     private bool CanBeDamagedByClass(Enums.Classes characterClass)
     {
         if (m_canBeDamagedByClassesDict[characterClass])
@@ -559,7 +607,7 @@ public abstract class Character : OutlineInteractableObject
         m_buffCharacterAbility.SelectCard();
     }
 
-    protected void OnAttackInvoke()
+    public void OnAttackInvoke()
     {
         m_isAttackedOnTheMove = true;
         OnAttack?.Invoke(this);

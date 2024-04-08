@@ -67,7 +67,8 @@ public class EnemyTurn : State
         Cell cellToMove = cell.GetComponent<Cell>();
         EnemyCharacter enemyCharacter = BattleSystem.EnemyController.CurrentEnemyCharacter;
         Cell currentCell = enemyCharacter.GetComponentInParent<Cell>();
-        int moveCost = BattleSystem.FieldController.GetMoveCost(currentCell, cellToMove,BattleSystem.State);
+        int moveCost = BattleSystem.FieldController.GetMoveCost(currentCell, cellToMove,BattleSystem.State, enemyCharacter);
+
 
         if (moveCost > BattleSystem.PointsOfAction.Value)
         {
@@ -102,7 +103,7 @@ public class EnemyTurn : State
             EnemyCharacter enemyCharacter = BattleSystem.EnemyController.CurrentEnemyCharacter;
             Character currentTarget = target.GetComponent<Character>();
 
-            enemyCharacter.IsAttackedOnTheMove = true;
+            enemyCharacter.OnAttackInvoke();
 
              currentTarget.Damage(enemyCharacter);
 

@@ -60,8 +60,8 @@ MonoBehaviour:
     - \u0443\u0432\u0435\u043B\u0438\u0447\u0438\u0432\u0430\u0435\u0442 \u0444\u0438\u0437.
     \u0437\u0430\u0449\u0438\u0442\u0443 \u0434\u043E \u043C\u0430\u043A\u0441. \u043D\u0430
     3 \u0445\u043E\u0434\u0430 "
-  passiveCharacterAbility:
-    rid: -2
+  passiveCharacterAbilityData:
+    rid: 2085506571047272452
   attackCharacterAbility:
     rid: 6947752984539037703
   defenceCharacterAbility:
@@ -71,8 +71,21 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+    - rid: 2085506571047272452
+      type: {class: GargoyleCharacterPassiveAbilityData, ns: , asm: Assembly-CSharp}
+      data:
+        passiveCharacterAbility:
+          GuidAssignmentFailed: 0
+          GUID: 0c70b229a900b3c458f51d360f14fde7
+          _typeNameAndAssembly: GargoyleCharacterPassiveAbility, Assembly-CSharp
+          _suppressLogs: 0
+        abilityName: "\u041A\u0430\u043C\u0435\u043D\u043D\u043E\u0435 \u0442\u0435\u043B\u043E"
+        healthAmountToInvoke: 0.2
+        physDefenceAmount: 1
+        range: 3
+        turnCount: 2
+        direction: 1
+        isBuff: 1
     - rid: 6947752984539037702
       type: {class: GargoyleCharacterBuffAbility, ns: , asm: Assembly-CSharp}
       data:

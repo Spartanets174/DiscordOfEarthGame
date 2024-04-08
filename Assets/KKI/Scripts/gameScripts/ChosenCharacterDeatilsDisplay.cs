@@ -75,7 +75,12 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
     {
         foreach (var playerCharacter in playerController.PlayerCharactersObjects)
         {
-            
+            if (playerCharacter.PassiveCharacterAbility!=null)
+            {
+                playerCharacter.PassiveCharacterAbility.Init(battleSystem, playerCharacter);
+            }
+           
+
             playerCharacter.AttackCharacterAbility.OnCardAbilitySelected += OnCardAbilitySelected;
             playerCharacter.AttackCharacterAbility.OnSecondCardAbilitySelected += OnCardAbilitySelected;
             playerCharacter.AttackCharacterAbility.OnThirdCardAbilitySelected += OnCardAbilitySelected;
