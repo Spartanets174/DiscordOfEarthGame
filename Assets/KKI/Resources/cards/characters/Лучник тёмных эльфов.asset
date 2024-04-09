@@ -44,8 +44,8 @@ MonoBehaviour:
   buffAbility: "\"\u041C\u044F\u0442\u044B\u0439 \u0441\u0432\u0438\u0442\u043E\u043A\"
     - \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u0430\u0432\u043B\u0438\u0432\u0430\u0435\u0442
     50% \u0445\u043F \u0441\u0435\u0431\u0435"
-  passiveCharacterAbility:
-    rid: -2
+  passiveCharacterAbilityData:
+    rid: 2085506596913807360
   attackCharacterAbility:
     rid: 2085506413921828864
   defenceCharacterAbility:
@@ -55,8 +55,6 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
     - rid: 2085506413921828864
       type: {class: DarkElfArcherCharacterAttackAbility, ns: , asm: Assembly-CSharp}
       data:
@@ -71,3 +69,14 @@ MonoBehaviour:
       type: {class: DarkElfArcherCharacterBuffAbility, ns: , asm: Assembly-CSharp}
       data:
         m_typeOfAbility: 2
+    - rid: 2085506596913807360
+      type: {class: DarkElfArcherCharacterPassiveAbilityData, ns: , asm: Assembly-CSharp}
+      data:
+        passiveCharacterAbility:
+          GuidAssignmentFailed: 0
+          GUID: 549b0baf900b4ac42bacf9f1b8ab6b8c
+          _typeNameAndAssembly: DarkElfArcherCharacterPassiveAbility, Assembly-CSharp
+          _suppressLogs: 0
+        abilityName: "\u0412\u0435\u0442\u0435\u0440\u0430\u043D \u043F\u0435\u0440\u0435\u0441\u0442\u0440\u0435\u043B\u043E\u043A"
+        damageIncrease: 0.2
+        classToIncreaseDamage: 2

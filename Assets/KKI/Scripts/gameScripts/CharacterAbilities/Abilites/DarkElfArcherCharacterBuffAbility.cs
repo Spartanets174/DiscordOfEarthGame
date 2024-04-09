@@ -35,3 +35,9 @@ public class DarkElfArcherCharacterBuffAbility : BaseCharacterAbility
         
     }
 }
+[Serializable]
+
+public class DarkElfArcherCharacterBuffAbilityData : BaseCharacterAbilityData
+{
+
+}

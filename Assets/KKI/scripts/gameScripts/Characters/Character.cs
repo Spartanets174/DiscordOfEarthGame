@@ -138,6 +138,13 @@ public abstract class Character : OutlineInteractableObject
         set => m_critNum = value;
     }
 
+    protected float m_chanceToFreeAttack = 0;
+    public float ChanceToFreeAttack
+    {
+        get => m_chanceToFreeAttack;
+        set => m_chanceToFreeAttack = value;
+    }
+
     protected float m_chanceToAvoidDamage = 0;
     public float ChanceToAvoidDamage
     {
@@ -306,9 +313,14 @@ public abstract class Character : OutlineInteractableObject
 
     private Dictionary<Enums.Classes, float> m_attackMultiplierByClassesDict = new();
     public Dictionary<Enums.Classes, float> AttackMultiplierByClassesDict => m_attackMultiplierByClassesDict;
+    private Dictionary<Enums.Races, float> m_attackMultiplierByRacesDict = new();
+    public Dictionary<Enums.Races, float> AttackMultiplierByRacesDict => m_attackMultiplierByRacesDict;
 
     private Dictionary<Enums.Races, float> m_damageMultiplierByRacesDict = new();
     public Dictionary<Enums.Races, float> DamageMultiplierByRacesDict => m_damageMultiplierByRacesDict;
+
+    private Dictionary<Enums.Classes, float> m_damageMultiplierByClassesDict = new();
+    public Dictionary<Enums.Classes, float> DamageMultiplierByClassesDict => m_damageMultiplierByClassesDict;
 
 
     private Dictionary<Enums.Classes, bool> m_canBeDamagedByClassesDict = new();
@@ -342,6 +354,7 @@ public abstract class Character : OutlineInteractableObject
         m_critChance = m_card.critChance;
         m_critNum = m_card.critNum;
 
+        m_chanceToFreeAttack = 0;
         if (card.passiveCharacterAbilityData!=null)
         {
             Type type = card.passiveCharacterAbilityData.passiveCharacterAbility.Type;
@@ -367,10 +380,12 @@ public abstract class Character : OutlineInteractableObject
         foreach (Enums.Races characterRace in Enum.GetValues(typeof(Enums.Races)))
         {
             m_damageMultiplierByRacesDict.Add(characterRace,1);
+            m_attackMultiplierByRacesDict.Add(characterRace, 1);
         }
         foreach (Enums.Classes characterClass in Enum.GetValues(typeof(Enums.Classes)))
         {
             m_attackMultiplierByClassesDict.Add(characterClass, 1);
+            m_damageMultiplierByClassesDict.Add(characterClass, 1);
         }
         OnClick += OnCharacterClickedInvoke;
         IsChosen = false;
@@ -406,9 +421,9 @@ public abstract class Character : OutlineInteractableObject
         }
 
         float crit = IsCrit(chosenCharacter.CritChance,chosenCharacter.CritNum);
-        float finalPhysDamage = IgnorePhysDamage? 0 :((11 + chosenCharacter.PhysAttack) * chosenCharacter.PhysAttack * crit * (chosenCharacter.PhysAttack - PhysDefence + m_maxHealth)) / 256 * GetDamageMultiplierByRace(chosenCharacter.Race) * chosenCharacter.GetAttackMultiplierByClass(Class);
-        float finalMagDamage = IgnoreMagDamage?0 : ((11 + chosenCharacter.MagAttack) * chosenCharacter.MagAttack * crit * (chosenCharacter.MagAttack - MagDefence + m_maxHealth)) / 256 * GetDamageMultiplierByRace(chosenCharacter.Race) * chosenCharacter.GetAttackMultiplierByClass(Class);
-        float finalDamage = Math.Max(finalMagDamage, finalPhysDamage);
+        float finalPhysDamage = IgnorePhysDamage? 0 :((11 + chosenCharacter.PhysAttack) * chosenCharacter.PhysAttack * crit * (chosenCharacter.PhysAttack - PhysDefence + m_maxHealth)) / 256;
+        float finalMagDamage = IgnoreMagDamage?0 : ((11 + chosenCharacter.MagAttack) * chosenCharacter.MagAttack * crit * (chosenCharacter.MagAttack - MagDefence + m_maxHealth)) / 256;
+        float finalDamage = Math.Max(finalMagDamage, finalPhysDamage) * GetDamageMultiplierByRace(chosenCharacter.Race) * GetDamageMultiplierByClass(chosenCharacter.Class) * chosenCharacter.GetAttackMultiplierByRace(Race) * chosenCharacter.GetAttackMultiplierByClass(Class);
 
         Health = Math.Max(0, Health - finalDamage);
 
@@ -496,6 +511,15 @@ public abstract class Character : OutlineInteractableObject
     {
         return m_damageMultiplierByRacesDict[characterRace];
     }
+    public float GetAttackMultiplierByRace(Enums.Races characterRace)
+    {
+        return m_attackMultiplierByRacesDict[characterRace];
+    }
+    private float GetDamageMultiplierByClass(Enums.Classes characterClass)
+    {
+        return m_damageMultiplierByClassesDict[characterClass];
+    }
+  
     private bool CanBeDamagedByClass(Enums.Classes characterClass)
     {
         if (m_canBeDamagedByClassesDict[characterClass])

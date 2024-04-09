@@ -47,4 +47,8 @@ public class DarkElfArcherCharacterDefenceAbility : BaseCharacterAbility
         
     }
 }
-
+[Serializable]
+public class DarkElfArcherCharacterDefenceAbilityData : BaseCharacterAbilityData
+{
+    public Enums.Classes classToDefence;
+}

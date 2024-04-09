@@ -50,4 +50,9 @@ public class DarkElfArcherCharacterAttackAbility : BaseCharacterAbility
         battleSystem.PlayerController.SetPlayerStates(true, false);
     }
 }
+[Serializable]
 
+public class DarkElfArcherCharacterAttackAbilityData : BaseCharacterAbilityData
+{
+    public int range;
+}

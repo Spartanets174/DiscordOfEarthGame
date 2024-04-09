@@ -118,3 +118,8 @@ public class EternalGuardianCharacterBuffAbility : BaseCharacterAbility
     }
 
 }
+[Serializable]
+public class EternalGuardianCharacterBuffAbilityData : BaseCharacterAbilityData
+{
+    public float healAmount;
+}

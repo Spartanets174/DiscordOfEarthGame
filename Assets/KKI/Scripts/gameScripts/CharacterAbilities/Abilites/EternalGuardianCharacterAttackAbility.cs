@@ -7,9 +7,7 @@ using UnityEngine;
 public class EternalGuardianCharacterAttackAbility : BaseCharacterAbility, ITurnCountable
 {
     [SerializeField]
-    private float damage;
-
-    private Character character; 
+    private float damage;  
 
     [SerializeField]
     private int m_turnCount;
@@ -18,6 +16,9 @@ public class EternalGuardianCharacterAttackAbility : BaseCharacterAbility, ITurn
     [SerializeField]
     private bool m_isBuff;
     public bool IsBuff { get => m_isBuff; }
+
+    private Character character;
+    
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
@@ -85,4 +86,14 @@ public class EternalGuardianCharacterAttackAbility : BaseCharacterAbility, ITurn
         OnReturnToNormal?.Invoke(this);
         character = null;
     }
+}
+[Serializable]
+public class EternalGuardianCharacterAttackAbilityData
+{
+    public float damage;
+
+    public int turnCount;
+
+    [Header("Õ≈ “–Œ√¿“‹")]
+    public bool isBuff;
 }

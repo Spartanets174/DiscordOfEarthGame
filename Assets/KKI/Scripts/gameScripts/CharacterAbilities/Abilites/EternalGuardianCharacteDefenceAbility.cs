@@ -45,3 +45,13 @@ public class EternalGuardianCharacteDefenceAbility : BaseCharacterAbility, ITurn
     }
 
 }
+[Serializable]
+public class EternalGuardianCharacteDefenceAbilityData
+{
+    public float physDefenceAmount;
+
+    public int turnCount;
+
+    [Header("Õ≈ “–Œ√¿“‹")]
+    public bool isBuff;
+}

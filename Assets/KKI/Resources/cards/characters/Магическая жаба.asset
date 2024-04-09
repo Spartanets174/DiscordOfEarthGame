@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f652d45b50f5d142bbb5af89b9ad55a, type: 3}
   m_Name: "\u041C\u0430\u0433\u0438\u0447\u0435\u0441\u043A\u0430\u044F \u0436\u0430\u0431\u0430"
   m_EditorClassIdentifier: 
-  cardName: 
+  cardName: "\u041C\u0430\u0433\u0438\u0447\u0435\u0441\u043A\u0430\u044F \u0436\u0430\u0431\u0430"
   description: "\u043C\u0430\u0433\u0441\u0443\u0449"
   race: 5
   image: {fileID: 21300000, guid: 33e6c9648cb02f84893315330852565c, type: 3}
-  rarity: 0
-  Price: 54
-  id: 0
-  Class: 3
+  rarity: 1
+  Price: 123
+  id: 40
+  Class: 4
   health: 1
   speed: 3
   physAttack: 1
@@ -48,8 +48,8 @@ MonoBehaviour:
     - \u0443\u0432\u0435\u043B\u0438\u0447\u0438\u0432\u0430\u0435\u0442 \u0437\u0434\u043E\u0440\u043E\u0432\u044C\u0435,
     \u043C\u0430\u0433. \u0438 \u0444\u0438\u0437. \u0437\u0430\u0449\u0438\u0442\u0443
     \u043D\u0430 1 \u043D\u0430 3 \u0445\u043E\u0434\u0430"
-  passiveCharacterAbility:
-    rid: -2
+  passiveCharacterAbilityData:
+    rid: 2085506596913807361
   attackCharacterAbility:
     rid: 2085506413921828868
   defenceCharacterAbility:
@@ -59,8 +59,6 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
     - rid: 2085506413921828868
       type: {class: MagicToadCharacterAttackAbility, ns: , asm: Assembly-CSharp}
       data:
@@ -82,3 +80,14 @@ MonoBehaviour:
         physDefenceAmount: 1
         m_turnCount: 3
         m_isBuff: 1
+    - rid: 2085506596913807361
+      type: {class: MagicToadCharacterPassiveAbilityData, ns: , asm: Assembly-CSharp}
+      data:
+        passiveCharacterAbility:
+          GuidAssignmentFailed: 0
+          GUID: 38e93740010215d4db29d4ebbef5f176
+          _typeNameAndAssembly: MagicToadCharacterPassiveAbility, Assembly-CSharp
+          _suppressLogs: 0
+        abilityName: "\u041D\u0438\u0437\u043A\u0430\u044F \u0446\u0435\u043B\u044C"
+        damageIgnore: 0.2
+        classToIgnoreDamage: 3

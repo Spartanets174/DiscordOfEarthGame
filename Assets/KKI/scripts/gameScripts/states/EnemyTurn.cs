@@ -111,8 +111,12 @@ public class EnemyTurn : State
             {
                 BattleSystem.SetLost();
             }
-
-            BattleSystem.PointsOfAction.Value -= 2;
+            float chance = UnityEngine.Random.Range(0f, 1f);
+            if (chance > enemyCharacter.ChanceToFreeAttack)
+            {
+                BattleSystem.PointsOfAction.Value -= 2;
+            }
+            
             if (BattleSystem.PointsOfAction.Value == 0)
             {
                 BattleSystem.SetPlayerTurn();
