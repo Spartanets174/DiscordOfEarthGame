@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 205228971039015902}
   m_Layer: 0
-  m_Name: OldMaster (prefab)
+  m_Name: OldMaster [Prefab]
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

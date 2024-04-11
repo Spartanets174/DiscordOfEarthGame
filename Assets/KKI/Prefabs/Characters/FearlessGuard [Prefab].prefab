@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2825636921043075202}
   m_Layer: 0
-  m_Name: FearlessGuard (prefab)
+  m_Name: FearlessGuard [Prefab]
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
