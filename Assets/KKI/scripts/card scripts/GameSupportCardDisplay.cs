@@ -1,5 +1,7 @@
 using DG.Tweening;
+using System;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -59,10 +61,11 @@ public class GameSupportCardDisplay : OutlineClicableUI
         supportAbility.text = cardSupport.abilityText;
         supportName.text = cardSupport.cardName;
 
-        if (cardSupport.GameSupportÑardAbility != null)
+        if (cardSupport.supportÑardAbilityData != null)
         {
-            m_gameSupportÑardAbility = cardSupport.GameSupportÑardAbility;
-            m_gameSupportÑardAbility.Init(battleSystem);
+            Type type = cardSupport.supportÑardAbilityData.SupportÑardAbility.Type;
+            m_gameSupportÑardAbility = (BaseSupportÑardAbility)gameObject.AddComponent(type);
+            m_gameSupportÑardAbility.Init(battleSystem, cardSupport.supportÑardAbilityData);
         }
 
     }

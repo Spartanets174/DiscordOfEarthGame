@@ -6,23 +6,20 @@ using UnityEngine;
 [Serializable]
 public class MagicToadCharacterDefenceAbility : BaseCharacterAbility, ITurnCountable
 { 
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     private Character character;
+    private MagicToadCharacterDefenceAbilityData abilityData;
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("Выберите вражеского персонажа для дебаффа", battleSystem));
+        abilityData = (MagicToadCharacterDefenceAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour(abilityData.selectAbilityText, battleSystem));
         SetSelectCharacterBehaviour(new SetCurrentEnemyCharacterBehaviour("", battleSystem));
         SetUseCardBehaviour(new EmptyUseAbilityBehaviour());
 
@@ -85,4 +82,14 @@ public class MagicToadCharacterDefenceAbility : BaseCharacterAbility, ITurnCount
         OnReturnToNormal?.Invoke(this);
         character = null;
     }
+}
+[Serializable]
+public class MagicToadCharacterDefenceAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public int turnCount;
+
+    [Header("Не трогать!!!")]
+    public bool isBuff;
 }

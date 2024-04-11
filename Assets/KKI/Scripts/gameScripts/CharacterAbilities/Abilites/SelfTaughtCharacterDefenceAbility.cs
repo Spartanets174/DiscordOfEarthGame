@@ -1,31 +1,23 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class SelfTaughtCharacterDefenceAbility : BaseCharacterAbility, ITurnCountable
 {
-   
-
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     private Character character;
+    private SelfTaughtCharacterDefenceAbilityData abilityData;
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Выберите союзного персонажа для баффа", battleSystem));
+        abilityData = (SelfTaughtCharacterDefenceAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectAbilityText, battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
@@ -78,4 +70,14 @@ public class SelfTaughtCharacterDefenceAbility : BaseCharacterAbility, ITurnCoun
         character.CanDamage = true;
         character.CanBeDamaged = true;
     }
+}
+[Serializable]
+public class SelfTaughtCharacterDefenceAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public int turnCount;
+
+    [Header("НЕ трогать!")]
+    public bool isBuff;
 }

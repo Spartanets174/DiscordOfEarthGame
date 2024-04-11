@@ -46,35 +46,15 @@ MonoBehaviour:
     3 \u0445\u043E\u0434\u0430 "
   passiveCharacterAbilityData:
     rid: 2085506596913807364
-  attackCharacterAbility:
-    rid: 2085506459617460229
-  defenceCharacterAbility:
-    rid: 2085506459617460230
-  buffCharacterAbility:
-    rid: 2085506459617460231
+  attackCharacterAbilityData:
+    rid: 2085506640524869711
+  defenceCharacterAbilityData:
+    rid: 2085506640524869712
+  buffCharacterAbilityData:
+    rid: 2085506640524869713
   references:
     version: 2
     RefIds:
-    - rid: 2085506459617460229
-      type: {class: FallenElfCharacterAttackAbility, ns: , asm: Assembly-CSharp}
-      data:
-        m_typeOfAbility: 0
-        damage: 1
-        range: 3
-        healPercent: 0.2
-    - rid: 2085506459617460230
-      type: {class: FallenElfCharacterDefenceAbility, ns: , asm: Assembly-CSharp}
-      data:
-        m_typeOfAbility: 1
-        magDefenceAmount: 1
-        physDefenceAmount: 1
-        m_turnCount: 1
-        m_isBuff: 1
-    - rid: 2085506459617460231
-      type: {class: FallenElfCharacteBuffAbility, ns: , asm: Assembly-CSharp}
-      data:
-        m_typeOfAbility: 2
-        magDefenceAmount: 1
     - rid: 2085506596913807364
       type: {class: FallenElfCharacterPassiveAbilityData, ns: , asm: Assembly-CSharp}
       data:
@@ -86,3 +66,41 @@ MonoBehaviour:
         abilityName: "\u041C\u0435\u0441\u0442\u044C \u0437\u0430 \u043F\u0440\u043E\u0448\u043B\u043E\u0435"
         damageIncrease: 0.2
         raceToIncreaseDamage: 3
+    - rid: 2085506640524869711
+      type: {class: FallenElfCharacterAttackAbilityData, ns: , asm: Assembly-CSharp}
+      data:
+        characterAbility:
+          GuidAssignmentFailed: 0
+          GUID: e955fb8d2cd042449a0de811b51c5bc0
+          _typeNameAndAssembly: FallenElfCharacterAttackAbility, Assembly-CSharp
+          _suppressLogs: 0
+        abilityName: "\u041F\u043E\u0442\u043E\u043A"
+        selectAbilityText: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0440\u0430\u0436\u0435\u0441\u043A\u043E\u0433\u043E
+          \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u0436\u0430 \u0434\u043B\u044F
+          \u0430\u0442\u0430\u043A\u0438"
+        damage: 1
+        range: 3
+        healPercent: 0.2
+    - rid: 2085506640524869712
+      type: {class: FallenElfCharacterDefenceAbilityData, ns: , asm: Assembly-CSharp}
+      data:
+        characterAbility:
+          GuidAssignmentFailed: 0
+          GUID: d698adabaa3c66045bdb31b6703b1d14
+          _typeNameAndAssembly: FallenElfCharacterDefenceAbility, Assembly-CSharp
+          _suppressLogs: 0
+        abilityName: "\u041A\u043E\u0437\u044B\u0440\u044C \u0432 \u0440\u0443\u043A\u0430\u0432\u0435"
+        magDefenceAmount: 1
+        physDefenceAmount: 1
+        turnCount: 1
+        isBuff: 1
+    - rid: 2085506640524869713
+      type: {class: FallenElfCharacteBuffAbilityData, ns: , asm: Assembly-CSharp}
+      data:
+        characterAbility:
+          GuidAssignmentFailed: 0
+          GUID: be877186466fb0a4996e15200aea124b
+          _typeNameAndAssembly: FallenElfCharacteBuffAbility, Assembly-CSharp
+          _suppressLogs: 0
+        abilityName: "\u0417\u0430\u0433\u043E\u0432\u043E\u0440 "
+        magDefenceAmount: 1

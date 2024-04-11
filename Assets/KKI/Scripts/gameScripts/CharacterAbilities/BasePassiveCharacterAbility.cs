@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public abstract class BasePassiveCharacterAbility : MonoBehaviour
@@ -14,4 +15,5 @@ public abstract class BasePassiveCharacterAbility : MonoBehaviour
     public abstract void AbilityStart(Character character);
 
     public abstract void AbilityEnd(Character character);
+
 }

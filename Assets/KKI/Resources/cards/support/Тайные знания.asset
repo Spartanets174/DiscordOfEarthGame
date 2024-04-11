@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f07b7677596d73a42b7bae752aea67b3, type: 3}
   m_Name: "\u0422\u0430\u0439\u043D\u044B\u0435 \u0437\u043D\u0430\u043D\u0438\u044F"
   m_EditorClassIdentifier: 
-  cardName: 
+  cardName: "\u0422\u0430\u0439\u043D\u044B\u0435 \u0437\u043D\u0430\u043D\u0438\u044F "
   description: 
   race: 0
   image: {fileID: 21300000, guid: 2b628a45a904b3a49a864b94d7e3c0c1, type: 3}
@@ -21,12 +21,18 @@ MonoBehaviour:
   id: 0
   type: 2
   abilityText: 
-  "GameSupport\u0421ardAbility":
-    rid: 2085506480921116684
+  "support\u0421ardAbilityData":
+    rid: 2085506640524869664
   references:
     version: 2
     RefIds:
-    - rid: 2085506480921116684
-      type: {class: SecretKnowledgesCardSupportAbility, ns: , asm: Assembly-CSharp}
+    - rid: 2085506640524869664
+      type: {class: SecretKnowledgesCardSupportAbilityData, ns: , asm: Assembly-CSharp}
       data:
+        "Support\u0421ardAbility":
+          GuidAssignmentFailed: 0
+          GUID: 0f41a0dc423f72c43ac90335f08b0e56
+          _typeNameAndAssembly: SecretKnowledgesCardSupportAbility, Assembly-CSharp
+          _suppressLogs: 0
+        "support\u0421ardAbilityName": "\u0422\u0430\u0439\u043D\u044B\u0435 \u0437\u043D\u0430\u043D\u0438\u044F "
         pointsOfUsingAbility: 9

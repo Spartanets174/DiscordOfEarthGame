@@ -1,29 +1,21 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [Serializable]
 public class EternalGuardianCharacteDefenceAbility : BaseCharacterAbility, ITurnCountable
 {
-    [SerializeField]
-    private float physDefenceAmount;
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    private EternalGuardianCharacteDefenceAbilityData abilityData;
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
+        abilityData = (EternalGuardianCharacteDefenceAbilityData)characterAbilityData;
         SetCardSelectBehaviour(new EmptySelectBehaviour("Используйте карту"));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -31,7 +23,7 @@ public class EternalGuardianCharacteDefenceAbility : BaseCharacterAbility, ITurn
 
     private void OnSelected()
     {
-        abilityOwner.PhysDefence += physDefenceAmount;
+        abilityOwner.PhysDefence += abilityData.physDefenceAmount;
 
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(abilityOwner.gameObject);
@@ -40,13 +32,13 @@ public class EternalGuardianCharacteDefenceAbility : BaseCharacterAbility, ITurn
 
     public void ReturnToNormal()
     {
-        abilityOwner.PhysDefence -= physDefenceAmount;
+        abilityOwner.PhysDefence -= abilityData.physDefenceAmount;
         OnReturnToNormal?.Invoke(this);
     }
 
 }
 [Serializable]
-public class EternalGuardianCharacteDefenceAbilityData
+public class EternalGuardianCharacteDefenceAbilityData: BaseCharacterAbilityData
 {
     public float physDefenceAmount;
 

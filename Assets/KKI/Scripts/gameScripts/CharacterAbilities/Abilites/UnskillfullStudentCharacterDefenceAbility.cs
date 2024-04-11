@@ -6,26 +6,21 @@ using UnityEngine;
 [Serializable]
 public class UnskillfullStudentCharacterDefenceAbility : BaseCharacterAbility, ITurnCountable
 {
-    [SerializeField]
-    private float physDefenceAmount;
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
+
+    public bool IsBuff { get => abilityData.isBuff; }
 
     private Character character;
+    private UnskillfullStudentCharacterDefenceAbilityData abilityData;
 
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
+    public event Action<ITurnCountable> OnReturnToNormal; 
 
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
-
-    public event Action<ITurnCountable> OnReturnToNormal;
-
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData baseCharacterAbility)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Выберите союзного персонажа для услиения", battleSystem));
+        abilityData = (UnskillfullStudentCharacterDefenceAbilityData)baseCharacterAbility;
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectAbilityText, battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
@@ -57,7 +52,7 @@ public class UnskillfullStudentCharacterDefenceAbility : BaseCharacterAbility, I
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
 
-        character.PhysDefence += physDefenceAmount;
+        character.PhysDefence += abilityData.physDefenceAmount;
         OnCancelSelection();
         UseCard(character.gameObject);
     }
@@ -74,9 +69,21 @@ public class UnskillfullStudentCharacterDefenceAbility : BaseCharacterAbility, I
 
     public void ReturnToNormal()
     {
-        character.PhysDefence -= physDefenceAmount;
+        character.PhysDefence -= abilityData.physDefenceAmount;
 
         OnReturnToNormal?.Invoke(this);
         character = null;
     }
+}
+[Serializable]
+public class UnskillfullStudentCharacterDefenceAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public float physDefenceAmount;
+
+    public int turnCount;
+
+    [Header("НЕ трогать!")]
+    public bool isBuff;
 }

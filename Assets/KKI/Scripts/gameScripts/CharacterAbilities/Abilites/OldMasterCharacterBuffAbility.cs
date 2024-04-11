@@ -3,30 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class OldMasterCharacterBuffbility : BaseCharacterAbility, ITurnCountable
+public class OldMasterCharacterBuffAbility : BaseCharacterAbility, ITurnCountable
 {
-    [SerializeField]
-    private float healthIcnreaseAmount;
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
 
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     private List<Character> characterList = new List<Character>();
+    private OldMasterCharacterBuffbilityData abilityData;
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
     private float increaseAmount;
     private float healAmount;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
+        abilityData = (OldMasterCharacterBuffbilityData)characterAbilityData;
         SetCardSelectBehaviour(new EmptySelectBehaviour("Используйте карту"));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -38,8 +33,8 @@ public class OldMasterCharacterBuffbility : BaseCharacterAbility, ITurnCountable
         SetCharacters();
         foreach (var character in characterList)
         {
-            increaseAmount = (character.MaxHealth * (1 + healthIcnreaseAmount)) - character.MaxHealth;
-            character.MaxHealth = character.MaxHealth * (1 + healthIcnreaseAmount);
+            increaseAmount = (character.MaxHealth * (1 + abilityData.healthIcnreaseAmount)) - character.MaxHealth;
+            character.MaxHealth = character.MaxHealth * (1 + abilityData.healthIcnreaseAmount);
 
             if (character.Health == character.MaxHealth)
             {
@@ -48,7 +43,7 @@ public class OldMasterCharacterBuffbility : BaseCharacterAbility, ITurnCountable
             }
             else
             {
-                healAmount = character.Health * healthIcnreaseAmount;
+                healAmount = character.Health * abilityData.healthIcnreaseAmount;
                 character.Heal(healAmount);
             }
         }
@@ -103,4 +98,14 @@ public class OldMasterCharacterBuffbility : BaseCharacterAbility, ITurnCountable
         OnReturnToNormal?.Invoke(this);
     }
 
+}
+[Serializable]
+public class OldMasterCharacterBuffbilityData : BaseCharacterAbilityData
+{
+    public float healthIcnreaseAmount;
+
+    public int turnCount;
+
+    [Header("НЕ трогать!")]
+    public bool isBuff;
 }

@@ -6,21 +6,17 @@ using UnityEngine;
 [Serializable]
 public class SentinelCharacterAttackAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float damage;
-
-    [SerializeField]
-    private int range;
-
+    private SentinelCharacterAttackAbilityData abilityData;
     private SelectCellsWithCharactersInRangeBehaviour selectCellsToAttackInRangeBehaviour;
     private FormulaAttackSelected—haractersBehaviour attackSelected—haractersBehaviour;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour("",battleSystem, abilityOwner, range, "attack"));
-        SetUseCardBehaviour(new FormulaAttackSelected—haractersBehaviour(damage, battleSystem, abilityOwner, "\"“ˇÊÂÎ‡ˇ ÛÍ‡\""));
+        abilityData = (SentinelCharacterAttackAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour("",battleSystem, abilityOwner, abilityData.range, "attack"));
+        SetUseCardBehaviour(new FormulaAttackSelected—haractersBehaviour(abilityData.damage, battleSystem, abilityOwner, $"\"{abilityData.abilityName}\""));
 
         selectCellsToAttackInRangeBehaviour = (SelectCellsWithCharactersInRangeBehaviour)CardSelectBehaviour;
         attackSelected—haractersBehaviour = (FormulaAttackSelected—haractersBehaviour)UseCardBehaviour;
@@ -33,7 +29,7 @@ public class SentinelCharacterAttackAbility : BaseCharacterAbility
         attackSelected—haractersBehaviour.characters= selectCellsToAttackInRangeBehaviour.charactersOnCells;
         foreach (var character in attackSelected—haractersBehaviour.characters)
         {
-            character.PhysDefence--;
+            character.PhysDefence -=abilityData.physDefenceAmount;
         }
         UseCard(abilityOwner.gameObject);       
     }
@@ -44,4 +40,11 @@ public class SentinelCharacterAttackAbility : BaseCharacterAbility
         selectCellsToAttackInRangeBehaviour.charactersOnCells.Clear();
         attackSelected—haractersBehaviour.characters.Clear();
     }
+}
+[Serializable]
+public class SentinelCharacterAttackAbilityData : BaseCharacterAbilityData
+{
+    public float damage;
+    public float physDefenceAmount;
+    public int range;
 }

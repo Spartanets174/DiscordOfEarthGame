@@ -4,24 +4,19 @@ using UnityEngine;
 [Serializable]
 public class ArtOfSurviveSupportCardAbility : BaseSupport—ardAbility, ITurnCountable
 {
-    [SerializeField]
-    private float chanceToAvoidDamage;
-
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
     private Character character;
-    public override void Init(BattleSystem battleSystem)
+    private ArtOfSurviveSupportCardAbilityData abilityData;
+
+    public override void Init(BattleSystem battleSystem, BaseSupport—ardAbilityData baseAbilityData)
     {
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("¬˚·ÂËÚÂ ÔÂÒÓÌ‡Ê‡", battleSystem));
+        abilityData = (ArtOfSurviveSupportCardAbilityData)baseAbilityData;
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectCardText, battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
@@ -52,7 +47,7 @@ public class ArtOfSurviveSupportCardAbility : BaseSupport—ardAbility, ITurnCount
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
 
-        character.ChanceToAvoidDamage += chanceToAvoidDamage;
+        character.ChanceToAvoidDamage += abilityData.chanceToAvoidDamage;
 
         battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {
@@ -72,9 +67,21 @@ public class ArtOfSurviveSupportCardAbility : BaseSupport—ardAbility, ITurnCount
 
     public void ReturnToNormal()
     {
-        character.ChanceToAvoidDamage -= chanceToAvoidDamage;
+        character.ChanceToAvoidDamage -= abilityData.chanceToAvoidDamage;
 
         OnReturnToNormal?.Invoke(this);
     }
 
+}
+[Serializable]
+public class ArtOfSurviveSupportCardAbilityData : BaseSupport—ardAbilityData
+{
+    public string selectCardText;
+
+    public float chanceToAvoidDamage;
+
+    public int turnCount;
+
+    [Header("ÕÂ ÚÓ„‡Ú¸!")]
+    public bool isBuff;
 }

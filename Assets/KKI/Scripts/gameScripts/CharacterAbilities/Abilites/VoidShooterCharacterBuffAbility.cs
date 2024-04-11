@@ -1,24 +1,17 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
 public class VoidShooterCharacterBuffAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float chance;
-
-    [SerializeField]
-    private float amount;
-
     private Character character;
-
-    public override void Init(BattleSystem battleSystem, Character abilityOwner)
+    private VoidShooterCharacterBuffAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character abilityOwner, BaseCharacterAbilityData baseCharacterAbility)
     {
         this.abilityOwner = abilityOwner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("Выберите вражеского персонажа для дебаффа", battleSystem));
+        abilityData = (VoidShooterCharacterBuffAbilityData)baseCharacterAbility;
+        SetCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour(abilityData.selectAbilityText, battleSystem));
         SetSelectCharacterBehaviour(new SetCurrentEnemyCharacterBehaviour("", battleSystem));
         SetUseCardBehaviour(new EmptyUseAbilityBehaviour());
 
@@ -54,15 +47,15 @@ public class VoidShooterCharacterBuffAbility : BaseCharacterAbility
 
         float tempChance = UnityEngine.Random.Range(0f, 1f);
         Character tempCharacter = battleSystem.PlayerController.PlayerCharactersObjects[UnityEngine.Random.Range(0, battleSystem.PlayerController.PlayerCharactersObjects.Count)];
-        if (tempChance <= chance)
+        if (tempChance <= abilityData.chance)
         {
-            character.PhysDefence -= amount;
-            tempCharacter.PhysDefence += amount;
+            character.PhysDefence -= abilityData.amount;
+            tempCharacter.PhysDefence += abilityData.amount;
         }
         else
         {
-            character.MagDefence -= amount;
-            tempCharacter.MagDefence += amount;
+            character.MagDefence -= abilityData.amount;
+            tempCharacter.MagDefence += abilityData.amount;
 
         }
 
@@ -82,4 +75,14 @@ public class VoidShooterCharacterBuffAbility : BaseCharacterAbility
         });
         battleSystem.PlayerController.SetPlayerStates(true, false);
     }
+}
+[Serializable]
+public class VoidShooterCharacterBuffAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public float chance;
+
+    public float amount;
+
 }

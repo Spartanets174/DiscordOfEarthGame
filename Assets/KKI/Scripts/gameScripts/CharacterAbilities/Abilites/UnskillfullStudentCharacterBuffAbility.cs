@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
 
 [Serializable]
 public class UnskillfullStudentCharacterBuffAbility : BaseCharacterAbility
@@ -18,15 +16,16 @@ public class UnskillfullStudentCharacterBuffAbility : BaseCharacterAbility
     private Enums.Directions directionToMove;
 
     private Character character;
-
+    private UnskillfullStudentCharacterBuffAbilityData abilityData;
     private Dictionary<Character, Cell> cellToMoveForEachCharacter = new();
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData baseCharacterAbility)
     {
         character = null;
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsWithConditionBehaviour("Выберите союзного персонажа для усиления", battleSystem, CanBeSelected));
+        abilityData = (UnskillfullStudentCharacterBuffAbilityData)baseCharacterAbility;
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsWithConditionBehaviour(abilityData.selectAbilityText, battleSystem, CanBeSelected));
         SetUseCardBehaviour(new MoveToCellBehaviour(battleSystem));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -43,7 +42,7 @@ public class UnskillfullStudentCharacterBuffAbility : BaseCharacterAbility
         if (character == abilityOwner)
         {
             return false;
-        } 
+        }
 
         int newI = (int)character.PositionOnField.x;
         int newJ = (int)character.PositionOnField.y;
@@ -101,12 +100,12 @@ public class UnskillfullStudentCharacterBuffAbility : BaseCharacterAbility
     }
 
     private void OnSelected()
-    {        
+    {
         if (battleSystem.State is PlayerTurn)
         {
             foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
             {
-                playerCharacter.OnClick += OnClick ;
+                playerCharacter.OnClick += OnClick;
             }
         }
     }
@@ -125,7 +124,7 @@ public class UnskillfullStudentCharacterBuffAbility : BaseCharacterAbility
         }
 
         character.MaxSpeed += speedAmount;
-        
+
         Uncubscribe();
     }
 
@@ -149,4 +148,15 @@ public class UnskillfullStudentCharacterBuffAbility : BaseCharacterAbility
     {
         UseCard(cellToMoveForEachCharacter[gameObject.GetComponent<Character>()].gameObject);
     }
+}
+[Serializable]
+public class UnskillfullStudentCharacterBuffAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public int speedAmount;
+
+    public int rangeToMove;
+
+    public Enums.Directions directionToMove;
 }

@@ -6,24 +6,20 @@ using UnityEngine;
 [Serializable]
 public class GargoyleCharacterBuffAbility : BaseCharacterAbility, ITurnCountable
 {
-    [SerializeField]
-    private float physDefenceToIcrease;
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
 
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    private GargoyleCharacterBuffAbilityData abilityData;
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
     private float amount;
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
+        abilityData = (GargoyleCharacterBuffAbilityData)characterAbilityData;
         SetCardSelectBehaviour(new EmptySelectBehaviour("Используйте карту"));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -31,7 +27,7 @@ public class GargoyleCharacterBuffAbility : BaseCharacterAbility, ITurnCountable
 
     private void OnSelected()
     {
-        amount = physDefenceToIcrease - abilityOwner.PhysDefence;
+        amount = abilityData.physDefenceToIcrease - abilityOwner.PhysDefence;
 
         abilityOwner.PhysDefence += amount;
 
@@ -44,4 +40,16 @@ public class GargoyleCharacterBuffAbility : BaseCharacterAbility, ITurnCountable
         abilityOwner.PhysDefence -= amount;
         OnReturnToNormal?.Invoke(this);
     }
+}
+
+[Serializable]
+public class GargoyleCharacterBuffAbilityData : BaseCharacterAbilityData
+{
+    public float physDefenceToIcrease;
+
+    public int turnCount;
+
+    [Header("Не трогать!!!")]
+    public bool isBuff;
+
 }

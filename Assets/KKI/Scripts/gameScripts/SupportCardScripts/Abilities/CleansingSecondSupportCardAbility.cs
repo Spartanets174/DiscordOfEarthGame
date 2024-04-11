@@ -6,10 +6,11 @@ using UnityEngine;
 [Serializable]
 public class CleansingSecondSupportCardAbility : BaseSupportÑardAbility
 {
-    public override void Init(BattleSystem battleSystem)
+    private CleansingSecondSupportCardAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, BaseSupportÑardAbilityData baseAbilityData)
     {
         this.battleSystem = battleSystem;
-
+        abilityData = (CleansingSecondSupportCardAbilityData)baseAbilityData;
         SetCardSelectBehaviour(new EmptySelectBehaviour("Èñïîëüçóéòå êàğòó"));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -31,4 +32,9 @@ public class CleansingSecondSupportCardAbility : BaseSupportÑardAbility
         UseCard(null);
     }
 
+}
+[Serializable]
+public class CleansingSecondSupportCardAbilityData : BaseSupportÑardAbilityData
+{
+    
 }

@@ -5,23 +5,10 @@ using UnityEngine;
 [Serializable]
 public class ProtectedDonkeyCharacterBuffAbility : BaseCharacterAbility, ITurnCountable
 {
-    [SerializeField]
-    private float physDefenceAmount;
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
-    [SerializeField]
-    private float magDefenceAmount;
-
-    [SerializeField]
-    private float rangeAmount;
-
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
-
+    private ProtectedDonkeyCharacterBuffAbilityData abilityData;
     private List<Character> characterList = new List<Character>();
 
     private bool hasPeople = false;
@@ -32,10 +19,11 @@ public class ProtectedDonkeyCharacterBuffAbility : BaseCharacterAbility, ITurnCo
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
+        abilityData = (ProtectedDonkeyCharacterBuffAbilityData)characterAbilityData;
         SetCardSelectBehaviour(new EmptySelectBehaviour("Используйте карту"));
 
         hasPeople = false;
@@ -66,9 +54,9 @@ public class ProtectedDonkeyCharacterBuffAbility : BaseCharacterAbility, ITurnCo
 
         foreach (var character in characterList)
         {
-            character.MaxSpeed += rangeAmount;
-            character.PhysDefence += physDefenceAmount;
-            character.MagDefence += magDefenceAmount;
+            character.MaxSpeed += abilityData.rangeAmount;
+            character.PhysDefence += abilityData.physDefenceAmount;
+            character.MagDefence += abilityData.magDefenceAmount;
         }
 
 
@@ -124,9 +112,9 @@ public class ProtectedDonkeyCharacterBuffAbility : BaseCharacterAbility, ITurnCo
     {
         foreach (var character in characterList)
         {
-            character.MaxSpeed -= rangeAmount;
-            character.PhysDefence -= physDefenceAmount;
-            character.MagDefence -= magDefenceAmount;
+            character.MaxSpeed -= abilityData.rangeAmount;
+            character.PhysDefence -= abilityData.physDefenceAmount;
+            character.MagDefence -= abilityData.magDefenceAmount;
         }
 
         hasPeople = false;
@@ -140,4 +128,18 @@ public class ProtectedDonkeyCharacterBuffAbility : BaseCharacterAbility, ITurnCo
         OnReturnToNormal?.Invoke(this);
     }
 
+}
+[Serializable]
+public class ProtectedDonkeyCharacterBuffAbilityData : BaseCharacterAbilityData
+{
+    public float physDefenceAmount;
+
+    public float magDefenceAmount;
+
+    public float rangeAmount;
+
+    public int turnCount;
+
+    [Header("НЕ трогать!")]
+    public bool isBuff;
 }

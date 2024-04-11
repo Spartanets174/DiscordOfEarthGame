@@ -1,34 +1,26 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
 public class EternalGuardianCharacterAttackAbility : BaseCharacterAbility, ITurnCountable
 {
-    [SerializeField]
-    private float damage;  
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
 
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     private Character character;
-    
+    private EternalGuardianCharacterAttackAbilityData abilityData;
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("Âûáåðèòå âðàæåñêîãî ïåðñîíàæà äëÿ àòàêè", battleSystem));
+        abilityData = (EternalGuardianCharacterAttackAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour(abilityData.selectAbilityText, battleSystem));
         SetSelectCharacterBehaviour(new SetCurrentEnemyCharacterBehaviour("", battleSystem));
-        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(damage, battleSystem, abilityOwner, "\"Áîëü â ãðóäè\""));
+        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(abilityData.damage, battleSystem, abilityOwner, $"\"{abilityData.abilityName}\""));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -72,7 +64,7 @@ public class EternalGuardianCharacterAttackAbility : BaseCharacterAbility, ITurn
     }
 
     private void OnCancelSelection()
-    {        
+    {
         battleSystem.EnemyController.SetEnemiesStates(true, false, x =>
         {
             x.OnClick -= SelectCharacter;
@@ -88,8 +80,10 @@ public class EternalGuardianCharacterAttackAbility : BaseCharacterAbility, ITurn
     }
 }
 [Serializable]
-public class EternalGuardianCharacterAttackAbilityData
+public class EternalGuardianCharacterAttackAbilityData: BaseCharacterAbilityData
 {
+    public string selectAbilityText;
+
     public float damage;
 
     public int turnCount;

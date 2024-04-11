@@ -1,24 +1,19 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class FearlessGuardianCharacterAttackAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float damage;
-
+    private FearlessGuardianCharacterAttackAbilityData abilityData;
     private Character character;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("Âûáåğèòå âğàæåñêîãî ïåğñîíàæà äëÿ àòàêè", battleSystem));
+        abilityData = (FearlessGuardianCharacterAttackAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour(abilityData.selectAbilityText, battleSystem));
         SetSelectCharacterBehaviour(new SetCurrentEnemyCharacterBehaviour("", battleSystem));
-        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(damage, battleSystem, abilityOwner, "\"Âçîâ\""));
+        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(abilityData.damage, battleSystem, abilityOwner, $"\"{abilityData.abilityName}\""));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -67,4 +62,11 @@ public class FearlessGuardianCharacterAttackAbility : BaseCharacterAbility
         });
         battleSystem.PlayerController.SetPlayerStates(true, false);
     }
+}
+[Serializable]
+public class FearlessGuardianCharacterAttackAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public float damage;
 }

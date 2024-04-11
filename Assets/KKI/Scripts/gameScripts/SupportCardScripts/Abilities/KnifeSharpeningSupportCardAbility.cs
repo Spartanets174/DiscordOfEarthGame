@@ -4,27 +4,19 @@ using UnityEngine;
 [Serializable]
 public class KnifeSharpeningSupportCardAbility : BaseSupport—ardAbility, ITurnCountable
 {
-    [SerializeField]
-    private float critChance;
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
 
-    [SerializeField]
-    private float critNum;
-
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
     private Character character;
-    public override void Init(BattleSystem battleSystem)
+    private KnifeSharpeningSupportCardAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, BaseSupport—ardAbilityData baseAbilityData)
     {
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("¬˚·ÂËÚÂ ÔÂÒÓÌ‡Ê‡", battleSystem));
+        abilityData = (KnifeSharpeningSupportCardAbilityData)baseAbilityData;
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectCardText, battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
@@ -55,8 +47,8 @@ public class KnifeSharpeningSupportCardAbility : BaseSupport—ardAbility, ITurnCo
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
 
-        character.CritChance += critChance;
-        character.CritNum += critNum;
+        character.CritChance += abilityData.critChance;
+        character.CritNum += abilityData.critNum;
 
         battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {
@@ -75,10 +67,24 @@ public class KnifeSharpeningSupportCardAbility : BaseSupport—ardAbility, ITurnCo
 
     public void ReturnToNormal()
     {
-        character.CritChance -= critChance;
-        character.CritNum -= critNum;
+        character.CritChance -= abilityData.critChance;
+        character.CritNum -= abilityData.critNum;
 
         OnReturnToNormal?.Invoke(this);
     }
 }
 
+[Serializable]
+public class KnifeSharpeningSupportCardAbilityData : BaseSupport—ardAbilityData
+{
+    public string selectCardText;
+
+    public float critChance;
+
+    public float critNum;
+
+    public int turnCount;
+
+    [Header("ÕÂ ÚÓ„‡Ú¸!")]
+    public bool isBuff;
+}

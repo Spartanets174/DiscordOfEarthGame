@@ -5,11 +5,13 @@ using UnityEngine;
 public class TeleportSupportCardAbility : BaseSupportÑardAbility
 {
     private SetAbiableCellsBehaviour setAbiableCellsBehaviour;
-    public override void Init(BattleSystem battleSystem)
+    private TeleportSupportCardAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, BaseSupportÑardAbilityData baseAbilityData)
     {
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Âûáåğèòå ïåğñîíàæà", battleSystem));
-        SetSelectCharacterBehaviour(new SetAbiableCellsBehaviour("Âûáåğèòå êëåòêó äëÿ ïåğåìåùåíèÿ", battleSystem));
+        abilityData = (TeleportSupportCardAbilityData)baseAbilityData;
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectCardText, battleSystem));
+        SetSelectCharacterBehaviour(new SetAbiableCellsBehaviour(abilityData.selectCharacterText, battleSystem));
         SetUseCardBehaviour(new MoveToCellBehaviour(battleSystem));
 
         setAbiableCellsBehaviour = (SetAbiableCellsBehaviour)SelectCharacterBehaviour;
@@ -80,4 +82,11 @@ public class TeleportSupportCardAbility : BaseSupportÑardAbility
             cell.OnClick -= UseCard;
         }
     }
+}
+[Serializable]
+public class TeleportSupportCardAbilityData : BaseSupportÑardAbilityData
+{
+    public string selectCardText;
+    public string selectCharacterText;
+
 }

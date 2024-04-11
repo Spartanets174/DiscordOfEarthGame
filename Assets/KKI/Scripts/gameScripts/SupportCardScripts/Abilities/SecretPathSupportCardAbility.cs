@@ -4,15 +4,14 @@ using UnityEngine;
 [Serializable]
 public class SecretPathSupportCardAbility : BaseSupportÑardAbility
 {
-    [SerializeField]
-    private int cellsCount;
-
     private SetAbiableCellsBehaviour setAbiableCellsBehaviour;
-    public override void Init(BattleSystem battleSystem)
+    private SecretPathSupportCardAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, BaseSupportÑardAbilityData baseAbilityData)
     {
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Âûáåğèòå ïåğñîíàæà", battleSystem));
-        SetSelectCharacterBehaviour(new SetAbiableCellsBehaviour("Âûáåğèòå êëåòêó äëÿ ïåğåìåùåíèÿ", battleSystem));
+        abilityData = (SecretPathSupportCardAbilityData)baseAbilityData;
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectCardText, battleSystem));
+        SetSelectCharacterBehaviour(new SetAbiableCellsBehaviour(abilityData.selectCharacterText, battleSystem));
         SetUseCardBehaviour(new MoveToCellBehaviour(battleSystem));
 
         setAbiableCellsBehaviour = (SetAbiableCellsBehaviour)SelectCharacterBehaviour;
@@ -51,7 +50,7 @@ public class SecretPathSupportCardAbility : BaseSupportÑardAbility
         {
             item.OnClick -= UseCard;
         }
-        setAbiableCellsBehaviour.cellsToMove = battleSystem.FieldController.GetCellsForMove(@object.GetComponent<Character>(), cellsCount);
+        setAbiableCellsBehaviour.cellsToMove = battleSystem.FieldController.GetCellsForMove(@object.GetComponent<Character>(), abilityData.cellsCount);
     }
     private void OnSelectCharacter()
     {
@@ -80,4 +79,12 @@ public class SecretPathSupportCardAbility : BaseSupportÑardAbility
             item.OnClick -= UseCard;
         }
     }
+}
+[Serializable]
+public class SecretPathSupportCardAbilityData : BaseSupportÑardAbilityData
+{
+    public string selectCardText;
+    public string selectCharacterText;
+
+    public int cellsCount;
 }

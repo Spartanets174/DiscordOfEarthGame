@@ -4,12 +4,11 @@ using UnityEngine;
 [Serializable]
 public class ForestFriendsCardSupportAbility : BaseSupport—ardAbility
 {
-    [SerializeField]
-    private int transitionCost;
-    public override void Init(BattleSystem battleSystem)
+    private ForestFriendsCardSupportAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, BaseSupport—ardAbilityData baseAbilityData)
     {
         this.battleSystem = battleSystem;
-
+        abilityData = (ForestFriendsCardSupportAbilityData)baseAbilityData;
         SetCardSelectBehaviour(new EmptySelectBehaviour("»ÒÔÓÎ¸ÁÛÈÚÂ Í‡ÚÛ"));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -23,7 +22,7 @@ public class ForestFriendsCardSupportAbility : BaseSupport—ardAbility
             {
                 if (x.IsSwamp)
                 {
-                    x.TransitionCostEnemy += transitionCost;
+                    x.TransitionCostEnemy += abilityData.transitionCost;
                 }
             });
         }
@@ -33,7 +32,7 @@ public class ForestFriendsCardSupportAbility : BaseSupport—ardAbility
             {
                 if (x.IsSwamp)
                 {
-                    x.TransitionCostPlayer += transitionCost;
+                    x.TransitionCostPlayer += abilityData.transitionCost;
                 }
             });
         }
@@ -41,4 +40,9 @@ public class ForestFriendsCardSupportAbility : BaseSupport—ardAbility
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(null);
     }
+}
+[Serializable]
+public class ForestFriendsCardSupportAbilityData : BaseSupport—ardAbilityData
+{
+    public int transitionCost;
 }

@@ -6,20 +6,13 @@ using UnityEngine;
 [Serializable]
 public class SentinelCharacteBuffAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float magDefenceAmount;
-
-    [SerializeField]
-    private float physDefenceAmount;
-
-    [SerializeField]
-    private float healAmount;
-
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private SentinelCharacteBuffAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Выберите союзного персонажа для баффа", battleSystem));
+        abilityData = (SentinelCharacteBuffAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectAbilityText, battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
@@ -41,15 +34,15 @@ public class SentinelCharacteBuffAbility : BaseCharacterAbility
     {
         if (battleSystem.State is PlayerTurn)
         {
-            battleSystem.PlayerController.CurrentPlayerCharacter.PhysDefence += physDefenceAmount;
-            battleSystem.PlayerController.CurrentPlayerCharacter.MagDefence += magDefenceAmount;
-            battleSystem.PlayerController.CurrentPlayerCharacter.Heal(healAmount);
+            battleSystem.PlayerController.CurrentPlayerCharacter.PhysDefence += abilityData.physDefenceAmount;
+            battleSystem.PlayerController.CurrentPlayerCharacter.MagDefence += abilityData.magDefenceAmount;
+            battleSystem.PlayerController.CurrentPlayerCharacter.Heal(abilityData.healAmount);
         }
         else
         {
-            battleSystem.EnemyController.CurrentEnemyCharacter.PhysDefence += physDefenceAmount;
-            battleSystem.EnemyController.CurrentEnemyCharacter.MagDefence += magDefenceAmount;
-            battleSystem.EnemyController.CurrentEnemyCharacter.Heal(healAmount);
+            battleSystem.EnemyController.CurrentEnemyCharacter.PhysDefence += abilityData.physDefenceAmount;
+            battleSystem.EnemyController.CurrentEnemyCharacter.MagDefence += abilityData.magDefenceAmount;
+            battleSystem.EnemyController.CurrentEnemyCharacter.Heal(abilityData.healAmount);
 
         }
 
@@ -69,4 +62,15 @@ public class SentinelCharacteBuffAbility : BaseCharacterAbility
         }
     }
 
+}
+[Serializable]
+public class SentinelCharacteBuffAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public float magDefenceAmount;
+
+    public float physDefenceAmount;
+
+    public float healAmount;
 }

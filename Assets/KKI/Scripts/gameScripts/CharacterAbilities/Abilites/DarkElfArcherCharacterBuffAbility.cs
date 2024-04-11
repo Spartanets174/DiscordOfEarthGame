@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class DarkElfArcherCharacterBuffAbility : BaseCharacterAbility
 {
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData baseCharacterAbility)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;

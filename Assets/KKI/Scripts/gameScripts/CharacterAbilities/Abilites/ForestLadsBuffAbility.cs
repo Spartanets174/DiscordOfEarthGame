@@ -6,22 +6,18 @@ using UnityEngine;
 [Serializable]
 public class ForestLadsBuffAbility : BaseCharacterAbility, ITurnCountable
 {
-    [SerializeField]
-    private int attackRange;
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
 
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    private ForestLadsBuffAbilityData abilityData;
 
     public event Action<ITurnCountable> OnReturnToNormal;
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
+        abilityData = (ForestLadsBuffAbilityData)characterAbilityData;
         SetCardSelectBehaviour(new EmptySelectBehaviour("Используйте карту"));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -31,7 +27,7 @@ public class ForestLadsBuffAbility : BaseCharacterAbility, ITurnCountable
     {
         foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
         {
-            playerCharacter.Range += attackRange;
+            playerCharacter.Range += abilityData.attackRange;
         }
 
         m_cardSelectBehaviour.OnSelected -= OnSelected;
@@ -42,8 +38,18 @@ public class ForestLadsBuffAbility : BaseCharacterAbility, ITurnCountable
     {
         foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
         {
-            playerCharacter.Range -= attackRange;
+            playerCharacter.Range -= abilityData.attackRange;
         }
         OnReturnToNormal?.Invoke(this);
     }
+}
+[Serializable]
+public class ForestLadsBuffAbilityData : BaseCharacterAbilityData
+{
+    public int attackRange;
+
+    public int turnCount;
+
+    [Header("Не трогать!!!")]
+    public bool isBuff;
 }

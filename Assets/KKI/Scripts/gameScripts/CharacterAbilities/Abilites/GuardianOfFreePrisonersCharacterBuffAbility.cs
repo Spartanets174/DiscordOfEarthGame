@@ -7,25 +7,20 @@ using UnityEngine.TextCore.Text;
 [Serializable]
 public class GuardianOfFreePrisonersCharacterBuffAbility : BaseCharacterAbility, ITurnCountable
 {
-    [SerializeField]
-    private float buffAttackAmount;
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
 
-    private Character character;
-
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private Character character;
+
+    private GuardianOfFreePrisonersCharacterBuffAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
+        abilityData = (GuardianOfFreePrisonersCharacterBuffAbilityData)characterAbilityData;
         SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Выберите союзного персонажа для услиения", battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
         SetUseCardBehaviour(new EmptyUseAbilityBehaviour());
@@ -66,7 +61,7 @@ public class GuardianOfFreePrisonersCharacterBuffAbility : BaseCharacterAbility,
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
 
-        character.PhysAttack+= buffAttackAmount;
+        character.PhysAttack+= abilityData.buffAttackAmount;
         character.IsFreezed = true;
         UseCard(character.gameObject);
     }
@@ -82,10 +77,22 @@ public class GuardianOfFreePrisonersCharacterBuffAbility : BaseCharacterAbility,
 
     public void ReturnToNormal()
     {
-        character.PhysAttack -= buffAttackAmount;
+        character.PhysAttack -= abilityData.buffAttackAmount;
         character.IsFreezed = false;
 
         OnReturnToNormal?.Invoke(this);
         character = null;
     }
+}
+[Serializable]
+public class GuardianOfFreePrisonersCharacterBuffAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public float buffAttackAmount;
+
+    public int turnCount;
+
+    [Header("Не трогать!!!")]
+    public bool isBuff;
 }

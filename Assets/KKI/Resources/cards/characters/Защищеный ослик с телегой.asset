@@ -58,12 +58,12 @@ MonoBehaviour:
     \u0445\u043E\u0434\u043E\u0432"
   passiveCharacterAbilityData:
     rid: 2085506571047272455
-  attackCharacterAbility:
-    rid: 6947753029802917888
-  defenceCharacterAbility:
-    rid: 6947753029802917889
-  buffCharacterAbility:
-    rid: 6947753029802917890
+  attackCharacterAbilityData:
+    rid: 2085506640524869689
+  defenceCharacterAbilityData:
+    rid: 2085506640524869690
+  buffCharacterAbilityData:
+    rid: 2085506640524869692
   references:
     version: 2
     RefIds:
@@ -79,27 +79,45 @@ MonoBehaviour:
         chance: 0.1
         range: 1
         direction: 1
-    - rid: 6947753029802917888
-      type: {class: ProtectedDonkeyCharacterAttackAbility, ns: , asm: Assembly-CSharp}
+    - rid: 2085506640524869689
+      type: {class: ProtectedDonkeyCharacterAttackAbilityData, ns: , asm: Assembly-CSharp}
       data:
-        m_typeOfAbility: 0
+        characterAbility:
+          GuidAssignmentFailed: 0
+          GUID: e999c7997cfcff44790d2bf9941d7c6a
+          _typeNameAndAssembly: ProtectedDonkeyCharacterAttackAbility, Assembly-CSharp
+          _suppressLogs: 0
+        abilityName: "\u0425\u043B\u043E\u043F\u043D\u0435\u043C \u0438\u0445"
+        selectAbilityText: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0440\u0430\u0434\u0438\u0443\u0441
+          \u0430\u0442\u0430\u043A\u0438"
         damage: 2
-        range: 1
-    - rid: 6947753029802917889
-      type: {class: ProtectedDonkeyCharacterDefenceAbility, ns: , asm: Assembly-CSharp}
+        range: 2
+        damageArea: {x: 2, y: 3}
+    - rid: 2085506640524869690
+      type: {class: ProtectedDonkeyCharacterDefenceAbilityData, ns: , asm: Assembly-CSharp}
       data:
-        m_typeOfAbility: 1
+        characterAbility:
+          GuidAssignmentFailed: 0
+          GUID: 62174b1ab4058b648b86d1159cd81723
+          _typeNameAndAssembly: ProtectedDonkeyCharacterDefenceAbility, Assembly-CSharp
+          _suppressLogs: 0
+        abilityName: "\u0412\u043A\u0443\u0441\u043D\u0430\u044F \u0435\u0434\u0430"
         physAttackAmount: 1
         magAttackAmount: 1
         magDefenceAmount: 1
-        m_turnCount: 2
-        m_isBuff: 1
-    - rid: 6947753029802917890
-      type: {class: ProtectedDonkeyCharacterBuffAbility, ns: , asm: Assembly-CSharp}
+        turnCount: 2
+        isBuff: 1
+    - rid: 2085506640524869692
+      type: {class: ProtectedDonkeyCharacterBuffAbilityData, ns: , asm: Assembly-CSharp}
       data:
-        m_typeOfAbility: 2
+        characterAbility:
+          GuidAssignmentFailed: 0
+          GUID: a51ffde6bb9ea784e9638580bece38cf
+          _typeNameAndAssembly: ProtectedDonkeyCharacterBuffAbility, Assembly-CSharp
+          _suppressLogs: 0
+        abilityName: "\u0412\u0441\u0435 \u043C\u044B \u0431\u0440\u0430\u0442\u044C\u044F"
         physDefenceAmount: 1
         magDefenceAmount: 1
         rangeAmount: 1
-        m_turnCount: 2
-        m_isBuff: 1
+        turnCount: 2
+        isBuff: 1

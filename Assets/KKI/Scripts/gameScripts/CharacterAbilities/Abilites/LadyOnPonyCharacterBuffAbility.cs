@@ -4,24 +4,17 @@ using UnityEngine;
 [Serializable]
 public class LadyOnPonyCharacterBuffAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float damage;
-
-    [SerializeField]
-    private float physDefenceAmount;
-
-    [SerializeField]
-    private float magDefenceAmount;
-
     private Character character;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private LadyOnPonyCharacterBuffAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData baseAbilityData)
     {
         character = null;
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsWithConditionBehaviour("Âûáåðèòå ñîþçíîãî ïåðñîíàæà äëÿ óñèëåíèÿ", battleSystem, CanBeBuffed));
-        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(damage, battleSystem, abilityOwner, "\"Óâå÷üÿ\""));
+        abilityData = (LadyOnPonyCharacterBuffAbilityData)baseAbilityData;
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsWithConditionBehaviour(abilityData.selectAbilityText, battleSystem, CanBeBuffed));
+        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(abilityData.damage, battleSystem, abilityOwner, $"\"{abilityData.abilityName}\""));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
 
@@ -59,8 +52,8 @@ public class LadyOnPonyCharacterBuffAbility : BaseCharacterAbility
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
 
-        character.MagDefence += magDefenceAmount;
-        character.PhysDefence += physDefenceAmount;
+        character.MagDefence += abilityData.magDefenceAmount;
+        character.PhysDefence += abilityData.physDefenceAmount;
         Uncubscribe();
     }
 
@@ -79,4 +72,15 @@ public class LadyOnPonyCharacterBuffAbility : BaseCharacterAbility
 
     }
 
+}
+[Serializable]
+public class LadyOnPonyCharacterBuffAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public float damage;
+
+    public float physDefenceAmount;
+
+    public float magDefenceAmount;
 }

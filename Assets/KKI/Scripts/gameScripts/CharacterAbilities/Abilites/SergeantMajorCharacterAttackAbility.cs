@@ -2,36 +2,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class SergeantMajorCharacterAttackAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float increaseDamageAmount;
-
-    [SerializeField]
-    private float damage;
-
-    [SerializeField]
-    private int range;
-
-    List<Character> characters ;
+    List<Character> characters;
 
     private SelectCellsWithCharactersInRangeBehaviour selectCellsToAttackInRangeBehaviour;
     private SelectCellsWithCharactersInRangeBehaviour secondSelectCellsToAttackInRangeBehaviour;
 
     private FormulaAttackSelected—haractersBehaviour formulaAttackSelected—haractersBehaviour;
-
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private SergeantMajorCharacterAttackAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
+        abilityData = (SergeantMajorCharacterAttackAbilityData)characterAbilityData;
         characters = new();
-        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour("Õ‡ÊÏËÚÂ Ì‡ ÔÂÒÓÌ‡Ê‡ ‚ Í‡ÒÌÓÈ ÍÎÂÚÍÂ ‰Îˇ ‡Ú‡ÍË", battleSystem, abilityOwner, range, "attack"));
-        SetSecondCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour("Õ‡ÊÏËÚÂ Ì‡ ÔÂÒÓÌ‡Ê‡ ‚ Í‡ÒÌÓÈ ÍÎÂÚÍÂ ‰Îˇ ‰ÓÔÓÎÌËÚÂÎ¸ÌÓÈ ‡Ú‡ÍË", battleSystem, abilityOwner, 1, "attack"));
+        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour(abilityData.selectAbilityText, battleSystem, abilityOwner, abilityData.range, "attack"));
+        SetSecondCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour(abilityData.selectCharacterText, battleSystem, abilityOwner, 1, "attack"));
         SetSelectCharacterBehaviour(new SetCurrentEnemyCharacterBehaviour("", battleSystem));
-        SetUseCardBehaviour(new FormulaAttackSelected—haractersBehaviour(damage, battleSystem, abilityOwner, "\"ƒ‡‚‡È ƒ‚‡\"", increaseDamageAmount));
+        SetUseCardBehaviour(new FormulaAttackSelected—haractersBehaviour(abilityData.damage, battleSystem, abilityOwner, $"\"{abilityData.abilityName}\"", abilityData.increaseDamageAmount));
 
         selectCellsToAttackInRangeBehaviour = (SelectCellsWithCharactersInRangeBehaviour)CardSelectBehaviour;
         secondSelectCellsToAttackInRangeBehaviour = (SelectCellsWithCharactersInRangeBehaviour)CardSecondSelectBehaviour;
@@ -77,7 +68,7 @@ public class SergeantMajorCharacterAttackAbility : BaseCharacterAbility
     {
         if (battleSystem.State is PlayerTurn)
         {
-            if (secondSelectCellsToAttackInRangeBehaviour.charactersOnCells.Count>0)
+            if (secondSelectCellsToAttackInRangeBehaviour.charactersOnCells.Count > 0)
             {
                 foreach (var enemyCharacter in secondSelectCellsToAttackInRangeBehaviour.charactersOnCells)
                 {
@@ -88,7 +79,7 @@ public class SergeantMajorCharacterAttackAbility : BaseCharacterAbility
             {
                 OnSelectCharacter();
             }
-            
+
         }
 
     }
@@ -103,7 +94,7 @@ public class SergeantMajorCharacterAttackAbility : BaseCharacterAbility
         if (secondSelectCellsToAttackInRangeBehaviour.charactersOnCells.Count > 0)
         {
             characters.Add(battleSystem.CurrentChosenCharacter.Value);
-        }      
+        }
 
         formulaAttackSelected—haractersBehaviour.characters.AddRange(characters);
 
@@ -131,4 +122,17 @@ public class SergeantMajorCharacterAttackAbility : BaseCharacterAbility
         secondSelectCellsToAttackInRangeBehaviour.charactersOnCells.Clear();
     }
 
+}
+[Serializable]
+public class SergeantMajorCharacterAttackAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public string selectCharacterText;
+
+    public float increaseDamageAmount;
+
+    public float damage;
+
+    public int range;
 }

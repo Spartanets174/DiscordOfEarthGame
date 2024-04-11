@@ -4,29 +4,17 @@ using UnityEngine;
 [Serializable]
 public class ProtectedDonkeyCharacterDefenceAbility : BaseCharacterAbility, ITurnCountable
 {
-    [SerializeField]
-    private float physAttackAmount;
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
-    [SerializeField]
-    private float magAttackAmount;
-
-    [SerializeField]
-    private float magDefenceAmount;
-
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
-
+    private ProtectedDonkeyCharacterDefenceAbilityData abilityData;
     public event Action<ITurnCountable> OnReturnToNormal;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
+        abilityData = (ProtectedDonkeyCharacterDefenceAbilityData)characterAbilityData;
         SetCardSelectBehaviour(new EmptySelectBehaviour("Используйте карту"));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -34,9 +22,9 @@ public class ProtectedDonkeyCharacterDefenceAbility : BaseCharacterAbility, ITur
 
     private void OnSelected()
     {
-        abilityOwner.MagDefence += magDefenceAmount;
-        abilityOwner.PhysAttack += physAttackAmount;
-        abilityOwner.MagAttack += magAttackAmount;
+        abilityOwner.MagDefence += abilityData.magDefenceAmount;
+        abilityOwner.PhysAttack += abilityData.physAttackAmount;
+        abilityOwner.MagAttack += abilityData.magAttackAmount;
 
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(abilityOwner.gameObject);
@@ -44,10 +32,24 @@ public class ProtectedDonkeyCharacterDefenceAbility : BaseCharacterAbility, ITur
 
     public void ReturnToNormal()
     {
-        abilityOwner.MagDefence -= magDefenceAmount;
-        abilityOwner.PhysAttack -= physAttackAmount;
-        abilityOwner.MagAttack -= magAttackAmount;
+        abilityOwner.MagDefence -= abilityData.magDefenceAmount;
+        abilityOwner.PhysAttack -= abilityData.physAttackAmount;
+        abilityOwner.MagAttack -= abilityData.magAttackAmount;
         OnReturnToNormal?.Invoke(this);
     }
 
+}
+[Serializable]
+public class ProtectedDonkeyCharacterDefenceAbilityData : BaseCharacterAbilityData
+{
+    public float physAttackAmount;
+
+    public float magAttackAmount;
+
+    public float magDefenceAmount;
+
+    public int turnCount;
+
+    [Header("НЕ трогать!")]
+    public bool isBuff;
 }

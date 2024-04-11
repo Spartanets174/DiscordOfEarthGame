@@ -6,32 +6,26 @@ using UnityEngine;
 [Serializable]
 public class WallSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 {
-    [SerializeField]
-    private GameObject prefab;
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
 
-    public event Action<ITurnCountable> OnReturnToNormal;
-
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     private SelectCellsBehaviour selectCellsBehaviour;
     private SpawnObjectBehaviour spawnObjectBehaviour;
 
     private GameObject wall;
+    private WallSupportCardAbilityData abilityData;
 
     private List<GameObject> kostilGameObjects = new();
-    public override void Init(BattleSystem battleSystem)
+
+    public event Action<ITurnCountable> OnReturnToNormal;
+
+    public override void Init(BattleSystem battleSystem, BaseSupportÑardAbilityData baseAbilityData)
     {
         this.battleSystem = battleSystem;
-
-        TurnCount = 2;
-        m_isBuff = true;
-
-        SetCardSelectBehaviour(new SelectCellsBehaviour("Âûáåğèòå îáëàñòü äëÿ ğàçìåùåíèÿ", battleSystem, new Vector2(3, 1), "allowed"));
-        SetUseCardBehaviour(new SpawnObjectBehaviour(prefab));
+        abilityData = (WallSupportCardAbilityData)baseAbilityData;
+        SetCardSelectBehaviour(new SelectCellsBehaviour(abilityData.selectCardText, battleSystem, new Vector2(3, 1), "allowed"));
+        SetUseCardBehaviour(new SpawnObjectBehaviour(abilityData.prefab));
 
         selectCellsBehaviour = (SelectCellsBehaviour)CardSelectBehaviour;
         spawnObjectBehaviour = (SpawnObjectBehaviour)UseCardBehaviour;
@@ -90,5 +84,18 @@ public class WallSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
         kostilGameObjects.Clear();
 
         GameObject.Destroy(wall);
+        OnReturnToNormal?.Invoke(this);
     }
+}
+[Serializable]
+public class WallSupportCardAbilityData : BaseSupportÑardAbilityData
+{
+    public string selectCardText;
+
+    public GameObject prefab;
+
+    public int turnCount;
+
+    [Header("Íå òğîãàòü!")]
+    public bool isBuff;
 }

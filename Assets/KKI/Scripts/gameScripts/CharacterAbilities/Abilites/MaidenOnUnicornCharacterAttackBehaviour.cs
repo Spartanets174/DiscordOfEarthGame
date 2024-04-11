@@ -4,24 +4,16 @@ using UnityEngine;
 [Serializable]
 public class MaidenOnUnicornCharacterAttackBehaviour : BaseCharacterAbility
 {
-    [SerializeField]
-    private float damage;
-
-    [SerializeField]
-    private Vector2 area;
-
-    [SerializeField]
-    private Enums.Directions direction;
-
     private SelectCellsToAttackInAreaRangedBehaviour selectCellsToAttackInAreaRangedBehaviour;
     private AttackAllCharactersInAreaBehaviour attackAllCharactersInAreaBehaviour;
-
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private MaidenOnUnicornCharacterAttackBehaviourData abilityData;
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectCellsToAttackInAreaRangedBehaviour(battleSystem, abilityOwner, area, direction));
-        SetUseCardBehaviour(new AttackAllCharactersInAreaBehaviour(damage, battleSystem, "\"Большой брат\""));
+        abilityData = (MaidenOnUnicornCharacterAttackBehaviourData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectCellsToAttackInAreaRangedBehaviour(battleSystem, abilityOwner, abilityData.area, abilityData.direction));
+        SetUseCardBehaviour(new AttackAllCharactersInAreaBehaviour(abilityData.damage, battleSystem, "\"Большой брат\""));
 
         selectCellsToAttackInAreaRangedBehaviour = (SelectCellsToAttackInAreaRangedBehaviour)CardSelectBehaviour;
         attackAllCharactersInAreaBehaviour = (AttackAllCharactersInAreaBehaviour)UseCardBehaviour;
@@ -41,4 +33,13 @@ public class MaidenOnUnicornCharacterAttackBehaviour : BaseCharacterAbility
         selectCellsToAttackInAreaRangedBehaviour.cells.Clear();
         attackAllCharactersInAreaBehaviour.cellsToAttack.Clear();
     }
+}
+[Serializable]
+public class MaidenOnUnicornCharacterAttackBehaviourData : BaseCharacterAbilityData
+{
+    public float damage;
+
+    public Vector2 area;
+
+    public Enums.Directions direction;
 }

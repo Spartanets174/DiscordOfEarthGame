@@ -7,20 +7,16 @@ using UnityEngine;
 
 public class СursedCharacterAttackAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float damage;
-
-    [SerializeField]
-    private int range;
-
     private SelectCellsWithCharactersInRangeBehaviour selectCellsToAttackInRangeBehaviour;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private СursedCharacterAttackAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour("Нажмите на персонажа в красной клетке для атаки", battleSystem, abilityOwner, range, "attack"));
-        SetUseCardBehaviour(new FormulaAttackSelectedСharacterBehaviour(damage, battleSystem, abilityOwner, "\"Месть\""));
+        abilityData = (СursedCharacterAttackAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour(abilityData.selectAbilityText, battleSystem, abilityOwner, abilityData.range, "attack"));
+        SetUseCardBehaviour(new FormulaAttackSelectedСharacterBehaviour(abilityData.damage, battleSystem, abilityOwner, "\"Месть\""));
 
         selectCellsToAttackInRangeBehaviour = (SelectCellsWithCharactersInRangeBehaviour)CardSelectBehaviour;
 
@@ -55,4 +51,13 @@ public class СursedCharacterAttackAbility : BaseCharacterAbility
         selectCellsToAttackInRangeBehaviour.charactersDirectionsOnCells.Clear();
         battleSystem.PlayerController.SetPlayerStates(true, false);
     }
+}
+[Serializable]
+public class СursedCharacterAttackAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public float damage;
+
+    public int range;
 }

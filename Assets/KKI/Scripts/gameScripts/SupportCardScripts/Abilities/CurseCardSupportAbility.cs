@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,25 +6,20 @@ using UnityEngine;
 [Serializable]
 public class CurseCardSupportAbility : BaseSupportÑardAbility, ITurnCountable
 {
-    [SerializeField]
-    private int pointsOfAction;
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
 
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff;}
+    public bool IsBuff { get => abilityData.isBuff; }
 
     private List<EnemyCharacter> enemyCharacters;
     private List<PlayerCharacter> playerCharacters;
 
+    private CurseCardSupportAbilityData abilityData;
     public event Action<ITurnCountable> OnReturnToNormal;
 
-    public override void Init(BattleSystem battleSystem)
+    public override void Init(BattleSystem battleSystem, BaseSupportÑardAbilityData baseAbilityData)
     {
         this.battleSystem = battleSystem;
+        abilityData = (CurseCardSupportAbilityData)baseAbilityData;
         SetCardSelectBehaviour(new EmptySelectBehaviour("Èñïîëüçóéòå êàğòó"));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -33,7 +27,7 @@ public class CurseCardSupportAbility : BaseSupportÑardAbility, ITurnCountable
 
     private void OnSelected()
     {
-        battleSystem.PointsOfAction.Value += pointsOfAction;
+        battleSystem.PointsOfAction.Value += abilityData.pointsOfAction;
 
         if (battleSystem.State is PlayerTurn)
         {
@@ -63,7 +57,7 @@ public class CurseCardSupportAbility : BaseSupportÑardAbility, ITurnCountable
             foreach (var playerCharacter in playerCharacters)
             {
                 playerCharacter.IsFreezed = false;
-            }            
+            }
         }
         else
         {
@@ -76,4 +70,14 @@ public class CurseCardSupportAbility : BaseSupportÑardAbility, ITurnCountable
         OnReturnToNormal?.Invoke(this);
     }
 
+}
+[Serializable]
+public class CurseCardSupportAbilityData : BaseSupportÑardAbilityData
+{
+    public int pointsOfAction;
+
+    public int turnCount;
+
+    [Header("Íå òğîãàòü!")]
+    public bool isBuff;
 }

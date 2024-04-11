@@ -30,11 +30,11 @@ public class CharacterCard: Card
     public BasePassiveCharacterAbilityData passiveCharacterAbilityData;   
 
     [SerializeReference, SubclassSelector]
-    public BaseCharacterAbility attackCharacterAbility;
+    public BaseCharacterAbilityData attackCharacterAbilityData;
 
     [SerializeReference, SubclassSelector]
-    public BaseCharacterAbility defenceCharacterAbility;
+    public BaseCharacterAbilityData defenceCharacterAbilityData;
 
     [SerializeReference, SubclassSelector]
-    public BaseCharacterAbility buffCharacterAbility;
+    public BaseCharacterAbilityData buffCharacterAbilityData;
 }

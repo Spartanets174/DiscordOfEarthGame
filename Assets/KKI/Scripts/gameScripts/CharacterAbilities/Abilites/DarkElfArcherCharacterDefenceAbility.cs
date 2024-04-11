@@ -6,13 +6,13 @@ using UnityEngine;
 [Serializable]
 public class DarkElfArcherCharacterDefenceAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private Enums.Classes classToDefence;
+    private DarkElfArcherCharacterDefenceAbilityData abilityData;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
+        abilityData = (DarkElfArcherCharacterDefenceAbilityData)characterAbilityData;
         SetCardSelectBehaviour(new EmptySelectBehaviour(""));
         SetUseCardBehaviour(new EmptyUseAbilityBehaviour());
 
@@ -23,16 +23,16 @@ public class DarkElfArcherCharacterDefenceAbility : BaseCharacterAbility
 
     private void OnSelected()
     {
-        abilityOwner.CanBeDamagedByClassesDict[classToDefence] = false;
+        abilityOwner.CanBeDamagedByClassesDict[abilityData.classToDefence] = false;
         abilityOwner.OnDamaged += OnDamaged;
         UseCard(abilityOwner.gameObject);
     }
 
     private void OnDamaged(Character character, string arg2, float arg3)
     {
-        if (character.LastAttackedCharacter.Class == classToDefence)
+        if (character.LastAttackedCharacter.Class == abilityData.classToDefence)
         {
-            abilityOwner.CanBeDamagedByClassesDict[classToDefence] = true;
+            abilityOwner.CanBeDamagedByClassesDict[abilityData.classToDefence] = true;
             abilityOwner.OnDamaged -= OnDamaged;
         }       
     }

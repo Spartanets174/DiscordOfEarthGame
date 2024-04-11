@@ -5,18 +5,18 @@ using UnityEngine;
 [Serializable]
 public class EternalGuardianCharacterBuffAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float healAmount;
+    private EternalGuardianCharacterBuffAbilityData abilityData;
 
     private List<Character> characters = new();
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData baseCharacterAbility)
     {
         characters.Clear();
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsWithConditionBehaviour("Выберите союзного персонажа для лечения", battleSystem, CanBeHealed));
-        SetSecondCardSelectBehaviour(new SelectAllPlayerUnitsWithConditionBehaviour("Выберите второго союзного персонажа для лечения", battleSystem, CanBeHealed));
+        abilityData = (EternalGuardianCharacterBuffAbilityData)baseCharacterAbility;
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsWithConditionBehaviour(abilityData.selectAbilityText, battleSystem, CanBeHealed));
+        SetSecondCardSelectBehaviour(new SelectAllPlayerUnitsWithConditionBehaviour(abilityData.selectCharacterText, battleSystem, CanBeHealed));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
         SetUseCardBehaviour(new EmptyUseAbilityBehaviour());
 
@@ -89,7 +89,7 @@ public class EternalGuardianCharacterBuffAbility : BaseCharacterAbility
             {
                 if (character != null)
                 {
-                    character.Heal(healAmount);
+                    character.Heal(abilityData.healAmount);
                 }
             }
         }
@@ -121,5 +121,9 @@ public class EternalGuardianCharacterBuffAbility : BaseCharacterAbility
 [Serializable]
 public class EternalGuardianCharacterBuffAbilityData : BaseCharacterAbilityData
 {
+    public string selectAbilityText;
+
+    public string selectCharacterText;
+
     public float healAmount;
 }

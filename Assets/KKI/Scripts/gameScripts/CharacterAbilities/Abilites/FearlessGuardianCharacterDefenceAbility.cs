@@ -6,17 +6,14 @@ using UnityEngine;
 [Serializable]
 public class FearlessGuardianCharacterDefenceAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float magDefenceAmount;
+    private FearlessGuardianCharacterDefenceAbilityData abilityData;
 
-    [SerializeField]
-    private float physDefenceAmount;
-
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Выберите союзного персонажа для дебаффа", battleSystem));
+        abilityData = (FearlessGuardianCharacterDefenceAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectAbilityText, battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
@@ -38,18 +35,18 @@ public class FearlessGuardianCharacterDefenceAbility : BaseCharacterAbility
     {
         if (battleSystem.State is PlayerTurn)
         {
-            battleSystem.PlayerController.CurrentPlayerCharacter.PhysDefence -= physDefenceAmount;
-            battleSystem.PlayerController.CurrentPlayerCharacter.MagDefence -= magDefenceAmount;
+            battleSystem.PlayerController.CurrentPlayerCharacter.PhysDefence -= abilityData.physDefenceAmount;
+            battleSystem.PlayerController.CurrentPlayerCharacter.MagDefence -= abilityData.magDefenceAmount;
 
         }
         else
         {
-            battleSystem.EnemyController.CurrentEnemyCharacter.PhysDefence -= physDefenceAmount;
-            battleSystem.EnemyController.CurrentEnemyCharacter.MagDefence -= magDefenceAmount;
+            battleSystem.EnemyController.CurrentEnemyCharacter.PhysDefence -= abilityData.physDefenceAmount;
+            battleSystem.EnemyController.CurrentEnemyCharacter.MagDefence -= abilityData.magDefenceAmount;
         }
 
-        abilityOwner.PhysDefence += physDefenceAmount;
-        abilityOwner.MagDefence += magDefenceAmount;
+        abilityOwner.PhysDefence += abilityData.physDefenceAmount;
+        abilityOwner.MagDefence += abilityData.magDefenceAmount;
 
         battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {
@@ -67,4 +64,13 @@ public class FearlessGuardianCharacterDefenceAbility : BaseCharacterAbility
         }
     }
 
+}
+[Serializable]
+public class FearlessGuardianCharacterDefenceAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public float magDefenceAmount;
+
+    public float physDefenceAmount;
 }

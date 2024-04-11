@@ -1,25 +1,18 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
 public class VoidShooterCharacterAttackAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float damage;
-
-    [SerializeField]
-    private int range;
-
     private SelectCellsWithCharactersInRangeBehaviour selectCellsToAttackInRangeBehaviour;
-
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private VoidShooterCharacterAttackAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData baseCharacterAbility)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour("Íàæìèòå íà ïåğñîíàæà â êğàñíîé êëåòêå äëÿ àòàêè", battleSystem, abilityOwner, range, "attack"));
-        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(damage, battleSystem, abilityOwner, "\"Êîøìàğû\""));
+        abilityData = (VoidShooterCharacterAttackAbilityData)baseCharacterAbility;
+        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour(abilityData.selectAbilityText, battleSystem, abilityOwner, abilityData.range, "attack"));
+        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(abilityData.damage, battleSystem, abilityOwner, $"\"{abilityData.abilityName}\""));
 
         selectCellsToAttackInRangeBehaviour = (SelectCellsWithCharactersInRangeBehaviour)CardSelectBehaviour;
 
@@ -55,3 +48,12 @@ public class VoidShooterCharacterAttackAbility : BaseCharacterAbility
     }
 }
 
+[Serializable]
+public class VoidShooterCharacterAttackAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public float damage;
+
+    public int range;
+}

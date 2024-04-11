@@ -1,21 +1,14 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 [Serializable]
 public class WarriorOfLightCharacterBuffAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float healAmount;
-
-    [SerializeField]
-    private float physDamageAmount;
-
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private WarriorOfLightCharacterBuffAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
+        abilityData = (WarriorOfLightCharacterBuffAbilityData)characterAbilityData;
         SetCardSelectBehaviour(new EmptySelectBehaviour("Используйте карту"));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -24,9 +17,9 @@ public class WarriorOfLightCharacterBuffAbility : BaseCharacterAbility
     private void OnSelected()
     {
         abilityOwner.OnDeath += OnDeath;
-        
 
-        
+
+
 
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(abilityOwner.gameObject);
@@ -38,14 +31,22 @@ public class WarriorOfLightCharacterBuffAbility : BaseCharacterAbility
         {
             if (playerCharacter.Class == Enums.Classes.Паладин)
             {
-                playerCharacter.PhysAttack += physDamageAmount;
+                playerCharacter.PhysAttack += abilityData.physDamageAmount;
 
                 if (playerCharacter.Health == playerCharacter.MaxHealth)
                 {
-                    playerCharacter.MaxHealth += healAmount;
+                    playerCharacter.MaxHealth += abilityData.healAmount;
                 }
-                playerCharacter.Heal(healAmount);
+                playerCharacter.Heal(abilityData.healAmount);
             }
         }
     }
+}
+[Serializable]
+public class WarriorOfLightCharacterBuffAbilityData : BaseCharacterAbilityData
+{
+    public float healAmount;
+
+    public float physDamageAmount;
+
 }

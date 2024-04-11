@@ -7,24 +7,20 @@ using UnityEngine;
 [Serializable]
 public class PeasantWithPitchforkCharacterDefenceAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private int range;
-
-    [SerializeField]
-    private GameObject prefab;
-
+    private PeasantWithPitchforkCharacterDefenceAbilityData abilityData;
     private SelectCellsInRangeBehaviour selectCellsBehaviour;
     private SpawnObjectBehaviour spawnObjectBehaviour;
 
     private WallEnemyCharacter wallEnemyCharacter;
 
     private List<GameObject> kostilGameObjects = new();
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectCellsInRangeBehaviour("Выберите область для размещения", battleSystem, abilityOwner, new Vector2(3, 1), range, "allowed"));
-        SetUseCardBehaviour(new SpawnObjectBehaviour(prefab));
+        abilityData = (PeasantWithPitchforkCharacterDefenceAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectCellsInRangeBehaviour(abilityData.selectAbilityText, battleSystem, abilityOwner, new Vector2(3, 1), abilityData.range, "allowed"));
+        SetUseCardBehaviour(new SpawnObjectBehaviour(abilityData.prefab));
 
         selectCellsBehaviour = (SelectCellsInRangeBehaviour)CardSelectBehaviour;
         spawnObjectBehaviour = (SpawnObjectBehaviour)UseCardBehaviour;
@@ -88,4 +84,13 @@ public class PeasantWithPitchforkCharacterDefenceAbility : BaseCharacterAbility
         }
         battleSystem.FieldController.TurnOnCells();
     }
+}
+[Serializable]
+public class PeasantWithPitchforkCharacterDefenceAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public int range;
+
+    public GameObject prefab;
 }

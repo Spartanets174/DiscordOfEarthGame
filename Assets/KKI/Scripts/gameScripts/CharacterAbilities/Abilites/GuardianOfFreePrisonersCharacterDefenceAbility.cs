@@ -1,31 +1,21 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
 public class GuardianOfFreePrisonersCharacterDefenceAbility : BaseCharacterAbility, ITurnCountable
 {
-    [SerializeField]
-    private float magDefenceAmount;
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
 
-    [SerializeField]
-    private float physDefenceAmount;
-
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private GuardianOfFreePrisonersCharacterDefenceAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
+        abilityData = (GuardianOfFreePrisonersCharacterDefenceAbilityData)characterAbilityData;
         SetCardSelectBehaviour(new EmptySelectBehaviour("Используйте карту"));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -39,8 +29,8 @@ public class GuardianOfFreePrisonersCharacterDefenceAbility : BaseCharacterAbili
             {
                 if (character.Race == Enums.Races.МагическиеСущества)
                 {
-                    character.PhysDefence += physDefenceAmount;
-                    character.MagDefence += magDefenceAmount;
+                    character.PhysDefence += abilityData.physDefenceAmount;
+                    character.MagDefence += abilityData.magDefenceAmount;
                 }
             }
         }
@@ -50,8 +40,8 @@ public class GuardianOfFreePrisonersCharacterDefenceAbility : BaseCharacterAbili
             {
                 if (character.Race == Enums.Races.МагическиеСущества)
                 {
-                    character.PhysDefence += physDefenceAmount;
-                    character.MagDefence += magDefenceAmount;
+                    character.PhysDefence += abilityData.physDefenceAmount;
+                    character.MagDefence += abilityData.magDefenceAmount;
                 }
             }
         }
@@ -68,8 +58,8 @@ public class GuardianOfFreePrisonersCharacterDefenceAbility : BaseCharacterAbili
             {
                 if (character.Race == Enums.Races.МагическиеСущества)
                 {
-                    character.PhysDefence -= physDefenceAmount;
-                    character.MagDefence -= magDefenceAmount;
+                    character.PhysDefence -= abilityData.physDefenceAmount;
+                    character.MagDefence -= abilityData.magDefenceAmount;
                 }
             }
         }
@@ -79,8 +69,8 @@ public class GuardianOfFreePrisonersCharacterDefenceAbility : BaseCharacterAbili
             {
                 if (character.Race == Enums.Races.МагическиеСущества)
                 {
-                    character.PhysDefence -= physDefenceAmount;
-                    character.MagDefence -= magDefenceAmount;
+                    character.PhysDefence -= abilityData.physDefenceAmount;
+                    character.MagDefence -= abilityData.magDefenceAmount;
                 }
             }
         }
@@ -88,4 +78,16 @@ public class GuardianOfFreePrisonersCharacterDefenceAbility : BaseCharacterAbili
         OnReturnToNormal?.Invoke(this);
     }
 
+}
+[Serializable]
+public class GuardianOfFreePrisonersCharacterDefenceAbilityData : BaseCharacterAbilityData
+{
+    public float magDefenceAmount;
+
+    public float physDefenceAmount;
+
+    public int turnCount;
+
+    [Header("Не трогать!!!")]
+    public bool isBuff;
 }

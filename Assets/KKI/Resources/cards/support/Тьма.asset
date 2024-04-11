@@ -19,21 +19,30 @@ MonoBehaviour:
   rarity: 1
   Price: 143
   id: 29
-  prefab: {fileID: 0}
   type: 1
   abilityText: "\u041F\u043E\u0432\u044B\u0448\u0430\u0435\u0442 \u043C\u0430\u0433\u0438\u0447\u0435\u0441\u043A\u0443\u044E
     \u0430\u0442\u0430\u043A\u0443 \u043D\u0430 1 \u0438 \u0440\u0430\u0437\u0440\u0443\u0448\u0430\u0435\u0442
     \u043C\u0430\u0433\u0438\u0447\u0435\u0441\u043A\u0443\u044E \u0437\u0430\u0449\u0438\u0442\u0443
     \u0432\u0440\u0430\u0433\u0430 \u043D\u0430 1 \u043D\u0430 1 \u0445\u043E\u0434"
-  "GameSupport\u0421ardAbility":
-    rid: 6947752826724679714
+  "support\u0421ardAbilityData":
+    rid: 2085506640524869669
   references:
     version: 2
     RefIds:
-    - rid: 6947752826724679714
-      type: {class: DarknessSupportCardAbility, ns: , asm: Assembly-CSharp}
+    - rid: 2085506640524869669
+      type: {class: DarknessSupportCardAbilityData, ns: , asm: Assembly-CSharp}
       data:
+        "Support\u0421ardAbility":
+          GuidAssignmentFailed: 0
+          GUID: 0af4aa208cf89e144836284a58e3875d
+          _typeNameAndAssembly: DarknessSupportCardAbility, Assembly-CSharp
+          _suppressLogs: 0
+        "support\u0421ardAbilityName": "\u0422\u044C\u043C\u0430"
+        selectCardText: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u043E\u044E\u0437\u043D\u043E\u0433\u043E
+          \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u0436\u0430"
+        selectCharacterText: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0440\u0430\u0436\u0435\u0441\u043A\u043E\u0433\u043E
+          \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u0436\u0430"
         characterMagAttack: 1
         enemyCharacterMagDefence: 1
-        m_turnCount: 1
-        m_isBuff: 1
+        turnCount: 1
+        isBuff: 1

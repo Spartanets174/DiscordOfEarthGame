@@ -1,25 +1,18 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
 public class WarriorOfLightCharacterAttackAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float damage;
-
-    [SerializeField]
-    private int range;
-
     private SelectCellsWithCharactersInRangeBehaviour selectCellsToAttackInRangeBehaviour;
-
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private WarriorOfLightCharacterAttackAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour("Íàæìèòå íà ïåğñîíàæà â êğàñíîé êëåòêå äëÿ àòàêè", battleSystem, abilityOwner, range, "attack"));
-        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(damage, battleSystem, abilityOwner, "\"Ïğàâåäíûé óäàğ\""));
+        abilityData = (WarriorOfLightCharacterAttackAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour(abilityData.selectAbilityText, battleSystem, abilityOwner, abilityData.range, "attack"));
+        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(abilityData.damage, battleSystem, abilityOwner, $"\"{abilityData.abilityName}\""));
 
         selectCellsToAttackInRangeBehaviour = (SelectCellsWithCharactersInRangeBehaviour)CardSelectBehaviour;
 
@@ -53,4 +46,14 @@ public class WarriorOfLightCharacterAttackAbility : BaseCharacterAbility
         }
         battleSystem.PlayerController.SetPlayerStates(true, false);
     }
+}
+[Serializable]
+public class WarriorOfLightCharacterAttackAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public float damage;
+
+    public int range;
+
 }

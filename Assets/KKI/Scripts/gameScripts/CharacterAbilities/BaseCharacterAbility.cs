@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public abstract class BaseCharacterAbility
+public abstract class BaseCharacterAbility: MonoBehaviour
 {
     [SerializeField]
     private Enums.TypeOfAbility m_typeOfAbility;
@@ -114,5 +114,5 @@ public abstract class BaseCharacterAbility
         OnUsingCancel?.Invoke(this);
     }
 
-    public abstract void Init(BattleSystem battleSystem, Character owner);
+    public abstract void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData);
 }

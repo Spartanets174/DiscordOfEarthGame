@@ -1,26 +1,20 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class GargoyleCharacterDefenceAbility : BaseCharacterAbility, ITurnCountable
 {
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private GargoyleCharacterDefenceAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
+        abilityData = (GargoyleCharacterDefenceAbilityData)characterAbilityData;
         SetCardSelectBehaviour(new EmptySelectBehaviour(""));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -46,4 +40,13 @@ public class GargoyleCharacterDefenceAbility : BaseCharacterAbility, ITurnCounta
 
         OnReturnToNormal?.Invoke(this);
     }
+}
+[Serializable]
+public class GargoyleCharacterDefenceAbilityData : BaseCharacterAbilityData
+{
+    public int turnCount;
+
+    [Header("Не трогать!!!")]
+    public bool isBuff;
+
 }

@@ -1,21 +1,17 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-[Serializable]
+
 public class DarkElfArcherCharacterAttackAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private int range;
-
+    private DarkElfArcherCharacterAttackAbilityData abilityData;
     private SelectCellsWithCharactersInRangeBehaviour selectCellsToAttackInRangeBehaviour;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData baseCharacterAbility)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour("Íàæìèòå íà ïåğñîíàæà â êğàñíîé êëåòêå äëÿ àòàêè", battleSystem, abilityOwner, range, "attack"));
-        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(abilityOwner.PhysAttack, battleSystem, abilityOwner, "\"Çîğêèé ãëàç\""));
+        abilityData = (DarkElfArcherCharacterAttackAbilityData)baseCharacterAbility;
+        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour(abilityData.selectAbilityText, battleSystem, abilityOwner, abilityData.range, "attack"));
+        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(abilityOwner.PhysAttack, battleSystem, abilityOwner, $"\"{abilityData.abilityName}\""));
 
         selectCellsToAttackInRangeBehaviour = (SelectCellsWithCharactersInRangeBehaviour)CardSelectBehaviour;
 
@@ -54,5 +50,7 @@ public class DarkElfArcherCharacterAttackAbility : BaseCharacterAbility
 
 public class DarkElfArcherCharacterAttackAbilityData : BaseCharacterAbilityData
 {
+    public string selectAbilityText;
+
     public int range;
 }

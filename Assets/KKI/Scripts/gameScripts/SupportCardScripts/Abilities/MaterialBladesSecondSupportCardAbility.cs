@@ -1,35 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.TextCore;
-using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class MaterialBladesSecondSupportCardAbility : BaseSupportСardAbility, ITurnCountable
 {
-    [SerializeField]
-    private float damage;
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
 
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
     private List<Character> characters = new();
     AttackSelectedСharactersBehaviour attackSelectedСharactersBehaviour;
-    public override void Init(BattleSystem battleSystem)
+    private MaterialBladesSecondSupportCardAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, BaseSupportСardAbilityData baseAbilityData)
     {
         characters.Clear();
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("Выберите вражеского персонажа для атаки", battleSystem));
-        SetSecondCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("Выберите второго вражеского персонажа для атаки", battleSystem));
+        abilityData = (MaterialBladesSecondSupportCardAbilityData)baseAbilityData;
+        SetCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour(abilityData.selectCardText, battleSystem));
+        SetSecondCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour(abilityData.selectCharacterText, battleSystem));
         SetSelectCharacterBehaviour(new SetCurrentEnemyCharacterBehaviour("", battleSystem));
-        SetUseCardBehaviour(new AttackSelectedСharactersBehaviour(damage, battleSystem, "\"Материальные клинки 2\""));
+        SetUseCardBehaviour(new AttackSelectedСharactersBehaviour(abilityData.damage, battleSystem, $"\"{abilityData.supportСardAbilityName}\""));
 
         attackSelectedСharactersBehaviour = (AttackSelectedСharactersBehaviour)UseCardBehaviour;
 
@@ -127,4 +120,17 @@ public class MaterialBladesSecondSupportCardAbility : BaseSupportСardAbility, I
         }
         OnReturnToNormal?.Invoke(this);
     }
+}
+[Serializable]
+public class MaterialBladesSecondSupportCardAbilityData : BaseSupportСardAbilityData
+{
+    public string selectCardText;
+    public string selectCharacterText;
+
+    public float damage;
+
+    public int turnCount;
+
+    [Header("Не трогать!")]
+    public bool isBuff;
 }

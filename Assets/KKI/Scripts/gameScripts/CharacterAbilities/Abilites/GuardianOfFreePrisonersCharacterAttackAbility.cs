@@ -4,32 +4,25 @@ using UnityEngine;
 [Serializable]
 public class GuardianOfFreePrisonersCharacterAttackAbility : BaseCharacterAbility, ITurnCountable
 {
-    [SerializeField]
-    private float damage;
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
 
-    [SerializeField]
-    private float speedDecreaseAmount;
-
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     private Character character;
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
     private int decreaseAmount;
-    public override void Init(BattleSystem battleSystem, Character abilityOwner)
+
+    private GuardianOfFreePrisonersCharacterAttackAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character abilityOwner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = abilityOwner;
         this.battleSystem = battleSystem;
+        abilityData = (GuardianOfFreePrisonersCharacterAttackAbilityData)characterAbilityData;
         SetCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("Âûáåğèòå âğàæåñêîãî ïåğñîíàæà äëÿ àòàêè", battleSystem));
         SetSelectCharacterBehaviour(new SetCurrentEnemyCharacterBehaviour("", battleSystem));
-        SetUseCardBehaviour(new AttackSelectedÑharacterBehaviour(damage, battleSystem, "\"Ñòàëüíûå îêîâû\""));
+        SetUseCardBehaviour(new AttackSelectedÑharacterBehaviour(abilityData.damage, battleSystem, "\"Ñòàëüíûå îêîâû\""));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -61,7 +54,7 @@ public class GuardianOfFreePrisonersCharacterAttackAbility : BaseCharacterAbilit
             character = battleSystem.PlayerController.CurrentPlayerCharacter;
         }
 
-        decreaseAmount = (int)Math.Ceiling(character.Speed * speedDecreaseAmount);
+        decreaseAmount = (int)Math.Ceiling(character.Speed * abilityData.speedDecreaseAmount);
         character.Speed = decreaseAmount;
 
         UseCard(character.gameObject);
@@ -85,4 +78,18 @@ public class GuardianOfFreePrisonersCharacterAttackAbility : BaseCharacterAbilit
         character.Speed += decreaseAmount;
         OnReturnToNormal?.Invoke(this);
     }
+}
+[Serializable]
+public class GuardianOfFreePrisonersCharacterAttackAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public float damage;
+
+    public float speedDecreaseAmount;
+
+    public int turnCount;
+
+    [Header("Íå òğîãàòü!!!")]
+    public bool isBuff;
 }

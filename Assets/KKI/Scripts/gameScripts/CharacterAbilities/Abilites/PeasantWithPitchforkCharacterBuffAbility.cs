@@ -6,19 +6,14 @@ using UnityEngine;
 [Serializable]
 public class PeasantWithPitchforkCharacterBuffAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float physDefenceAmount;
-
-    [SerializeField]
-    private int range;
-
     private SelectCellsWithCharactersInRangeBehaviour selectCellsToAttackInRangeBehaviour;
-
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private PeasantWithPitchforkCharacterBuffAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour("", battleSystem, abilityOwner, range, "allowed"));
+        abilityData = (PeasantWithPitchforkCharacterBuffAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour("", battleSystem, abilityOwner, abilityData.range, "allowed"));
 
         selectCellsToAttackInRangeBehaviour = (SelectCellsWithCharactersInRangeBehaviour)CardSelectBehaviour;
 
@@ -28,10 +23,17 @@ public class PeasantWithPitchforkCharacterBuffAbility : BaseCharacterAbility
     {
         foreach (var character in selectCellsToAttackInRangeBehaviour.charactersOnCells)
         {
-            character.PhysDefence += physDefenceAmount;
+            character.PhysDefence += abilityData.physDefenceAmount;
         }
         selectCellsToAttackInRangeBehaviour.charactersOnCells.Clear();
         UseCard(abilityOwner.gameObject);
     }
 
+}
+[Serializable]
+public class PeasantWithPitchforkCharacterBuffAbilityData : BaseCharacterAbilityData
+{
+    public float physDefenceAmount;
+
+    public int range;
 }

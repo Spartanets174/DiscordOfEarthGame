@@ -6,26 +6,19 @@ using UnityEngine;
 [Serializable]
 public class KeenEyeSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 {
-    [SerializeField]
-    private float critChance;
-
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     private List<EnemyCharacter> enemyCharacters;
     private List<PlayerCharacter> playerCharacters;
+    private KeenEyeSupportCardAbilityData abilityData;
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
-    public override void Init(BattleSystem battleSystem)
+    public override void Init(BattleSystem battleSystem, BaseSupportÑardAbilityData baseAbilityData)
     {
         this.battleSystem = battleSystem;
-
+        abilityData = (KeenEyeSupportCardAbilityData)baseAbilityData;
         SetCardSelectBehaviour(new EmptySelectBehaviour("Èñïîëüçóéòå êàğòó"));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -38,7 +31,7 @@ public class KeenEyeSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
             playerCharacters = battleSystem.PlayerController.PlayerCharactersObjects.Where(x => x.Class == Enums.Classes.Ëó÷íèê).ToList();
             foreach (var playerCharacter in playerCharacters)
             {
-                playerCharacter.CritChance = critChance;
+                playerCharacter.CritChance = abilityData.critChance;
             }
         }
         else
@@ -46,7 +39,7 @@ public class KeenEyeSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
             enemyCharacters = battleSystem.EnemyController.EnemyCharObjects.Where(x => x.Class == Enums.Classes.Ëó÷íèê).ToList();
             foreach (var enemyCharacter in enemyCharacters)
             {
-                enemyCharacter.CritChance = critChance;
+                enemyCharacter.CritChance = abilityData.critChance;
             }
         }
 
@@ -72,4 +65,14 @@ public class KeenEyeSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
         }
         OnReturnToNormal?.Invoke(this);
     }
+}
+[Serializable]
+public class KeenEyeSupportCardAbilityData : BaseSupportÑardAbilityData
+{
+    public  float critChance;
+
+    public int turnCount;
+
+    [Header("Íå òğîãàòü!")]
+    public bool isBuff;
 }

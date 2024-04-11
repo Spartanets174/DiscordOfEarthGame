@@ -6,22 +6,18 @@ using UnityEngine;
 [Serializable]
 public class FearlessGuardianCharacterBuffAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float magDefenceAmount;
-
-    [SerializeField]
-    private float physDefenceAmount;
-
+    private FearlessGuardianCharacterBuffAbilityData abilityData;
     private List<Character> characters = new();
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         characters.Clear();
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Выберите союзного персонажа для усиления", battleSystem));
-        SetSecondCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Выберите второго союзного персонажа для усиления", battleSystem));
-        SetThirdCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Выберите третьего союзного персонажа для усиления", battleSystem));
+        abilityData = (FearlessGuardianCharacterBuffAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectAbilityText, battleSystem));
+        SetSecondCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectSecondCharacterText, battleSystem));
+        SetThirdCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectThirdCharacterText, battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -108,8 +104,8 @@ public class FearlessGuardianCharacterBuffAbility : BaseCharacterAbility
             {
                 if (character != null)
                 {
-                    character.PhysDefence += physDefenceAmount;
-                    character.MagDefence += magDefenceAmount;
+                    character.PhysDefence += abilityData.physDefenceAmount;
+                    character.MagDefence += abilityData.magDefenceAmount;
                 }
             }
         }
@@ -133,4 +129,17 @@ public class FearlessGuardianCharacterBuffAbility : BaseCharacterAbility
         }
 
     }
+}
+[Serializable]
+public class FearlessGuardianCharacterBuffAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public string selectSecondCharacterText;
+
+    public string selectThirdCharacterText;
+
+    public float magDefenceAmount;
+
+    public float physDefenceAmount;
 }

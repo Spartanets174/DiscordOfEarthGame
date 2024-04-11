@@ -8,6 +8,6 @@ public class CardSupport : Card
     public string abilityText;
 
     [SerializeReference, SubclassSelector]
-    public BaseSupportÑardAbility GameSupportÑardAbility;
+    public BaseSupportÑardAbilityData supportÑardAbilityData;
 
 }

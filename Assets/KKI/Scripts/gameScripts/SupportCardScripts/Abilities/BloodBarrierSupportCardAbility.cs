@@ -4,21 +4,18 @@ using UnityEngine;
 [Serializable]
 public class BloodBarrierSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 {
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
     private Character character;
-    public override void Init(BattleSystem battleSystem)
+    private BloodBarrierSupportCardAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, BaseSupportÑardAbilityData baseAbilityData)
     {
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Âûáåğèòå ïåğñîíàæà", battleSystem));
+        abilityData = (BloodBarrierSupportCardAbilityData)baseAbilityData;
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectCardText, battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
@@ -73,4 +70,14 @@ public class BloodBarrierSupportCardAbility : BaseSupportÑardAbility, ITurnCount
         OnReturnToNormal?.Invoke(this);
     }
 
+}
+[Serializable]
+public class BloodBarrierSupportCardAbilityData : BaseSupportÑardAbilityData
+{
+    public string selectCardText;
+
+    public int turnCount;
+
+    [Header("Íå òğîãàòü!")]
+    public bool isBuff;
 }

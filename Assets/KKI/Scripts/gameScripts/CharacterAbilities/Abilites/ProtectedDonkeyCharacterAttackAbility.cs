@@ -1,27 +1,20 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 [Serializable]
 public class ProtectedDonkeyCharacterAttackAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float damage;
-
-    [SerializeField]
-    private int range;
-
     private SelectCellsInRangeBehaviour selectCellsInRangeBehaviour;
     private FormulaAttackEnemyCharactersInAreaBehaviour formulaAttackAllCharactersInAreaBehaviour;
-
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private ProtectedDonkeyCharacterAttackAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectCellsInRangeBehaviour("Выберите область для атаки", battleSystem, abilityOwner, new Vector2(3, 2), range, "attack"));
-        SetUseCardBehaviour(new FormulaAttackEnemyCharactersInAreaBehaviour(damage, battleSystem, abilityOwner, "\"Хлопнем их!\""));
+        abilityData = (ProtectedDonkeyCharacterAttackAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectCellsInRangeBehaviour(abilityData.selectAbilityText, battleSystem, abilityOwner, abilityData.damageArea, abilityData.range, "attack"));
+        SetUseCardBehaviour(new FormulaAttackEnemyCharactersInAreaBehaviour(abilityData.damage, battleSystem, abilityOwner, $"\"{abilityData.abilityName}\""));
 
         selectCellsInRangeBehaviour = (SelectCellsInRangeBehaviour)CardSelectBehaviour;
         formulaAttackAllCharactersInAreaBehaviour = (FormulaAttackEnemyCharactersInAreaBehaviour)UseCardBehaviour;
@@ -38,7 +31,7 @@ public class ProtectedDonkeyCharacterAttackAbility : BaseCharacterAbility
         else
         {
             formulaAttackAllCharactersInAreaBehaviour.cellsToAttack = selectCellsInRangeBehaviour.highlightedCells.Where(x => x.GetComponentInChildren<PlayerCharacter>() != null).ToList();
-        }     
+        }
         if (formulaAttackAllCharactersInAreaBehaviour.cellsToAttack.Count == 0)
         {
             SelectCard();
@@ -55,4 +48,15 @@ public class ProtectedDonkeyCharacterAttackAbility : BaseCharacterAbility
         selectCellsInRangeBehaviour.highlightedCells.Clear();
         formulaAttackAllCharactersInAreaBehaviour.cellsToAttack.Clear();
     }
+}
+[Serializable]
+public class ProtectedDonkeyCharacterAttackAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public float damage;
+
+    public int range;
+
+    public Vector2 damageArea;
 }

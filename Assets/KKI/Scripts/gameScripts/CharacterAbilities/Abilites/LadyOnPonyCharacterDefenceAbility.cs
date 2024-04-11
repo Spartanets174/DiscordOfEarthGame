@@ -1,26 +1,18 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [Serializable]
 public class LadyOnPonyCharacterDefenceAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private int range;
-
-    [SerializeField]
-    private float physDefenceAmount;
-
-
     private SelectCellsWithCharactersInRangeBehaviour selectCellsToAttackInRangeBehaviour;
-
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private LadyOnPonyCharacterDefenceAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour("", battleSystem, abilityOwner, range, "allowed"));
+        abilityData = (LadyOnPonyCharacterDefenceAbilityData)characterAbilityData;
+        abilityData = (LadyOnPonyCharacterDefenceAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour("", battleSystem, abilityOwner, abilityData.range, "allowed"));
 
         selectCellsToAttackInRangeBehaviour = (SelectCellsWithCharactersInRangeBehaviour)CardSelectBehaviour;
 
@@ -30,9 +22,16 @@ public class LadyOnPonyCharacterDefenceAbility : BaseCharacterAbility
     {
         foreach (var character in selectCellsToAttackInRangeBehaviour.charactersOnCells)
         {
-            character.PhysDefence += physDefenceAmount;
+            character.PhysDefence += abilityData.physDefenceAmount;
         }
         selectCellsToAttackInRangeBehaviour.charactersOnCells.Clear();
         UseCard(abilityOwner.gameObject);
     }
+}
+[Serializable]
+public class LadyOnPonyCharacterDefenceAbilityData : BaseCharacterAbilityData
+{
+    public int range;
+
+    public float physDefenceAmount;
 }

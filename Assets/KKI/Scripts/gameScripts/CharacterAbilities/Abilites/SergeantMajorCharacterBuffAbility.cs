@@ -5,25 +5,14 @@ using UnityEngine;
 [Serializable]
 public class SergeantMajorCharacterBuffAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float physDamageAmount;
-
-    [SerializeField]
-    private float physDefenceAmount;
-
-    [SerializeField]
-    private float magDefenceAmount;
-
-
-    [SerializeField]
-    private float chanceToIncreaseDamage;
-
+    private SergeantMajorCharacterBuffAbilityData abilityData;
     private Character character;
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Выберите союзного персонажа для баффа", battleSystem));
+        abilityData = (SergeantMajorCharacterBuffAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectAbilityText, battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
@@ -54,14 +43,14 @@ public class SergeantMajorCharacterBuffAbility : BaseCharacterAbility
 
         float chance = UnityEngine.Random.Range(0f, 1f);
 
-        if (chance <= chanceToIncreaseDamage)
+        if (chance <= abilityData.chanceToIncreaseDamage)
         {
-            character.PhysAttack += physDamageAmount;
+            character.PhysAttack += abilityData.physDamageAmount;
         }
         else
         {
-            character.PhysDefence += physDefenceAmount;
-            character.MagDefence += magDefenceAmount;
+            character.PhysDefence += abilityData.physDefenceAmount;
+            character.MagDefence += abilityData.magDefenceAmount;
 
         }
 
@@ -81,4 +70,17 @@ public class SergeantMajorCharacterBuffAbility : BaseCharacterAbility
             playerCharacter.OnClick -= SelectCharacter;
         }
     }
+}
+[Serializable]
+public class SergeantMajorCharacterBuffAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public float physDamageAmount;
+
+    public float physDefenceAmount;
+
+    public float magDefenceAmount;
+
+    public float chanceToIncreaseDamage;
 }

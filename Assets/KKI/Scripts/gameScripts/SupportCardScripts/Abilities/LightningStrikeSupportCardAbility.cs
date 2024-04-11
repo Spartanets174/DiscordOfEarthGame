@@ -5,20 +5,17 @@ using UnityEngine;
 [Serializable]
 public class LightningStrikeSupportCardAbility : BaseSupportÑardAbility
 {
-    [SerializeField]
-    private float damage;
-
-    [SerializeField]
-    private Vector2 area; 
 
     private SelectCellsBehaviour selectCellsBehaviour;
     private AttackAllCharactersInAreaBehaviour attackAllCharactersInAreaBehaviour;
-    public override void Init(BattleSystem battleSystem)
+    private LightningStrikeSupportCardAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, BaseSupportÑardAbilityData baseAbilityData)
     {
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectCellsBehaviour("Âûáåğèòå îáëàñòü äëÿ íàíåñåíèÿ óäàğà", battleSystem, area, "attack"));
+        abilityData = (LightningStrikeSupportCardAbilityData)baseAbilityData;
+        SetCardSelectBehaviour(new SelectCellsBehaviour(abilityData.selectCardText, battleSystem, abilityData.area, "attack"));
 
-        SetUseCardBehaviour(new AttackAllCharactersInAreaBehaviour(damage, battleSystem, "\"Ïğèçûâ áóğè\""));
+        SetUseCardBehaviour(new AttackAllCharactersInAreaBehaviour(abilityData.damage, battleSystem, $"\"{abilityData.supportÑardAbilityName}\""));
 
         selectCellsBehaviour = (SelectCellsBehaviour)CardSelectBehaviour;
         attackAllCharactersInAreaBehaviour = (AttackAllCharactersInAreaBehaviour)UseCardBehaviour;
@@ -54,4 +51,13 @@ public class LightningStrikeSupportCardAbility : BaseSupportÑardAbility
         }
         battleSystem.FieldController.TurnOnCells();
     }
+}
+[Serializable]
+public class LightningStrikeSupportCardAbilityData : BaseSupportÑardAbilityData
+{
+    public string selectCardText;
+
+    public float damage;
+
+    public Vector2 area;
 }

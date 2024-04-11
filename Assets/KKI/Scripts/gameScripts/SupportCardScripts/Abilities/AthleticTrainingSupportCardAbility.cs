@@ -4,11 +4,11 @@ using UnityEngine;
 [Serializable]
 public class AthleticTrainingSupportCardAbility : BaseSupportÑardAbility
 {
-    [SerializeField]
-    private int pointsOfAction;
-    public override void Init(BattleSystem battleSystem)
+    private AthleticTrainingSupportCardAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, BaseSupportÑardAbilityData baseAbilityData)
     {
        this.battleSystem = battleSystem;
+        abilityData = (AthleticTrainingSupportCardAbilityData)baseAbilityData;
 
         SetCardSelectBehaviour(new EmptySelectBehaviour("Èñïîëüçóéòå êàðòó"));
 
@@ -17,8 +17,13 @@ public class AthleticTrainingSupportCardAbility : BaseSupportÑardAbility
 
     private void OnSelected()
     {
-        battleSystem.PointsOfAction.Value += pointsOfAction;
+        battleSystem.PointsOfAction.Value += abilityData.pointsOfAction;
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(null);
     }
+}
+[Serializable]
+public class AthleticTrainingSupportCardAbilityData : BaseSupportÑardAbilityData
+{
+    public int pointsOfAction;
 }

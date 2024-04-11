@@ -4,30 +4,22 @@ using UnityEngine;
 [Serializable]
 public class FutureTechnologiesSupportCardAbility : BaseSupport—ardAbility, ITurnCountable
 {
-    [SerializeField]
-    private int defenceAmount;
-
-    [SerializeField]
-    private int m_turnCount;
     public int TurnCount
     {
-        get => m_turnCount; set
-        {
-            m_turnCount = value;
-        }
+        get => abilityData.turnCount; 
+        set => abilityData.turnCount = value;
     }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
     private Character character;
-    public override void Init(BattleSystem battleSystem)
+    private FutureTechnologiesSupportCardAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, BaseSupport—ardAbilityData baseAbilityData)
     {
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("¬˚·ÂËÚÂ ÔÂÒÓÌ‡Ê‡", battleSystem));
+        abilityData = (FutureTechnologiesSupportCardAbilityData)baseAbilityData;
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectCardText, battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
@@ -56,8 +48,8 @@ public class FutureTechnologiesSupportCardAbility : BaseSupport—ardAbility, ITur
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
 
-        character.MagDefence += defenceAmount;
-        character.PhysDefence += defenceAmount;
+        character.MagDefence += abilityData.defenceAmount;
+        character.PhysDefence += abilityData.defenceAmount;
 
 
         battleSystem.PlayerController.SetPlayerChosenState(false, x =>
@@ -77,10 +69,22 @@ public class FutureTechnologiesSupportCardAbility : BaseSupport—ardAbility, ITur
 
     public void ReturnToNormal()
     {
-        character.MagDefence -= defenceAmount;
-        character.PhysDefence -= defenceAmount;
+        character.MagDefence -= abilityData.defenceAmount;
+        character.PhysDefence -= abilityData.defenceAmount;
 
         OnReturnToNormal?.Invoke(this);
     }
 
+}
+[Serializable]
+public class FutureTechnologiesSupportCardAbilityData : BaseSupport—ardAbilityData
+{
+    public string selectCardText;
+
+    public int defenceAmount;
+
+    public int turnCount;
+
+    [Header("ÕÂ ÚÓ„‡Ú¸!")]
+    public bool isBuff;
 }

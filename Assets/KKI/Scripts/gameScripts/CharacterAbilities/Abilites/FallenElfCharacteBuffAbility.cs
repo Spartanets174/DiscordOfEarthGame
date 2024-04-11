@@ -6,13 +6,12 @@ using UnityEngine;
 [Serializable]
 public class FallenElfCharacteBuffAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float magDefenceAmount;
-
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private FallenElfCharacteBuffAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
+        abilityData = (FallenElfCharacteBuffAbilityData)characterAbilityData;
         SetCardSelectBehaviour(new EmptySelectBehaviour("Используйте карту"));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -20,11 +19,16 @@ public class FallenElfCharacteBuffAbility : BaseCharacterAbility
 
     private void OnSelected()
     {
-        abilityOwner.MagDefence += magDefenceAmount;
+        abilityOwner.MagDefence += abilityData.magDefenceAmount;
 
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(abilityOwner.gameObject);
 
     }
 
+}
+[Serializable]
+public class FallenElfCharacteBuffAbilityData : BaseCharacterAbilityData
+{
+    public float magDefenceAmount;
 }

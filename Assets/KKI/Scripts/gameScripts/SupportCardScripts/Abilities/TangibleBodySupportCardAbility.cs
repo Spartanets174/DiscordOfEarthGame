@@ -4,27 +4,18 @@ using UnityEngine;
 [Serializable]
 public class TangibleBodySupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 {
-    [SerializeField]
-    private float healAmount;
-
-    [SerializeField]
-    private float physAmount;
-
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
     private Character character;
-    public override void Init(BattleSystem battleSystem)
+    private TangibleBodySupportCardAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, BaseSupportÑardAbilityData baseAbilityData)
     {
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Âûáåğèòå ïåğñîíàæà", battleSystem));
+        abilityData = (TangibleBodySupportCardAbilityData)baseAbilityData;
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectCardText, battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
@@ -55,8 +46,8 @@ public class TangibleBodySupportCardAbility : BaseSupportÑardAbility, ITurnCount
         }
 
         character.HealMoreThenMax(1);
-        character.PhysDefence += physAmount;
-        character.PhysAttack += physAmount;
+        character.PhysDefence += abilityData.physAmount;
+        character.PhysAttack += abilityData.physAmount;
 
         battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {
@@ -75,9 +66,9 @@ public class TangibleBodySupportCardAbility : BaseSupportÑardAbility, ITurnCount
 
     public void ReturnToNormal()
     {
-        character.PhysDefence -= physAmount;
-        character.PhysAttack -= physAmount;
-        bool isDeath = character.Damage(healAmount, "Îñÿçàåìîå òåëî");
+        character.PhysDefence -= abilityData.physAmount;
+        character.PhysAttack -= abilityData.physAmount;
+        bool isDeath = character.Damage(abilityData.healAmount, $"{abilityData.supportÑardAbilityName}");
 
         if (isDeath)
         {
@@ -96,4 +87,18 @@ public class TangibleBodySupportCardAbility : BaseSupportÑardAbility, ITurnCount
         OnReturnToNormal?.Invoke(this);
     }
 
+}
+[Serializable]
+public class TangibleBodySupportCardAbilityData : BaseSupportÑardAbilityData
+{
+    public string selectCardText;
+
+    public float healAmount;
+
+    public float physAmount;
+
+    public int turnCount;
+
+    [Header("Íå òğîãàòü!")]
+    public bool isBuff;
 }

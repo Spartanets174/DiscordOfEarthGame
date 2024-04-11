@@ -4,20 +4,17 @@ using UnityEngine;
 [Serializable]
 public class UnskillfullStudentCharacterAttackAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float damage;
-
-    [SerializeField]
-    private int range;
+    private UnskillfullStudentCharacterAttackAbilityData abilityData;
 
     private SelectCellsWithCharactersInRangeBehaviour selectCellsToAttackInRangeBehaviour;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData baseCharacterAbility)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour("Íàæìèòå íà ïåğñîíàæà â êğàñíîé êëåòêå äëÿ àòàêè", battleSystem, abilityOwner, range, "attack"));
-        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(damage, battleSystem, abilityOwner, "\"Ëó÷øèé ïğèåì\""));
+        abilityData = (UnskillfullStudentCharacterAttackAbilityData)baseCharacterAbility;
+        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour(abilityData.selectAbilityText, battleSystem, abilityOwner, abilityData.range, "attack"));
+        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(abilityData.damage, battleSystem, abilityOwner, $"\"{abilityData.abilityName}\""));
 
         selectCellsToAttackInRangeBehaviour = (SelectCellsWithCharactersInRangeBehaviour)CardSelectBehaviour;
 
@@ -51,4 +48,13 @@ public class UnskillfullStudentCharacterAttackAbility : BaseCharacterAbility
         }
         battleSystem.PlayerController.SetPlayerStates(true, false);
     }
+}
+[Serializable]
+public class UnskillfullStudentCharacterAttackAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public float damage;
+
+    public int range;
 }

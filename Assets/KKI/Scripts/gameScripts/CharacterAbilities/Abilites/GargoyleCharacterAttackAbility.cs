@@ -6,20 +6,15 @@ using UnityEngine;
 [Serializable]
 public class GargoyleCharacterAttackAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private Vector2 damageSpread;
-
-    [SerializeField]
-    private int range;
-
     private SelectCellsWithCharactersInRangeBehaviour selectCellsToAttackInRangeBehaviour;
-
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private GargoyleCharacterAttackAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour("Íàæìèòå íà ïåğñîíàæà â êğàñíîé êëåòêå äëÿ àòàêè", battleSystem, abilityOwner, range, "attack"));
-        SetUseCardBehaviour(new AttackSelectedÑharacterBehaviour(UnityEngine.Random.Range(damageSpread.x, damageSpread.y), battleSystem, "\"Äûõàíèå îãí¸ì\""));
+        abilityData = (GargoyleCharacterAttackAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour(abilityData.selectAbilityText, battleSystem, abilityOwner, abilityData.range, "attack"));
+        SetUseCardBehaviour(new AttackSelectedÑharacterBehaviour(UnityEngine.Random.Range(abilityData.damageSpread.x, abilityData.damageSpread.y), battleSystem, "\"Äûõàíèå îãí¸ì\""));
 
         selectCellsToAttackInRangeBehaviour = (SelectCellsWithCharactersInRangeBehaviour)CardSelectBehaviour;
 
@@ -55,3 +50,12 @@ public class GargoyleCharacterAttackAbility : BaseCharacterAbility
     }
 }
 
+[Serializable]
+public class GargoyleCharacterAttackAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public Vector2 damageSpread;
+
+    public int range;
+}

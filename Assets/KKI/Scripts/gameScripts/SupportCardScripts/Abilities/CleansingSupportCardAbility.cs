@@ -3,10 +3,12 @@ using System;
 [Serializable]
 public class CleansingSupportCardAbility : BaseSupportÑardAbility
 {
-    public override void Init(BattleSystem battleSystem)
+    private CleansingSupportCardAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, BaseSupportÑardAbilityData baseAbilityData)
     {
+        abilityData = (CleansingSupportCardAbilityData)baseAbilityData;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Âûáåğèòå ïåğñîíàæà äëÿ î÷èùåíèÿ", battleSystem));
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectCardText, battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
@@ -50,4 +52,9 @@ public class CleansingSupportCardAbility : BaseSupportÑardAbility
         }
     }
 
+}
+[Serializable]
+public class CleansingSupportCardAbilityData : BaseSupportÑardAbilityData
+{
+    public string selectCardText;
 }

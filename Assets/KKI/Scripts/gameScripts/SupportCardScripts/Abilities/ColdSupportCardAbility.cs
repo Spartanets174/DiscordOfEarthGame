@@ -6,23 +6,19 @@ using UnityEngine;
 [Serializable]
 public class ColdSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 {
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     private List<EnemyCharacter> enemyCharacters;
     private List<PlayerCharacter> playerCharacters;
 
+    private ColdSupportCardAbilityData abilityData;
     public event Action<ITurnCountable> OnReturnToNormal;
 
-    public override void Init(BattleSystem battleSystem)
+    public override void Init(BattleSystem battleSystem, BaseSupportÑardAbilityData baseAbilityData)
     {
         this.battleSystem = battleSystem;
-
+        abilityData = (ColdSupportCardAbilityData)baseAbilityData;
         SetCardSelectBehaviour(new EmptySelectBehaviour("Èñïîëüçóéòå êàğòó"));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -69,4 +65,12 @@ public class ColdSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
         }
         OnReturnToNormal?.Invoke(this);
     }
+}
+[Serializable]
+public class ColdSupportCardAbilityData : BaseSupportÑardAbilityData
+{
+    public int turnCount;
+
+    [Header("Íå òğîãàòü!")]
+    public bool isBuff;
 }

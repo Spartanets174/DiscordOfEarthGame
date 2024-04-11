@@ -186,6 +186,20 @@ public abstract class Character : OutlineInteractableObject
         private set => m_lastDamageAmount = value;
     }
 
+    protected float m_physDamageMultiplier;
+    public float PhysDamageMultiplier
+    {
+        get => m_physDamageMultiplier;
+        set => m_physDamageMultiplier = value;
+    }
+
+    protected float m_magDamageMultiplier;
+    public float MagDamageMultiplier
+    {
+        get => m_magDamageMultiplier;
+        set => m_magDamageMultiplier = value;
+    }
+
     protected Character m_lastAttackedCharacter;
     public Character LastAttackedCharacter
     {
@@ -355,22 +369,36 @@ public abstract class Character : OutlineInteractableObject
         m_critNum = m_card.critNum;
 
         m_chanceToFreeAttack = 0;
-        if (card.passiveCharacterAbilityData!=null)
+        if (m_card.passiveCharacterAbilityData!=null)
         {
-            Type type = card.passiveCharacterAbilityData.passiveCharacterAbility.Type;
+            Type type = m_card.passiveCharacterAbilityData.passiveCharacterAbility.Type;
             m_passiveCharacterAbility = (BasePassiveCharacterAbility)gameObject.AddComponent(type);
-            if (card.passiveCharacterAbilityData!=null)
+            if (m_card.passiveCharacterAbilityData!=null)
             {
-                m_passiveCharacterAbility.baseAbilityData = card.passiveCharacterAbilityData;
+                m_passiveCharacterAbility.baseAbilityData = m_card.passiveCharacterAbilityData;
             }
             
         }
-        
+        if (m_card.attackCharacterAbilityData != null)
+        {
+            Type type = m_card.attackCharacterAbilityData.characterAbility.Type;
+            m_attackCharacterAbility = (BaseCharacterAbility)gameObject.AddComponent(type);
+        }
 
-        m_attackCharacterAbility = m_card.attackCharacterAbility;
-        m_defenceCharacterAbility = m_card.defenceCharacterAbility;
-        m_buffCharacterAbility = m_card.buffCharacterAbility;
+        if (m_card.defenceCharacterAbilityData != null)
+        {
+            Type type = m_card.defenceCharacterAbilityData.characterAbility.Type;
+            m_defenceCharacterAbility = (BaseCharacterAbility)gameObject.AddComponent(type);
+        }
 
+        if (m_card.buffCharacterAbilityData != null)
+        {
+            Type type = m_card.buffCharacterAbilityData.characterAbility.Type;
+            m_buffCharacterAbility = (BaseCharacterAbility)gameObject.AddComponent(type);
+        }
+
+        m_physDamageMultiplier = 1;
+        m_magDamageMultiplier = 1;
         m_useAbilityCost = 11;
 
         foreach (Enums.Classes characterClass in Enum.GetValues(typeof(Enums.Classes)))
@@ -421,8 +449,8 @@ public abstract class Character : OutlineInteractableObject
         }
 
         float crit = IsCrit(chosenCharacter.CritChance,chosenCharacter.CritNum);
-        float finalPhysDamage = IgnorePhysDamage? 0 :((11 + chosenCharacter.PhysAttack) * chosenCharacter.PhysAttack * crit * (chosenCharacter.PhysAttack - PhysDefence + m_maxHealth)) / 256;
-        float finalMagDamage = IgnoreMagDamage?0 : ((11 + chosenCharacter.MagAttack) * chosenCharacter.MagAttack * crit * (chosenCharacter.MagAttack - MagDefence + m_maxHealth)) / 256;
+        float finalPhysDamage = IgnorePhysDamage? 0 :((11 + chosenCharacter.PhysAttack) * chosenCharacter.PhysAttack * crit * (chosenCharacter.PhysAttack - PhysDefence + m_maxHealth)) / 256 * m_physDamageMultiplier;
+        float finalMagDamage = IgnoreMagDamage?0 : ((11 + chosenCharacter.MagAttack) * chosenCharacter.MagAttack * crit * (chosenCharacter.MagAttack - MagDefence + m_maxHealth)) / 256 * m_magDamageMultiplier;
         float finalDamage = Math.Max(finalMagDamage, finalPhysDamage) * GetDamageMultiplierByRace(chosenCharacter.Race) * GetDamageMultiplierByClass(chosenCharacter.Class) * chosenCharacter.GetAttackMultiplierByRace(Race) * chosenCharacter.GetAttackMultiplierByClass(Class);
 
         Health = Math.Max(0, Health - finalDamage);

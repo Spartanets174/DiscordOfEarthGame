@@ -13,25 +13,33 @@ MonoBehaviour:
   m_Name: "\u041E\u0441\u044F\u0437\u0430\u0435\u043C\u043E\u0435 \u0442\u0435\u043B\u043E
     2"
   m_EditorClassIdentifier: 
-  cardName: 
+  cardName: "\u041E\u0441\u044F\u0437\u0430\u0435\u043C\u043E\u0435 \u0442\u0435\u043B\u043E
+    2"
   description: 
   race: 5
   image: {fileID: 21300000, guid: 78f72ed96d82cc643862cde3c84cbc7a, type: 3}
   rarity: 2
   Price: 123
   id: 0
-  prefab: {fileID: 0}
   type: 1
   abilityText: 
-  "GameSupport\u0421ardAbility":
-    rid: 6947752826724679733
+  "support\u0421ardAbilityData":
+    rid: 2085506640524869651
   references:
     version: 2
     RefIds:
-    - rid: 6947752826724679733
-      type: {class: TangibleBodySupportCardAbility, ns: , asm: Assembly-CSharp}
+    - rid: 2085506640524869651
+      type: {class: TangibleBodySupportCardAbilityData, ns: , asm: Assembly-CSharp}
       data:
+        "Support\u0421ardAbility":
+          GuidAssignmentFailed: 0
+          GUID: 5fcf000d1ca42e349b88972ecf5449fb
+          _typeNameAndAssembly: TangibleBodySupportCardAbility, Assembly-CSharp
+          _suppressLogs: 0
+        "support\u0421ardAbilityName": "\u041E\u0441\u044F\u0437\u0430\u0435\u043C\u043E\u0435
+          \u0442\u0435\u043B\u043E 2"
+        selectCardText: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u0436\u0430"
         healAmount: 1
         physAmount: 2
-        m_turnCount: 2
-        m_isBuff: 1
+        turnCount: 2
+        isBuff: 1

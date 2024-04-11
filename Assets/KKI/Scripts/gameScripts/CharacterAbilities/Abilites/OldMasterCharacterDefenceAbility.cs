@@ -6,28 +6,20 @@ using UnityEngine;
 [Serializable]
 public class OldMasterCharacterDefenceAbility : BaseCharacterAbility, ITurnCountable
 {
-    [SerializeField]
-    private float physAttackAmount;
-    [SerializeField]
-    private float physDefenceAmount;
-
-    private Character character;
-
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private Character character;
+    private OldMasterCharacterDefenceAbilityData abilityData;
+
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Выберите союзного персонажа для услиения", battleSystem));
+        abilityData = (OldMasterCharacterDefenceAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectAbilityText, battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
@@ -59,8 +51,8 @@ public class OldMasterCharacterDefenceAbility : BaseCharacterAbility, ITurnCount
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
 
-        character.PhysAttack += physAttackAmount;
-        character.PhysDefence -= physDefenceAmount;
+        character.PhysAttack += abilityData.physAttackAmount;
+        character.PhysDefence -= abilityData.physDefenceAmount;
 
 
         OnCancelSelection();
@@ -79,10 +71,24 @@ public class OldMasterCharacterDefenceAbility : BaseCharacterAbility, ITurnCount
 
     public void ReturnToNormal()
     {
-        character.PhysAttack -= physAttackAmount;
-        character.PhysDefence += physDefenceAmount;
+        character.PhysAttack -= abilityData.physAttackAmount;
+        character.PhysDefence += abilityData.physDefenceAmount;
 
         OnReturnToNormal?.Invoke(this);
         character = null;
     }
+}
+[Serializable]
+public class OldMasterCharacterDefenceAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public float physAttackAmount;
+
+    public float physDefenceAmount;
+
+    public int turnCount;
+
+    [Header("НЕ трогать!")]
+    public bool isBuff;
 }

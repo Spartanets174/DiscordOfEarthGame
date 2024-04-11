@@ -6,20 +6,21 @@ using UnityEngine;
 [Serializable]
 public class WallSecondSupportCardAbility : BaseSupportÑardAbility
 {
-    [SerializeField]
-    private GameObject prefab;
 
+    private WallSecondSupportCardAbilityData abilityData;
     private SelectCellsBehaviour selectCellsBehaviour;
     private SpawnObjectBehaviour spawnObjectBehaviour;
 
     private WallEnemyCharacter wallEnemyCharacter;
 
     private List<GameObject> kostilGameObjects = new();
-    public override void Init(BattleSystem battleSystem)
+    public override void Init(BattleSystem battleSystem, BaseSupportÑardAbilityData baseAbilityData)
     {
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectCellsBehaviour("Âûáåğèòå îáëàñòü äëÿ ğàçìåùåíèÿ", battleSystem, new Vector2(3, 1), "allowed"));
-        SetUseCardBehaviour(new SpawnObjectBehaviour(prefab));
+        abilityData = (WallSecondSupportCardAbilityData)baseAbilityData;
+
+        SetCardSelectBehaviour(new SelectCellsBehaviour(abilityData.selectCardText, battleSystem, new Vector2(3, 1), "allowed"));
+        SetUseCardBehaviour(new SpawnObjectBehaviour(abilityData.prefab));
 
         selectCellsBehaviour = (SelectCellsBehaviour)CardSelectBehaviour;
         spawnObjectBehaviour = (SpawnObjectBehaviour)UseCardBehaviour;
@@ -83,4 +84,11 @@ public class WallSecondSupportCardAbility : BaseSupportÑardAbility
         }
         battleSystem.FieldController.TurnOnCells();
     }
+}
+[Serializable]
+public class WallSecondSupportCardAbilityData : BaseSupportÑardAbilityData
+{
+    public string selectCardText;
+
+    public GameObject prefab;
 }

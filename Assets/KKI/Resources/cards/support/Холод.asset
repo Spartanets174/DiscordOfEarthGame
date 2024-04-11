@@ -19,18 +19,23 @@ MonoBehaviour:
   rarity: 1
   Price: 312
   id: 33
-  prefab: {fileID: 0}
   type: 3
   abilityText: "\u0417\u0430\u043C\u043E\u0440\u0430\u0436\u0438\u0432\u0430\u0435\u0442
     \u0432\u0440\u0430\u0436\u0435\u0441\u043A\u0438\u0445 \u043B\u0443\u0447\u043D\u0438\u043A\u043E\u0432
     \u043D\u0430 1 \u0445\u043E\u04342"
-  "GameSupport\u0421ardAbility":
-    rid: 6947752826724679708
+  "support\u0421ardAbilityData":
+    rid: 2085506640524869673
   references:
     version: 2
     RefIds:
-    - rid: 6947752826724679708
-      type: {class: ColdSupportCardAbility, ns: , asm: Assembly-CSharp}
+    - rid: 2085506640524869673
+      type: {class: ColdSupportCardAbilityData, ns: , asm: Assembly-CSharp}
       data:
-        m_turnCount: 1
-        m_isBuff: 1
+        "Support\u0421ardAbility":
+          GuidAssignmentFailed: 0
+          GUID: 554ff5cf4b237f046a5a4bbc22782f2e
+          _typeNameAndAssembly: ColdSupportCardAbility, Assembly-CSharp
+          _suppressLogs: 0
+        "support\u0421ardAbilityName": "\u0425\u043E\u043B\u043E\u0434"
+        turnCount: 1
+        isBuff: 0

@@ -6,26 +6,17 @@ using UnityEngine;
 [Serializable]
 public class FallenElfCharacterDefenceAbility : BaseCharacterAbility, ITurnCountable
 {
-    [SerializeField]
-    private float magDefenceAmount;
-
-    [SerializeField]
-    private float physDefenceAmount;
-
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private FallenElfCharacterDefenceAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData baseCharacterAbility)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
+        abilityData = (FallenElfCharacterDefenceAbilityData)baseCharacterAbility;
         SetCardSelectBehaviour(new EmptySelectBehaviour("Используйте карту"));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -33,8 +24,8 @@ public class FallenElfCharacterDefenceAbility : BaseCharacterAbility, ITurnCount
 
     private void OnSelected()
     {
-        abilityOwner.PhysDefence += physDefenceAmount;
-        abilityOwner.MagDefence += magDefenceAmount;
+        abilityOwner.PhysDefence += abilityData.physDefenceAmount;
+        abilityOwner.MagDefence += abilityData.magDefenceAmount;
 
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(abilityOwner.gameObject);
@@ -43,10 +34,22 @@ public class FallenElfCharacterDefenceAbility : BaseCharacterAbility, ITurnCount
 
     public void ReturnToNormal()
     {
-        abilityOwner.PhysDefence -= physDefenceAmount;
-        abilityOwner.MagDefence -= magDefenceAmount;
+        abilityOwner.PhysDefence -= abilityData.physDefenceAmount;
+        abilityOwner.MagDefence -= abilityData.magDefenceAmount;
 
         OnReturnToNormal?.Invoke(this);
     }
 
+}
+[Serializable]
+public class FallenElfCharacterDefenceAbilityData : BaseCharacterAbilityData
+{
+    public float magDefenceAmount;
+
+    public float physDefenceAmount;
+
+    public int turnCount;
+
+    [Header("Не трогать!!!")]
+    public bool isBuff;
 }

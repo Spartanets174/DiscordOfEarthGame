@@ -4,27 +4,21 @@ using UnityEngine;
 [Serializable]
 public class MaterialBladesSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 { 
-    [SerializeField]
-    private float damage;
-
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     private Character character;
+    private MaterialBladesSupportCardAbilityData abilityData;
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
-    public override void Init(BattleSystem battleSystem)
+    public override void Init(BattleSystem battleSystem, BaseSupportÑardAbilityData baseAbilityData)
     {
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("Âûáåğèòå âğàæåñêîãî ïåğñîíàæà äëÿ àòàêè", battleSystem));
+        abilityData = (MaterialBladesSupportCardAbilityData)baseAbilityData;
+        SetCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour(abilityData.selectCardText, battleSystem));
         SetSelectCharacterBehaviour(new SetCurrentEnemyCharacterBehaviour("", battleSystem));
-        SetUseCardBehaviour(new AttackSelectedÑharacterBehaviour(damage, battleSystem, "\"Ìàòåğèàëüíûå êëèíêè\""));
+        SetUseCardBehaviour(new AttackSelectedÑharacterBehaviour(abilityData.damage, battleSystem, $"\"{abilityData.supportÑardAbilityName}\""));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -79,4 +73,16 @@ public class MaterialBladesSupportCardAbility : BaseSupportÑardAbility, ITurnCou
         character.IsFreezed = false;
         OnReturnToNormal?.Invoke(this);
     }
+}
+[Serializable]
+public class MaterialBladesSupportCardAbilityData : BaseSupportÑardAbilityData
+{
+    public string selectCardText;
+
+    public float damage;
+
+    public int turnCount;
+
+    [Header("Íå òğîãàòü!")]
+    public bool isBuff;
 }

@@ -87,7 +87,7 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
             playerCharacter.AttackCharacterAbility.OnCardAbilityCharacterSelected += OnCardAbilityCharacterSelected;
             playerCharacter.AttackCharacterAbility.OnCardAbilityUsed += OnCardAbilityUsed;
             playerCharacter.AttackCharacterAbility.OnUsingCancel += OnUsingCancel;
-            playerCharacter.AttackCharacterAbility.Init(battleSystem, playerCharacter);
+            playerCharacter.AttackCharacterAbility.Init(battleSystem, playerCharacter, playerCharacter.Card.attackCharacterAbilityData);
 
             playerCharacter.DefenceCharacterAbility.OnCardAbilitySelected += OnCardAbilitySelected;
             playerCharacter.DefenceCharacterAbility.OnSecondCardAbilitySelected += OnCardAbilitySelected;
@@ -95,7 +95,7 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
             playerCharacter.DefenceCharacterAbility.OnCardAbilityCharacterSelected += OnCardAbilityCharacterSelected;
             playerCharacter.DefenceCharacterAbility.OnCardAbilityUsed += OnCardAbilityUsed;
             playerCharacter.DefenceCharacterAbility.OnUsingCancel += OnUsingCancel;
-            playerCharacter.DefenceCharacterAbility.Init(battleSystem, playerCharacter);
+            playerCharacter.DefenceCharacterAbility.Init(battleSystem, playerCharacter, playerCharacter.Card.defenceCharacterAbilityData);
 
             playerCharacter.BuffCharacterAbility.OnCardAbilitySelected += OnCardAbilitySelected;
             playerCharacter.BuffCharacterAbility.OnSecondCardAbilitySelected += OnCardAbilitySelected;
@@ -103,7 +103,7 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
             playerCharacter.BuffCharacterAbility.OnCardAbilityCharacterSelected += OnCardAbilityCharacterSelected;
             playerCharacter.BuffCharacterAbility.OnCardAbilityUsed += OnCardAbilityUsed;
             playerCharacter.BuffCharacterAbility.OnUsingCancel += OnUsingCancel;
-            playerCharacter.BuffCharacterAbility.Init(battleSystem, playerCharacter);
+            playerCharacter.BuffCharacterAbility.Init(battleSystem, playerCharacter, playerCharacter.Card.buffCharacterAbilityData);
         }
     }
     private void OnDestroy()

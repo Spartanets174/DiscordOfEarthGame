@@ -4,29 +4,23 @@ using UnityEngine;
 [Serializable]
 public class DarknessSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 {
-    [SerializeField]
-    private float characterMagAttack;
-    [SerializeField]
-    private float enemyCharacterMagDefence;
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
 
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
     private Character character;
 
     private Character enemyCharacter;
-    public override void Init(BattleSystem battleSystem)
+
+    private DarknessSupportCardAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, BaseSupportÑardAbilityData baseAbilityData)
     {
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Âûáåğèòå ñîşçíîãî ïåğñîíàæà", battleSystem));
-        SetSecondCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour("Âûáåğèòå âğàæåñêîãî ïåğñîíàæà", battleSystem));
+        abilityData = (DarknessSupportCardAbilityData)baseAbilityData;
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectCardText, battleSystem));
+        SetSecondCardSelectBehaviour(new SelectAllEnemyUnitsBehaviour(abilityData.selectCharacterText, battleSystem));
         SetSelectCharacterBehaviour(new SetCurrentEnemyCharacterBehaviour("", battleSystem));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
@@ -96,8 +90,8 @@ public class DarknessSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
             enemyCharacter.OnClick -= SelectCharacter;
         }
 
-        character.MagAttack += characterMagAttack;
-        enemyCharacter.MagDefence -= enemyCharacterMagDefence;
+        character.MagAttack += abilityData.characterMagAttack;
+        enemyCharacter.MagDefence -= abilityData.enemyCharacterMagDefence;
 
         UseCard(null);
     }
@@ -114,9 +108,25 @@ public class DarknessSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 
     public void ReturnToNormal()
     {
-        character.MagAttack -= characterMagAttack;
-        enemyCharacter.MagDefence += enemyCharacterMagDefence;
+        character.MagAttack -= abilityData.characterMagAttack;
+        enemyCharacter.MagDefence += abilityData.enemyCharacterMagDefence;
 
         OnReturnToNormal?.Invoke(this);
     }
+}
+[Serializable]
+public class DarknessSupportCardAbilityData : BaseSupportÑardAbilityData
+{
+    public string selectCardText;
+
+    public string selectCharacterText;
+
+    public float characterMagAttack;
+
+    public float enemyCharacterMagDefence;
+
+    public int turnCount;
+
+    [Header("Íå òğîãàòü!")]
+    public bool isBuff;
 }

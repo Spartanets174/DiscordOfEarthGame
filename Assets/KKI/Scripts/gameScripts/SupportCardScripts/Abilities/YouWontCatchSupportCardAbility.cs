@@ -4,27 +4,20 @@ using UnityEngine;
 [Serializable]
 public class YouWontCatchSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 {
-    [SerializeField]
-    private float encreacePercent;
-
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
     private Character character;
     private float physAmount;
     private float magAmount;
-    public override void Init(BattleSystem battleSystem)
+    private YouWontCatchSupportCardAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, BaseSupportÑardAbilityData baseAbilityData)
     {
         this.battleSystem = battleSystem;
-
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Âûáåğèòå ïåğñîíàæà", battleSystem));
+        abilityData = (YouWontCatchSupportCardAbilityData)baseAbilityData;
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectCardText, battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
 
@@ -56,8 +49,8 @@ public class YouWontCatchSupportCardAbility : BaseSupportÑardAbility, ITurnCount
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
 
-        physAmount = (float)(character.Card.physAttack * encreacePercent);
-        magAmount = (float)(character.Card.magAttack * encreacePercent);
+        physAmount *= abilityData.increacePercent;
+        magAmount *= abilityData.increacePercent;
 
 
         character.MagAttack += magAmount;
@@ -87,4 +80,16 @@ public class YouWontCatchSupportCardAbility : BaseSupportÑardAbility, ITurnCount
         OnReturnToNormal?.Invoke(this);
     }
 
+}
+[Serializable]
+public class YouWontCatchSupportCardAbilityData : BaseSupportÑardAbilityData
+{
+    public string selectCardText;
+
+    public float increacePercent;
+
+    public int turnCount;
+
+    [Header("Íå òğîãàòü!")]
+    public bool isBuff;
 }

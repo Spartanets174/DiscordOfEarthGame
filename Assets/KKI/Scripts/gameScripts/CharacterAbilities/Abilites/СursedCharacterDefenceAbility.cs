@@ -6,20 +6,18 @@ using UnityEngine;
 [Serializable]
 public class СursedCharacterDefenceAbility : BaseCharacterAbility, ITurnCountable
 {
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
 
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
+    private СursedCharacterDefenceAbilityData abilityData;
     public event Action<ITurnCountable> OnReturnToNormal;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
+        abilityData = (СursedCharacterDefenceAbilityData)characterAbilityData;
         SetCardSelectBehaviour(new EmptySelectBehaviour("Используйте карту"));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -40,4 +38,12 @@ public class СursedCharacterDefenceAbility : BaseCharacterAbility, ITurnCountab
         OnReturnToNormal?.Invoke(this);
     }
 
+}
+[Serializable]
+public class СursedCharacterDefenceAbilityData : BaseCharacterAbilityData
+{
+    public int turnCount;
+
+    [Header("НЕ трогать!")]
+    public bool isBuff;
 }

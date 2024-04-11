@@ -3,22 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[Serializable]
 public class ForestLadsDefenceAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float physDefenceAmount;
-
-    [SerializeField]
-    private float magDefenceAmount;
-
+    private ForestLadsDefenceAbilityData abilityData;
 
     private List<Character> characters = new List<Character>();
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Выберите союзного персонажа для баффа", battleSystem));
+        abilityData = (ForestLadsDefenceAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectAbilityText, battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
@@ -42,20 +37,20 @@ public class ForestLadsDefenceAbility : BaseCharacterAbility
         if (battleSystem.State is PlayerTurn)
         {
             character = battleSystem.PlayerController.CurrentPlayerCharacter;
-            character.PhysDefence += physDefenceAmount;
-            character.MagDefence += magDefenceAmount;
+            character.PhysDefence += abilityData.physDefenceAmount;
+            character.MagDefence += abilityData.magDefenceAmount;
         }
         else
         {
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
-            character.PhysDefence += physDefenceAmount;
-            character.MagDefence += magDefenceAmount;
+            character.PhysDefence += abilityData.physDefenceAmount;
+            character.MagDefence += abilityData.magDefenceAmount;
         }
 
-        characters.Add(GetNextCharacterByDirection(character.PositionOnField, Enums.Directions.top, 1));
-        characters.Add(GetNextCharacterByDirection(character.PositionOnField, Enums.Directions.bottom, 1));
-        characters.Add(GetNextCharacterByDirection(character.PositionOnField, Enums.Directions.right, 1));
-        characters.Add(GetNextCharacterByDirection(character.PositionOnField, Enums.Directions.left, 1));
+        characters.Add(GetNextCharacterByDirection(character.PositionOnField, Enums.Directions.top, abilityData.range));
+        characters.Add(GetNextCharacterByDirection(character.PositionOnField, Enums.Directions.bottom, abilityData.range));
+        characters.Add(GetNextCharacterByDirection(character.PositionOnField, Enums.Directions.right, abilityData.range));
+        characters.Add(GetNextCharacterByDirection(character.PositionOnField, Enums.Directions.left, abilityData.range));
 
         characters = characters.Where(x => x != null).ToList();
         if (characters.Count > 0)
@@ -142,4 +137,15 @@ public class ForestLadsDefenceAbility : BaseCharacterAbility
         }
         return null;
     }
+}
+[Serializable]
+public class ForestLadsDefenceAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public int range;
+
+    public float physDefenceAmount;
+
+    public float magDefenceAmount;
 }

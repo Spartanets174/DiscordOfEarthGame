@@ -4,24 +4,17 @@ using UnityEngine;
 [Serializable]
 public class FallenElfCharacterAttackAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float damage;
-
-    [SerializeField]
-    private int range;
-
-    [SerializeField]
-    private float healPercent;
-
+    private FallenElfCharacterAttackAbilityData abilityData;
     private SelectCellsWithCharactersInRangeBehaviour selectCellsToAttackInRangeBehaviour;
     private FormulaAttackSelectedÑharacterBehaviour formulaAttackSelectedÑharacterBehaviour;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour("Íàæìèòå íà ïåğñîíàæà â êğàñíîé êëåòêå äëÿ àòàêè", battleSystem, abilityOwner, range, "attack"));
-        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(damage, battleSystem, abilityOwner, "\"Ïîòîê\""));
+        abilityData = (FallenElfCharacterAttackAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour(abilityData.selectAbilityText, battleSystem, abilityOwner, abilityData.range, "attack"));
+        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(abilityData.damage, battleSystem, abilityOwner, $"\"{abilityData.abilityName}\""));
 
         selectCellsToAttackInRangeBehaviour = (SelectCellsWithCharactersInRangeBehaviour)CardSelectBehaviour;
         formulaAttackSelectedÑharacterBehaviour = (FormulaAttackSelectedÑharacterBehaviour)UseCardBehaviour;
@@ -45,7 +38,7 @@ public class FallenElfCharacterAttackAbility : BaseCharacterAbility
 
     private void OnCardUse()
     {
-        abilityOwner.Heal(formulaAttackSelectedÑharacterBehaviour.attackedCharacter.LastDamageAmount * healPercent);
+        abilityOwner.Heal(formulaAttackSelectedÑharacterBehaviour.attackedCharacter.LastDamageAmount * abilityData.healPercent);
         OnCancelSelection();
     }
 
@@ -58,4 +51,15 @@ public class FallenElfCharacterAttackAbility : BaseCharacterAbility
         selectCellsToAttackInRangeBehaviour.charactersDirectionsOnCells.Clear();
         battleSystem.PlayerController.SetPlayerStates(true, false);
     }
+}
+[Serializable]
+public class FallenElfCharacterAttackAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public float damage;
+
+    public int range;
+
+    public float healPercent;
 }

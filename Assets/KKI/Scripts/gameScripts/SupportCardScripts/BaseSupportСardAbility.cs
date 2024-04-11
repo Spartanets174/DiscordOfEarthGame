@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public abstract class BaseSupportСardAbility 
+public abstract class BaseSupportСardAbility: MonoBehaviour
 {
     protected BattleSystem battleSystem;
 
@@ -89,5 +89,5 @@ public abstract class BaseSupportСardAbility
         OnUsingCancel?.Invoke(this);
     }
 
-    public abstract void Init(BattleSystem battleSystem);
+    public abstract void Init(BattleSystem battleSystem, BaseSupportСardAbilityData baseSupportСardAbilityData);
 }

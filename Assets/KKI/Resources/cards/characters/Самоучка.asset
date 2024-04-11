@@ -52,32 +52,15 @@ MonoBehaviour:
     \u0435\u0434 \u0443\u0440\u043E\u043D\u0430"
   passiveCharacterAbilityData:
     rid: 2085506596913807366
-  attackCharacterAbility:
-    rid: 2085506459617460232
-  defenceCharacterAbility:
-    rid: 2085506459617460233
-  buffCharacterAbility:
-    rid: 2085506459617460234
+  attackCharacterAbilityData:
+    rid: 2085506640524869717
+  defenceCharacterAbilityData:
+    rid: 2085506640524869718
+  buffCharacterAbilityData:
+    rid: 2085506640524869720
   references:
     version: 2
     RefIds:
-    - rid: 2085506459617460232
-      type: {class: SelfTaughtCharacterAttackAbility, ns: , asm: Assembly-CSharp}
-      data:
-        m_typeOfAbility: 0
-        damage: 1
-        range: 5
-    - rid: 2085506459617460233
-      type: {class: SelfTaughtCharacterDefenceAbility, ns: , asm: Assembly-CSharp}
-      data:
-        m_typeOfAbility: 1
-        m_turnCount: 1
-        m_isBuff: 1
-    - rid: 2085506459617460234
-      type: {class: SelfTaughtCharacterBuffAbility, ns: , asm: Assembly-CSharp}
-      data:
-        m_typeOfAbility: 2
-        physDamageAmount: 1
     - rid: 2085506596913807366
       type: {class: SelfTaughtedCharacterPassiveAbilityData, ns: , asm: Assembly-CSharp}
       data:
@@ -89,3 +72,45 @@ MonoBehaviour:
         abilityName: "\u0421\u043C\u0435\u0440\u0442\u044C \u043F\u0430\u043B\u0430\u0434\u0438\u043D\u0430\u043C"
         damageIncrease: 0.1
         classToIncreaseDamage: 1
+    - rid: 2085506640524869717
+      type: {class: SelfTaughtCharacterAttackAbilityData, ns: , asm: Assembly-CSharp}
+      data:
+        characterAbility:
+          GuidAssignmentFailed: 0
+          GUID: cc24deb9acaf61842af5a8ec7c509109
+          _typeNameAndAssembly: SelfTaughtCharacterAttackAbility, Assembly-CSharp
+          _suppressLogs: 0
+        abilityName: "\u0421\u043C\u0435\u0440\u0442\u0435\u043B\u044C\u043D\u0430\u044F
+          \u0434\u0440\u043E\u0431\u044C"
+        selectAbilityText: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0440\u0430\u0436\u0435\u0441\u043A\u043E\u0433\u043E
+          \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u0436\u0430 \u0434\u043B\u044F
+          \u0430\u0442\u0430\u043A\u0438"
+        damage: 1.5
+        range: 4
+    - rid: 2085506640524869718
+      type: {class: SelfTaughtCharacterDefenceAbilityData, ns: , asm: Assembly-CSharp}
+      data:
+        characterAbility:
+          GuidAssignmentFailed: 0
+          GUID: 5708734c31a5e4a43bea87f5f822b60e
+          _typeNameAndAssembly: SelfTaughtCharacterDefenceAbility, Assembly-CSharp
+          _suppressLogs: 0
+        abilityName: "\u0421\u043E\u0437\u0434\u0430\u0432\u0430\u0439"
+        selectAbilityText: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u043E\u044E\u0437\u043D\u043E\u0433\u043E
+          \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u0436\u0430 \u0434\u043B\u044F
+          \u0437\u0430\u0449\u0438\u0442\u044B \u043A\u0443\u043F\u043E\u043B\u043E\u043C"
+        turnCount: 1
+        isBuff: 1
+    - rid: 2085506640524869720
+      type: {class: SelfTaughtCharacterBuffAbilityData, ns: , asm: Assembly-CSharp}
+      data:
+        characterAbility:
+          GuidAssignmentFailed: 0
+          GUID: 1b4252b63bdec854ba6f2861592d6a55
+          _typeNameAndAssembly: SelfTaughtCharacterBuffAbility, Assembly-CSharp
+          _suppressLogs: 0
+        abilityName: "\u041D\u0430\u0447\u0435\u0440\u0442\u0430\u043D\u0438\u0435"
+        selectAbilityText: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u043E\u044E\u0437\u043D\u043E\u0433\u043E
+          \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u0436\u0430 \u0434\u043B\u044F
+          \u0443\u0441\u0438\u043B\u0435\u043D\u0438\u044F"
+        physDamageAmount: 1

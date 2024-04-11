@@ -6,17 +6,15 @@ using UnityEngine;
 [Serializable]
 public class SelfTaughtCharacterBuffAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float physDamageAmount;
-
-
+    private SelfTaughtCharacterBuffAbilityData abilityData;
     private Character character;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour("Выберите союзного персонажа для баффа", battleSystem));
+        abilityData = (SelfTaughtCharacterBuffAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectAbilityText, battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
@@ -45,7 +43,7 @@ public class SelfTaughtCharacterBuffAbility : BaseCharacterAbility
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
 
-        character.PhysAttack += physDamageAmount;
+        character.PhysAttack += abilityData.physDamageAmount;
 
         battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {
@@ -62,4 +60,11 @@ public class SelfTaughtCharacterBuffAbility : BaseCharacterAbility
             playerCharacter.OnClick -= SelectCharacter;
         }
     }
+}
+[Serializable]
+public class SelfTaughtCharacterBuffAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public float physDamageAmount;
 }

@@ -1,21 +1,14 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 [Serializable]
 public class VoidShooterCharacterDefenceAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float physDefenceAmount;
-
-    [SerializeField]
-    private float magDefenceAmount;
-
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private VoidShooterCharacterDefenceAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
+        abilityData = (VoidShooterCharacterDefenceAbilityData)characterAbilityData;
         SetCardSelectBehaviour(new EmptySelectBehaviour(""));
         SetUseCardBehaviour(new EmptyUseAbilityBehaviour());
 
@@ -26,8 +19,8 @@ public class VoidShooterCharacterDefenceAbility : BaseCharacterAbility
 
     private void OnSelected()
     {
-        abilityOwner.PhysDefence += physDefenceAmount;
-        abilityOwner.MagDefence += magDefenceAmount;
+        abilityOwner.PhysDefence += abilityData.physDefenceAmount;
+        abilityOwner.MagDefence += abilityData.magDefenceAmount;
         UseCard(abilityOwner.gameObject);
     }
 
@@ -42,3 +35,10 @@ public class VoidShooterCharacterDefenceAbility : BaseCharacterAbility
     }
 }
 
+[Serializable]
+public class VoidShooterCharacterDefenceAbilityData : BaseCharacterAbilityData
+{
+    public float physDefenceAmount;
+
+    public float magDefenceAmount;
+}

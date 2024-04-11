@@ -6,31 +6,19 @@ using UnityEngine;
 [Serializable]
 public class MagicToadCharacterBuffAbility : BaseCharacterAbility, ITurnCountable
 {
-    [SerializeField]
-    private float healthAmount;
-
-    [SerializeField]
-    private float magDefenceAmount;
-
-    [SerializeField]
-    private float physDefenceAmount;
-
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
 
     private float healAmount;
     public event Action<ITurnCountable> OnReturnToNormal;
 
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private MagicToadCharacterBuffAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
+        abilityData = (MagicToadCharacterBuffAbilityData)characterAbilityData;
         SetCardSelectBehaviour(new EmptySelectBehaviour("Используйте карту"));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -38,9 +26,9 @@ public class MagicToadCharacterBuffAbility : BaseCharacterAbility, ITurnCountabl
 
     private void OnSelected()
     {
-        abilityOwner.PhysDefence += physDefenceAmount;
-        abilityOwner.MagDefence += magDefenceAmount;
-        abilityOwner.Heal(healthAmount);
+        abilityOwner.PhysDefence += abilityData.physDefenceAmount;
+        abilityOwner.MagDefence += abilityData.magDefenceAmount;
+        abilityOwner.Heal(abilityData.healthAmount);
         healAmount = abilityOwner.LastHealAmount;
 
         m_cardSelectBehaviour.OnSelected -= OnSelected;
@@ -49,9 +37,23 @@ public class MagicToadCharacterBuffAbility : BaseCharacterAbility, ITurnCountabl
 
     public void ReturnToNormal()
     {
-        abilityOwner.PhysDefence -= physDefenceAmount;
-        abilityOwner.MagDefence -= magDefenceAmount;
-        abilityOwner.Damage(healAmount, "Склизкая оболочка");
+        abilityOwner.PhysDefence -= abilityData.physDefenceAmount;
+        abilityOwner.MagDefence -= abilityData.magDefenceAmount;
+        abilityOwner.Damage(healAmount, $"{abilityData.abilityName}");
         OnReturnToNormal?.Invoke(this);
     }
+}
+[Serializable]
+public class MagicToadCharacterBuffAbilityData : BaseCharacterAbilityData
+{
+    public float healthAmount;
+
+    public float magDefenceAmount;
+
+    public float physDefenceAmount;
+
+    public int turnCount;
+
+    [Header("Не трогать!!!")]
+    public bool isBuff;
 }

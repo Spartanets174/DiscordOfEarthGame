@@ -1,38 +1,24 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.SocialPlatforms;
 
 [Serializable]
 public class OldMasterCharacterAttackAbility : BaseCharacterAbility, ITurnCountable
 {
-    [SerializeField]
-    private float damage;
-
-    [SerializeField]
-    private int range;
-
-    [SerializeField]
-    private int m_turnCount;
-    public int TurnCount { get => m_turnCount; set => m_turnCount = value; }
-
-    [SerializeField]
-    private bool m_isBuff;
-    public bool IsBuff { get => m_isBuff; }
+    public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
+    public bool IsBuff { get => abilityData.isBuff; }
 
     public event Action<ITurnCountable> OnReturnToNormal;
 
     private SelectCellsWithCharactersInRangeBehaviour selectCellsToAttackInRangeBehaviour;
     private FormulaAttackSelectedÑharacterBehaviour formulaAttackSelectedÑharacterBehaviour;
-
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private OldMasterCharacterAttackAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour("Íàæìèòå íà ïåğñîíàæà â êğàñíîé êëåòêå äëÿ àòàêè", battleSystem, abilityOwner, range, "attack"));
-        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(damage, battleSystem, abilityOwner, "\"Âàì íå óáåæàòü\""));
+        abilityData = (OldMasterCharacterAttackAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour(abilityData.selectAbilityText, battleSystem, abilityOwner, abilityData.range, "attack"));
+        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(abilityData.damage, battleSystem, abilityOwner, $"\"{abilityData.abilityName}\""));
 
         selectCellsToAttackInRangeBehaviour = (SelectCellsWithCharactersInRangeBehaviour)CardSelectBehaviour;
         formulaAttackSelectedÑharacterBehaviour = (FormulaAttackSelectedÑharacterBehaviour)UseCardBehaviour;
@@ -76,4 +62,18 @@ public class OldMasterCharacterAttackAbility : BaseCharacterAbility, ITurnCounta
 
         OnReturnToNormal?.Invoke(this);
     }
+}
+[Serializable]
+public class OldMasterCharacterAttackAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public float damage;
+
+    public int range;
+
+    public int turnCount;
+
+    [Header("ÍÅ òğîãàòü!")]
+    public bool isBuff;
 }

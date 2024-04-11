@@ -80,7 +80,7 @@ MonoBehaviour:
   allUserCharCards: []
   allUserSupportCards: []
   deckUserCharCards:
-  - {fileID: 11400000, guid: 7c1bf058d4094a148b9ec544c8523b87, type: 2}
+  - {fileID: 11400000, guid: 8ddad6f2dd7fae749ab585f3bc109f72, type: 2}
   - {fileID: 11400000, guid: 14cbde657a3173347af9823bb863e1d9, type: 2}
   - {fileID: 11400000, guid: d745ccd1720745248852e6cccc78a53a, type: 2}
   - {fileID: 11400000, guid: 5dc9179130fd1504c8ce4aefc55c8249, type: 2}

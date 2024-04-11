@@ -5,24 +5,17 @@ using UnityEngine;
 [Serializable]
 public class ForestLadsAttackAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private float increaseDamageAmount;
-    [SerializeField]
-    private float decreaseDamageAmount;
-
-    [SerializeField]
-    private int range;
-
     private SelectCellsWithCharactersInRangeBehaviour selectCellsToAttackInRangeBehaviour;
     private FormulaAttackSelectedÑharacterBehaviour formulaAttackSelectedÑharacterBehaviour;
-
-    public override void Init(BattleSystem battleSystem, Character owner)
+    private ForestLadsAttackAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData)
     {
         this.abilityOwner = owner;
         this.battleSystem = battleSystem;
-        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour("Íàæìèòå íà ïåğñîíàæà â êğàñíîé êëåòêå äëÿ àòàêè", battleSystem, abilityOwner, range, "attack"));
+        abilityData = (ForestLadsAttackAbilityData)characterAbilityData;
+        SetCardSelectBehaviour(new SelectCellsWithCharactersInRangeBehaviour(abilityData.selectAbilityText, battleSystem, abilityOwner, abilityData.range, "attack"));
         SetSelectCharacterBehaviour(new SetCurrentEnemyCharacterBehaviour("", battleSystem));
-        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(abilityOwner.PhysAttack * (1 + increaseDamageAmount), battleSystem, abilityOwner, "\"Òû ìîÿ öåëü\""));
+        SetUseCardBehaviour(new FormulaAttackSelectedÑharacterBehaviour(abilityOwner.PhysAttack * (1 + abilityData.increaseDamageAmount), battleSystem, abilityOwner, $"\"{abilityData.abilityName}\""));
 
         selectCellsToAttackInRangeBehaviour = (SelectCellsWithCharactersInRangeBehaviour)CardSelectBehaviour;
         formulaAttackSelectedÑharacterBehaviour = (FormulaAttackSelectedÑharacterBehaviour)UseCardBehaviour;
@@ -62,7 +55,7 @@ public class ForestLadsAttackAbility : BaseCharacterAbility
         UseCard(firstCharacter.gameObject);
         if (secondCharacter!=null)
         {
-            formulaAttackSelectedÑharacterBehaviour.damage = abilityOwner.PhysAttack * (1 - decreaseDamageAmount);
+            formulaAttackSelectedÑharacterBehaviour.damage = abilityOwner.PhysAttack * (1 - abilityData.decreaseDamageAmount);
             UseCard(secondCharacter.gameObject);
             battleSystem.PointsOfAction.Value += 11;
         }
@@ -144,4 +137,14 @@ public class ForestLadsAttackAbility : BaseCharacterAbility
         }
         return null;
     }
+}
+[Serializable]
+public class ForestLadsAttackAbilityData : BaseCharacterAbilityData
+{
+    public string selectAbilityText;
+
+    public float increaseDamageAmount;
+    public float decreaseDamageAmount;
+
+    public int range;
 }

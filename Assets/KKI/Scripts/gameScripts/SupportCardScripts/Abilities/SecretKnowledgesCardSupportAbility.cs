@@ -6,12 +6,11 @@ using UnityEngine;
 [Serializable]
 public class SecretKnowledgesCardSupportAbility : BaseSupportÑardAbility
 {
-    [SerializeField]
-    private int pointsOfUsingAbility;
-    public override void Init(BattleSystem battleSystem)
+    private SecretKnowledgesCardSupportAbilityData abilityData;
+    public override void Init(BattleSystem battleSystem, BaseSupportÑardAbilityData baseAbilityData)
     {
         this.battleSystem = battleSystem;
-
+        abilityData = (SecretKnowledgesCardSupportAbilityData)baseAbilityData;
         SetCardSelectBehaviour(new EmptySelectBehaviour("Èñïîëüçóéòå êàðòó"));
 
         m_cardSelectBehaviour.OnSelected += OnSelected;
@@ -23,17 +22,22 @@ public class SecretKnowledgesCardSupportAbility : BaseSupportÑardAbility
         {
             foreach (var character in battleSystem.PlayerController.PlayerCharactersObjects)
             {
-                character.UseAbilityCost = pointsOfUsingAbility;
+                character.UseAbilityCost = abilityData.pointsOfUsingAbility;
             }
         }
         else
         {
             foreach (var character in battleSystem.EnemyController.EnemyCharObjects)
             {
-                character.UseAbilityCost = pointsOfUsingAbility;
+                character.UseAbilityCost = abilityData.pointsOfUsingAbility;
             }
         }
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(null);
     }
+}
+[Serializable]
+public class SecretKnowledgesCardSupportAbilityData : BaseSupportÑardAbilityData
+{
+    public int pointsOfUsingAbility;
 }
