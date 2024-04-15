@@ -19,7 +19,7 @@ public class WallEnemyCharacter : StaticEnemyCharacter
     {
         if (canDamage)
         {
-            LastAttackedCharacter.Damage(LastDamageAmount * 0.3f, name);
+            LastAttackedCharacter.Damage(LastDamageAmount * 0.3f, CharacterName);
         }
         
     }

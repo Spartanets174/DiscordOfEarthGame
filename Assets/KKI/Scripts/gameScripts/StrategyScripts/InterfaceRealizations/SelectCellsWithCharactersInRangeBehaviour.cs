@@ -119,13 +119,20 @@ public class SelectCellsWithCharactersInRangeBehaviour : ICardSelectable
                 {
                     cell.SetColor(materialKey);
                     charactersOnCells.Add(enemy);
-                    charactersDirectionsOnCells.Add(direction, enemy);
+                    if (!charactersDirectionsOnCells.ContainsKey(direction))
+                    {
+                        charactersDirectionsOnCells.Add(direction, enemy);
+                    }
+                    
                 }
                 if (kostilEnemy != null)
                 {
                     cell.SetColor(materialKey);
                     charactersOnCells.Add(kostilEnemy.WallEnemyCharacter);
-                    charactersDirectionsOnCells.Add(direction, enemy);
+                    if (!charactersDirectionsOnCells.ContainsKey(direction))
+                    {
+                        charactersDirectionsOnCells.Add(direction, enemy);
+                    }
                 }
                 if (character.Class == Enums.Classes.Маг)
                 {

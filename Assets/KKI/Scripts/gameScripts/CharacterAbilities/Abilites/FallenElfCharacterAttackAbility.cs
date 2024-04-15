@@ -38,7 +38,7 @@ public class FallenElfCharacterAttackAbility : BaseCharacterAbility
 
     private void OnCardUse()
     {
-        abilityOwner.Heal(formulaAttackSelected—haracterBehaviour.attackedCharacter.LastDamageAmount * abilityData.healPercent);
+        abilityOwner.Heal(formulaAttackSelected—haracterBehaviour.attackedCharacter.LastDamageAmount * abilityData.healPercent, abilityOwner.CharacterName);
         OnCancelSelection();
     }
 

@@ -15,7 +15,7 @@ public class PlayerCharacter : Character
     {
         base.SetData(card, material, index);
         m_index = index;
-        healthBar.SetHealth(card.health);
+        healthBar.SetHealth(card.health, 1);
         healthBar.SetMaxHealth(card.health);
         m_card = card;
     }

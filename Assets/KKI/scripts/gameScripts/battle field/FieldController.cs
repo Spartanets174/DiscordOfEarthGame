@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using UnityEngine;
 
 public class FieldController : MonoBehaviour, ILoadable
@@ -32,7 +30,7 @@ public class FieldController : MonoBehaviour, ILoadable
                 else
                 {
                     spawnedTile = Instantiate(cellPrefab, Vector3.zero, Quaternion.identity, transform);
-                    
+
                 }
                 if ((j == 4 || j == 6) && i % 2 != 0)
                 {
@@ -41,9 +39,9 @@ public class FieldController : MonoBehaviour, ILoadable
                 }
 
                 spawnedTile.SetCellMovable();
-                
-                spawnedTile.transform.localPosition = new Vector3(j * -0.27f, 0, i * -0.27f);              
-                spawnedTile.SetCellState(true);              
+
+                spawnedTile.transform.localPosition = new Vector3(j * -0.27f, 0, i * -0.27f);
+                spawnedTile.SetCellState(true);
                 spawnedTile.IsEnabled = true;
                 spawnedTile.CellIndex = new Vector2(i, j);
 
@@ -60,7 +58,7 @@ public class FieldController : MonoBehaviour, ILoadable
         {
             for (int j = 0; j < CellsOfFieled.GetLength(1); j++)
             {
-                action?.Invoke(CellsOfFieled[i,j]);
+                action?.Invoke(CellsOfFieled[i, j]);
             }
         }
     }
@@ -121,8 +119,8 @@ public class FieldController : MonoBehaviour, ILoadable
         int y = y0;
         for (int x = x0; x <= x1; x++)
         {
-            Cell cell =  GetCell((steep ? y : x), (steep ? x : y));
-            if (cell == startCell) continue;            
+            Cell cell = GetCell((steep ? y : x), (steep ? x : y));
+            if (cell == startCell) continue;
             error = error - dy;
             if (error < 0)
             {
@@ -140,7 +138,7 @@ public class FieldController : MonoBehaviour, ILoadable
             moveCost += gameState is PlayerTurn ? cell.TransitionCostPlayer : cell.TransitionCostEnemy;
         }
         return moveCost;
-    }   
+    }
 
     public Cell GetCell(int i, int j)
     {
@@ -168,24 +166,45 @@ public class FieldController : MonoBehaviour, ILoadable
         return GetCell((int)newI, (int)newJ);
     }
 
-    public List<Cell> GetCellsForMove(Character character, int numberOfCells)
+    public List<Cell> GetCellsForMove(Character character, int speed)
     {
         List<Cell> cellsToMove = new();
         bool top = true;
         bool bottom = true;
         bool left = true;
         bool rigth = true;
-        for (int i = 1; i <= numberOfCells; i++)
+        int topCount = speed;
+        int bottomCount = speed;
+        int leftCount = speed;
+        int rigthCount = speed;
+        for (int i = 1; i <= speed; i++)
         {
             Cell topCell = GetCellForMove(-i, 0, character.PositionOnField);
             Cell bottomCell = GetCellForMove(0, -i, character.PositionOnField);
             Cell leftCell = GetCellForMove(i, 0, character.PositionOnField);
             Cell rigtCell = GetCellForMove(0, i, character.PositionOnField);
 
-            top = topCell != null && top;
-            bottom = bottomCell != null && bottom;
-            rigth = rigtCell != null && rigth;
-            left = leftCell != null && left;
+            if (BattleSystem.Instance.State is PlayerTurn)
+            {
+                topCount -= topCell == null ? 0 : topCell.TransitionCostPlayer;
+                bottomCount -= bottomCell == null ? 0 : bottomCell.TransitionCostPlayer;
+                leftCount -= leftCell == null ? 0 : leftCell.TransitionCostPlayer;
+                rigthCount -= rigtCell == null ? 0 : rigtCell.TransitionCostPlayer;
+
+            }
+            else
+            {
+                topCount -= topCell == null ? 0 : topCell.TransitionCostEnemy;
+                bottomCount -= bottomCell == null ? 0 : bottomCell.TransitionCostEnemy;
+                leftCount -= leftCell == null ? 0 : leftCell.TransitionCostEnemy;
+                rigthCount -= rigtCell == null ? 0 : rigtCell.TransitionCostEnemy;
+            }
+
+
+            top = topCell != null && top && topCount >= 0;
+            bottom = bottomCell != null && bottom && bottomCount >= 0;
+            rigth = rigtCell != null && rigth && leftCount >= 0;
+            left = leftCell != null && left && rigthCount >= 0;
 
             SetActiveCell(topCell, top, cellsToMove);
             SetActiveCell(bottomCell, bottom, cellsToMove);

@@ -26,7 +26,7 @@ public class SentinelCharacterAttackAbility : BaseCharacterAbility
     }
     private void OnSelected()
     {
-        attackSelected—haractersBehaviour.characters= selectCellsToAttackInRangeBehaviour.charactersOnCells;
+        attackSelected—haractersBehaviour.characters.AddRange(selectCellsToAttackInRangeBehaviour.charactersOnCells);
         foreach (var character in attackSelected—haractersBehaviour.characters)
         {
             character.PhysDefence -=abilityData.physDefenceAmount;

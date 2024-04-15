@@ -18,11 +18,14 @@ public class MaidenOnUnicornCharacterBuffBehaviour : BaseCharacterAbility, ITurn
         abilityData = (MaidenOnUnicornCharacterBuffBehaviourData)characterAbilityData;
         SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectAbilityText, battleSystem));
         SetSelectCharacterBehaviour(new EmptySelectCharacterBehaviour(""));
+        SetUseCardBehaviour(new EmptyUseAbilityBehaviour());
 
         m_cardSelectBehaviour.OnCancelSelection += OnCancelSelection;
         m_cardSelectBehaviour.OnSelected += OnSelected;
+        m_useCardBehaviour.OnCardUse += OnCardUse;
         m_selectCharacterBehaviour.OnSelectCharacter += OnSelectCharacter;
     }
+
 
     private void OnSelected()
     {
@@ -54,10 +57,13 @@ public class MaidenOnUnicornCharacterBuffBehaviour : BaseCharacterAbility, ITurn
         UseCard(character.gameObject);
     }
 
+    private void OnCardUse()
+    {
+        OnCancelSelection();
+    }
 
     private void OnCancelSelection()
     {
-        battleSystem.EnemyController.SetEnemiesStates(true, false);
         battleSystem.PlayerController.SetPlayerStates(true, false, x =>
         {
             x.OnClick -= SelectCharacter;

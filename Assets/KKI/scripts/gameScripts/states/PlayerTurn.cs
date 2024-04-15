@@ -14,7 +14,6 @@ public class PlayerTurn : State
 
     private List<Cell> cellsToMove = new();
     private List<Enemy> enemiesToAttack = new();
-    private CompositeDisposable disposables = new();
 
     public PlayerTurn(BattleSystem battleSystem) : base(battleSystem)
     {
@@ -22,9 +21,8 @@ public class PlayerTurn : State
 
     public override IEnumerator Start()
     {
-        /*Логика при выборе старте*/
-        new WaitForSecondsRealtime(1f);
-     
+        IsSupportCardUsed = false;
+
         BattleSystem.PointsOfAction.Value = 20;
 
         CheckPlayerTurnCountables();
@@ -34,6 +32,10 @@ public class PlayerTurn : State
 
         OnStateStarted += OnPlayerTurnStarted;
         OnStateCompleted += OnPlayerTurnCompleted;
+
+        new WaitForSecondsRealtime(1f);
+     
+        
 
      
         OnStateStartedInvoke();

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class YouWontCatchSupportCardAbility : BaseSupport—ardAbility, ITurnCountable
@@ -49,8 +50,8 @@ public class YouWontCatchSupportCardAbility : BaseSupport—ardAbility, ITurnCount
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
 
-        physAmount *= abilityData.increacePercent;
-        magAmount *= abilityData.increacePercent;
+        physAmount = (character.PhysAttack * (1+ abilityData.increacePercent)) - character.PhysAttack;
+        magAmount = (character.MagAttack * (1 + abilityData.increacePercent)) - character.MagAttack;
 
 
         character.MagAttack += magAmount;

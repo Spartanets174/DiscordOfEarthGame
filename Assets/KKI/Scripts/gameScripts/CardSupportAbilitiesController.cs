@@ -58,7 +58,7 @@ public class CardSupportAbilitiesController : MonoBehaviour, ILoadable
 
             StartCoroutine(SetPosDelayed(cardDisplay.DragAndDropComponent));
 
-            
+
             cardDisplay.IsEnabled = false;
 
             cardDisplay.DragAndDropComponent.OnBeginDragEvent += OnBeginDrag;
@@ -79,7 +79,7 @@ public class CardSupportAbilitiesController : MonoBehaviour, ILoadable
         foreach (var item in GameSupportCards)
         {
             item.DragAndDropComponent.OnDropEvent += battleSystem.OnSupportCardButton;
-            item.DragAndDropComponent.OnDropEvent += (x)=> battleSystem.FieldController.TurnOnCells(); ;
+            item.DragAndDropComponent.OnDropEvent += (x) => battleSystem.FieldController.TurnOnCells(); ;
         }
 
         currentGameSupportCardDisplay.Where(x => x != null).Subscribe(x =>
@@ -87,10 +87,17 @@ public class CardSupportAbilitiesController : MonoBehaviour, ILoadable
             SetTipsText(x.GameSupport—ardAbility.CardSelectBehaviour.SelectCardTipText);
             OnSupportAbilitySelected?.Invoke();
         }).AddTo(disposables);
+        battleSystem.OnPlayerTurnStarted += OnPlayerTurnStarted;
 
         SetBlockersState(false);
         tipsTextParent.SetActive(false);
     }
+
+    private void OnPlayerTurnStarted(PlayerTurn turn)
+    {
+        EnableSupportCards();      
+    }
+
 
     private void OnDestroy()
     {
@@ -109,6 +116,7 @@ public class CardSupportAbilitiesController : MonoBehaviour, ILoadable
                 cardDisplay.GameSupport—ardAbility.OnSupportCardAbilityUsed -= OnSupportCardAbilityUsed;
             }
         }
+        battleSystem.OnPlayerTurnStarted -= OnPlayerTurnStarted;
 
         disposables.Dispose();
         disposables.Clear();
@@ -140,6 +148,8 @@ public class CardSupportAbilitiesController : MonoBehaviour, ILoadable
         SetBlockersState(false);
         SetTipsText("");
 
+        battleSystem.State.IsSupportCardUsed = true;
+
         foreach (var cardDisplay in GameSupportCards)
         {
             cardDisplay.DragAndDropComponent.StartPos = cardDisplay.DragAndDropComponent.transform.localPosition;
@@ -148,7 +158,7 @@ public class CardSupportAbilitiesController : MonoBehaviour, ILoadable
     }
     private void OnDropEvent(GameObject gameObject)
     {
-        SetEnabledToSupportCards(false);
+        DisableSupportCards();
         gameObject.SetActive(false);
         SetBlockersState(false);
         currentGameSupportCardDisplay.Value = gameObject.GetComponent<GameSupportCardDisplay>();
@@ -177,19 +187,25 @@ public class CardSupportAbilitiesController : MonoBehaviour, ILoadable
         bottomBlocker.SetActive(state);
         centerBlocker.SetActive(state);
     }
-    public void SetEnabledToSupportCards(bool state)
+    public void EnableSupportCards()
+    {
+        if (!battleSystem.State.IsSupportCardUsed)
+        {
+            SetEnabledToSupportCards(true);
+        }
+    }
+    public void DisableSupportCards()
+    {
+        SetEnabledToSupportCards(false);
+    }
+    private void SetEnabledToSupportCards(bool state)
     {
         foreach (var SupportCard in GameSupportCards)
         {
             SupportCard.IsEnabled = state;
+            SupportCard.DragAndDropComponent.IsAllowedToDrag = state;
         }
-    }
-    public void SetDragAllowToSupportCards(bool state)
-    {
-        foreach (var cardDisplay in GameSupportCards)
-        {
-            cardDisplay.DragAndDropComponent.IsAllowedToDrag = state;
-        }
+
     }
     private IEnumerator SetPosDelayed(DragAndDropComponent dragAndDropComponent)
     {

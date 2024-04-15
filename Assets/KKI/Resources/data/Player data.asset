@@ -80,19 +80,18 @@ MonoBehaviour:
   allUserCharCards: []
   allUserSupportCards: []
   deckUserCharCards:
-  - {fileID: 11400000, guid: 8ddad6f2dd7fae749ab585f3bc109f72, type: 2}
-  - {fileID: 11400000, guid: 14cbde657a3173347af9823bb863e1d9, type: 2}
+  - {fileID: 11400000, guid: 3c0d8d76eb182f4448c9ab5176ac15a4, type: 2}
+  - {fileID: 11400000, guid: 93fa790d82335fb429e52d537e81876b, type: 2}
+  - {fileID: 11400000, guid: 3a1f88c195808ea4eabf1b3bccc95de9, type: 2}
+  - {fileID: 11400000, guid: 3ca1373b7a605eb40bceec110a4e19d6, type: 2}
   - {fileID: 11400000, guid: d745ccd1720745248852e6cccc78a53a, type: 2}
-  - {fileID: 11400000, guid: 5dc9179130fd1504c8ce4aefc55c8249, type: 2}
-  - {fileID: 11400000, guid: 07a973fb0c82eed4dae92921ad89407e, type: 2}
   deckUserSupportCards:
-  - {fileID: 11400000, guid: 8f5cbf164e1efd545bbc328802f0b632, type: 2}
-  - {fileID: 11400000, guid: df0aedd72128a1544ae2cc75ab6768fb, type: 2}
-  - {fileID: 11400000, guid: 4356bed165dbfaa448f3e1fb04adada3, type: 2}
-  - {fileID: 11400000, guid: db21915f334f3154280ff419b29fd575, type: 2}
-  - {fileID: 11400000, guid: 1ee5f89ca1b8b0c44a78b4c0d1dad92f, type: 2}
-  - {fileID: 11400000, guid: 8b4677ba62c957e44a32c1eaf62909f1, type: 2}
-  - {fileID: 11400000, guid: 53179920743f8c441b620df47da4bbb4, type: 2}
+  - {fileID: 11400000, guid: 3bcf693f0fa8a4b4ea27f58944bc4c9e, type: 2}
+  - {fileID: 11400000, guid: bc7c9e8a72f529a4dab187054b238ec8, type: 2}
+  - {fileID: 11400000, guid: 7c51c4de9e922d746a9886dabd133727, type: 2}
+  - {fileID: 11400000, guid: 01051d735d44b6d4d882ae4ff2cd2912, type: 2}
+  - {fileID: 11400000, guid: 119a4b4fc355b564cab1cb2438170384, type: 2}
+  - {fileID: 11400000, guid: 247e8b9ff08bba24080a9a0ca99b0d38, type: 2}
   money: 10000
   Name: "\u041D\u043E\u0432\u044B\u0439"
   Password: ssS@@

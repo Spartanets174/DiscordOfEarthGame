@@ -6,14 +6,6 @@ using UnityEngine;
 [Serializable]
 public class UnskillfullStudentCharacterBuffAbility : BaseCharacterAbility
 {
-    [SerializeField]
-    private int speedAmount;
-
-    [SerializeField]
-    private int rangeToMove;
-
-    [SerializeField]
-    private Enums.Directions directionToMove;
 
     private Character character;
     private UnskillfullStudentCharacterBuffAbilityData abilityData;
@@ -49,9 +41,9 @@ public class UnskillfullStudentCharacterBuffAbility : BaseCharacterAbility
 
         List<Cell> cells = new();
 
-        for (int i = 0; i < rangeToMove; i++)
+        for (int i = 0; i < abilityData.rangeToMove; i++)
         {
-            switch (directionToMove)
+            switch (abilityData.directionToMove)
             {
                 case Enums.Directions.top:
                     newJ--;
@@ -123,7 +115,7 @@ public class UnskillfullStudentCharacterBuffAbility : BaseCharacterAbility
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
 
-        character.MaxSpeed += speedAmount;
+        character.MaxSpeed += abilityData.speedAmount;
 
         Uncubscribe();
     }

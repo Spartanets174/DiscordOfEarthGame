@@ -43,7 +43,7 @@ public abstract class Character : OutlineInteractableObject
         private set 
         { 
             m_health = value;
-            healthBar.SetHealth(m_health);
+            healthBar.SetHealth(m_health,1);
         }
     }
 
@@ -152,26 +152,7 @@ public abstract class Character : OutlineInteractableObject
         set => m_chanceToAvoidDamage = value;
     }
 
-    private bool m_canBeDamaged;
-    public bool CanBeDamaged
-    {
-        get => m_canBeDamaged;
-        set => m_canBeDamaged = value;
-    }
-
-    private bool m_canDamage;
-    public bool CanDamage
-    {
-        get => m_canDamage;
-        set => m_canDamage = value;
-    }
-
-    protected bool m_isAttackedOnTheMove = false;
-    public bool IsAttackedOnTheMove
-    {
-        get => m_isAttackedOnTheMove;
-    }
-
+  
     protected float m_lastHealmount;
     public float LastHealAmount
     {
@@ -219,6 +200,26 @@ public abstract class Character : OutlineInteractableObject
             m_isChosen = value;
             SetOutlineState(IsChosen);
         }
+    }
+
+    private bool m_canBeDamaged;
+    public bool CanBeDamaged
+    {
+        get => m_canBeDamaged;
+        set => m_canBeDamaged = value;
+    }
+
+    private bool m_canDamage;
+    public bool CanDamage
+    {
+        get => m_canDamage;
+        set => m_canDamage = value;
+    }
+
+    protected bool m_isAttackedOnTheMove = false;
+    public bool IsAttackedOnTheMove
+    {
+        get => m_isAttackedOnTheMove;
     }
 
     private bool m_ignorePhysDamage;
@@ -341,7 +342,7 @@ public abstract class Character : OutlineInteractableObject
     public Dictionary<Enums.Classes, bool> CanBeDamagedByClassesDict => m_canBeDamagedByClassesDict;
 
     public event Action<Character> OnAttack;
-    public event Action<Character> OnHeal;
+    public event Action<Character, string, float> OnHeal;
     public event Action<Character> OnDeath;
     public event Action<Character, string, float> OnDamaged;
 
@@ -383,18 +384,23 @@ public abstract class Character : OutlineInteractableObject
         {
             Type type = m_card.attackCharacterAbilityData.characterAbility.Type;
             m_attackCharacterAbility = (BaseCharacterAbility)gameObject.AddComponent(type);
+            m_attackCharacterAbility.SetAbilityType(Enums.TypeOfAbility.attack);
         }
 
         if (m_card.defenceCharacterAbilityData != null)
         {
             Type type = m_card.defenceCharacterAbilityData.characterAbility.Type;
             m_defenceCharacterAbility = (BaseCharacterAbility)gameObject.AddComponent(type);
+            m_defenceCharacterAbility.SetAbilityType(Enums.TypeOfAbility.defence);
+
         }
 
         if (m_card.buffCharacterAbilityData != null)
         {
             Type type = m_card.buffCharacterAbilityData.characterAbility.Type;
             m_buffCharacterAbility = (BaseCharacterAbility)gameObject.AddComponent(type);
+            m_buffCharacterAbility.SetAbilityType(Enums.TypeOfAbility.buff);
+
         }
 
         m_physDamageMultiplier = 1;
@@ -585,27 +591,28 @@ public abstract class Character : OutlineInteractableObject
         }
     }
 
-    public void Heal(float amount)
+    public void Heal(float amount, string nameObject)
     {
         float temp = Health + amount;
         if (temp> m_maxHealth)
         {
             m_lastHealmount = m_maxHealth - Health;
             Health = m_maxHealth;
+            OnHeal?.Invoke(this, nameObject, m_lastHealmount);
         }
         else
         {
             Health = temp;
             m_lastHealmount = amount;
+            OnHeal?.Invoke(this, nameObject, amount);
         }
-        
-        OnHeal?.Invoke(this);
+
     }
 
-    public void HealMoreThenMax(float amount)
+    public void HealMoreThenMax(float amount, string nameObject)
     {
         Health += amount;
-        OnHeal?.Invoke(this);
+        OnHeal?.Invoke(this, nameObject, amount);
     }
 
     public void Move(int moveCost, Transform positionToMove)

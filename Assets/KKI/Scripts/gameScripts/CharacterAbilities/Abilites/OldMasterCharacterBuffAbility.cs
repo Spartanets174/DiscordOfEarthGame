@@ -38,13 +38,13 @@ public class OldMasterCharacterBuffAbility : BaseCharacterAbility, ITurnCountabl
 
             if (character.Health == character.MaxHealth)
             {
-                character.Heal(character.MaxHealth);
+                character.Heal(character.MaxHealth, abilityOwner.CharacterName);
                 healAmount = increaseAmount;
             }
             else
             {
                 healAmount = character.Health * abilityData.healthIcnreaseAmount;
-                character.Heal(healAmount);
+                character.Heal(healAmount, abilityOwner.CharacterName);
             }
         }
 

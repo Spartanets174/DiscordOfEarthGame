@@ -14,7 +14,7 @@ public class Enemy : Character
     {
         base.SetData(card, material, currentIndex);
         healthBar.SetMaxHealth(card.health);
-        healthBar.SetHealth(card.health);
+        healthBar.SetHealth(card.health, 1);
         GetComponent<MeshRenderer>().sharedMaterial = material;
         m_card = card;
         m_index = currentIndex;

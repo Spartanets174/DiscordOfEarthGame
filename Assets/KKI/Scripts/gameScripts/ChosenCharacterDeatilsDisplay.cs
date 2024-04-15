@@ -188,7 +188,11 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
 
     public void SetData(Character character)
     {
-        if (character == null) return;
+        if (character == null)
+        {
+            ResetData();
+            return;
+        }
 
         if (currentCharacter != null)
         {
@@ -201,7 +205,7 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
 
         characterNameText.text = currentCharacter.Value.CharacterName;
         healthBar.SetMaxHealth(currentCharacter.Value.Card.health);
-        healthBar.SetHealth(currentCharacter.Value.Health);
+        healthBar.SetHealth(currentCharacter.Value.Health, 0);
         physAttackText.text = $"Физическая атака: {currentCharacter.Value.PhysAttack * 100}";
         magAttackText.text = $"Магическая атака: {currentCharacter.Value.MagAttack * 100}";
         physDefenceText.text = $"Физическая защита: {currentCharacter.Value.PhysDefence * 100}";
@@ -254,6 +258,28 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
         {
             SetAbilityButtonsState(false);
         }
+    }
+
+    private void ResetData()
+    {
+        characterNameText.text = string.Empty;
+
+        healthBar.SetMaxHealth(0);
+        healthBar.SetHealth(0, 0);
+
+        physAttackText.text = string.Empty;
+        magAttackText.text = string.Empty;
+        physDefenceText.text = string.Empty;
+        magDefenceText.text = string.Empty;
+
+        cardRaceText.text = string.Empty;
+
+        cardImage.sprite = null;
+        cardClassImage.sprite = null;
+
+        cardRaceText.text = string.Empty;
+
+        SetAbilityButtonsState(false);
     }
 
     private void UseAttackAbility(GameObject gameObject)

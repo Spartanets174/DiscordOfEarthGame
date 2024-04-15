@@ -14,9 +14,9 @@ public class HealthBar : MonoBehaviour
         slider.maxValue = health;
         slider.value = health;
     }
-    public void SetHealth(float health)
+    public void SetHealth(float health,float delay)
     {
-        DOTween.To(()=> { return slider.value; }, SetSliderValue, health,1f);
+        DOTween.To(()=> { return slider.value; }, SetSliderValue, health, delay);
     }
 
     private void SetSliderValue(float x)

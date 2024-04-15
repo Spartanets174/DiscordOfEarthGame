@@ -55,7 +55,7 @@ public class GameCharacterCardDisplay : OutlineClicableUI
         m_currentCharacterCard = characterCard;
         charImage.sprite = m_currentCharacterCard.image;
         m_charealthBar.SetMaxHealth(m_currentCharacterCard.health);
-        m_charealthBar.SetHealth(m_currentCharacterCard.health);      
+        m_charealthBar.SetHealth(m_currentCharacterCard.health, 1);      
     }
 
     public void SetCharacter(PlayerCharacter character)
@@ -66,7 +66,7 @@ public class GameCharacterCardDisplay : OutlineClicableUI
         character.DefenceCharacterAbility.OnCardAbilityUsed += OnDefenceAbilityUsed;
         character.BuffCharacterAbility.OnCardAbilityUsed += OnBuffAbilityUsed;
         character.OnDamaged += (x,y,z)=> SetHealth(x);
-        character.OnHeal += SetHealth;
+        character.OnHeal += (x, y, z)=> SetHealth(x);
         character.OnDeath += OnDeath;
     }
 
@@ -85,7 +85,7 @@ public class GameCharacterCardDisplay : OutlineClicableUI
 
     private void SetHealth(Character character)
     {
-        m_charealthBar.SetHealth(character.Health);
+        m_charealthBar.SetHealth(character.Health, 1);
     }
 
     private void OnDeath(Character character)

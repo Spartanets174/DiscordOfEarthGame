@@ -89,7 +89,7 @@ public class EternalGuardianCharacterBuffAbility : BaseCharacterAbility
             {
                 if (character != null)
                 {
-                    character.Heal(abilityData.healAmount);
+                    character.Heal(abilityData.healAmount, abilityOwner.CharacterName);
                 }
             }
         }

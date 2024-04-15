@@ -115,14 +115,12 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
 
     private void OnAbilityUsed()
     {
-        cardSupportAbilitiesController.SetEnabledToSupportCards(true);
-        cardSupportAbilitiesController.SetDragAllowToSupportCards(true);
+        cardSupportAbilitiesController.EnableSupportCards();
     }
 
     private void OnAbilitySelected()
     {
-        cardSupportAbilitiesController.SetEnabledToSupportCards(false);
-        cardSupportAbilitiesController.SetDragAllowToSupportCards(false);
+        cardSupportAbilitiesController.DisableSupportCards();
     }
 
     private void OnSupportAbilityUsed()
@@ -163,21 +161,27 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
         {
             playerCharacter.OnDamaged += LogCharacterDamage;
             playerCharacter.OnDeath += LogDeath;
+            playerCharacter.OnHeal += LogHeal;
         }
 
         foreach (var enemyCharacter in battleSystem.EnemyController.EnemyCharObjects)
         {
             enemyCharacter.OnDamaged += LogCharacterDamage;
             enemyCharacter.OnDeath += LogDeath;
+            enemyCharacter.OnHeal += LogHeal;
+
         }
         foreach (var staticEnemyCharacter in battleSystem.EnemyController.StaticEnemyCharObjects)
         {
             staticEnemyCharacter.OnDamaged += LogCharacterDamage;
             staticEnemyCharacter.OnDeath += LogDeath;
+            staticEnemyCharacter.OnHeal += LogHeal;
+
         }
 
         chosenCharacterDeatilsDisplay.Init();
     }
+
 
     private void SetEndGame()
     {
@@ -214,7 +218,6 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
     }
     private void OnPlayerTurnStart(PlayerTurn playerTurn)
     {
-        cardSupportAbilitiesController.SetDragAllowToSupportCards(true);
         AddMessageToGameLog("Ваш ход.");
         endMoveButton.interactable = true;
         foreach (var supportCard in cardSupportAbilitiesController.GameSupportCards)
@@ -236,7 +239,7 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
     {
         endMoveButton.interactable = false;
 
-        cardSupportAbilitiesController.SetDragAllowToSupportCards(false);
+        cardSupportAbilitiesController.DisableSupportCards();
         AddMessageToGameLog("Враг планирует свой ход...");
 
         foreach (var supportCard in cardSupportAbilitiesController.GameSupportCards)
@@ -258,6 +261,12 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
         {
             AddMessageToGameLog($"Вражеский юнит {character.CharacterName} убит");
         }
+    }
+
+    private void LogHeal(Character healedCharacter, string characterUsedHeal, float healAmount)
+    {
+        SetChosenCharDeatils(healedCharacter);
+        AddMessageToGameLog($"{characterUsedHeal} восстанавливает  юниту {healedCharacter.CharacterName} {healAmount * 100:00.00} единиц здоровья");
     }
     private void LogCharacterDamage(Character character, string enemyName, float finalDamage)
     {

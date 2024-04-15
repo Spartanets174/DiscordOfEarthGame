@@ -45,7 +45,7 @@ public class TangibleBodySupportCardAbility : BaseSupport—ardAbility, ITurnCount
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
 
-        character.HealMoreThenMax(1);
+        character.HealMoreThenMax(1, abilityData.support—ardAbilityName);
         character.PhysDefence += abilityData.physAmount;
         character.PhysAttack += abilityData.physAmount;
 

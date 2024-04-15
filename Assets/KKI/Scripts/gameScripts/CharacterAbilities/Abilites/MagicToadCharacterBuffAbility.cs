@@ -28,7 +28,7 @@ public class MagicToadCharacterBuffAbility : BaseCharacterAbility, ITurnCountabl
     {
         abilityOwner.PhysDefence += abilityData.physDefenceAmount;
         abilityOwner.MagDefence += abilityData.magDefenceAmount;
-        abilityOwner.Heal(abilityData.healthAmount);
+        abilityOwner.Heal(abilityData.healthAmount, abilityOwner.CharacterName);
         healAmount = abilityOwner.LastHealAmount;
 
         m_cardSelectBehaviour.OnSelected -= OnSelected;

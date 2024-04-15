@@ -41,7 +41,7 @@ public class AttackAllCharactersInAreaBehaviour : ICardUsable
                 {
                     characterType = "Союзный";
                 }
-                if (character is EnemyCharacter)
+                else
                 {
                     characterType = "Вражеский";
                 }

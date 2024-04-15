@@ -1,12 +1,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 
 [Serializable]
 public abstract class State 
 {
     protected BattleSystem BattleSystem;
+
+    protected CompositeDisposable disposables = new();
+
+    public bool IsSupportCardUsed = false;
 
     public event Action<GameCharacterCardDisplay> OnCharacterChosen;
     public event Func<GameCharacterCardDisplay> OnCharacterMoved;

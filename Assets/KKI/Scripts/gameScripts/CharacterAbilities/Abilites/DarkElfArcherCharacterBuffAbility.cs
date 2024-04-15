@@ -20,7 +20,7 @@ public class DarkElfArcherCharacterBuffAbility : BaseCharacterAbility
 
     private void OnSelected()
     {
-        abilityOwner.Heal(abilityOwner.Health*0.5f);
+        abilityOwner.Heal(abilityOwner.Health*0.5f, abilityOwner.CharacterName);
         UseCard(abilityOwner.gameObject);
     }
 

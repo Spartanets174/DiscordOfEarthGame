@@ -37,7 +37,7 @@ public class WarriorOfLightCharacterBuffAbility : BaseCharacterAbility
                 {
                     playerCharacter.MaxHealth += abilityData.healAmount;
                 }
-                playerCharacter.Heal(abilityData.healAmount);
+                playerCharacter.Heal(abilityData.healAmount, abilityOwner.CharacterName);
             }
         }
     }

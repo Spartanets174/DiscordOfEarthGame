@@ -24,7 +24,8 @@ public class FormulaAttackSelectedСharactersBehaviour : ICardUsable
     public event Action OnCardUse;
     public void UseAbility(GameObject gameObject)
     {
-        foreach (var tempCharacter in characters)
+        List<Character> tempCharacters = new(characters);
+        foreach (var tempCharacter in tempCharacters)
         {
             Character character = tempCharacter;
             if (character is KostilEnemy kostilEnemy)

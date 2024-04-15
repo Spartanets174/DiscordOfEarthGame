@@ -36,13 +36,13 @@ public class SentinelCharacteBuffAbility : BaseCharacterAbility
         {
             battleSystem.PlayerController.CurrentPlayerCharacter.PhysDefence += abilityData.physDefenceAmount;
             battleSystem.PlayerController.CurrentPlayerCharacter.MagDefence += abilityData.magDefenceAmount;
-            battleSystem.PlayerController.CurrentPlayerCharacter.Heal(abilityData.healAmount);
+            battleSystem.PlayerController.CurrentPlayerCharacter.Heal(abilityData.healAmount, abilityOwner.CharacterName);
         }
         else
         {
             battleSystem.EnemyController.CurrentEnemyCharacter.PhysDefence += abilityData.physDefenceAmount;
             battleSystem.EnemyController.CurrentEnemyCharacter.MagDefence += abilityData.magDefenceAmount;
-            battleSystem.EnemyController.CurrentEnemyCharacter.Heal(abilityData.healAmount);
+            battleSystem.EnemyController.CurrentEnemyCharacter.Heal(abilityData.healAmount, abilityOwner.CharacterName);
 
         }
 

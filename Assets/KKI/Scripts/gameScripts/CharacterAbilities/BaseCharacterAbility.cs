@@ -114,5 +114,9 @@ public abstract class BaseCharacterAbility: MonoBehaviour
         OnUsingCancel?.Invoke(this);
     }
 
+    public void SetAbilityType(Enums.TypeOfAbility typeOfAbility)
+    {
+        m_typeOfAbility = typeOfAbility;
+    }
     public abstract void Init(BattleSystem battleSystem, Character owner, BaseCharacterAbilityData characterAbilityData);
 }
