@@ -1,9 +1,6 @@
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,8 +31,8 @@ public class ChosenCharacterCardDisplay : MonoBehaviour
         CharacterCard characterCard = characterCardObject.GetComponent<CardDisplay>().Card;
         m_chosenCharCard = characterCard;
         charImage.sprite = characterCard.image;
-        charImage.DOFade(1,0);
-        charStatsText.text = $"гд: {characterCard.health*100}" + "\n" +
+        charImage.DOFade(1, 0);
+        charStatsText.text = $"гд: {characterCard.health * 100}" + "\n" +
                     $"тю: {characterCard.physAttack * 100}" + "\n" +
                     $"лю: {characterCard.magAttack * 100}" + "\n" +
                     $"тг: {characterCard.physDefence * 100}" + "\n" +

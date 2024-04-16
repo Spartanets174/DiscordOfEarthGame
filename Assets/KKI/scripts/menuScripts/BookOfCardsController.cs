@@ -16,6 +16,7 @@ public class BookOfCardsController : CardController
 
     public bool CanEquipCharacterCard(CharacterCard card)
     {
+        if(card == null) return false;
         int count = 0;
         int max=5;
         for (int j = 0; j < m_PlayerManager.DeckUserCharCards.Count; j++)
