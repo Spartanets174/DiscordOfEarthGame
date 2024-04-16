@@ -3,13 +3,11 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-[RequireComponent(typeof(UnityEngine.UI.Outline),typeof(ImageWithRoundedCorners))]
+[RequireComponent(typeof(UnityEngine.UI.Outline))]
 public class OutlineClicableUI : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler, IPointerClickHandler
 {
     [SerializeField]
     private UnityEngine.UI.Outline outline;
-    [SerializeField]
-    private ImageWithRoundedCorners roundedCorners;
     [SerializeField]
     protected GameObject blocker;
 
@@ -45,7 +43,6 @@ public class OutlineClicableUI : MonoBehaviour, IPointerExitHandler, IPointerEnt
         outline.enabled = false;
         outline.effectColor = Color.black;
         outline.effectDistance = new Vector2(2, -2);
-        roundedCorners.radius = 10;
     }
     public void OnPointerExit(PointerEventData eventData)
     {

@@ -7,6 +7,7 @@ using static Enums;
 public abstract class CardController : MonoBehaviour, ILoadable
 {
     protected PlayerDataController m_PlayerManager;
+    public PlayerDataController PlayerDataController => m_PlayerManager;
 
     private List<OutlineInteractableObject> outlineInteractableObjects;
     public List<OutlineInteractableObject> OutlineInteractableObjects => outlineInteractableObjects;

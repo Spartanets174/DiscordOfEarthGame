@@ -15,6 +15,8 @@ public class CardSupportDisplay : OutlineClicableUI
     public TextMeshProUGUI rarity;
     public Image image;
     public Image rarityImage;
+    public Color normalColor;
+    public Color mythColor;
 
     public void SetValues(CardSupport cardSupport)
     {
@@ -28,11 +30,11 @@ public class CardSupportDisplay : OutlineClicableUI
         rarity.color = Color.white;
         if (m_cardSupport.rarity.ToString() == "Обычная")
         {
-            rarityImage.color = Color.gray;
+            rarityImage.color = normalColor;
         }
         else
         {
-            rarityImage.color = new Color(126, 0, 255);
+            rarityImage.color = mythColor;
         }
     }
 }

@@ -18,6 +18,8 @@ public class CardDisplay : OutlineClicableUI
     public TextMeshProUGUI magDefence;
     public Image rarity;
     public Image image;
+    public Color normalColor;
+    public Color mythColor;
 
     public void SetValues(CharacterCard card)
     {
@@ -27,11 +29,11 @@ public class CardDisplay : OutlineClicableUI
         cardName.text = m_card.cardName;
         if (m_card.rarity.ToString() == "Обычная")
         {
-            rarity.color = Color.gray;
+            rarity.color = normalColor;
         }
         else
         {
-            rarity.color = new Color(126, 0, 255);
+            rarity.color = mythColor;
         }
         health.text = Convert.ToString(m_card.health * 100);
         physAttack.text = Convert.ToString(m_card.physAttack * 100);

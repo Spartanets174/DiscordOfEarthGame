@@ -118,22 +118,26 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
         }
         else
         {
-            switch (characterCardDisplay.ChosenCharCard.Class)
-            {       
-                case Enums.Classes.Лучник:
-                    tooMuchCardCaption.text = "В колоде уже максимум лучников (2)";
-                    break;
-                case Enums.Classes.Маг:
-                    tooMuchCardCaption.text = "В колоде уже максимум магов (2)";
-                    break;
-                case Enums.Classes.Кавалерия:
-                    tooMuchCardCaption.text = "В колоде уже максимум кавалерии (1)";
-                    break;
-                default:
-                    tooMuchCardCaption.text = "В колоде уже максимальное количество карт (5)";
-                    break;
+            if (bookOfCardsController.PlayerDataController.DeckUserCharCards.Count>=5)
+            {
+                tooMuchCardCaption.text = "В колоде уже максимальное количество карт (5)";
             }
-            StartCoroutine(ShowTooMuchCardCaption());
+            else
+            {
+                switch (characterCardDisplay.ChosenCharCard.Class)
+                {
+                    case Enums.Classes.Лучник:
+                        tooMuchCardCaption.text = "В колоде уже максимум лучников (2)";
+                        break;
+                    case Enums.Classes.Маг:
+                        tooMuchCardCaption.text = "В колоде уже максимум магов (2)";
+                        break;
+                    case Enums.Classes.Кавалерия:
+                        tooMuchCardCaption.text = "В колоде уже максимум кавалерии (1)";
+                        break;
+                }
+            }            
+            ShowTooMuchCardCaption();
         }
     }
 
@@ -147,7 +151,7 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
         else
         {
             tooMuchCardCaption.text = "У вас уже максимальное количество карт помощи (7)";
-            StartCoroutine(ShowTooMuchCardCaption());
+            ShowTooMuchCardCaption();
         }
     }
     private void RaceDropdownCLick(int value)
@@ -259,17 +263,21 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
         SpawnSupportCards();
     }
 
-    private IEnumerator ShowTooMuchCardCaption()
+    private void ShowTooMuchCardCaption()
     {
+        tooMuchCardCaption.color = Color.red;
+        tooMuchCardCaption.DOFade(1, 0f);
+
+        currentSequence.Kill();
+
         tooMuchCardCaption.gameObject.SetActive(true);
-        yield return new WaitForSecondsRealtime(2);
         currentSequence = DOTween.Sequence();
-        currentSequence.id = 1;
+
+        currentSequence.AppendInterval(2);
         currentSequence.Append(tooMuchCardCaption.DOFade(0, 2f))
         .OnComplete(() => {
             tooMuchCardCaption.color = Color.red;
             tooMuchCardCaption.gameObject.SetActive(false);
-            currentSequence.Kill();
         });
         currentSequence.Play();
 
