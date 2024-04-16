@@ -18,6 +18,7 @@ public class CardSupportDisplay : OutlineClicableUI
 
     public void SetValues(CardSupport cardSupport)
     {
+        if (cardSupport == null) return; 
         IsEnabled = true;
         m_cardSupport = cardSupport;
         cardSupportName.text = m_cardSupport.cardName;

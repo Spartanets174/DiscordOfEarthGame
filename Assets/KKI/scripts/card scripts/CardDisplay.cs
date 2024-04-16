@@ -21,6 +21,7 @@ public class CardDisplay : OutlineClicableUI
 
     public void SetValues(CharacterCard card)
     {
+        if (card == null) return;
         IsEnabled = true;
         m_card = card;
         cardName.text = m_card.cardName;

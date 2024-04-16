@@ -17,6 +17,7 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
     [SerializeField] private Button submitLogin;
     [SerializeField] private Button toRegistration;
     [SerializeField] private Button toLogin;
+    [SerializeField] private Toggle passwordToggle;
 
     [Header("Panels")]
     [SerializeField] private GameObject registrationPanel;
@@ -53,7 +54,7 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
             }
         }).AddTo(disposables);
 
-        validateGuidRegex = new Regex("^(?=.*?[A-Z])(?=.*?[#?!@$%^&*-]).{4,}$");
+        validateGuidRegex = new Regex("^(?=.*?[A-Z])(?=.*?[#?!@$%^&*-]).{4,}$");        
 
         dataLoader.OnPlayerDataRecieved += CheckRecievedData;
 
@@ -63,10 +64,24 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
         toLogin.onClick.AddListener(SwapPanels);
         Nick.onValueChanged.AddListener(TurnOffWarningTextName);
         Password.onValueChanged.AddListener(TurnOffWarningTextPassword);
+        passwordToggle.onValueChanged.AddListener(ChangePasswordVisibility);
 
+        passwordToggle.isOn = false;
         dataLoader.CheckPlayerData();
     }
 
+    private void ChangePasswordVisibility(bool state)
+    {
+        if (state)
+        {
+            Password.contentType = InputField.ContentType.Standard;
+        }
+        else
+        {
+            Password.contentType = InputField.ContentType.Password;
+        }
+        Password.ForceLabelUpdate();
+    }
 
     private void OnDestroy()
     {
@@ -78,6 +93,8 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
         toLogin.onClick.RemoveListener(SwapPanels);
         Nick.onValueChanged.RemoveListener(TurnOffWarningTextName);
         Password.onValueChanged.RemoveListener(TurnOffWarningTextPassword);
+        passwordToggle.onValueChanged.RemoveListener(ChangePasswordVisibility);
+
         StopAllCoroutines();
 
         disposables.Dispose();
