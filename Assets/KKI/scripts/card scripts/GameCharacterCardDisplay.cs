@@ -20,8 +20,6 @@ public class GameCharacterCardDisplay : OutlineClicableUI
     private PlayerCharacter m_currentCharacter;
     public PlayerCharacter CurrentCharacter => m_currentCharacter;
 
-    private Image image;
-
     private bool m_isCharacterSpawned;
     public bool IsCharacterSpawned
     {
@@ -47,7 +45,6 @@ public class GameCharacterCardDisplay : OutlineClicableUI
     private void Start()
     {
         m_isCharacterSpawned = false;
-        image = GetComponent<Image>();
     }
 
     public void SetData(CharacterCard characterCard )
@@ -72,15 +69,15 @@ public class GameCharacterCardDisplay : OutlineClicableUI
 
     public void OnAttackAbilityUsed(BaseCharacterAbility baseCharacterAbility)
     {
-        charAttackAbilityImage.DOColor(Color.white,1);
+        charAttackAbilityImage.DOFade(0,1);
     }
     public void OnDefenceAbilityUsed(BaseCharacterAbility baseCharacterAbility)
     {
-        charDefenceAbilityImage.DOColor(Color.white, 1);
+        charDefenceAbilityImage.DOFade(0, 1);
     }
     public void OnBuffAbilityUsed(BaseCharacterAbility baseCharacterAbility)
     {
-        charBuffAbilityImage.DOColor(Color.white, 1);
+        charBuffAbilityImage.DOFade(0, 1);
     }
 
     private void SetHealth(Character character)
@@ -90,6 +87,6 @@ public class GameCharacterCardDisplay : OutlineClicableUI
 
     private void OnDeath(Character character)
     {
-        image.DOFade(0.5f, 1);
+        IsEnabled = false;
     }
 }

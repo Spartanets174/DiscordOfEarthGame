@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UniRx;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -17,6 +18,10 @@ public class BattleSystem : StateMachine, ILoadable
     [SerializeField]
     private FieldController m_fieldController;
     public FieldController FieldController => m_fieldController;
+
+    [Header("Controllers")]
+    [SerializeField]
+    private Color infoColor;
 
     private Dictionary<ITurnCountable, int> m_playerTurnCountables = new();
     public Dictionary<ITurnCountable, int> PlayerTurnCountables => m_playerTurnCountables;
@@ -170,7 +175,7 @@ public class BattleSystem : StateMachine, ILoadable
 
         int cubeValue = UnityEngine.Random.Range(1, 6);
 
-        gameLogCurrentText.Value = $"На кубице выпало {cubeValue}";
+        gameLogCurrentText.Value = $"На кубице выпало <color=#{infoColor.ToHexString()}>{cubeValue}</color>";
 
         if (cubeValue % 2 == 0)
         {

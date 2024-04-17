@@ -111,10 +111,13 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
 
     private void AddToDeckCharacterCard()
     {
+        if (characterCardDisplay.ChosenCharCard==null) return;
+
         if (bookOfCardsController.CanEquipCharacterCard(characterCardDisplay.ChosenCharCard))
         {
             SpawnCharacterCards();
             SpawnCharacterDeckCard(characterCardDisplay.ChosenCharCard);
+            characterCardDisplay.ChosenCharCard = null;
         }
         else
         {
@@ -143,10 +146,13 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
 
     private void AddToDeckSupportCard()
     {
+        if (supportCardDisplay.ChosenCardSupport == null) return;
+
         if (bookOfCardsController.CanEquipSupportCard(supportCardDisplay.ChosenCardSupport))
         {
             SpawnSupportCards();
             SpawnSupportDeckCard(supportCardDisplay.ChosenCardSupport);
+            supportCardDisplay.ChosenCardSupport = null;
         }
         else
         {

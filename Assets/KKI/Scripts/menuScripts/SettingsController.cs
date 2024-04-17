@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -27,11 +28,15 @@ public class SettingsController : MonoBehaviour, ILoadable
 
     private List<OutlineInteractableObject> outlineInteractableObjects;
     public List<OutlineInteractableObject> OutlineInteractableObjects => outlineInteractableObjects;
+
+    private bool isPaused;
+
+
+    public event Action<bool> OnPauseStateChanged;
     public void Init()
     {
         dbManager = FindObjectOfType<DbManager>();
         outlineInteractableObjects = FindObjectsOfType<OutlineInteractableObject>().ToList();
-
         resolutions.Clear();
         for (int i = 0; i < Screen.resolutions.Length; i++)
         {
@@ -51,18 +56,26 @@ public class SettingsController : MonoBehaviour, ILoadable
             ChangeScreenSize(resolutions.Last().Key);
             ChangeFullScreenState(fullWindow);
             PlayerPrefs.SetString("isFirst", "1");
-        }
-
-        foreach (var interactableObject in outlineInteractableObjects)
-        {
-            interactableObject.OnClick += x => PlayClickSound();
-        }
+        }      
 
         MusicAudioSource.loop = true;
         MusicAudioSource.clip = menuMusic;
         MusicAudioSource.Play();
     }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            TogglePausedState();
+        }
+    }
 
+    public void TogglePausedState()
+    {
+        isPaused = !isPaused;
+        Time.timeScale = isPaused ? 0 : 1;
+        OnPauseStateChanged?.Invoke(isPaused);
+    }
     public void ExitAccount()
     {
         dbManager.SavePlayer();

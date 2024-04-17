@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,10 +32,15 @@ public class SettingsControllerPresenter : MonoBehaviour, ILoadable
     [SerializeField]
     private Slider musicSlider;
 
+    [Header("Settings")]
+    [SerializeField]
+    private bool isGame;
+
     private List<Button> soundButtons = new();
     private List<Dropdown> soundDropdowns = new();
 
     private SettingsController settingsController;
+
     public void Init()
     {
         soundButtons = FindObjectsOfType<Button>(true).ToList();
@@ -49,7 +54,7 @@ public class SettingsControllerPresenter : MonoBehaviour, ILoadable
 
         foreach (var dropdown in soundDropdowns)
         {
-            dropdown.onValueChanged.AddListener((x)=>settingsController.PlayClickSound());
+            dropdown.onValueChanged.AddListener((x) => settingsController.PlayClickSound());
         }
 
         List<string> resolutions = new();
@@ -73,8 +78,14 @@ public class SettingsControllerPresenter : MonoBehaviour, ILoadable
         soundSlider.value = settingsController.GetSoundVolume();
         musicSlider.value = settingsController.GetMusicVolume();
         fullScreenToggle.isOn = settingsController.GetFullScreenState();
-        Debug.Log(settingsController.Resolutions[settingsController.GetScreenSize()]);
         screenSizeDropdown.value = settingsController.GetScreenSize();
+
+        settingsController.OnPauseStateChanged += TogglePausedState;
+    }
+
+    private void TogglePausedState(bool state)
+    {
+        gameObject.SetActive(state);
     }
 
     private void SetScreenSize(int id)
@@ -109,7 +120,7 @@ public class SettingsControllerPresenter : MonoBehaviour, ILoadable
 
     private void CloseSettings()
     {
-        gameObject.SetActive(false);
+        settingsController.TogglePausedState();
         foreach (var outlineInteractableObject in settingsController.OutlineInteractableObjects)
         {
             outlineInteractableObject.IsEnabled = true;
@@ -118,6 +129,14 @@ public class SettingsControllerPresenter : MonoBehaviour, ILoadable
 
     private void ExitAccount()
     {
-        settingsController.ExitAccount();
+        if (isGame)
+        {
+            SceneController.ToMenu();
+        }
+        else
+        {
+            settingsController.ExitAccount();
+        }
+
     }
 }

@@ -24,7 +24,11 @@ public class ChosenCharacterCardDisplay : MonoBehaviour
     private Color passiveColor;
 
     private CharacterCard m_chosenCharCard;
-    public CharacterCard ChosenCharCard => m_chosenCharCard;
+    public CharacterCard ChosenCharCard
+    {
+        get => m_chosenCharCard;
+        set => m_chosenCharCard = value;
+    }
 
     public void SetCharacterData(GameObject characterCardObject)
     {

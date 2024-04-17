@@ -1543,7 +1543,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outline: {fileID: 4887834901515906045}
-  roundedCorners: {fileID: 0}
   blocker: {fileID: 0}
   cardName: {fileID: 2469340801815459508}
   health: {fileID: 4040653782783857405}
@@ -1553,8 +1552,8 @@ MonoBehaviour:
   magDefence: {fileID: 3219631283985199349}
   rarity: {fileID: 3818842325137143403}
   image: {fileID: 2894099336416996225}
-  normalColor: {r: 0.50980395, g: 0.50980395, b: 0.50980395, a: 1}
-  mythColor: {r: 0.39308187, g: 0, b: 0.8018868, a: 1}
+  normalColor: {r: 0.6784314, g: 0.6627451, b: 0.73333335, a: 1}
+  mythColor: {r: 0.42352945, g: 0.16470589, b: 0.54901963, a: 1}
 --- !u!114 &4887834901515906045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3029,7 +3028,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.41814458, g: 0.03444285, b: 0.8113208, a: 1}
+  m_Color: {r: 0.42352945, g: 0.16470589, b: 0.54901963, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

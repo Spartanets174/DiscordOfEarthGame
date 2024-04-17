@@ -48,6 +48,8 @@ public class BookOfCardsController : CardController
 
     public bool CanEquipSupportCard(CardSupport card)
     {
+        if (card == null) return false;
+
         if (m_PlayerManager.DeckUserSupportCards.Count < 7)
         {
             m_PlayerManager.DeckUserSupportCards.Add(card);
@@ -62,6 +64,8 @@ public class BookOfCardsController : CardController
 
     public void RemoveCardFromDeck(Card card)
     {
+        if (card == null) return;
+
         if (card is CharacterCard)
         {
             m_PlayerManager.DeckUserCharCards.Remove((CharacterCard)card);

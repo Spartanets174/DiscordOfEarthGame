@@ -274,7 +274,7 @@ public class PlayerTurn : State
     }
 
 
-    private void ResetPlayer()
+    public void ResetPlayer()
     {
         BattleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {

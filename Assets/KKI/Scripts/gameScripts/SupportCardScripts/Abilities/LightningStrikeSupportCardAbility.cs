@@ -15,7 +15,7 @@ public class LightningStrikeSupportCardAbility : BaseSupport—ardAbility
         abilityData = (LightningStrikeSupportCardAbilityData)baseAbilityData;
         SetCardSelectBehaviour(new SelectCellsBehaviour(abilityData.selectCardText, battleSystem, abilityData.area, "attack"));
 
-        SetUseCardBehaviour(new AttackAllCharactersInAreaBehaviour(abilityData.damage, battleSystem, $"\"{abilityData.support—ardAbilityName}\""));
+        SetUseCardBehaviour(new AttackAllCharactersInAreaBehaviour(abilityData.damage, battleSystem, $"{abilityData.support—ardAbilityName}"));
 
         selectCellsBehaviour = (SelectCellsBehaviour)CardSelectBehaviour;
         attackAllCharactersInAreaBehaviour = (AttackAllCharactersInAreaBehaviour)UseCardBehaviour;

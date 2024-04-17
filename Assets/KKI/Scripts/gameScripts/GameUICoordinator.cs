@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UniRx;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,8 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
     private PlayerControllerPresenter playerControllerPresenter;
     [SerializeField]
     private CardSupportAbilitiesController cardSupportAbilitiesController;
+    [SerializeField]
+    private SettingsController settingsController;
 
     [Space, Header("Action UI")]
     [SerializeField]
@@ -50,6 +53,16 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
     [SerializeField]
     private GameObject gameInterface;
 
+    [Space, Header("Colors")]
+    [SerializeField]
+    private Color enemyTextColor;
+    [SerializeField]
+    private Color playerTextColor;
+    [SerializeField]
+    private Color amountTextColor;
+    [SerializeField]
+    private Color changeTurnTextColor;
+
     private CompositeDisposable disposables = new();
     private float timer = 1f;
     public void Init()
@@ -76,6 +89,8 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
         battleSystem.OnEnemyTurnStarted += OnEnemyTurnStart;
         battleSystem.OnPlayerTurnStarted += OnPlayerTurnStart;
         battleSystem.OnGameEnded += SetEndGame;
+        settingsController.OnPauseStateChanged += SetPausedPlayer;
+
 
         DevButtons.SetActive(false);
 
@@ -84,7 +99,7 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
         setEnemyTurnButton.onClick.AddListener(battleSystem.SetEnemyTurn);
         setWinButton.onClick.AddListener(battleSystem.SetWin);
         setLostButton.onClick.AddListener(battleSystem.SetLost);
-        toMenuButton.onClick.AddListener(SceneController.ToMenu);
+        toMenuButton.onClick.AddListener(settingsController.TogglePausedState);
         toMenuButtonEndGame.onClick.AddListener(SceneController.ToMenu);
 
 
@@ -218,7 +233,7 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
     }
     private void OnPlayerTurnStart(PlayerTurn playerTurn)
     {
-        AddMessageToGameLog("Ваш ход.");
+        AddMessageToGameLog($"<color=#{changeTurnTextColor.ToHexString()}>Ваш ход</color>");
         endMoveButton.interactable = true;
         foreach (var supportCard in cardSupportAbilitiesController.GameSupportCards)
         {
@@ -231,16 +246,41 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
         foreach (var SupportCard in cardSupportAbilitiesController.GameSupportCards)
         {
             SupportCard.IsEnabled = true;
-        }  
+        }
     }
 
+    private void SetPausedPlayer(bool state)
+    {
+        if (battleSystem.State is PlayerTurn playerTurn)
+        {
+            if (state)
+            {
+                playerTurn.ResetPlayer();
+            }
+            else
+            {
+                playerTurn.SetStateToNormal();
+            }
+        }
+        if (battleSystem.State is EnemyTurn enemyTurn)
+        {
+            if (state)
+            {
+                battleSystem.EnemyController.StopTree();
+            }
+            else
+            {
+                battleSystem.EnemyController.RestartTree();
+            }
+        }
+    }
 
     private void OnEnemyTurnStart(EnemyTurn enemyTurn)
     {
         endMoveButton.interactable = false;
 
         cardSupportAbilitiesController.DisableSupportCards();
-        AddMessageToGameLog("Враг планирует свой ход...");
+        AddMessageToGameLog($"<color=#{changeTurnTextColor.ToHexString()}>Ход противника</color>");;
 
         foreach (var supportCard in cardSupportAbilitiesController.GameSupportCards)
         {
@@ -250,34 +290,48 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
         {
             Card.IsEnabled = false;
         }
+
     }
     private void LogDeath(Character character)
     {
         if (character is PlayerCharacter)
         {
-            AddMessageToGameLog($"Союзный юнит {character.CharacterName} убит");
+            AddMessageToGameLog($"<color=#{playerTextColor.ToHexString()}>Союзный юнит</color> {character.CharacterName} убит");
         }
         else
         {
-            AddMessageToGameLog($"Вражеский юнит {character.CharacterName} убит");
+            AddMessageToGameLog($"<color=#{enemyTextColor.ToHexString()}>Вражеский юнит</color> {character.CharacterName} убит");
         }
     }
 
     private void LogHeal(Character healedCharacter, string characterUsedHeal, float healAmount)
     {
+        Color characterColor = healedCharacter is PlayerCharacter? playerTextColor: enemyTextColor;
+
         SetChosenCharDeatils(healedCharacter);
-        AddMessageToGameLog($"{characterUsedHeal} восстанавливает  юниту {healedCharacter.CharacterName} {healAmount * 100:00.00} единиц здоровья");
+        AddMessageToGameLog($"<color=#{characterColor.ToHexString()}>{characterUsedHeal}</color> восстанавливает юниту <color=#{characterColor.ToHexString()}>{healedCharacter.CharacterName}</color> <color=#{amountTextColor.ToHexString()}>{healAmount * 100:00.00}</color> единиц здоровья");
     }
     private void LogCharacterDamage(Character character, string enemyName, float finalDamage)
     {
         SetChosenCharDeatils(character);
-        if (finalDamage > 0)
+        Color characterColor = character is PlayerCharacter ? playerTextColor : enemyTextColor;
+        Color secondCharacterColor;
+        if (battleSystem.State is PlayerTurn)
         {
-            AddMessageToGameLog($"{enemyName} наносит  юниту {character.CharacterName} {finalDamage * 100:00.00} урона");
+            secondCharacterColor = character is PlayerCharacter ? enemyTextColor : playerTextColor;
         }
         else
         {
-            AddMessageToGameLog($"{character.CharacterName} избежал получения урона от {enemyName}");
+            secondCharacterColor = enemyTextColor;
+        }
+
+        if (finalDamage > 0)
+        {
+            AddMessageToGameLog($"<color=#{secondCharacterColor.ToHexString()}>{enemyName}</color> наносит <color=#{amountTextColor.ToHexString()}>{finalDamage * 100:00.00}</color> единиц урона юниту <color=#{characterColor.ToHexString()}>{character.CharacterName}</color>  ");
+        }
+        else
+        {
+            AddMessageToGameLog($"<color=#{characterColor.ToHexString()}>{character.CharacterName}</color> избежал получения урона от <color=#{secondCharacterColor.ToHexString()}>{enemyName}</color>");
         }
     }
     private void AddMessageToGameLog(string message)

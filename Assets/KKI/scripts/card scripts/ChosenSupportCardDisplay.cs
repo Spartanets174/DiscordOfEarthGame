@@ -24,7 +24,11 @@ public class ChosenSupportCardDisplay : MonoBehaviour
 
 
     private CardSupport m_chosenCardSupport;
-    public CardSupport ChosenCardSupport=>m_chosenCardSupport;
+    public CardSupport ChosenCardSupport
+    {
+        get => m_chosenCardSupport;
+        set => m_chosenCardSupport = value;
+    }
 
     public void SetSupportCardData(GameObject cardSupportObject)
     {

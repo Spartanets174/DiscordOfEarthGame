@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -193,7 +194,8 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
             ResetData();
             return;
         }
-
+        cardImage.DOFade(1, 0);
+        cardClassImage.DOFade(1, 0);
         if (currentCharacter != null)
         {
             attackAbilityButton.OnClick -= UseAttackAbility;
@@ -274,8 +276,8 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
 
         cardRaceText.text = string.Empty;
 
-        cardImage.sprite = null;
-        cardClassImage.sprite = null;
+        cardImage.DOFade(0,0);
+        cardClassImage.DOFade(0, 0);
 
         cardRaceText.text = string.Empty;
 
