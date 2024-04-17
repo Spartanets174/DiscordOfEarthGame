@@ -1,4 +1,5 @@
 using DG.Tweening;
+using HighlightPlus;
 using System;
 using System.Collections.Generic;
 using UniRx;
@@ -13,7 +14,7 @@ public abstract class Character : ChildOutlineInteractableObject
 
     [SerializeField]
     protected HealthBar healthBar;
-    
+
 
     protected string m_characterName;
     public string CharacterName => m_characterName;
@@ -41,10 +42,10 @@ public abstract class Character : ChildOutlineInteractableObject
     public float Health
     {
         get => m_health;
-        private set 
-        { 
+        private set
+        {
             m_health = value;
-            healthBar.SetHealth(m_health,1);
+            healthBar.SetHealth(m_health, 1);
         }
     }
 
@@ -69,7 +70,7 @@ public abstract class Character : ChildOutlineInteractableObject
         set
         {
             m_physAttack = value;
-            if (m_physAttack < 1 )
+            if (m_physAttack < 1)
             {
                 m_physAttack = 1;
             }
@@ -153,7 +154,7 @@ public abstract class Character : ChildOutlineInteractableObject
         set => m_chanceToAvoidDamage = value;
     }
 
-  
+
     protected float m_lastHealmount;
     public float LastHealAmount
     {
@@ -349,32 +350,6 @@ public abstract class Character : ChildOutlineInteractableObject
 
     public event Action<Character> OnPositionOnFieldChanged;
 
-    protected override void Awake()
-    {
-        base.Awake();
-        m_collider = GetComponent<Collider>();
-        if (m_collider == null)
-        {
-            m_collider = GetComponentInChildren<Collider>();
-        }
-
-        m_collider.OnMouseEnterAsObservable().Where(x => IsEnabled).Subscribe(
-            x => OnHoverEnterInvoke()
-            ).AddTo(disposables);
-
-        m_collider.OnMouseExitAsObservable().Where(x => IsEnabled && !IsChosen).Subscribe(
-            x => OnHoverExitInvoke()
-            ).AddTo(disposables);
-
-        m_collider.OnMouseDownAsObservable().Where(x => IsEnabled).Subscribe(
-            x => OnClickInvoke()
-            ).AddTo(disposables);
-
-        m_collider.OnMouseOverAsObservable().Where(x => IsEnabled).Subscribe(
-            x => OnHoverInvoke()
-            ).AddTo(disposables);
-    }
-
     public virtual void SetData(CharacterCard card, int currentIndex)
     {
         if (healthBar == null)
@@ -397,18 +372,18 @@ public abstract class Character : ChildOutlineInteractableObject
         m_physDefence = m_card.physDefence;
         m_magDefence = m_card.magDefence;
         m_critChance = m_card.critChance;
-        m_critNum = m_card.critNum;      
+        m_critNum = m_card.critNum;
 
         m_chanceToFreeAttack = 0;
-        if (m_card.passiveCharacterAbilityData!=null)
+        if (m_card.passiveCharacterAbilityData != null)
         {
             Type type = m_card.passiveCharacterAbilityData.passiveCharacterAbility.Type;
             m_passiveCharacterAbility = (BasePassiveCharacterAbility)gameObject.AddComponent(type);
-            if (m_card.passiveCharacterAbilityData!=null)
+            if (m_card.passiveCharacterAbilityData != null)
             {
                 m_passiveCharacterAbility.baseAbilityData = m_card.passiveCharacterAbilityData;
             }
-            
+
         }
         if (m_card.attackCharacterAbilityData != null)
         {
@@ -443,7 +418,7 @@ public abstract class Character : ChildOutlineInteractableObject
         }
         foreach (Enums.Races characterRace in Enum.GetValues(typeof(Enums.Races)))
         {
-            m_damageMultiplierByRacesDict.Add(characterRace,1);
+            m_damageMultiplierByRacesDict.Add(characterRace, 1);
             m_attackMultiplierByRacesDict.Add(characterRace, 1);
         }
         foreach (Enums.Classes characterClass in Enum.GetValues(typeof(Enums.Classes)))
@@ -484,9 +459,9 @@ public abstract class Character : ChildOutlineInteractableObject
             return false;
         }
 
-        float crit = IsCrit(chosenCharacter.CritChance,chosenCharacter.CritNum);
-        float finalPhysDamage = IgnorePhysDamage? 0 :((11 + chosenCharacter.PhysAttack) * chosenCharacter.PhysAttack * crit * (chosenCharacter.PhysAttack - PhysDefence + m_maxHealth)) / 256 * m_physDamageMultiplier;
-        float finalMagDamage = IgnoreMagDamage?0 : ((11 + chosenCharacter.MagAttack) * chosenCharacter.MagAttack * crit * (chosenCharacter.MagAttack - MagDefence + m_maxHealth)) / 256 * m_magDamageMultiplier;
+        float crit = IsCrit(chosenCharacter.CritChance, chosenCharacter.CritNum);
+        float finalPhysDamage = IgnorePhysDamage ? 0 : ((11 + chosenCharacter.PhysAttack) * chosenCharacter.PhysAttack * crit * (chosenCharacter.PhysAttack - PhysDefence + m_maxHealth)) / 256 * m_physDamageMultiplier;
+        float finalMagDamage = IgnoreMagDamage ? 0 : ((11 + chosenCharacter.MagAttack) * chosenCharacter.MagAttack * crit * (chosenCharacter.MagAttack - MagDefence + m_maxHealth)) / 256 * m_magDamageMultiplier;
         float finalDamage = Math.Max(finalMagDamage, finalPhysDamage) * GetDamageMultiplierByRace(chosenCharacter.Race) * GetDamageMultiplierByClass(chosenCharacter.Class) * chosenCharacter.GetAttackMultiplierByRace(Race) * chosenCharacter.GetAttackMultiplierByClass(Class);
 
         Health = Math.Max(0, Health - finalDamage);
@@ -498,7 +473,7 @@ public abstract class Character : ChildOutlineInteractableObject
         {
             OnDeath?.Invoke(this);
         }
-        
+
         return Health == 0;
     }
 
@@ -530,7 +505,7 @@ public abstract class Character : ChildOutlineInteractableObject
         }
         Health = Math.Max(0, Health - finalDamage);
 
-        LastDamageAmount = finalDamage;       
+        LastDamageAmount = finalDamage;
 
         OnDamaged?.Invoke(this, abilityName, finalDamage);
         if (Health == 0)
@@ -583,7 +558,7 @@ public abstract class Character : ChildOutlineInteractableObject
     {
         return m_damageMultiplierByClassesDict[characterClass];
     }
-  
+
     private bool CanBeDamagedByClass(Enums.Classes characterClass)
     {
         if (m_canBeDamagedByClassesDict[characterClass])
@@ -610,7 +585,7 @@ public abstract class Character : ChildOutlineInteractableObject
 
     protected float IsCrit(float critChance, float m_critNum)
     {
-        float chance =  UnityEngine.Random.Range(0f,1f);
+        float chance = UnityEngine.Random.Range(0f, 1f);
         if (chance < critChance)
         {
             return m_critNum;
@@ -624,7 +599,7 @@ public abstract class Character : ChildOutlineInteractableObject
     public void Heal(float amount, string nameObject)
     {
         float temp = Health + amount;
-        if (temp> m_maxHealth)
+        if (temp > m_maxHealth)
         {
             m_lastHealmount = m_maxHealth - Health;
             Health = m_maxHealth;
@@ -655,7 +630,7 @@ public abstract class Character : ChildOutlineInteractableObject
             transform.SetParent(positionToMove);
             transform.localPosition = Vector3.zero;
             OnPositionOnFieldChanged?.Invoke(this);
-        });      
+        });
     }
     public void ResetCharacter()
     {
@@ -704,5 +679,15 @@ public abstract class Character : ChildOutlineInteractableObject
     protected void OnCharacterClickedInvoke(GameObject gameObject)
     {
         IsChosen = true;
+    }
+    protected override void SubscribeOnMouseExit()
+    {
+        m_collider.OnMouseExitAsObservable().Where(x => IsEnabled).Subscribe(x =>
+        {
+            if (!IsChosen)
+            {
+                OnHoverExitInvoke();
+            }
+        }).AddTo(disposables);
     }
 }

@@ -33,14 +33,10 @@ public abstract class ChildInteractableObject : MonoBehaviour
         {
             m_collider = GetComponentInChildren<Collider>();
         }
-
+       
         m_collider.OnMouseEnterAsObservable().Where(x => IsEnabled).Subscribe(
             x => OnHoverEnterInvoke()
-            ).AddTo(disposables);
-
-        m_collider.OnMouseExitAsObservable().Where(x => IsEnabled).Subscribe(
-            x => OnHoverExitInvoke()
-            ).AddTo(disposables);
+            ).AddTo(disposables);       
 
         m_collider.OnMouseDownAsObservable().Where(x => IsEnabled).Subscribe(
             x => OnClickInvoke()
@@ -49,8 +45,15 @@ public abstract class ChildInteractableObject : MonoBehaviour
         m_collider.OnMouseOverAsObservable().Where(x => IsEnabled).Subscribe(
             x => OnHoverInvoke()
             ).AddTo(disposables);
+        SubscribeOnMouseExit();
     }
 
+    protected virtual void SubscribeOnMouseExit()
+    {
+        m_collider.OnMouseExitAsObservable().Where(x => IsEnabled).Subscribe(
+            x => OnHoverExitInvoke()
+            ).AddTo(disposables);
+    }
     private void OnDestroy()
     {
         disposables.Dispose();

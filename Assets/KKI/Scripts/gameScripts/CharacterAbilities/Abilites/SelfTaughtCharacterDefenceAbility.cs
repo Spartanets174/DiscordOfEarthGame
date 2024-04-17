@@ -69,6 +69,7 @@ public class SelfTaughtCharacterDefenceAbility : BaseCharacterAbility, ITurnCoun
     {
         character.CanDamage = true;
         character.CanBeDamaged = true;
+        OnReturnToNormal?.Invoke(this);
     }
 }
 [Serializable]

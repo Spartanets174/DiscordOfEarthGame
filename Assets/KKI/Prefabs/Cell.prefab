@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3980020682128929375}
   - component: {fileID: 2402688601813834047}
   - component: {fileID: 6688806995402944095}
-  - component: {fileID: 8942622942012439245}
+  - component: {fileID: 8871251476631974673}
   m_Layer: 0
   m_Name: Cell
   m_TagString: Untagged
@@ -275,7 +275,7 @@ MonoBehaviour:
   hitFxFadeOutDuration: 0.25
   hitFxColor: {r: 1, g: 1, b: 1, a: 1}
   hitFxRadius: 0.5
---- !u!114 &8942622942012439245
+--- !u!114 &8871251476631974673
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

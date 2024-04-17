@@ -9,20 +9,12 @@ public class OutlineInteractableObject : InteractableObject
     private Collider m_collider;
     public Collider Collider => m_collider;
     // Start is called before the first frame update
-    void Awake()
+   protected virtual void Awake()
     {
         highlightEffect = GetComponent<HighlightEffect>();
-        if (highlightEffect==null)
-        {
-            highlightEffect = GetComponentInChildren<HighlightEffect>();
 
-        }
         m_collider = GetComponent<Collider>();
-        if (m_collider==null)
-        {
-            m_collider = GetComponentInChildren<Collider>();
 
-        }
         OnHoverEnter += EnableOutline;
         OnHoverExit += DisableOutline;
         OnEnableChanged += x => { if (!x) DisableOutline(null); };

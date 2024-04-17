@@ -3,7 +3,7 @@ using RotaryHeart.Lib.SerializableDictionary;
 using System;
 using UnityEngine;
 
-public class Cell : InteractableObject
+public class Cell : OutlineInteractableObject
 {
     [SerializeField]
     private ColorDictioanary colorDictionary;
@@ -41,8 +41,9 @@ public class Cell : InteractableObject
         set => m_cellIndex=value;
     }
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         TransitionCostEnemy = transitionCost;
         TransitionCostPlayer = transitionCost;
 
