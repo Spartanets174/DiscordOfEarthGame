@@ -11,7 +11,7 @@ public class WallEnemyCharacter : StaticEnemyCharacter
     {
         IsEnabled = true;
 
-        SetData(Card,GetComponent<MeshRenderer>().material,-1);
+        SetData(Card,-1);
         OnDamaged += AttackAttackedCharacter;
     }
 

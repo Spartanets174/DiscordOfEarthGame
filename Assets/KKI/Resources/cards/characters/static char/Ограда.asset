@@ -19,6 +19,7 @@ MonoBehaviour:
   rarity: 0
   Price: 0
   id: 0
+  characterPrefab: {fileID: 7333318791917978713, guid: b02d7371af70ee840b9f47061281437e, type: 3}
   Class: 0
   health: 0.5
   speed: 0
@@ -33,13 +34,13 @@ MonoBehaviour:
   attackAbility: 
   defenceAbility: 
   buffAbility: 
-  passiveCharacterAbility:
+  passiveCharacterAbilityData:
     rid: -2
-  attackCharacterAbility:
+  attackCharacterAbilityData:
     rid: -2
-  defenceCharacterAbility:
+  defenceCharacterAbilityData:
     rid: -2
-  buffCharacterAbility:
+  buffCharacterAbilityData:
     rid: -2
   references:
     version: 2

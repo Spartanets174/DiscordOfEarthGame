@@ -12,8 +12,7 @@ public class PlayerController : MonoBehaviour, ILoadable
 
     [Header("Prefabs")]
     [SerializeField]
-    private PlayerCharacter charPrefab;
-    public PlayerCharacter CharPrefab => charPrefab;
+    private GameObject defaultPlayerPrefab;
 
     private ReactiveCollection<PlayerCharacter> m_playerCharactersObjects = new();
     public ReactiveCollection<PlayerCharacter> PlayerCharactersObjects => m_playerCharactersObjects;
@@ -53,16 +52,28 @@ public class PlayerController : MonoBehaviour, ILoadable
 
     public PlayerCharacter InstasiatePlayerCharacter(CharacterCard characterCard, Transform parent)
     {
-        PlayerCharacter prefab = Instantiate(CharPrefab, Vector3.zero, Quaternion.identity, parent);
-        prefab.transform.localPosition = new Vector3(0, 1, 0);
-        
-        prefab.SetData(characterCard, null, m_playerCharactersObjects.Count);
-        prefab.OnClick += SetCurrentPlayerChosenCharacter;
-        prefab.OnDeath += OnCharacterDeath;
+        GameObject prefab;
+        if (characterCard.characterPrefab==null)
+        {
+            prefab = Instantiate(defaultPlayerPrefab, Vector3.zero, Quaternion.identity, parent);
 
-        m_playerCharactersObjects.Add(prefab);
+        }
+        else
+        {
+            prefab = Instantiate(characterCard.characterPrefab, Vector3.zero,Quaternion.identity, parent);
+        }
+        PlayerCharacter playerCharacter = prefab.AddComponent<PlayerCharacter>();
+        prefab.transform.localPosition = Vector3.zero;
+        prefab.transform.localEulerAngles = new Vector3(0, 180, 0);
+
+
+        playerCharacter.SetData(characterCard, m_playerCharactersObjects.Count);
+        playerCharacter.OnClick += SetCurrentPlayerChosenCharacter;
+        playerCharacter.OnDeath += OnCharacterDeath;
+
+        m_playerCharactersObjects.Add(playerCharacter);
         OnPlayerCharacterSpawned?.Invoke();
-        return prefab;
+        return playerCharacter;
     }
 
     private void OnCharacterDeath(Character character)

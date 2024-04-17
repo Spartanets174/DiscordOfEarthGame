@@ -122,7 +122,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2e458810105ab4648828c9e25778d193, type: 2}
   - {fileID: 11400000, guid: 34cb52581f51c0d49a3f556361ebfbf6, type: 2}
   - {fileID: 11400000, guid: 7c1bf058d4094a148b9ec544c8523b87, type: 2}
-  deckUserSupportCards: []
+  - {fileID: 11400000, guid: 93fa790d82335fb429e52d537e81876b, type: 2}
+  deckUserSupportCards:
+  - {fileID: 11400000, guid: 8f5cbf164e1efd545bbc328802f0b632, type: 2}
+  - {fileID: 11400000, guid: df0aedd72128a1544ae2cc75ab6768fb, type: 2}
+  - {fileID: 11400000, guid: 4356bed165dbfaa448f3e1fb04adada3, type: 2}
+  - {fileID: 11400000, guid: db21915f334f3154280ff419b29fd575, type: 2}
+  - {fileID: 11400000, guid: 1ee5f89ca1b8b0c44a78b4c0d1dad92f, type: 2}
+  - {fileID: 11400000, guid: 8b4677ba62c957e44a32c1eaf62909f1, type: 2}
+  - {fileID: 11400000, guid: 53179920743f8c441b620df47da4bbb4, type: 2}
   money: 10000
   Name: ffffff
   Password: ffffF@

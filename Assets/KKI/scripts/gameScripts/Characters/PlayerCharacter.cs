@@ -11,12 +11,17 @@ public class PlayerCharacter : Character
         set => m_isCurrentPlayerCharacter = value;
     }
     
-    public override void SetData(CharacterCard card, Material material, int index)
+    public override void SetData(CharacterCard card, int index)
     {
-        base.SetData(card, material, index);
+        base.SetData(card, index);
         m_index = index;
-        healthBar.SetHealth(card.health, 1);
-        healthBar.SetMaxHealth(card.health);
+        healthBar.gameObject.SetActive(false);
+        if (healthBar!=null)
+        {
+            healthBar.SetHealth(card.health, 1);
+            healthBar.SetMaxHealth(card.health);
+        }
+        
         m_card = card;
     }
 }

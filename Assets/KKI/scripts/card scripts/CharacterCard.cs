@@ -7,7 +7,8 @@ using UnityEngine;
 //scriptable object для карт со всеми параметрами карты
 [CreateAssetMenu(fileName = "New Card",menuName = "Card")]
 public class CharacterCard: Card
-{   
+{
+    public GameObject characterPrefab;
     public Enums.Classes Class;
 
     [Space, Header("Characteristics")]

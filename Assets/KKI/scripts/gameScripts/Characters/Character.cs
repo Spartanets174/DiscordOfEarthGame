@@ -1,10 +1,11 @@
 using DG.Tweening;
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 
-public abstract class Character : OutlineInteractableObject
+public abstract class Character : ChildOutlineInteractableObject
 {
     [SerializeField]
     protected CharacterCard m_card;
@@ -348,10 +349,39 @@ public abstract class Character : OutlineInteractableObject
 
     public event Action<Character> OnPositionOnFieldChanged;
 
-
-
-    public virtual void SetData(CharacterCard card, Material material, int currentIndex)
+    protected override void Awake()
     {
+        base.Awake();
+        m_collider = GetComponent<Collider>();
+        if (m_collider == null)
+        {
+            m_collider = GetComponentInChildren<Collider>();
+        }
+
+        m_collider.OnMouseEnterAsObservable().Where(x => IsEnabled).Subscribe(
+            x => OnHoverEnterInvoke()
+            ).AddTo(disposables);
+
+        m_collider.OnMouseExitAsObservable().Where(x => IsEnabled && !IsChosen).Subscribe(
+            x => OnHoverExitInvoke()
+            ).AddTo(disposables);
+
+        m_collider.OnMouseDownAsObservable().Where(x => IsEnabled).Subscribe(
+            x => OnClickInvoke()
+            ).AddTo(disposables);
+
+        m_collider.OnMouseOverAsObservable().Where(x => IsEnabled).Subscribe(
+            x => OnHoverInvoke()
+            ).AddTo(disposables);
+    }
+
+    public virtual void SetData(CharacterCard card, int currentIndex)
+    {
+        if (healthBar == null)
+        {
+            healthBar = gameObject.GetComponentInChildren<HealthBar>(true);
+        }
+
         m_card = card;
         m_characterName = m_card.cardName;
         m_race = m_card.race;
@@ -367,7 +397,7 @@ public abstract class Character : OutlineInteractableObject
         m_physDefence = m_card.physDefence;
         m_magDefence = m_card.magDefence;
         m_critChance = m_card.critChance;
-        m_critNum = m_card.critNum;
+        m_critNum = m_card.critNum;      
 
         m_chanceToFreeAttack = 0;
         if (m_card.passiveCharacterAbilityData!=null)
@@ -623,7 +653,7 @@ public abstract class Character : OutlineInteractableObject
         transform.DOMove(new Vector3(cellToMovePos.x, transform.position.y, cellToMovePos.z), 0.5f).OnComplete(() =>
         {
             transform.SetParent(positionToMove);
-            transform.localPosition = new Vector3(0, 1, 0);           
+            transform.localPosition = Vector3.zero;
             OnPositionOnFieldChanged?.Invoke(this);
         });      
     }
@@ -671,15 +701,6 @@ public abstract class Character : OutlineInteractableObject
         m_isAttackedOnTheMove = true;
         OnAttack?.Invoke(this);
     }
-
-    protected override void OnMouseExit()
-    {
-        if (IsEnabled&&!IsChosen)
-        {
-            OnHoverExitInvoke();
-        }
-    }
-
     protected void OnCharacterClickedInvoke(GameObject gameObject)
     {
         IsChosen = true;

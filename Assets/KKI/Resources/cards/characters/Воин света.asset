@@ -19,6 +19,7 @@ MonoBehaviour:
   rarity: 1
   Price: 123
   id: 40
+  characterPrefab: {fileID: 3626096291062311550, guid: 6f5b3c6b2301e854e82085beb7dfd3db, type: 3}
   Class: 4
   health: 1
   speed: 3

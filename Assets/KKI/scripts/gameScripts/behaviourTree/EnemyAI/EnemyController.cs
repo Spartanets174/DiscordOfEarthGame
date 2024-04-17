@@ -1,10 +1,8 @@
 using BehaviourTree;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UniRx;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 using Tree = BehaviourTree.Tree;
 
 public class EnemyController : Tree
@@ -25,21 +23,10 @@ public class EnemyController : Tree
     [SerializeField]
     private CharacterCard elementalCard;
 
-    [Header("Enemy prefabs")]
+    [Header("Prefabs")]
     [SerializeField]
-    private EnemyCharacter enemyPrefab;
-    [SerializeField]
-    private StaticEnemyCharacter staticEnemyPrefab;
+    private GameObject defaultEnemyPrefab;
 
-    [Header("Enemy materials")]
-    [SerializeField]
-    private Material redMaterial;
-    [SerializeField]
-    private Material goliafMaterial;
-    [SerializeField]
-    private Material assasinMaterial;
-    [SerializeField]
-    private Material elementalMaterial;
 
     private ReactiveCollection<EnemyCharacter> m_enemyCharObjects = new();
     public ReactiveCollection<EnemyCharacter> EnemyCharObjects => m_enemyCharObjects;
@@ -47,7 +34,7 @@ public class EnemyController : Tree
     private ReactiveCollection<StaticEnemyCharacter> m_staticEnemyCharObjects = new();
     public ReactiveCollection<StaticEnemyCharacter> StaticEnemyCharObjects => m_staticEnemyCharObjects;
 
-    private List<CharacterCard> m_enemyCharCards=new();
+    private List<CharacterCard> m_enemyCharCards = new();
     public List<CharacterCard> EnemyCharCards => m_enemyCharCards;
 
     private EnemyCharacter m_currentEnemyCharacter;
@@ -113,17 +100,17 @@ public class EnemyController : Tree
                 //Спавн ассасинов
                 if ((j == 4 || j == 6) && (i == 0 || i == 6))
                 {
-                    InstantiateStaticEnemy(assasinCard, assasinMaterial, fieldController.GetCell(i, j));
+                    InstantiateStaticEnemy(assasinCard, fieldController.GetCell(i, j));
                 }
                 //Спавн голиафов
                 if ((j == 4 || j == 6) && (i == 2 || i == 4))
                 {
-                    InstantiateStaticEnemy(goliafCard, goliafMaterial, fieldController.GetCell(i, j));
+                    InstantiateStaticEnemy(goliafCard, fieldController.GetCell(i, j));
                 }
                 //Спавн элементалей
                 if ((j == 2 || j == 8) && i % 2 != 0)
                 {
-                    InstantiateStaticEnemy(elementalCard, elementalMaterial, fieldController.GetCell(i, j));
+                    InstantiateStaticEnemy(elementalCard, fieldController.GetCell(i, j));
                 }
             }
         }
@@ -133,14 +120,24 @@ public class EnemyController : Tree
             Cell Cell = fieldController.GetCell(UnityEngine.Random.Range(0, fieldController.CellsOfFieled.GetLength(0)), UnityEngine.Random.Range(0, 2));
             if (!IsEnemyOnCell(Cell))
             {
-                EnemyCharacter enemyCharacter = Instantiate(enemyPrefab, Vector3.zero, Quaternion.identity, Cell.transform);
-                enemyCharacter.transform.localPosition = new Vector3(0, 1, 0);
+                GameObject prefab;
+                if (m_enemyCharCards[count].characterPrefab == null)
+                {
+                    prefab = Instantiate(defaultEnemyPrefab, Vector3.zero, Quaternion.identity, Cell.transform);
+                }
+                else
+                {
+                    prefab = Instantiate(m_enemyCharCards[count].characterPrefab, Vector3.zero, Quaternion.identity, Cell.transform);
+                }
+                
+                EnemyCharacter enemyCharacter = prefab.AddComponent<EnemyCharacter>();
+                enemyCharacter.transform.localPosition = Vector3.zero;
                 enemyCharacter.OnDeath += OnEnemyCharacterDeath;
 
-                enemyCharacter.SetData(m_enemyCharCards[count], redMaterial, count);
+                enemyCharacter.SetData(m_enemyCharCards[count], count);
 
                 m_enemyCharObjects.Add(enemyCharacter);
-               
+
                 count++;
             }
             count2++;
@@ -162,12 +159,13 @@ public class EnemyController : Tree
             return false;
         }
     }
-    private void InstantiateStaticEnemy(CharacterCard characterCard, Material material, Cell cell)
+    private void InstantiateStaticEnemy(CharacterCard characterCard, Cell cell)
     {
-        StaticEnemyCharacter staticEnemyCharacter = Instantiate(staticEnemyPrefab, Vector3.zero, Quaternion.identity, cell.transform);
-        staticEnemyCharacter.transform.localPosition = new Vector3(0, 1, 0);
+        GameObject prefab = Instantiate(characterCard.characterPrefab, Vector3.zero, Quaternion.identity, cell.transform);
+        StaticEnemyCharacter staticEnemyCharacter = prefab.AddComponent<StaticEnemyCharacter>();
+        staticEnemyCharacter.transform.localPosition =  Vector3.zero;
 
-        staticEnemyCharacter.SetData(characterCard, material, m_staticEnemyCharObjects.Count - 1);
+        staticEnemyCharacter.SetData(characterCard, m_staticEnemyCharObjects.Count - 1);
         staticEnemyCharacter.OnDeath += OnStaticEnemyCharacterDeath;
 
         SetAttackableCells(Enums.Directions.top, staticEnemyCharacter);
@@ -188,11 +186,11 @@ public class EnemyController : Tree
         Destroy(character.gameObject);
     }
 
-    private void SetAttackableCells(Enums.Directions direction, StaticEnemyCharacter staticEnemyCharacter )
+    private void SetAttackableCells(Enums.Directions direction, StaticEnemyCharacter staticEnemyCharacter)
     {
         int newI = (int)staticEnemyCharacter.PositionOnField.x;
         int newJ = (int)staticEnemyCharacter.PositionOnField.y;
-        
+
         for (int i = 0; i < staticEnemyCharacter.Range; i++)
         {
             switch (direction)
@@ -210,7 +208,7 @@ public class EnemyController : Tree
                     newJ++;
                     break;
             }
-           
+
             if (newI >= 7 || newI < 0)
             {
                 break;
@@ -221,12 +219,12 @@ public class EnemyController : Tree
             }
 
             Cell cell = battleSystem.FieldController.GetCell(newI, newJ);
-            
-            if (cell.transform.childCount==0)
+
+            if (cell.transform.childCount == 0)
             {
                 staticEnemyCharacter.CellsToAttack.Add(cell);
             }
-            
+
         }
     }
 
@@ -258,7 +256,7 @@ public class EnemyController : Tree
         }
     }
 
-    public void SetEnemiesState(bool state, Action<EnemyCharacter> subAction=null)
+    public void SetEnemiesState(bool state, Action<EnemyCharacter> subAction = null)
     {
         foreach (var enemyCharacter in m_enemyCharObjects)
         {
