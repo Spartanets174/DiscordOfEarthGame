@@ -17,9 +17,9 @@ public class SettingsController : MonoBehaviour, ILoadable
     [SerializeField]
     private AudioClip menuMusic;
 
-    [Header("Setup data")]
+    [Header("Settings")]
     [SerializeField]
-    private bool fullWindow;
+    private KeyCode settingsButton;
 
     private DbManager dbManager;
 
@@ -38,25 +38,27 @@ public class SettingsController : MonoBehaviour, ILoadable
         dbManager = FindObjectOfType<DbManager>();
         outlineInteractableObjects = FindObjectsOfType<OutlineInteractableObject>().ToList();
         resolutions.Clear();
+        int count = 0;
         for (int i = 0; i < Screen.resolutions.Length; i++)
         {
             if (Screen.resolutions[i].width <= 1920 && Screen.resolutions[i].height <= 1080)
             {
-                if (resolutions.Where(x=>x.Value.x == Screen.resolutions[i].width && x.Value.y == Screen.resolutions[i].height).ToList().Count==0)
+                if (resolutions.Where(x => x.Value.x == Screen.resolutions[i].width && x.Value.y == Screen.resolutions[i].height).ToList().Count == 0)
                 {
-                    resolutions.Add(i, new Vector2(Screen.resolutions[i].width, Screen.resolutions[i].height));
+                    resolutions.Add(count, new Vector2(Screen.resolutions[i].width, Screen.resolutions[i].height));
+                    count++;
                 }
-                
-            }           
+            }
         }
         if (PlayerPrefs.GetString("isFirst") != "1")
         {
             ChangeSoundLevel(1);
             ChangeMusicLevel(1);
-            ChangeScreenSize(resolutions.Last().Key);
-            ChangeFullScreenState(fullWindow);
+
+            PlayerPrefs.SetInt("fullScreen", 1);
+            ChangeScreenSize(resolutions.Keys.Last());
             PlayerPrefs.SetString("isFirst", "1");
-        }      
+        }
 
         MusicAudioSource.loop = true;
         MusicAudioSource.clip = menuMusic;
@@ -64,7 +66,7 @@ public class SettingsController : MonoBehaviour, ILoadable
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(settingsButton))
         {
             TogglePausedState();
         }
@@ -73,6 +75,10 @@ public class SettingsController : MonoBehaviour, ILoadable
     public void TogglePausedState()
     {
         isPaused = !isPaused;
+        foreach (var item in outlineInteractableObjects)
+        {
+            item.IsEnabled = !isPaused;
+        }
         Time.timeScale = isPaused ? 0 : 1;
         OnPauseStateChanged?.Invoke(isPaused);
     }

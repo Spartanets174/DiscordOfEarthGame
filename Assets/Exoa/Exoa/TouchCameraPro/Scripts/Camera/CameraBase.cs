@@ -161,8 +161,8 @@ namespace Exoa.Cameras
         {
             cam = GetComponent<Camera>();
             // Fix for jittering issues when camera is really high
-            cam.nearClipPlane = 1f;
-
+/*            cam.nearClipPlane = 1f;
+*/
             camBounds = GetComponent<CameraBoundaries>();
             standalone = GetComponent<CameraModeSwitcher>() == null;
             Init();

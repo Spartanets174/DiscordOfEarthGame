@@ -57,7 +57,7 @@ public class BattleSystem : StateMachine, ILoadable
     public void Init()
     {
         m_instance = this;
-        FieldController.InvokeActionOnField(x => x.OnClick += x=> FieldController.TurnOnCells());
+        FieldController.InvokeActionOnField(x => x.OnClick += x => FieldController.TurnOnCells());
         PlayerController.PlayerCharactersObjects.ObserveCountChanged().Subscribe(x =>
         {
             if (x == 5)
@@ -72,7 +72,7 @@ public class BattleSystem : StateMachine, ILoadable
 
         EnemyController.EnemyCharObjects.ObserveCountChanged().Subscribe(x =>
         {
-            if (x==0)
+            if (x == 0)
             {
                 SetWin();
             }
@@ -191,11 +191,18 @@ public class BattleSystem : StateMachine, ILoadable
     {
         if (character != null)
         {
+            Character tmpCharacter = character.GetComponent<Character>();
             if (CurrentChosenCharacter.Value != null)
             {
                 CurrentChosenCharacter.Value.IsChosen = false;
+                if (CurrentChosenCharacter.Value == tmpCharacter)
+                {
+                    CurrentChosenCharacter.Value = null;
+                    return;
+                }
             }
-            CurrentChosenCharacter.Value = character.GetComponent<Character>();
+
+            CurrentChosenCharacter.Value = tmpCharacter;
             CurrentChosenCharacter.Value.IsChosen = true;
         }
         else

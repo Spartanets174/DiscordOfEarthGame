@@ -167,6 +167,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Character
       objectReference: {fileID: 0}
+    - target: {fileID: 539823197231590358, guid: e6531ec5831594a4d816af9d973d28e0, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 539823197231590358, guid: e6531ec5831594a4d816af9d973d28e0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2461886949497734725, guid: e6531ec5831594a4d816af9d973d28e0, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -222,6 +230,10 @@ PrefabInstance:
     - target: {fileID: 2461886949497734725, guid: e6531ec5831594a4d816af9d973d28e0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5697508625532752715, guid: e6531ec5831594a4d816af9d973d28e0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e6531ec5831594a4d816af9d973d28e0, type: 3}

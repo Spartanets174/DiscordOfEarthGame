@@ -200,6 +200,7 @@ public abstract class Character : ChildOutlineInteractableObject
         set
         {
             m_isChosen = value;
+            SetEnabledToHealthBar(m_isChosen);
             SetOutlineState(IsChosen);
         }
     }
@@ -356,6 +357,7 @@ public abstract class Character : ChildOutlineInteractableObject
         {
             healthBar = gameObject.GetComponentInChildren<HealthBar>(true);
         }
+        healthBar.gameObject.SetActive(false);
 
         m_card = card;
         m_characterName = m_card.cardName;
@@ -427,6 +429,11 @@ public abstract class Character : ChildOutlineInteractableObject
             m_damageMultiplierByClassesDict.Add(characterClass, 1);
         }
         OnClick += OnCharacterClickedInvoke;
+
+        OnHoverEnter += EnableHealthBar;
+        OnHoverExit += DisableHealthBar;
+
+
         IsChosen = false;
         CanBeDamaged = true;
         CanDamage = true;
@@ -434,6 +441,7 @@ public abstract class Character : ChildOutlineInteractableObject
         IgnorePhysDamage = false;
         IgnoreMagDamage = false;
     }
+
     public virtual bool Damage(Character chosenCharacter)
     {
         LastAttackedCharacter = chosenCharacter;
@@ -679,6 +687,28 @@ public abstract class Character : ChildOutlineInteractableObject
     protected void OnCharacterClickedInvoke(GameObject gameObject)
     {
         IsChosen = true;
+    }
+
+
+    private void SetEnabledToHealthBar(bool state)
+    {
+        if (state)
+        {
+            EnableHealthBar(null);
+        }
+        else
+        {
+            DisableHealthBar(null);
+        }
+    }
+    private void DisableHealthBar(GameObject gameObject)
+    {
+        healthBar.gameObject.SetActive(false);
+    }
+
+    private void EnableHealthBar(GameObject gameObject)
+    {
+        healthBar.gameObject.SetActive(true);
     }
     protected override void SubscribeOnMouseExit()
     {

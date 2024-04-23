@@ -100,17 +100,17 @@ public class EnemyController : Tree
                 //Спавн ассасинов
                 if ((j == 4 || j == 6) && (i == 0 || i == 6))
                 {
-                    InstantiateStaticEnemy(assasinCard, fieldController.GetCell(i, j));
+                    InstantiateStaticEnemy(assasinCard, fieldController.GetCell(i, j), j == 6);
                 }
                 //Спавн голиафов
                 if ((j == 4 || j == 6) && (i == 2 || i == 4))
                 {
-                    InstantiateStaticEnemy(goliafCard, fieldController.GetCell(i, j));
+                    InstantiateStaticEnemy(goliafCard, fieldController.GetCell(i, j), j == 6);
                 }
                 //Спавн элементалей
                 if ((j == 2 || j == 8) && i % 2 != 0)
                 {
-                    InstantiateStaticEnemy(elementalCard, fieldController.GetCell(i, j));
+                    InstantiateStaticEnemy(elementalCard, fieldController.GetCell(i, j), j == 8);
                 }
             }
         }
@@ -129,7 +129,7 @@ public class EnemyController : Tree
                 {
                     prefab = Instantiate(m_enemyCharCards[count].characterPrefab, Vector3.zero, Quaternion.identity, Cell.transform);
                 }
-                
+
                 EnemyCharacter enemyCharacter = prefab.AddComponent<EnemyCharacter>();
                 enemyCharacter.transform.localPosition = Vector3.zero;
                 enemyCharacter.OnDeath += OnEnemyCharacterDeath;
@@ -159,11 +159,16 @@ public class EnemyController : Tree
             return false;
         }
     }
-    private void InstantiateStaticEnemy(CharacterCard characterCard, Cell cell)
+    private void InstantiateStaticEnemy(CharacterCard characterCard, Cell cell, bool enemySide)
     {
         GameObject prefab = Instantiate(characterCard.characterPrefab, Vector3.zero, Quaternion.identity, cell.transform);
         StaticEnemyCharacter staticEnemyCharacter = prefab.AddComponent<StaticEnemyCharacter>();
-        staticEnemyCharacter.transform.localPosition =  Vector3.zero;
+        staticEnemyCharacter.transform.localPosition = Vector3.zero;
+
+        if (!enemySide)
+        {
+            staticEnemyCharacter.transform.localEulerAngles = new Vector3(0, 180, 0);
+        }
 
         staticEnemyCharacter.SetData(characterCard, m_staticEnemyCharObjects.Count - 1);
         staticEnemyCharacter.OnDeath += OnStaticEnemyCharacterDeath;

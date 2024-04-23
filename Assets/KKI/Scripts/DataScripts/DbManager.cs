@@ -27,28 +27,12 @@ public class DbManager : MonoBehaviour
     public static MySqlConnection con;
 
     [SerializeField] private PlayerData playerData;
-    [SerializeField] private CanvasGroup debugConsole;
     public PlayerData PlayerData => playerData;
 
     private bool m_isConnected;
     public bool IsConnected => m_isConnected;
-    private float timer = 1f;
-    private CompositeDisposable disposables = new();
     public void Awake()
     {
-        debugConsole.alpha = 0;
-        Observable.EveryUpdate().Subscribe(x =>
-        {
-            timer -= Time.deltaTime;
-            if (timer < 0)
-            {
-                if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.F1))
-                {
-                    debugConsole.alpha = debugConsole.alpha == 0 ?  1 : 0;
-                    timer = 1f;
-                }
-            }
-        }).AddTo(disposables);
         OpenCon();
     }
 
@@ -76,12 +60,6 @@ public class DbManager : MonoBehaviour
         CloseCon();
     }
 
-    private void OnDestroy()
-    {
-        disposables.Dispose();
-        disposables.Clear();
-        disposables = new();
-    }
     public void SavePlayer()
     {
         if (playerData != null)
@@ -409,6 +387,7 @@ public class DbManager : MonoBehaviour
     {
         for (int i = 0; i < playerData.allShopSupportCards.Count; i++)
         {
+            Debug.Log(playerData.allShopSupportCards[i]);
             string query = $"insert into gamedb.cards_shop(idCards_Shop,cost,id_player) values({playerData.allShopSupportCards[i].id},{playerData.allShopSupportCards[i].Price},{playerData.PlayerId})";
             var command = new MySqlCommand(query, con);
             try

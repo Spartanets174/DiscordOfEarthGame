@@ -41,6 +41,8 @@ public class UICoordinator : MonoBehaviour, ILoadable
     [Space, Header("Controllers")]
     [SerializeField]
     private PlayerDataController PlayerManager;
+    [SerializeField]
+    private SettingsController settingsController;
 
 
     private Camera cam;
@@ -129,9 +131,7 @@ public class UICoordinator : MonoBehaviour, ILoadable
     }
     private void TurnOnSettings(GameObject gameObject)
     {
-        shopObject.IsEnabled = false;
-        settingsObject.IsEnabled = false;
-        SetState(settings, true);
+        settingsController.TogglePausedState();
     }
     private void TurnOnShopText(GameObject gameObject)
     {

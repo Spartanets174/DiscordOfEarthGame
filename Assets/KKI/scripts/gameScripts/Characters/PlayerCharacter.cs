@@ -15,7 +15,6 @@ public class PlayerCharacter : Character
     {
         base.SetData(card, index);
         m_index = index;
-        healthBar.gameObject.SetActive(false);
         if (healthBar!=null)
         {
             healthBar.SetHealth(card.health, 1);
