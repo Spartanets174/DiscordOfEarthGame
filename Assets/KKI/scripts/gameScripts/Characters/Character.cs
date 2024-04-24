@@ -15,7 +15,6 @@ public abstract class Character : ChildOutlineInteractableObject
     [SerializeField]
     protected HealthBar healthBar;
 
-
     protected string m_characterName;
     public string CharacterName => m_characterName;
 
@@ -433,6 +432,9 @@ public abstract class Character : ChildOutlineInteractableObject
         OnHoverEnter += EnableHealthBar;
         OnHoverExit += DisableHealthBar;
 
+        OnDamaged += (x, y, z) => InstantiateEffectOnCharacter(card.damageEffect);
+        OnHeal += (x, y, z) => InstantiateEffectOnCharacter(card.healEffect);
+        OnAttack += (x) =>  InstantiateEffectOnCharacter(card.attacklEffect);
 
         IsChosen = false;
         CanBeDamaged = true;
@@ -440,6 +442,20 @@ public abstract class Character : ChildOutlineInteractableObject
         CanUseAbilities = true;
         IgnorePhysDamage = false;
         IgnoreMagDamage = false;
+    }
+
+    public void InstantiateEffectOnCharacter(GameObject effect)
+    {
+        if (effect !=null)
+        {
+            GameObject spawnedEffect = Instantiate(effect, Vector3.zero, Quaternion.identity, transform);
+            spawnedEffect.transform.localPosition = new Vector3(0,1,0);
+        }
+        else
+        {
+            Debug.LogError("null effect");
+        }
+        
     }
 
     public virtual bool Damage(Character chosenCharacter)

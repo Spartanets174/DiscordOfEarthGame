@@ -108,7 +108,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c7459b8714411a647b37bc4c6210a14b, type: 2}
   - {fileID: 11400000, guid: 2bda1a7935a22ef4fad4e90c8bfc8301, type: 2}
   - {fileID: 11400000, guid: 501922f67ef97b34dafe533a1d15acc0, type: 2}
-  allUserCharCards: []
+  allUserCharCards:
+  - {fileID: 11400000, guid: 14cbde657a3173347af9823bb863e1d9, type: 2}
+  - {fileID: 11400000, guid: 2e458810105ab4648828c9e25778d193, type: 2}
+  - {fileID: 11400000, guid: 34cb52581f51c0d49a3f556361ebfbf6, type: 2}
+  - {fileID: 11400000, guid: 7c1bf058d4094a148b9ec544c8523b87, type: 2}
+  - {fileID: 11400000, guid: 8ddad6f2dd7fae749ab585f3bc109f72, type: 2}
   allUserSupportCards:
   - {fileID: 11400000, guid: 84bb7f7ff0b430349930dd26f46f8419, type: 2}
   - {fileID: 11400000, guid: b40dccc0e8052b749a505921aca02c2a, type: 2}
@@ -118,11 +123,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 119a4b4fc355b564cab1cb2438170384, type: 2}
   - {fileID: 11400000, guid: 01051d735d44b6d4d882ae4ff2cd2912, type: 2}
   deckUserCharCards:
-  - {fileID: 11400000, guid: 14cbde657a3173347af9823bb863e1d9, type: 2}
-  - {fileID: 11400000, guid: 2e458810105ab4648828c9e25778d193, type: 2}
-  - {fileID: 11400000, guid: 34cb52581f51c0d49a3f556361ebfbf6, type: 2}
-  - {fileID: 11400000, guid: 7c1bf058d4094a148b9ec544c8523b87, type: 2}
-  - {fileID: 11400000, guid: 93fa790d82335fb429e52d537e81876b, type: 2}
+  - {fileID: 11400000, guid: 1efb931489e48d54382b4858bb72c825, type: 2}
+  - {fileID: 11400000, guid: 3c0d8d76eb182f4448c9ab5176ac15a4, type: 2}
+  - {fileID: 11400000, guid: 8ddad6f2dd7fae749ab585f3bc109f72, type: 2}
+  - {fileID: 11400000, guid: 8ab1066cb4f39254899be95026fb9297, type: 2}
+  - {fileID: 11400000, guid: 07a973fb0c82eed4dae92921ad89407e, type: 2}
   deckUserSupportCards:
   - {fileID: 11400000, guid: 8f5cbf164e1efd545bbc328802f0b632, type: 2}
   - {fileID: 11400000, guid: df0aedd72128a1544ae2cc75ab6768fb, type: 2}
@@ -132,6 +137,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8b4677ba62c957e44a32c1eaf62909f1, type: 2}
   - {fileID: 11400000, guid: 53179920743f8c441b620df47da4bbb4, type: 2}
   money: 10000
-  Name: ffffff
-  Password: ffffF@
-  PlayerId: 106
+  Name: dfgdfgdf
+  Password: dfdfggfG@
+  PlayerId: 137

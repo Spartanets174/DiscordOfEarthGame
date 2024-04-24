@@ -26,6 +26,12 @@ public class CharacterCard: Card
     public string defenceAbility;
     public string buffAbility;
 
+    [Space, Header("Effects")]
+    public GameObject damageEffect;
+    public GameObject healEffect;
+    public GameObject attacklEffect;
+
+
     [Header("Abilities")]
     [SerializeReference, SubclassSelector]
     public BasePassiveCharacterAbilityData passiveCharacterAbilityData;   

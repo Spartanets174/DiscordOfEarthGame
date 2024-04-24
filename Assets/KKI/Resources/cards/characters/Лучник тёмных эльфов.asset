@@ -13,14 +13,16 @@ MonoBehaviour:
   m_Name: "\u041B\u0443\u0447\u043D\u0438\u043A \u0442\u0451\u043C\u043D\u044B\u0445
     \u044D\u043B\u044C\u0444\u043E\u0432"
   m_EditorClassIdentifier: 
-  cardName: 
+  cardName: "\u041B\u0443\u0447\u043D\u0438\u043A \u0442\u0451\u043C\u043D\u044B\u0445
+    \u044D\u043B\u044C\u0444\u043E\u0432"
   description: "\u0442\u044D\u043B\u044C\u0444"
   race: 4
   image: {fileID: 21300000, guid: 6b0001d70d013894da2aeda784d9c707, type: 3}
-  rarity: 0
-  Price: 423
-  id: 0
-  Class: 1
+  rarity: 1
+  Price: 12432
+  id: 39
+  characterPrefab: {fileID: 0}
+  Class: 2
   health: 1
   speed: 2
   physAttack: 2
@@ -44,6 +46,9 @@ MonoBehaviour:
   buffAbility: "\"\u041C\u044F\u0442\u044B\u0439 \u0441\u0432\u0438\u0442\u043E\u043A\"
     - \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u0430\u0432\u043B\u0438\u0432\u0430\u0435\u0442
     50% \u0445\u043F \u0441\u0435\u0431\u0435"
+  damageEffect: {fileID: 3056142561319656689, guid: 30bde6c7c698b4e45bee74d4554f578d, type: 3}
+  healEffect: {fileID: 1399381404335117779, guid: 6cd472cd175a9c9468542a7121b21da4, type: 3}
+  attacklEffect: {fileID: 3354070747603088629, guid: 6dc330c661d0a87488c2f5ae2397ff6f, type: 3}
   passiveCharacterAbilityData:
     rid: 2085506596913807360
   attackCharacterAbilityData:

@@ -19,6 +19,7 @@ MonoBehaviour:
   rarity: 2
   Price: 423
   id: 43
+  characterPrefab: {fileID: 0}
   Class: 3
   health: 3
   speed: 5
@@ -44,6 +45,9 @@ MonoBehaviour:
   buffAbility: "\"\u0421\u0438\u043B\u0430 \u0434\u0443\u0445\u043E\u0432\" - \u043F\u043E\u0432\u044B\u0448\u0430\u0435\u0442
     \u0448\u0430\u043D\u0441 \u043A\u0440\u0438\u0442\u0430 \u0434\u043E 30% \u043D\u0430
     3 \u0445\u043E\u0434\u0430 "
+  damageEffect: {fileID: 3056142561319656689, guid: 30bde6c7c698b4e45bee74d4554f578d, type: 3}
+  healEffect: {fileID: 1399381404335117779, guid: 6cd472cd175a9c9468542a7121b21da4, type: 3}
+  attacklEffect: {fileID: 1233945089189314085, guid: e4315e772a9451f45a5c2702c30e3db7, type: 3}
   passiveCharacterAbilityData:
     rid: 2085506596913807364
   attackCharacterAbilityData:

@@ -8,6 +8,9 @@ public abstract class BaseCharacterAbility: MonoBehaviour
     private Enums.TypeOfAbility m_typeOfAbility;
     public Enums.TypeOfAbility TypeOfAbility=> m_typeOfAbility;
 
+    [SerializeField]
+    private GameObject abilityEffect;
+
     protected BattleSystem battleSystem;
 
     protected ICardSelectable m_cardSelectBehaviour;
