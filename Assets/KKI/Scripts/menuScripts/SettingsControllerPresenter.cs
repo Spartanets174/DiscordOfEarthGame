@@ -127,7 +127,7 @@ public class SettingsControllerPresenter : MonoBehaviour, ILoadable
         }
     }
 
-    private void ExitAccount()
+    protected virtual void ExitAccount()
     {
         if (isGame)
         {

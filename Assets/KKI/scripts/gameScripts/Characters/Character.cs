@@ -434,7 +434,7 @@ public abstract class Character : ChildOutlineInteractableObject
 
         OnDamaged += (x, y, z) => InstantiateEffectOnCharacter(card.damageEffect);
         OnHeal += (x, y, z) => InstantiateEffectOnCharacter(card.healEffect);
-        OnAttack += (x) =>  InstantiateEffectOnCharacter(card.attacklEffect);
+        OnAttack += (x) =>  InstantiateEffectOnCharacter(card.attackEffect);
 
         IsChosen = false;
         CanBeDamaged = true;
@@ -449,7 +449,8 @@ public abstract class Character : ChildOutlineInteractableObject
         if (effect !=null)
         {
             GameObject spawnedEffect = Instantiate(effect, Vector3.zero, Quaternion.identity, transform);
-            spawnedEffect.transform.localPosition = new Vector3(0,1,0);
+            spawnedEffect.transform.localPosition = new Vector3(0, 1, 0);
+
         }
         else
         {

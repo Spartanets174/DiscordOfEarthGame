@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class EternalGuardianCharacteDefenceAbility : BaseCharacterAbility, ITurnCountable
@@ -24,6 +25,8 @@ public class EternalGuardianCharacteDefenceAbility : BaseCharacterAbility, ITurn
     private void OnSelected()
     {
         abilityOwner.PhysDefence += abilityData.physDefenceAmount;
+        abilityOwner.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
+
 
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(abilityOwner.gameObject);

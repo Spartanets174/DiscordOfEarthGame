@@ -37,7 +37,7 @@ public class FearlessGuardianCharacterDefenceAbility : BaseCharacterAbility
         {
             battleSystem.PlayerController.CurrentPlayerCharacter.PhysDefence -= abilityData.physDefenceAmount;
             battleSystem.PlayerController.CurrentPlayerCharacter.MagDefence -= abilityData.magDefenceAmount;
-
+            battleSystem.PlayerController.CurrentPlayerCharacter.InstantiateEffectOnCharacter(abilityData.useEffects["debuff"]);
         }
         else
         {
@@ -47,6 +47,8 @@ public class FearlessGuardianCharacterDefenceAbility : BaseCharacterAbility
 
         abilityOwner.PhysDefence += abilityData.physDefenceAmount;
         abilityOwner.MagDefence += abilityData.magDefenceAmount;
+        abilityOwner.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
+
 
         battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {

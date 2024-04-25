@@ -1,7 +1,6 @@
 using DG.Tweening;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UniRx;
 using UnityEngine;
@@ -24,10 +23,18 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
 
     [SerializeField]
     private HealthBar healthBar;
+
+    [Header("Card images")]
     [SerializeField]
     private Image cardImage;
     [SerializeField]
     private Image cardClassImage;
+    [SerializeField]
+    private Image cardAttackImage;
+    [SerializeField]
+    private Image cardDefenceImage;
+    [SerializeField]
+    private Image cardBuffImage;
 
     [Header("Card characteristics")]
     [SerializeField]
@@ -35,7 +42,7 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
     [SerializeField]
     private TextMeshProUGUI magAttackText;
     [SerializeField]
-    private TextMeshProUGUI physDefenceText;   
+    private TextMeshProUGUI physDefenceText;
     [SerializeField]
     private TextMeshProUGUI magDefenceText;
 
@@ -56,6 +63,12 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
     private Sprite wizardSprite;
     [SerializeField]
     private Sprite сavalrySprite;
+    [SerializeField]
+    private Sprite defaultAttackImage;
+    [SerializeField]
+    private Sprite defaultDefenceImage;
+    [SerializeField]
+    private Sprite defaultBuffImage;
 
     [Space, Header("Text panel")]
     [SerializeField]
@@ -76,11 +89,11 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
     {
         foreach (var playerCharacter in playerController.PlayerCharactersObjects)
         {
-            if (playerCharacter.PassiveCharacterAbility!=null)
+            if (playerCharacter.PassiveCharacterAbility != null)
             {
                 playerCharacter.PassiveCharacterAbility.Init(battleSystem, playerCharacter);
             }
-           
+
 
             playerCharacter.AttackCharacterAbility.OnCardAbilitySelected += OnCardAbilitySelected;
             playerCharacter.AttackCharacterAbility.OnSecondCardAbilitySelected += OnCardAbilitySelected;
@@ -116,7 +129,7 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
     {
         SetAbilityButtonsState(false);
         tipsTextParent.SetActive(true);
-        SetTipsText($"{selectable.SelectCardTipText}");       
+        SetTipsText($"{selectable.SelectCardTipText}");
         OnAbilitySelected?.Invoke();
     }
 
@@ -164,7 +177,7 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
     }
 
     private void OnUsingCancel(BaseCharacterAbility ability)
-    {       
+    {
         playerController.PlayerTurn.SetStateToNormal();
         battleSystem.FieldController.TurnOnCells();
         playerController.PlayerTurn.ClearDisposables();
@@ -213,6 +226,45 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
         physDefenceText.text = $"Физическая защита: {currentCharacter.Value.PhysDefence * 100}";
         magDefenceText.text = $"Магическая защита: {currentCharacter.Value.MagDefence * 100}";
 
+        if (character.Card.attackCharacterAbilityData != null)
+        {
+            if (character.Card.attackCharacterAbilityData.abilityImage != null)
+            {
+                cardAttackImage.sprite = character.Card.attackCharacterAbilityData.abilityImage;
+            }
+            else
+            {
+                cardAttackImage.sprite = defaultAttackImage;
+            }
+        }
+
+        if (character.Card.defenceCharacterAbilityData != null)
+        {
+            if (character.Card.defenceCharacterAbilityData.abilityImage != null)
+            {
+                cardDefenceImage.sprite = character.Card.defenceCharacterAbilityData.abilityImage;
+            }
+            else
+            {
+                cardDefenceImage.sprite = defaultDefenceImage;
+
+            }
+        }
+
+        if (character.Card.buffCharacterAbilityData !=null )
+        {
+            if (character.Card.buffCharacterAbilityData.abilityImage != null)
+            {
+                cardBuffImage.sprite = character.Card.buffCharacterAbilityData.abilityImage;
+            }
+            else
+            {
+                cardBuffImage.sprite = defaultBuffImage;
+            }
+        }
+
+        
+
         cardImage.sprite = currentCharacter.Value.Card.image;
         switch (currentCharacter.Value.Card.Class)
         {
@@ -254,7 +306,7 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
             SetRulesAbilityButtonsState(currentCharacter.Value);
             attackAbilityButton.OnClick += UseAttackAbility;
             defenceAbilityButton.OnClick += UseDefencebility;
-            buffAbilityButton.OnClick += UseBuffAbility;            
+            buffAbilityButton.OnClick += UseBuffAbility;
         }
         else
         {
@@ -276,7 +328,7 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
 
         cardRaceText.text = string.Empty;
 
-        cardImage.DOFade(0,0);
+        cardImage.DOFade(0, 0);
         cardClassImage.DOFade(0, 0);
 
         cardRaceText.text = string.Empty;
@@ -287,17 +339,17 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
     private void UseAttackAbility(GameObject gameObject)
     {
         usingAbilityCharacter.Value = currentCharacter.Value;
-        battleSystem.OnAttackAbilityButton(currentCharacter.Value.gameObject);      
+        battleSystem.OnAttackAbilityButton(currentCharacter.Value.gameObject);
     }
     private void UseDefencebility(GameObject gameObject)
     {
         usingAbilityCharacter.Value = currentCharacter.Value;
-        battleSystem.OnDefensiveAbilityButton(currentCharacter.Value.gameObject);       
+        battleSystem.OnDefensiveAbilityButton(currentCharacter.Value.gameObject);
     }
     private void UseBuffAbility(GameObject gameObject)
     {
         usingAbilityCharacter.Value = currentCharacter.Value;
-        battleSystem.OnBuffAbilityButton(currentCharacter.Value.gameObject);        
+        battleSystem.OnBuffAbilityButton(currentCharacter.Value.gameObject);
     }
 
     public void SetRulesAbilityButtonsState(Character character)

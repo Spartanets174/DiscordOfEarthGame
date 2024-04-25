@@ -106,6 +106,8 @@ public class FearlessGuardianCharacterBuffAbility : BaseCharacterAbility
                 {
                     character.PhysDefence += abilityData.physDefenceAmount;
                     character.MagDefence += abilityData.magDefenceAmount;
+                    character.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
+
                 }
             }
         }

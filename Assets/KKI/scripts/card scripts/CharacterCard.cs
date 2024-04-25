@@ -29,7 +29,12 @@ public class CharacterCard: Card
     [Space, Header("Effects")]
     public GameObject damageEffect;
     public GameObject healEffect;
-    public GameObject attacklEffect;
+    public GameObject attackEffect;
+
+/*    [Space, Header("Sounds")]
+    public AudioClip damageSound;
+    public AudioClip healSound;
+    public AudioClip attackSound;*/
 
 
     [Header("Abilities")]

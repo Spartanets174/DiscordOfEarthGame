@@ -33,7 +33,7 @@ public class SettingsController : MonoBehaviour, ILoadable
 
 
     public event Action<bool> OnPauseStateChanged;
-    public void Init()
+    public virtual void Init()
     {
         dbManager = FindObjectOfType<DbManager>();
         outlineInteractableObjects = FindObjectsOfType<OutlineInteractableObject>().ToList();
