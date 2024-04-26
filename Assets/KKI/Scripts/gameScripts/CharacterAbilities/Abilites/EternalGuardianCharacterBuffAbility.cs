@@ -90,8 +90,6 @@ public class EternalGuardianCharacterBuffAbility : BaseCharacterAbility
                 if (character != null)
                 {
                     character.Heal(abilityData.healAmount, abilityOwner.CharacterName);
-                    character.InstantiateEffectOnCharacter(abilityData.useEffects["heal"]);
-
                 }
             }
         }

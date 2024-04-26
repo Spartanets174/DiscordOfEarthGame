@@ -25,6 +25,8 @@ public class MaidenOnUnicornCharacterDefenceBehaviour : BaseCharacterAbility, IT
         abilityOwner.IgnorePhysDamage = true;
 
         m_cardSelectBehaviour.OnSelected -= OnSelected;
+        abilityOwner.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
+
         UseCard(abilityOwner.gameObject);
     }
 

@@ -20,4 +20,12 @@ public class BaseCharacterAbilityData
 }
 
 [Serializable]
-public class EffectsDitionary : SerializableDictionaryBase<string, GameObject> { }
+public class EffectsDitionary : SerializableDictionaryBase<string, EffectData> { }
+
+[Serializable]
+public class EffectData
+{
+    public GameObject effect;
+    public AudioClip effectSound;
+    public Enums.Directions spawnPoint;
+}

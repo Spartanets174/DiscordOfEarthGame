@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class WarriorOfLightCharacterDefenceAbility : BaseCharacterAbility, ITurnCountable
@@ -28,6 +29,7 @@ public class WarriorOfLightCharacterDefenceAbility : BaseCharacterAbility, ITurn
         {
             character.IgnoreMagDamage = true;
         }
+        abilityOwner.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
         UseCard(abilityOwner.gameObject);
     }
 

@@ -50,9 +50,18 @@ MonoBehaviour:
     \u043F\u043E\u043B\u0443\u0447\u0430\u0435\u0442 +1 \u0435\u0434 \u0430\u0442\u0430\u043A\u0438
     \u043D\u043E \u0432 \u0442\u043E\u0436\u0435 \u0432\u0440\u0435\u043C\u044F \u043D\u0435
     \u043C\u043E\u0436\u0435\u0442 \u043F\u0435\u0440\u0435\u0434\u0432\u0438\u0433\u0430\u0442\u044C\u0441\u044F"
-  damageEffect: {fileID: 3056142561319656689, guid: 30bde6c7c698b4e45bee74d4554f578d, type: 3}
-  healEffect: {fileID: 1399381404335117779, guid: 6cd472cd175a9c9468542a7121b21da4, type: 3}
-  attackEffect: {fileID: 0}
+  damageEffect:
+    effect: {fileID: 3056142561319656689, guid: 30bde6c7c698b4e45bee74d4554f578d, type: 3}
+    effectSound: {fileID: 0}
+    spawnPoint: 5
+  healEffect:
+    effect: {fileID: 1399381404335117779, guid: 6cd472cd175a9c9468542a7121b21da4, type: 3}
+    effectSound: {fileID: 0}
+    spawnPoint: 1
+  attackEffect:
+    effect: {fileID: 0}
+    effectSound: {fileID: 0}
+    spawnPoint: 5
   passiveCharacterAbilityData:
     rid: 2085506596913807370
   attackCharacterAbilityData:
@@ -82,7 +91,32 @@ MonoBehaviour:
           GUID: 428f4dba1ba712d4699517ec292ae716
           _typeNameAndAssembly: GuardianOfFreePrisonersCharacterAttackAbility, Assembly-CSharp
           _suppressLogs: 0
-        useEffects: []
+        useEffects:
+          reorderableList:
+            canAdd: 1
+            canRemove: 1
+            draggable: 1
+            expandable: 1
+            multipleSelection: 1
+            isExpanded: 0
+            label:
+              m_Text: Keys
+              m_Image: {fileID: 0}
+              m_Tooltip: 
+            headerHeight: 18
+            footerHeight: 13
+            slideEasing: 0.15
+            verticalSpacing: 2
+            showDefaultBackground: 1
+            elementDisplayType: 0
+            elementNameProperty: 
+            elementNameOverride: 
+            elementIcon: {fileID: 0}
+          reqReferences: {fileID: 0}
+          isExpanded: 0
+          _keyValues: []
+          _keys: []
+          _values: []
         useSound: {fileID: 0}
         abilityImage: {fileID: 0}
         abilityName: "\u0421\u0442\u0430\u043B\u044C\u043D\u044B\u0435 \u043E\u043A\u043E\u0432\u044B"
@@ -101,7 +135,32 @@ MonoBehaviour:
           GUID: 0d3d8af43beba43429284bccd3e52166
           _typeNameAndAssembly: GuardianOfFreePrisonersCharacterDefenceAbility, Assembly-CSharp
           _suppressLogs: 0
-        useEffects: []
+        useEffects:
+          reorderableList:
+            canAdd: 0
+            canRemove: 0
+            draggable: 0
+            expandable: 0
+            multipleSelection: 0
+            isExpanded: 0
+            label:
+              m_Text: 
+              m_Image: {fileID: 0}
+              m_Tooltip: 
+            headerHeight: 0
+            footerHeight: 0
+            slideEasing: 0
+            verticalSpacing: 0
+            showDefaultBackground: 0
+            elementDisplayType: 0
+            elementNameProperty: 
+            elementNameOverride: 
+            elementIcon: {fileID: 0}
+          reqReferences: {fileID: 0}
+          isExpanded: 0
+          _keyValues: []
+          _keys: []
+          _values: []
         useSound: {fileID: 0}
         abilityImage: {fileID: 0}
         abilityName: "\u0412\u0441\u0435 \u043C\u044B \u043E\u0434\u043D\u043E \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u043E"
@@ -117,7 +176,32 @@ MonoBehaviour:
           GUID: c9312a5ce3bb7804f88483e254cc2a8b
           _typeNameAndAssembly: GuardianOfFreePrisonersCharacterBuffAbility, Assembly-CSharp
           _suppressLogs: 0
-        useEffects: []
+        useEffects:
+          reorderableList:
+            canAdd: 0
+            canRemove: 0
+            draggable: 0
+            expandable: 0
+            multipleSelection: 0
+            isExpanded: 0
+            label:
+              m_Text: 
+              m_Image: {fileID: 0}
+              m_Tooltip: 
+            headerHeight: 0
+            footerHeight: 0
+            slideEasing: 0
+            verticalSpacing: 0
+            showDefaultBackground: 0
+            elementDisplayType: 0
+            elementNameProperty: 
+            elementNameOverride: 
+            elementIcon: {fileID: 0}
+          reqReferences: {fileID: 0}
+          isExpanded: 0
+          _keyValues: []
+          _keys: []
+          _values: []
         useSound: {fileID: 0}
         abilityImage: {fileID: 0}
         abilityName: "\u041E\u043A\u043E\u0432\u044B \u0442\u044C\u043C\u044B"

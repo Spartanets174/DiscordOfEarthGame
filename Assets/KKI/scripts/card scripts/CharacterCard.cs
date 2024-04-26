@@ -27,14 +27,11 @@ public class CharacterCard: Card
     public string buffAbility;
 
     [Space, Header("Effects")]
-    public GameObject damageEffect;
-    public GameObject healEffect;
-    public GameObject attackEffect;
+    public EffectData damageEffect;
+    public EffectData healEffect;
+    public EffectData attackEffect;
 
-/*    [Space, Header("Sounds")]
-    public AudioClip damageSound;
-    public AudioClip healSound;
-    public AudioClip attackSound;*/
+
 
 
     [Header("Abilities")]

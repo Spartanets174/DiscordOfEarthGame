@@ -37,12 +37,16 @@ public class SentinelCharacteBuffAbility : BaseCharacterAbility
             battleSystem.PlayerController.CurrentPlayerCharacter.PhysDefence += abilityData.physDefenceAmount;
             battleSystem.PlayerController.CurrentPlayerCharacter.MagDefence += abilityData.magDefenceAmount;
             battleSystem.PlayerController.CurrentPlayerCharacter.Heal(abilityData.healAmount, abilityOwner.CharacterName);
+            battleSystem.PlayerController.CurrentPlayerCharacter.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
+
         }
         else
         {
             battleSystem.EnemyController.CurrentEnemyCharacter.PhysDefence += abilityData.physDefenceAmount;
             battleSystem.EnemyController.CurrentEnemyCharacter.MagDefence += abilityData.magDefenceAmount;
             battleSystem.EnemyController.CurrentEnemyCharacter.Heal(abilityData.healAmount, abilityOwner.CharacterName);
+            battleSystem.EnemyController.CurrentEnemyCharacter.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
+
 
         }
 

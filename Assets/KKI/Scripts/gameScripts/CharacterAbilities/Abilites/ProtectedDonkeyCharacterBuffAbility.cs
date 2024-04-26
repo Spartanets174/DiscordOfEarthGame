@@ -57,6 +57,8 @@ public class ProtectedDonkeyCharacterBuffAbility : BaseCharacterAbility, ITurnCo
             character.MaxSpeed += abilityData.rangeAmount;
             character.PhysDefence += abilityData.physDefenceAmount;
             character.MagDefence += abilityData.magDefenceAmount;
+            character.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
+
         }
 
 

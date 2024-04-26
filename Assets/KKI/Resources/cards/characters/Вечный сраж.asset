@@ -48,9 +48,18 @@ MonoBehaviour:
     2 \u0432\u044B\u0431\u0440\u0430\u043D\u044B\u0445 \u0441\u043E\u044E\u0437\u043D\u0438\u043A\u0430
     \u043F\u043E\u043B\u0443\u0447\u0430\u044E\u0442 +1 \u043E\u0447\u043A\u043E
     \u0437\u0434\u043E\u0440\u043E\u0432\u044C\u044F"
-  damageEffect: {fileID: 3056142561319656689, guid: 30bde6c7c698b4e45bee74d4554f578d, type: 3}
-  healEffect: {fileID: 1399381404335117779, guid: 6cd472cd175a9c9468542a7121b21da4, type: 3}
-  attackEffect: {fileID: 0}
+  damageEffect:
+    effect: {fileID: 3056142561319656689, guid: 30bde6c7c698b4e45bee74d4554f578d, type: 3}
+    effectSound: {fileID: 0}
+    spawnPoint: 5
+  healEffect:
+    effect: {fileID: 1399381404335117779, guid: 6cd472cd175a9c9468542a7121b21da4, type: 3}
+    effectSound: {fileID: 0}
+    spawnPoint: 1
+  attackEffect:
+    effect: {fileID: 1233945089189314085, guid: e4315e772a9451f45a5c2702c30e3db7, type: 3}
+    effectSound: {fileID: 0}
+    spawnPoint: 5
   passiveCharacterAbilityData:
     rid: 2085506571047272450
   attackCharacterAbilityData:
@@ -151,9 +160,11 @@ MonoBehaviour:
           _keys:
           - buff
           _values:
-          - {fileID: 2799084144196254819, guid: c324a6e30ef76314292525669dc7248f, type: 3}
+          - effect: {fileID: 2799084144196254819, guid: c324a6e30ef76314292525669dc7248f, type: 3}
+            effectSound: {fileID: 0}
+            spawnPoint: 1
         useSound: {fileID: 0}
-        abilityImage: {fileID: 0}
+        abilityImage: {fileID: 21300000, guid: a42b3b2bb82524b4c9e97aca1cb294fe, type: 3}
         abilityName: "\u042F \u0432\u0430\u0448 \u0449\u0438\u0442"
         physDefenceAmount: 3
         turnCount: 2
@@ -173,7 +184,7 @@ MonoBehaviour:
             draggable: 1
             expandable: 1
             multipleSelection: 1
-            isExpanded: 1
+            isExpanded: 0
             label:
               m_Text: Keys
               m_Image: {fileID: 0}
@@ -188,13 +199,10 @@ MonoBehaviour:
             elementNameOverride: 
             elementIcon: {fileID: 0}
           reqReferences: {fileID: 0}
-          isExpanded: 1
-          _keyValues:
-          - heal
-          _keys:
-          - heal
-          _values:
-          - {fileID: 1399381404335117779, guid: 6cd472cd175a9c9468542a7121b21da4, type: 3}
+          isExpanded: 0
+          _keyValues: []
+          _keys: []
+          _values: []
         useSound: {fileID: 0}
         abilityImage: {fileID: 21300000, guid: 2e350bcef09f70943ba03de78d8c063a, type: 3}
         abilityName: "\u0412\u044B \u043D\u0435 \u0443\u043C\u0440\u0435\u0442\u0435"

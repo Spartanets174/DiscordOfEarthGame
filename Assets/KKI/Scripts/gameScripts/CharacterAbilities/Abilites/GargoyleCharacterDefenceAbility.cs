@@ -27,6 +27,8 @@ public class GargoyleCharacterDefenceAbility : BaseCharacterAbility, ITurnCounta
         abilityOwner.CanUseAbilities = false;
         abilityOwner.IgnorePhysDamage = true;
 
+        abilityOwner.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
+
         UseCard(abilityOwner.gameObject);
     }
 

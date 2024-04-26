@@ -24,6 +24,8 @@ public class PeasantWithPitchforkCharacterBuffAbility : BaseCharacterAbility
         foreach (var character in selectCellsToAttackInRangeBehaviour.charactersOnCells)
         {
             character.PhysDefence += abilityData.physDefenceAmount;
+            character.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
+
         }
         selectCellsToAttackInRangeBehaviour.charactersOnCells.Clear();
         UseCard(abilityOwner.gameObject);

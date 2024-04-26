@@ -48,6 +48,7 @@ public static class Enums
         bottom,
         left,
         right,
-        all
+        all,
+        middle
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class ProtectedDonkeyCharacterDefenceAbility : BaseCharacterAbility, ITurnCountable
@@ -25,6 +26,7 @@ public class ProtectedDonkeyCharacterDefenceAbility : BaseCharacterAbility, ITur
         abilityOwner.MagDefence += abilityData.magDefenceAmount;
         abilityOwner.PhysAttack += abilityData.physAttackAmount;
         abilityOwner.MagAttack += abilityData.magAttackAmount;
+        abilityOwner.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
 
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(abilityOwner.gameObject);

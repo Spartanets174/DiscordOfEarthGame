@@ -30,6 +30,8 @@ public class GargoyleCharacterBuffAbility : BaseCharacterAbility, ITurnCountable
         amount = abilityData.physDefenceToIcrease - abilityOwner.PhysDefence;
 
         abilityOwner.PhysDefence += amount;
+        abilityOwner.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
+
 
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(abilityOwner.gameObject);

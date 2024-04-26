@@ -22,6 +22,7 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
     [Header("Panels")]
     [SerializeField] private GameObject registrationPanel;
     [SerializeField] private GameObject loginPanel;
+    [SerializeField] private GameObject loadingPanel;
     [SerializeField] private ChangeConncetionInfo changeConncetionInfo;
 
     [Header("Texts")]
@@ -57,6 +58,7 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
         validateGuidRegex = new Regex("^(?=.*?[A-Z])(?=.*?[#?!@$%^&*-]).{4,}$");        
 
         dataLoader.OnPlayerDataRecieved += CheckRecievedData;
+        dataLoader.OnPlayerDataChecked += OnPlayerDataChecked;
 
         submitLogin.onClick.AddListener(CheckInputsLogin);
         submitRegistration.onClick.AddListener(CheckInputs);
@@ -68,6 +70,11 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
 
         passwordToggle.isOn = false;
         dataLoader.CheckPlayerData();
+    }
+
+    private void OnPlayerDataChecked(bool state)
+    {
+        loadingPanel.SetActive(state);
     }
 
     private void ChangePasswordVisibility(bool state)
@@ -85,7 +92,9 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
 
     private void OnDestroy()
     {
-        dataLoader.OnPlayerDataRecieved -= CheckRecievedData;
+        dataLoader.OnPlayerDataRecieved -= CheckRecievedData; 
+        dataLoader.OnPlayerDataChecked -= OnPlayerDataChecked;
+
 
         submitLogin.onClick.RemoveListener(CheckInputsLogin);
         submitRegistration.onClick.RemoveListener(CheckInputs);

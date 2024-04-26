@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f652d45b50f5d142bbb5af89b9ad55a, type: 3}
   m_Name: "\u0411\u0435\u0441\u0441\u0442\u0440\u0430\u0448\u043D\u044B\u0439 \u0421\u0442\u0440\u0430\u0436"
   m_EditorClassIdentifier: 
-  cardName: 
+  cardName: "\u0411\u0435\u0441\u0441\u0442\u0440\u0430\u0448\u043D\u044B\u0439 \"\u0421\u0442\u0440\u0430\u0436\""
   description: "\u044D\u043B\u044C\u0444"
   race: 3
   image: {fileID: 21300000, guid: 30a557852010cdf43ad46d48e0708fb3, type: 3}
   rarity: 2
-  Price: 432
-  id: 0
+  Price: 3452
+  id: 30
   characterPrefab: {fileID: 2825636921043075203, guid: 539501a4f0d52da4cb123996aed8fb0c, type: 3}
   Class: 1
   health: 3
@@ -46,9 +46,18 @@ MonoBehaviour:
     \u0434\u0443\u0448\u0438 \u0432\u0441\u0435\u0445 \u0441\u0442\u0430\u0440\u0435\u0439\u0448\u0438\u043D
     \u0438 \u043D\u0430\u0434\u0435\u043B\u044F\u0435\u0442 3\u0445 \u0441\u043E\u044E\u0437\u043D\u0438\u043A\u043E\u0432
     +1/+1 \u0424\u0438\u0437.\u0417\u0430\u0449\u0438\u0442\u044B/\u041C\u0430\u0433.\u0417\u0430\u0449\u0438\u0442\u044B"
-  damageEffect: {fileID: 3056142561319656689, guid: 30bde6c7c698b4e45bee74d4554f578d, type: 3}
-  healEffect: {fileID: 1399381404335117779, guid: 6cd472cd175a9c9468542a7121b21da4, type: 3}
-  attackEffect: {fileID: 0}
+  damageEffect:
+    effect: {fileID: 3056142561319656689, guid: 30bde6c7c698b4e45bee74d4554f578d, type: 3}
+    effectSound: {fileID: 0}
+    spawnPoint: 5
+  healEffect:
+    effect: {fileID: 1399381404335117779, guid: 6cd472cd175a9c9468542a7121b21da4, type: 3}
+    effectSound: {fileID: 0}
+    spawnPoint: 1
+  attackEffect:
+    effect: {fileID: 1233945089189314085, guid: e4315e772a9451f45a5c2702c30e3db7, type: 3}
+    effectSound: {fileID: 0}
+    spawnPoint: 5
   passiveCharacterAbilityData:
     rid: 2085506571047272448
   attackCharacterAbilityData:
@@ -101,7 +110,7 @@ MonoBehaviour:
             elementNameOverride: 
             elementIcon: {fileID: 0}
           reqReferences: {fileID: 0}
-          isExpanded: 1
+          isExpanded: 0
           _keyValues: []
           _keys: []
           _values: []
@@ -150,8 +159,12 @@ MonoBehaviour:
           - debuff
           - buff
           _values:
-          - {fileID: 1475449438463947466, guid: f3612d76d67194843b1a4df67bf19402, type: 3}
-          - {fileID: 2799084144196254819, guid: c324a6e30ef76314292525669dc7248f, type: 3}
+          - effect: {fileID: 1475449438463947466, guid: f3612d76d67194843b1a4df67bf19402, type: 3}
+            effectSound: {fileID: 0}
+            spawnPoint: 1
+          - effect: {fileID: 2799084144196254819, guid: c324a6e30ef76314292525669dc7248f, type: 3}
+            effectSound: {fileID: 0}
+            spawnPoint: 1
         useSound: {fileID: 0}
         abilityImage: {fileID: 21300000, guid: c1d35b40e3fb0f9438f23087432d9765, type: 3}
         abilityName: "\u0411\u043E\u043B\u044C"
@@ -196,7 +209,9 @@ MonoBehaviour:
           _keys:
           - buff
           _values:
-          - {fileID: 2799084144196254819, guid: c324a6e30ef76314292525669dc7248f, type: 3}
+          - effect: {fileID: 2799084144196254819, guid: c324a6e30ef76314292525669dc7248f, type: 3}
+            effectSound: {fileID: 0}
+            spawnPoint: 1
         useSound: {fileID: 0}
         abilityImage: {fileID: 21300000, guid: a2563f2b8dbc4044b9a50537d3a29962, type: 3}
         abilityName: "\u0412\u043E\u0439"

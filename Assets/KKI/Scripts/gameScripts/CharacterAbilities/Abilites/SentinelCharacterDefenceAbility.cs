@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class SentinelCharacterDefenceAbility : BaseCharacterAbility
@@ -37,12 +38,16 @@ public class SentinelCharacterDefenceAbility : BaseCharacterAbility
             battleSystem.PlayerController.CurrentPlayerCharacter.PhysDefence += abilityData.physDefenceAmount;
             battleSystem.PlayerController.CurrentPlayerCharacter.MagDefence += abilityData.magDefenceAmount;
             battleSystem.PlayerController.CurrentPlayerCharacter.CritChance += abilityData.critChanceAmount;
+            battleSystem.PlayerController.CurrentPlayerCharacter.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
+
         }
         else
         {
             battleSystem.EnemyController.CurrentEnemyCharacter.PhysDefence += abilityData.physDefenceAmount;
             battleSystem.EnemyController.CurrentEnemyCharacter.MagDefence += abilityData.magDefenceAmount;
             battleSystem.EnemyController.CurrentEnemyCharacter.CritChance += abilityData.critChanceAmount;
+            battleSystem.EnemyController.CurrentEnemyCharacter.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
+
 
         }
 

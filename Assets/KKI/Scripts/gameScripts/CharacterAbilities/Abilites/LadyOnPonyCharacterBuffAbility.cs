@@ -51,6 +51,7 @@ public class LadyOnPonyCharacterBuffAbility : BaseCharacterAbility
         {
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
+        character.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
 
         character.MagDefence += abilityData.magDefenceAmount;
         character.PhysDefence += abilityData.physDefenceAmount;

@@ -53,6 +53,8 @@ public class MaidenOnUnicornCharacterBuffBehaviour : BaseCharacterAbility, ITurn
 
         character.PhysAttack+= abilityData.buffAttackAmount;
         character.MagAttack += abilityData.buffAttackAmount;
+        character.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
+
 
         UseCard(character.gameObject);
     }

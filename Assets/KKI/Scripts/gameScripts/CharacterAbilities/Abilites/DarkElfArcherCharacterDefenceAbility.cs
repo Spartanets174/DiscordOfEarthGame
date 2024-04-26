@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class DarkElfArcherCharacterDefenceAbility : BaseCharacterAbility
@@ -24,6 +25,8 @@ public class DarkElfArcherCharacterDefenceAbility : BaseCharacterAbility
     private void OnSelected()
     {
         abilityOwner.CanBeDamagedByClassesDict[abilityData.classToDefence] = false;
+        abilityOwner.InstantiateEffectOnCharacter(abilityData.useEffects["shield"]);
+
         abilityOwner.OnDamaged += OnDamaged;
         UseCard(abilityOwner.gameObject);
     }

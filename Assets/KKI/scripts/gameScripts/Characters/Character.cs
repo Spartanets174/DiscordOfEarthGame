@@ -1,7 +1,7 @@
 using DG.Tweening;
-using HighlightPlus;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
@@ -14,6 +14,14 @@ public abstract class Character : ChildOutlineInteractableObject
 
     [SerializeField]
     protected HealthBar healthBar;
+
+    [Header("Spawn points")]
+    [SerializeField]
+    private Transform topPoint;
+    [SerializeField]
+    private Transform bottomPoint;
+    [SerializeField]
+    private Transform middlePoint;
 
     protected string m_characterName;
     public string CharacterName => m_characterName;
@@ -352,6 +360,12 @@ public abstract class Character : ChildOutlineInteractableObject
 
     public virtual void SetData(CharacterCard card, int currentIndex)
     {
+        List<SpawnpointReference> points = transform.GetComponentsInChildren<SpawnpointReference>().ToList();
+        topPoint = points.Where(x => Enums.Directions.top == x.Direction).First().gameObject.transform;
+        middlePoint = points.Where(x => Enums.Directions.middle == x.Direction).First().gameObject.transform;
+        bottomPoint = points.Where(x => Enums.Directions.bottom == x.Direction).First().gameObject.transform;
+
+
         if (healthBar == null)
         {
             healthBar = gameObject.GetComponentInChildren<HealthBar>(true);
@@ -434,7 +448,7 @@ public abstract class Character : ChildOutlineInteractableObject
 
         OnDamaged += (x, y, z) => InstantiateEffectOnCharacter(card.damageEffect);
         OnHeal += (x, y, z) => InstantiateEffectOnCharacter(card.healEffect);
-        OnAttack += (x) =>  InstantiateEffectOnCharacter(card.attackEffect);
+        OnAttack += (x) => InstantiateEffectOnCharacter(card.attackEffect);
 
         IsChosen = false;
         CanBeDamaged = true;
@@ -444,19 +458,36 @@ public abstract class Character : ChildOutlineInteractableObject
         IgnoreMagDamage = false;
     }
 
-    public void InstantiateEffectOnCharacter(GameObject effect)
+    public GameObject InstantiateEffectOnCharacter(EffectData effectData)
     {
-        if (effect !=null)
-        {
-            GameObject spawnedEffect = Instantiate(effect, Vector3.zero, Quaternion.identity, transform);
-            spawnedEffect.transform.localPosition = new Vector3(0, 1, 0);
 
+        if (effectData.effect != null)
+        {
+            GameObject spawnedEffect;
+            switch (effectData.spawnPoint)
+            {
+                case Enums.Directions.top:
+                    spawnedEffect = Instantiate(effectData.effect, Vector3.zero, Quaternion.identity, topPoint);
+                    break;
+                case Enums.Directions.bottom:
+                    spawnedEffect = Instantiate(effectData.effect, Vector3.zero, Quaternion.identity, bottomPoint);
+                    break;
+                case Enums.Directions.middle:
+                    spawnedEffect = Instantiate(effectData.effect, Vector3.zero, Quaternion.identity, middlePoint);
+                    break;
+                default:
+                    spawnedEffect = Instantiate(effectData.effect, Vector3.zero, Quaternion.identity, middlePoint);
+                    break;
+            }
+            spawnedEffect.transform.localPosition = Vector3.zero;
+            return spawnedEffect;
         }
         else
         {
             Debug.LogError("null effect");
+            return null;
         }
-        
+
     }
 
     public virtual bool Damage(Character chosenCharacter)

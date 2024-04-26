@@ -10,6 +10,7 @@ public class MagicToadCharacterDefenceAbility : BaseCharacterAbility, ITurnCount
     public bool IsBuff { get => abilityData.isBuff; }
 
     private Character character;
+    private GameObject effect;
     private MagicToadCharacterDefenceAbilityData abilityData;
 
     public event Action<ITurnCountable> OnReturnToNormal;
@@ -55,6 +56,7 @@ public class MagicToadCharacterDefenceAbility : BaseCharacterAbility, ITurnCount
         character.IsFreezed = true;
         character.CanDamage = false;
         character.CanUseAbilities = false;
+        effect =  character.InstantiateEffectOnCharacter(abilityData.useEffects["freeze"]);
 
         UseCard(character.gameObject);
     }
@@ -78,7 +80,7 @@ public class MagicToadCharacterDefenceAbility : BaseCharacterAbility, ITurnCount
         character.IsFreezed = false;
         character.CanDamage = true;
         character.CanUseAbilities = false;
-
+        Destroy(effect);
         OnReturnToNormal?.Invoke(this);
         character = null;
     }

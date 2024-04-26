@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class LadyOnPonyCharacterDefenceAbility : BaseCharacterAbility
@@ -23,8 +24,11 @@ public class LadyOnPonyCharacterDefenceAbility : BaseCharacterAbility
         foreach (var character in selectCellsToAttackInRangeBehaviour.charactersOnCells)
         {
             character.PhysDefence += abilityData.physDefenceAmount;
+            character.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
+
         }
         selectCellsToAttackInRangeBehaviour.charactersOnCells.Clear();
+
         UseCard(abilityOwner.gameObject);
     }
 }

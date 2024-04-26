@@ -39,12 +39,15 @@ public class ForestLadsDefenceAbility : BaseCharacterAbility
             character = battleSystem.PlayerController.CurrentPlayerCharacter;
             character.PhysDefence += abilityData.physDefenceAmount;
             character.MagDefence += abilityData.magDefenceAmount;
+            character.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
+
         }
         else
         {
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
             character.PhysDefence += abilityData.physDefenceAmount;
             character.MagDefence += abilityData.magDefenceAmount;
+            character.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
         }
 
         characters.Add(GetNextCharacterByDirection(character.PositionOnField, Enums.Directions.top, abilityData.range));

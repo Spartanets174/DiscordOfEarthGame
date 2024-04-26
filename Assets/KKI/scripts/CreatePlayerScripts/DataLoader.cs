@@ -11,6 +11,7 @@ public class DataLoader : MonoBehaviour, ILoadable
     private PlayerData playerData;
 
     public Action<string> OnPlayerDataRecieved;
+    public Action<bool> OnPlayerDataChecked;
     public void Init()
     {
         playerData = DB.PlayerData;
@@ -24,11 +25,19 @@ public class DataLoader : MonoBehaviour, ILoadable
     public void CheckPlayerData()
     {
         string[] creditials = SaveSystem.LoadPlayer().Split(".");
-        if (creditials.Length == 0) return;
+        if (creditials.Length == 0)
+        {
+            OnPlayerDataChecked?.Invoke(false);
+        }
 
         if (creditials[0] != "" && creditials[1] != "")
         {
             GetPlayerData(creditials[0], creditials[1]);
+            OnPlayerDataChecked?.Invoke(true);
+        }
+        else
+        {
+            OnPlayerDataChecked?.Invoke(false);
         }
     }
 

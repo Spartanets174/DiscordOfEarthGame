@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class ForestLadsBuffAbility : BaseCharacterAbility, ITurnCountable
@@ -28,6 +29,8 @@ public class ForestLadsBuffAbility : BaseCharacterAbility, ITurnCountable
         foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
         {
             playerCharacter.Range += abilityData.attackRange;
+            playerCharacter.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
+
         }
 
         m_cardSelectBehaviour.OnSelected -= OnSelected;

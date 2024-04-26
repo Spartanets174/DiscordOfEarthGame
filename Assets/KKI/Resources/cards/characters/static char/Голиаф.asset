@@ -34,9 +34,18 @@ MonoBehaviour:
   attackAbility: 
   defenceAbility: 
   buffAbility: 
-  damageEffect: {fileID: 3056142561319656689, guid: 30bde6c7c698b4e45bee74d4554f578d, type: 3}
-  healEffect: {fileID: 1399381404335117779, guid: 6cd472cd175a9c9468542a7121b21da4, type: 3}
-  attacklEffect: {fileID: 1233945089189314085, guid: e4315e772a9451f45a5c2702c30e3db7, type: 3}
+  damageEffect:
+    effect: {fileID: 3056142561319656689, guid: 30bde6c7c698b4e45bee74d4554f578d, type: 3}
+    effectSound: {fileID: 0}
+    spawnPoint: 5
+  healEffect:
+    effect: {fileID: 1399381404335117779, guid: 6cd472cd175a9c9468542a7121b21da4, type: 3}
+    effectSound: {fileID: 0}
+    spawnPoint: 1
+  attackEffect:
+    effect: {fileID: 1233945089189314085, guid: e4315e772a9451f45a5c2702c30e3db7, type: 3}
+    effectSound: {fileID: 0}
+    spawnPoint: 5
   passiveCharacterAbilityData:
     rid: -2
   attackCharacterAbilityData:

@@ -51,9 +51,18 @@ MonoBehaviour:
     \u043E\u0440\u0443\u0436\u0438\u0435 \u043E\u0434\u043D\u043E\u0433\u043E \u044E\u043D\u0438\u0442\u0430
     \u0438 \u0443\u0432\u0435\u043B\u0438\u0447\u0438\u0432\u0430\u0435\u0442 +1
     \u0435\u0434 \u0443\u0440\u043E\u043D\u0430"
-  damageEffect: {fileID: 3056142561319656689, guid: 30bde6c7c698b4e45bee74d4554f578d, type: 3}
-  healEffect: {fileID: 1399381404335117779, guid: 6cd472cd175a9c9468542a7121b21da4, type: 3}
-  attackEffect: {fileID: 0}
+  damageEffect:
+    effect: {fileID: 3056142561319656689, guid: 30bde6c7c698b4e45bee74d4554f578d, type: 3}
+    effectSound: {fileID: 0}
+    spawnPoint: 5
+  healEffect:
+    effect: {fileID: 1399381404335117779, guid: 6cd472cd175a9c9468542a7121b21da4, type: 3}
+    effectSound: {fileID: 0}
+    spawnPoint: 1
+  attackEffect:
+    effect: {fileID: 0}
+    effectSound: {fileID: 0}
+    spawnPoint: 5
   passiveCharacterAbilityData:
     rid: 2085506596913807366
   attackCharacterAbilityData:
@@ -84,7 +93,32 @@ MonoBehaviour:
           GUID: cc24deb9acaf61842af5a8ec7c509109
           _typeNameAndAssembly: SelfTaughtCharacterAttackAbility, Assembly-CSharp
           _suppressLogs: 0
-        useEffects: []
+        useEffects:
+          reorderableList:
+            canAdd: 1
+            canRemove: 1
+            draggable: 1
+            expandable: 1
+            multipleSelection: 1
+            isExpanded: 0
+            label:
+              m_Text: Keys
+              m_Image: {fileID: 0}
+              m_Tooltip: 
+            headerHeight: 18
+            footerHeight: 13
+            slideEasing: 0.15
+            verticalSpacing: 2
+            showDefaultBackground: 1
+            elementDisplayType: 0
+            elementNameProperty: 
+            elementNameOverride: 
+            elementIcon: {fileID: 0}
+          reqReferences: {fileID: 0}
+          isExpanded: 0
+          _keyValues: []
+          _keys: []
+          _values: []
         useSound: {fileID: 0}
         abilityImage: {fileID: 0}
         abilityName: "\u0421\u043C\u0435\u0440\u0442\u0435\u043B\u044C\u043D\u0430\u044F
@@ -102,7 +136,32 @@ MonoBehaviour:
           GUID: 5708734c31a5e4a43bea87f5f822b60e
           _typeNameAndAssembly: SelfTaughtCharacterDefenceAbility, Assembly-CSharp
           _suppressLogs: 0
-        useEffects: []
+        useEffects:
+          reorderableList:
+            canAdd: 0
+            canRemove: 0
+            draggable: 0
+            expandable: 0
+            multipleSelection: 0
+            isExpanded: 0
+            label:
+              m_Text: 
+              m_Image: {fileID: 0}
+              m_Tooltip: 
+            headerHeight: 0
+            footerHeight: 0
+            slideEasing: 0
+            verticalSpacing: 0
+            showDefaultBackground: 0
+            elementDisplayType: 0
+            elementNameProperty: 
+            elementNameOverride: 
+            elementIcon: {fileID: 0}
+          reqReferences: {fileID: 0}
+          isExpanded: 0
+          _keyValues: []
+          _keys: []
+          _values: []
         useSound: {fileID: 0}
         abilityImage: {fileID: 0}
         abilityName: "\u0421\u043E\u0437\u0434\u0430\u0432\u0430\u0439"
@@ -119,7 +178,32 @@ MonoBehaviour:
           GUID: 1b4252b63bdec854ba6f2861592d6a55
           _typeNameAndAssembly: SelfTaughtCharacterBuffAbility, Assembly-CSharp
           _suppressLogs: 0
-        useEffects: []
+        useEffects:
+          reorderableList:
+            canAdd: 0
+            canRemove: 0
+            draggable: 0
+            expandable: 0
+            multipleSelection: 0
+            isExpanded: 0
+            label:
+              m_Text: 
+              m_Image: {fileID: 0}
+              m_Tooltip: 
+            headerHeight: 0
+            footerHeight: 0
+            slideEasing: 0
+            verticalSpacing: 0
+            showDefaultBackground: 0
+            elementDisplayType: 0
+            elementNameProperty: 
+            elementNameOverride: 
+            elementIcon: {fileID: 0}
+          reqReferences: {fileID: 0}
+          isExpanded: 0
+          _keyValues: []
+          _keys: []
+          _values: []
         useSound: {fileID: 0}
         abilityImage: {fileID: 0}
         abilityName: "\u041D\u0430\u0447\u0435\u0440\u0442\u0430\u043D\u0438\u0435"

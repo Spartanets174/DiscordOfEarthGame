@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class MagicToadCharacterBuffAbility : BaseCharacterAbility, ITurnCountable
@@ -29,6 +30,8 @@ public class MagicToadCharacterBuffAbility : BaseCharacterAbility, ITurnCountabl
         abilityOwner.PhysDefence += abilityData.physDefenceAmount;
         abilityOwner.MagDefence += abilityData.magDefenceAmount;
         abilityOwner.Heal(abilityData.healthAmount, abilityOwner.CharacterName);
+        abilityOwner.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
+
         healAmount = abilityOwner.LastHealAmount;
 
         m_cardSelectBehaviour.OnSelected -= OnSelected;
