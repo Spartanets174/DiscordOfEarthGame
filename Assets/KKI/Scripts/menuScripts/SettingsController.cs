@@ -20,7 +20,9 @@ public class SettingsController : MonoBehaviour, ILoadable
     [Header("Settings")]
     [SerializeField]
     private KeyCode settingsButton;
-
+    [SerializeField]
+    private int maxFPS=60;
+    
     private DbManager dbManager;
 
     private Dictionary<int, Vector2> resolutions = new();
@@ -35,6 +37,7 @@ public class SettingsController : MonoBehaviour, ILoadable
     public event Action<bool> OnPauseStateChanged;
     public virtual void Init()
     {
+        Application.targetFrameRate = maxFPS;
         CanPause = true;
         dbManager = FindObjectOfType<DbManager>();
         outlineInteractableObjects = FindObjectsOfType<OutlineInteractableObject>().ToList();
