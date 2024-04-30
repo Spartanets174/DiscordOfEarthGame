@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class FallenElfCharacteBuffAbility : BaseCharacterAbility
@@ -20,6 +21,7 @@ public class FallenElfCharacteBuffAbility : BaseCharacterAbility
     private void OnSelected()
     {
         abilityOwner.MagDefence += abilityData.magDefenceAmount;
+        abilityOwner.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
 
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(abilityOwner.gameObject);

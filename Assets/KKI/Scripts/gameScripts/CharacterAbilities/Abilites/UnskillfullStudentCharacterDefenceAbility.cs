@@ -52,6 +52,7 @@ public class UnskillfullStudentCharacterDefenceAbility : BaseCharacterAbility, I
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
 
+        character.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
         character.PhysDefence += abilityData.physDefenceAmount;
         OnCancelSelection();
         UseCard(character.gameObject);

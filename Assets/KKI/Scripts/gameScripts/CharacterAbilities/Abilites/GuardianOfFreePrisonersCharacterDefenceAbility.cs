@@ -31,6 +31,8 @@ public class GuardianOfFreePrisonersCharacterDefenceAbility : BaseCharacterAbili
                 {
                     character.PhysDefence += abilityData.physDefenceAmount;
                     character.MagDefence += abilityData.magDefenceAmount;
+                    character.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
+
                 }
             }
         }
@@ -42,6 +44,8 @@ public class GuardianOfFreePrisonersCharacterDefenceAbility : BaseCharacterAbili
                 {
                     character.PhysDefence += abilityData.physDefenceAmount;
                     character.MagDefence += abilityData.magDefenceAmount;
+                    character.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
+
                 }
             }
         }

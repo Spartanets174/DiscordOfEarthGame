@@ -48,6 +48,7 @@ public class SelfTaughtCharacterDefenceAbility : BaseCharacterAbility, ITurnCoun
 
         character.CanDamage = false;
         character.CanBeDamaged = false;
+        character.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
 
         battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {

@@ -50,6 +50,7 @@ public class OldMasterCharacterDefenceAbility : BaseCharacterAbility, ITurnCount
         {
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
+        character.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
 
         character.PhysAttack += abilityData.physAttackAmount;
         character.PhysDefence -= abilityData.physDefenceAmount;

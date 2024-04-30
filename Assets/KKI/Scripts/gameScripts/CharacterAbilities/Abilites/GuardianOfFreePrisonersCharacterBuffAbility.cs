@@ -60,6 +60,7 @@ public class GuardianOfFreePrisonersCharacterBuffAbility : BaseCharacterAbility,
         {
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
+        character.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
 
         character.PhysAttack+= abilityData.buffAttackAmount;
         character.IsFreezed = true;

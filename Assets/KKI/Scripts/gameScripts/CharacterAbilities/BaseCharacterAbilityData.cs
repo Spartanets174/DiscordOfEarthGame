@@ -12,7 +12,6 @@ public class BaseCharacterAbilityData
     [Header("Ability effects")]
     [Tooltip("Не менять ключи!!!")]
     public EffectsDitionary useEffects ;
-    public AudioClip useSound;
     public Sprite abilityImage;
 
     [Header("Ability settings")]

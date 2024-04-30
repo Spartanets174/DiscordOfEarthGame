@@ -46,12 +46,13 @@ public class SergeantMajorCharacterBuffAbility : BaseCharacterAbility
         if (chance <= abilityData.chanceToIncreaseDamage)
         {
             character.PhysAttack += abilityData.physDamageAmount;
+            character.InstantiateEffectOnCharacter(abilityData.useEffects["buffDamage"]);
         }
         else
         {
             character.PhysDefence += abilityData.physDefenceAmount;
             character.MagDefence += abilityData.magDefenceAmount;
-
+            character.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
         }
 
         battleSystem.PlayerController.SetPlayerChosenState(false, x =>

@@ -30,9 +30,11 @@ public class СursedCharacterBuffAbility : BaseCharacterAbility, ITurnCountable
         {
             currentCritAmount = abilityData.critAmount - abilityOwner.CritChance;
 
-            abilityOwner.CritChance += currentCritAmount;          
+            abilityOwner.CritChance += currentCritAmount;
+            abilityOwner.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
+
         }
-        
+
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(abilityOwner.gameObject);
 

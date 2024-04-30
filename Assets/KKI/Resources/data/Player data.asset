@@ -141,8 +141,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 119a4b4fc355b564cab1cb2438170384, type: 2}
   - {fileID: 11400000, guid: 01051d735d44b6d4d882ae4ff2cd2912, type: 2}
   deckUserCharCards:
-  - {fileID: 11400000, guid: 07a973fb0c82eed4dae92921ad89407e, type: 2}
-  - {fileID: 11400000, guid: 84e4d71253b2d4d4a9f7783c74d63f99, type: 2}
+  - {fileID: 11400000, guid: 7c1bf058d4094a148b9ec544c8523b87, type: 2}
+  - {fileID: 11400000, guid: 2e458810105ab4648828c9e25778d193, type: 2}
   - {fileID: 11400000, guid: 99246efd4f7400145a3e0ac10a5f0b7c, type: 2}
   - {fileID: 11400000, guid: 6a35d8175b0def84294c1fd6c133e4e9, type: 2}
   - {fileID: 11400000, guid: 5dc9179130fd1504c8ce4aefc55c8249, type: 2}

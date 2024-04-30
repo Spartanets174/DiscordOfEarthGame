@@ -119,8 +119,7 @@ MonoBehaviour:
           _keyValues: []
           _keys: []
           _values: []
-        useSound: {fileID: 0}
-        abilityImage: {fileID: 0}
+        abilityImage: {fileID: 21300000, guid: bbe833a9207e7fa41bbd3ce71ad09605, type: 3}
         abilityName: "\u0421\u043C\u0435\u0440\u0442\u0435\u043B\u044C\u043D\u0430\u044F
           \u0434\u0440\u043E\u0431\u044C"
         selectAbilityText: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0440\u0430\u0436\u0435\u0441\u043A\u043E\u0433\u043E
@@ -138,32 +137,36 @@ MonoBehaviour:
           _suppressLogs: 0
         useEffects:
           reorderableList:
-            canAdd: 0
-            canRemove: 0
-            draggable: 0
-            expandable: 0
-            multipleSelection: 0
-            isExpanded: 0
+            canAdd: 1
+            canRemove: 1
+            draggable: 1
+            expandable: 1
+            multipleSelection: 1
+            isExpanded: 1
             label:
-              m_Text: 
+              m_Text: Keys
               m_Image: {fileID: 0}
               m_Tooltip: 
-            headerHeight: 0
-            footerHeight: 0
-            slideEasing: 0
-            verticalSpacing: 0
-            showDefaultBackground: 0
+            headerHeight: 18
+            footerHeight: 13
+            slideEasing: 0.15
+            verticalSpacing: 2
+            showDefaultBackground: 1
             elementDisplayType: 0
             elementNameProperty: 
             elementNameOverride: 
             elementIcon: {fileID: 0}
           reqReferences: {fileID: 0}
-          isExpanded: 0
-          _keyValues: []
-          _keys: []
-          _values: []
-        useSound: {fileID: 0}
-        abilityImage: {fileID: 0}
+          isExpanded: 1
+          _keyValues:
+          - buff
+          _keys:
+          - buff
+          _values:
+          - effect: {fileID: 3841576067044381765, guid: 151db150dd8d2e8469621b492e53c5f0, type: 3}
+            effectSound: {fileID: 0}
+            spawnPoint: 1
+        abilityImage: {fileID: 21300000, guid: f6b8b85cbdc82ce439a41ae3d56d57ee, type: 3}
         abilityName: "\u0421\u043E\u0437\u0434\u0430\u0432\u0430\u0439"
         selectAbilityText: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u043E\u044E\u0437\u043D\u043E\u0433\u043E
           \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u0436\u0430 \u0434\u043B\u044F
@@ -180,32 +183,36 @@ MonoBehaviour:
           _suppressLogs: 0
         useEffects:
           reorderableList:
-            canAdd: 0
-            canRemove: 0
-            draggable: 0
-            expandable: 0
-            multipleSelection: 0
-            isExpanded: 0
+            canAdd: 1
+            canRemove: 1
+            draggable: 1
+            expandable: 1
+            multipleSelection: 1
+            isExpanded: 1
             label:
-              m_Text: 
+              m_Text: Keys
               m_Image: {fileID: 0}
               m_Tooltip: 
-            headerHeight: 0
-            footerHeight: 0
-            slideEasing: 0
-            verticalSpacing: 0
-            showDefaultBackground: 0
+            headerHeight: 18
+            footerHeight: 13
+            slideEasing: 0.15
+            verticalSpacing: 2
+            showDefaultBackground: 1
             elementDisplayType: 0
             elementNameProperty: 
             elementNameOverride: 
             elementIcon: {fileID: 0}
           reqReferences: {fileID: 0}
-          isExpanded: 0
-          _keyValues: []
-          _keys: []
-          _values: []
-        useSound: {fileID: 0}
-        abilityImage: {fileID: 0}
+          isExpanded: 1
+          _keyValues:
+          - buff
+          _keys:
+          - buff
+          _values:
+          - effect: {fileID: 2952530085890256783, guid: 97421843bd63cab46a370ead0048bc6d, type: 3}
+            effectSound: {fileID: 0}
+            spawnPoint: 1
+        abilityImage: {fileID: 21300000, guid: 448d600b6b959074d94c8933775142fc, type: 3}
         abilityName: "\u041D\u0430\u0447\u0435\u0440\u0442\u0430\u043D\u0438\u0435"
         selectAbilityText: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u043E\u044E\u0437\u043D\u043E\u0433\u043E
           \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u0436\u0430 \u0434\u043B\u044F

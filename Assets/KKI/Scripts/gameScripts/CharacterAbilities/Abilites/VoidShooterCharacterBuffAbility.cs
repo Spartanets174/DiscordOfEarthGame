@@ -58,6 +58,7 @@ public class VoidShooterCharacterBuffAbility : BaseCharacterAbility
             tempCharacter.MagDefence += abilityData.amount;
 
         }
+        tempCharacter.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
 
         UseCard(character.gameObject);
     }

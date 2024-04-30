@@ -26,6 +26,7 @@ public class СursedCharacterDefenceAbility : BaseCharacterAbility, ITurnCountab
     private void OnSelected()
     {
         abilityOwner.IgnoreMagDamage = true;
+        abilityOwner.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
 
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(abilityOwner.gameObject);

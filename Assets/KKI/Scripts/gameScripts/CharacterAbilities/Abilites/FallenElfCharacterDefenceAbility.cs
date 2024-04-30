@@ -26,6 +26,7 @@ public class FallenElfCharacterDefenceAbility : BaseCharacterAbility, ITurnCount
     {
         abilityOwner.PhysDefence += abilityData.physDefenceAmount;
         abilityOwner.MagDefence += abilityData.magDefenceAmount;
+        abilityOwner.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
 
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(abilityOwner.gameObject);

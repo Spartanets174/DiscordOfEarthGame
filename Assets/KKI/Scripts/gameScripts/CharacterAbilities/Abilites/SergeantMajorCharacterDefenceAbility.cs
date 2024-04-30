@@ -1,4 +1,5 @@
 using System;
+using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class SergeantMajorCharacterDefenceAbility : BaseCharacterAbility
@@ -18,6 +19,7 @@ public class SergeantMajorCharacterDefenceAbility : BaseCharacterAbility
     private void OnSelected()
     {
         abilityOwner.MagDefence += abilityData.magDefenceAmount;
+        abilityOwner.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
 
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(abilityOwner.gameObject);

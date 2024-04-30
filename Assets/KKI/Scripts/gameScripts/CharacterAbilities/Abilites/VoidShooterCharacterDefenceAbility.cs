@@ -1,4 +1,5 @@
 using System;
+using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class VoidShooterCharacterDefenceAbility : BaseCharacterAbility
@@ -21,6 +22,8 @@ public class VoidShooterCharacterDefenceAbility : BaseCharacterAbility
     {
         abilityOwner.PhysDefence += abilityData.physDefenceAmount;
         abilityOwner.MagDefence += abilityData.magDefenceAmount;
+        abilityOwner.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
+
         UseCard(abilityOwner.gameObject);
     }
 

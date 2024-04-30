@@ -42,6 +42,7 @@ public class SelfTaughtCharacterBuffAbility : BaseCharacterAbility
         {
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
+        character.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
 
         character.PhysAttack += abilityData.physDamageAmount;
 

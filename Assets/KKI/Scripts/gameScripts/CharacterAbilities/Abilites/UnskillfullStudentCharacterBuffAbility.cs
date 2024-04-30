@@ -116,6 +116,7 @@ public class UnskillfullStudentCharacterBuffAbility : BaseCharacterAbility
         }
 
         character.MaxSpeed += abilityData.speedAmount;
+        character.InstantiateEffectOnCharacter(abilityData.useEffects["buff"]);
 
         Uncubscribe();
     }
