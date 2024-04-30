@@ -81,7 +81,7 @@ public class EnemyController : Tree
         while (m_enemyCharCards.Count < 5)
         {
             CharacterCard EnemyMan = playerData.allCharCards[UnityEngine.Random.Range(0, playerData.allCharCards.Count)];
-            if (!m_enemyCharCards.Contains(EnemyMan))
+            if (!m_enemyCharCards.Contains(EnemyMan)&& EnemyMan.characterPrefab!=null)
             {
                 m_enemyCharCards.Add(EnemyMan);
             }
@@ -91,7 +91,6 @@ public class EnemyController : Tree
     private void InstantiateEnemies()
     {
         int count = 0;
-        int count2 = 0;
         //Спавн статических врагов
         for (int i = 0; i < fieldController.CellsOfFieled.GetLength(0); i++)
         {
@@ -121,15 +120,7 @@ public class EnemyController : Tree
             if (!IsEnemyOnCell(Cell))
             {
                 GameObject prefab;
-                if (m_enemyCharCards[count].characterPrefab == null)
-                {
-                    prefab = Instantiate(defaultEnemyPrefab, Vector3.zero, Quaternion.identity, Cell.transform);
-                }
-                else
-                {
-                    prefab = Instantiate(m_enemyCharCards[count].characterPrefab, Vector3.zero, Quaternion.identity, Cell.transform);
-                }
-
+                prefab = Instantiate(m_enemyCharCards[count].characterPrefab, Vector3.zero, Quaternion.identity, Cell.transform);
                 EnemyCharacter enemyCharacter = prefab.AddComponent<EnemyCharacter>();
                 enemyCharacter.transform.localPosition = Vector3.zero;
                 enemyCharacter.OnDeath += OnEnemyCharacterDeath;
@@ -139,11 +130,6 @@ public class EnemyController : Tree
                 m_enemyCharObjects.Add(enemyCharacter);
 
                 count++;
-            }
-            count2++;
-            if (count2 > 100)
-            {
-                break;
             }
         }
 

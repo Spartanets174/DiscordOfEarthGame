@@ -19,7 +19,7 @@ MonoBehaviour:
   rarity: 1
   Price: 53421
   id: 34
-  characterPrefab: {fileID: 0}
+  characterPrefab: {fileID: 4260213726115684106, guid: bfb07f9e200a8744896349488413fffa, type: 3}
   Class: 2
   health: 2
   speed: 2
@@ -118,7 +118,6 @@ MonoBehaviour:
           _keyValues: []
           _keys: []
           _values: []
-        useSound: {fileID: 0}
         abilityImage: {fileID: 21300000, guid: 9725fb87facc42a4984598500f76e0fb, type: 3}
         abilityName: "\u0422\u044F\u0436\u0435\u043B\u0430\u044F \u0440\u0443\u043A\u0430"
         damage: 1
@@ -163,7 +162,6 @@ MonoBehaviour:
           - effect: {fileID: 2799084144196254819, guid: c324a6e30ef76314292525669dc7248f, type: 3}
             effectSound: {fileID: 0}
             spawnPoint: 1
-        useSound: {fileID: 0}
         abilityImage: {fileID: 21300000, guid: a2563f2b8dbc4044b9a50537d3a29962, type: 3}
         abilityName: "\u042F \u043B\u0443\u0447\u0448\u0438\u0439"
         selectAbilityText: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u043E\u044E\u0437\u043D\u043E\u0433\u043E
@@ -211,7 +209,6 @@ MonoBehaviour:
           - effect: {fileID: 2799084144196254819, guid: c324a6e30ef76314292525669dc7248f, type: 3}
             effectSound: {fileID: 0}
             spawnPoint: 1
-        useSound: {fileID: 0}
         abilityImage: {fileID: 21300000, guid: bb67b03c2969d104caba950c446f8c8d, type: 3}
         abilityName: "\u041F\u043E\u0432\u044B\u0448\u0435\u043D\u0438\u0435"
         selectAbilityText: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u043E\u044E\u0437\u043D\u043E\u0433\u043E

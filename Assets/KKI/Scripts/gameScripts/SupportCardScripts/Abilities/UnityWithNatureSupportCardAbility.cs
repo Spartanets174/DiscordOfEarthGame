@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [Serializable]
@@ -72,15 +73,19 @@ public class UnityWithNatureSupportCardAbility : BaseSupport—ardAbility, ITurnCo
         if (isDeath)
         {
             string characterType = "";
+            Color characterColor;
             if (character is PlayerCharacter)
             {
                 characterType = "союзный";
+                characterColor = battleSystem.playerTextColor;
             }
-            if (character is EnemyCharacter)
+            else
             {
                 characterType = "вражеский";
+                characterColor = battleSystem.enemyTextColor;
+
             }
-            battleSystem.gameLogCurrentText.Value = $"Ёффект дополнительного здоровь€ от карты \"≈динство с природой 2\" заканчиваетс€, {characterType} персонаж {character.CharacterName} погибает";
+            battleSystem.gameLogCurrentText.Value = $"Ёффект дополнительного здоровь€ от карты \"≈динство с природой 2\" заканчиваетс€, {characterType} персонаж <color=#{characterColor.ToHexString()}>{character.CharacterName}</color> погибает";
             GameObject.Destroy(character.gameObject);
         }
         OnReturnToNormal?.Invoke(this);

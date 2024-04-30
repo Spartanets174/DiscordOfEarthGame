@@ -38,6 +38,8 @@ public class LightningStrikeSupportCardAbility : BaseSupport—ardAbility
         }
         else
         {
+            GameObject spawnedEffect = Instantiate(abilityData.effect.effect, Vector3.zero, Quaternion.identity, selectCellsBehaviour.clickedCell.transform);
+            spawnedEffect.transform.localPosition = new Vector3(0, 0.5f, 0);
             UseCard(null);
         }
     }

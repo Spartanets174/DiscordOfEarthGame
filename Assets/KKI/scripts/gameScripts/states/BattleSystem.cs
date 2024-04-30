@@ -19,9 +19,15 @@ public class BattleSystem : StateMachine, ILoadable
     private FieldController m_fieldController;
     public FieldController FieldController => m_fieldController;
 
-    [Header("Controllers")]
+    [Header("Colors")]
     [SerializeField]
-    private Color infoColor;
+    public Color infoColor;
+    [SerializeField]
+    public Color enemyTextColor;
+    [SerializeField]
+    public Color playerTextColor;
+    [SerializeField]
+    public Color amountTextColor;
 
     private Dictionary<ITurnCountable, int> m_playerTurnCountables = new();
     public Dictionary<ITurnCountable, int> PlayerTurnCountables => m_playerTurnCountables;

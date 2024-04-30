@@ -50,6 +50,7 @@ public class FutureTechnologiesSupportCardAbility : BaseSupportÑardAbility, ITur
 
         character.MagDefence += abilityData.defenceAmount;
         character.PhysDefence += abilityData.defenceAmount;
+        character.InstantiateEffectOnCharacter(abilityData.effect);
 
 
         battleSystem.PlayerController.SetPlayerChosenState(false, x =>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AttackSelectedСharacterBehaviour : ICardUsable
@@ -28,15 +29,19 @@ public class AttackSelectedСharacterBehaviour : ICardUsable
         if (isDeath)
         {
             string characterType = "";
+            Color characterColor;
             if (character is PlayerCharacter)
             {
                 characterType = "Союзный";
+                characterColor = battleSystem.playerTextColor;
             }
-            if (character is EnemyCharacter)
+            else
             {
                 characterType = "Вражеский";
+                characterColor = battleSystem.enemyTextColor;
+
             }
-            battleSystem.gameLogCurrentText.Value = $"{characterType} персонаж {character.CharacterName} погибает от эффекта карты \"{abilityName}\"";
+            battleSystem.gameLogCurrentText.Value = $"{characterType} персонаж <color=#{characterColor.ToHexString()}>{character.CharacterName}</color> погибает от эффекта карты \"{abilityName}\"";
             GameObject.Destroy(character.gameObject);
         }
 

@@ -37,5 +37,9 @@ MonoBehaviour:
           _typeNameAndAssembly: ColdSupportCardAbility, Assembly-CSharp
           _suppressLogs: 0
         "support\u0421ardAbilityName": "\u0425\u043E\u043B\u043E\u0434"
+        effect:
+          effect: {fileID: 341953627080017243, guid: 2bfcd744d4d58c040bd7bbfa424d6c6b, type: 3}
+          effectSound: {fileID: 0}
+          spawnPoint: 1
         turnCount: 1
         isBuff: 0

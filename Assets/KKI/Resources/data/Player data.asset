@@ -147,13 +147,27 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6a35d8175b0def84294c1fd6c133e4e9, type: 2}
   - {fileID: 11400000, guid: 5dc9179130fd1504c8ce4aefc55c8249, type: 2}
   deckUserSupportCards:
-  - {fileID: 11400000, guid: cdaa202543bcb85439d194eec5831070, type: 2}
-  - {fileID: 11400000, guid: c7459b8714411a647b37bc4c6210a14b, type: 2}
-  - {fileID: 11400000, guid: 8241e45ddbded17418bcb23976749792, type: 2}
-  - {fileID: 11400000, guid: 501922f67ef97b34dafe533a1d15acc0, type: 2}
-  - {fileID: 11400000, guid: 2bda1a7935a22ef4fad4e90c8bfc8301, type: 2}
+  - {fileID: 11400000, guid: 3c6bccbf0c981974680a8dcf8ab2f531, type: 2}
+  - {fileID: 11400000, guid: 3bcf693f0fa8a4b4ea27f58944bc4c9e, type: 2}
+  - {fileID: 11400000, guid: b40dccc0e8052b749a505921aca02c2a, type: 2}
+  - {fileID: 11400000, guid: 01051d735d44b6d4d882ae4ff2cd2912, type: 2}
+  - {fileID: 11400000, guid: 119a4b4fc355b564cab1cb2438170384, type: 2}
+  - {fileID: 11400000, guid: bc7c9e8a72f529a4dab187054b238ec8, type: 2}
+  - {fileID: 11400000, guid: 7c51c4de9e922d746a9886dabd133727, type: 2}
+  startUserCharCards:
+  - {fileID: 11400000, guid: 1efb931489e48d54382b4858bb72c825, type: 2}
+  - {fileID: 11400000, guid: 8ddad6f2dd7fae749ab585f3bc109f72, type: 2}
+  - {fileID: 11400000, guid: 14cbde657a3173347af9823bb863e1d9, type: 2}
+  - {fileID: 11400000, guid: 99246efd4f7400145a3e0ac10a5f0b7c, type: 2}
+  - {fileID: 11400000, guid: 34cb52581f51c0d49a3f556361ebfbf6, type: 2}
+  startUserSupportCards:
+  - {fileID: 11400000, guid: 8f5cbf164e1efd545bbc328802f0b632, type: 2}
+  - {fileID: 11400000, guid: df0aedd72128a1544ae2cc75ab6768fb, type: 2}
+  - {fileID: 11400000, guid: 4eaf4d56f7012af43adae8f5e3c1c5ff, type: 2}
+  - {fileID: 11400000, guid: 7c51c4de9e922d746a9886dabd133727, type: 2}
   - {fileID: 11400000, guid: 85b14afbb58319748b746b388869d25f, type: 2}
-  - {fileID: 11400000, guid: 44c35506b3119fa4ca67d026c2656ddd, type: 2}
+  - {fileID: 11400000, guid: 2bda1a7935a22ef4fad4e90c8bfc8301, type: 2}
+  - {fileID: 11400000, guid: cc8709a890533164f9d6c898052f5b80, type: 2}
   money: 10000
   Name: "\u0432\u0430\u043F\u0432\u0430\u043F\u0432"
   Password: fdsdfF@

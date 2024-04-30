@@ -35,6 +35,10 @@ MonoBehaviour:
           _typeNameAndAssembly: CurseCardSupportAbility, Assembly-CSharp
           _suppressLogs: 0
         "support\u0421ardAbilityName": "\u041F\u0440\u043E\u043A\u043B\u044F\u0442\u044C\u0435"
+        effect:
+          effect: {fileID: 341953627080017243, guid: 2bfcd744d4d58c040bd7bbfa424d6c6b, type: 3}
+          effectSound: {fileID: 0}
+          spawnPoint: 0
         pointsOfAction: 1
         turnCount: 1
         isBuff: 0

@@ -130,21 +130,28 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
 
     private void OnAbilityUsed()
     {
+        settingsController.CanPause = true;
+
         cardSupportAbilitiesController.EnableSupportCards();
     }
 
     private void OnAbilitySelected()
     {
+        settingsController.CanPause = false;
         cardSupportAbilitiesController.DisableSupportCards();
     }
 
     private void OnSupportAbilityUsed()
     {
+        settingsController.CanPause = true;
+
         chosenCharacterDeatilsDisplay.SetRulesAbilityButtonsState(chosenCharacterDeatilsDisplay.currentCharacter.Value);
     }
 
     private void OnSupportAbilitySelected()
     {
+        settingsController.CanPause = false;
+
         chosenCharacterDeatilsDisplay.SetAbilityButtonsState(false);
         chosenCharacterDeatilsDisplay.currentCharacter.Value = null;
         battleSystem.CurrentChosenCharacter.Value = null;
@@ -296,11 +303,11 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
     {
         if (character is PlayerCharacter)
         {
-            AddMessageToGameLog($"<color=#{playerTextColor.ToHexString()}>Союзный юнит</color> {character.CharacterName} убит");
+            AddMessageToGameLog($"Союзный юнит <color=#{playerTextColor.ToHexString()}>{character.CharacterName}</color>  убит");
         }
         else
         {
-            AddMessageToGameLog($"<color=#{enemyTextColor.ToHexString()}>Вражеский юнит</color> {character.CharacterName} убит");
+            AddMessageToGameLog($"Вражеский юнит <color=#{enemyTextColor.ToHexString()}>{character.CharacterName}</color> убит");
         }
     }
 

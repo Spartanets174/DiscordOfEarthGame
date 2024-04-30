@@ -600,9 +600,9 @@ public class DbManager : MonoBehaviour
 
     public void InsertToOwnCardsSupportStart(PlayerData playerData)
     {
-        for (int i = playerData.allSupportCards.Count - 7; i < playerData.allSupportCards.Count; i++)
+        for (int i = 0; i < playerData.startUserSupportCards.Count; i++)
         {
-            string query = $"insert into gamedb.owned_cards(card_id,player_id) values({playerData.allSupportCards[i].id},{playerData.PlayerId})";
+            string query = $"insert into gamedb.owned_cards(card_id,player_id) values({playerData.startUserSupportCards[i].id},{playerData.PlayerId})";
             var command = new MySqlCommand(query, con);
             try
             {
@@ -691,9 +691,9 @@ public class DbManager : MonoBehaviour
 
     public void InsertToOwnCardStart(PlayerData playerData)
     {
-        for (int i = playerData.allCharCards.Count - 5; i < playerData.allCharCards.Count; i++)
+        for (int i = 0; i < playerData.startUserCharCards.Count; i++)
         {
-            string query = $"insert into gamedb.owned_characters(character_id,playerId) values({playerData.allCharCards[i].id},{playerData.PlayerId})";
+            string query = $"insert into gamedb.owned_characters(character_id,playerId) values({playerData.startUserCharCards[i].id},{playerData.PlayerId})";
             var command = new MySqlCommand(query, con);
             try
             {

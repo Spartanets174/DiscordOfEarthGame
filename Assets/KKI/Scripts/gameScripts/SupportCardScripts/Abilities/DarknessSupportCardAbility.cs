@@ -91,7 +91,11 @@ public class DarknessSupportCardAbility : BaseSupport—ardAbility, ITurnCountable
         }
 
         character.MagAttack += abilityData.characterMagAttack;
+        character.InstantiateEffectOnCharacter(abilityData.effect);
+
         enemyCharacter.MagDefence -= abilityData.enemyCharacterMagDefence;
+        enemyCharacter.InstantiateEffectOnCharacter(abilityData.secondEffect);
+
 
         UseCard(null);
     }
@@ -117,6 +121,8 @@ public class DarknessSupportCardAbility : BaseSupport—ardAbility, ITurnCountable
 [Serializable]
 public class DarknessSupportCardAbilityData : BaseSupport—ardAbilityData
 {
+    public EffectData secondEffect;
+
     public string selectCardText;
 
     public string selectCharacterText;

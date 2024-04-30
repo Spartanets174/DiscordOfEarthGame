@@ -12,6 +12,7 @@ public class ColdSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
     private List<EnemyCharacter> enemyCharacters;
     private List<PlayerCharacter> playerCharacters;
 
+    private List<GameObject> effects = new();
     private ColdSupportCardAbilityData abilityData;
     public event Action<ITurnCountable> OnReturnToNormal;
 
@@ -31,7 +32,9 @@ public class ColdSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
             enemyCharacters = battleSystem.EnemyController.EnemyCharObjects.Where(x => x.Class == Enums.Classes.Ëó÷íèê).ToList();
             foreach (var enemyCharacter in enemyCharacters)
             {
-                enemyCharacter.IsFreezed = true;
+                enemyCharacter.IsFreezed = true; 
+                effects.Add(enemyCharacter.InstantiateEffectOnCharacter(abilityData.effect));
+
             }
         }
         else
@@ -40,6 +43,7 @@ public class ColdSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
             foreach (var playerCharacter in playerCharacters)
             {
                 playerCharacter.IsFreezed = true;
+                effects.Add(playerCharacter.InstantiateEffectOnCharacter(abilityData.effect));
             }
         }
 
@@ -49,11 +53,16 @@ public class ColdSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 
     public void ReturnToNormal()
     {
+        foreach (var item in effects)
+        {
+            Destroy(item);
+        }
         if (battleSystem.State is PlayerTurn)
         {
             foreach (var playerCharacter in playerCharacters)
             {
                 playerCharacter.IsFreezed = false;
+                
             }
         }
         else
@@ -61,6 +70,7 @@ public class ColdSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
             foreach (var enemyCharacter in enemyCharacters)
             {
                 enemyCharacter.IsFreezed = false;
+
             }
         }
         OnReturnToNormal?.Invoke(this);

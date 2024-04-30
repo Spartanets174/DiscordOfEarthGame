@@ -30,11 +30,12 @@ public class SettingsController : MonoBehaviour, ILoadable
     public List<OutlineInteractableObject> OutlineInteractableObjects => outlineInteractableObjects;
 
     private bool isPaused;
-
+    public bool CanPause { get; set; }
 
     public event Action<bool> OnPauseStateChanged;
     public virtual void Init()
     {
+        CanPause = true;
         dbManager = FindObjectOfType<DbManager>();
         outlineInteractableObjects = FindObjectsOfType<OutlineInteractableObject>().ToList();
         resolutions.Clear();
@@ -66,7 +67,7 @@ public class SettingsController : MonoBehaviour, ILoadable
     }
     private void Update()
     {
-        if (Input.GetKeyDown(settingsButton))
+        if (Input.GetKeyDown(settingsButton)&&CanPause)
         {
             TogglePausedState();
         }
@@ -74,6 +75,7 @@ public class SettingsController : MonoBehaviour, ILoadable
 
     public void TogglePausedState()
     {
+
         isPaused = !isPaused;
         foreach (var item in outlineInteractableObjects)
         {
@@ -81,6 +83,8 @@ public class SettingsController : MonoBehaviour, ILoadable
         }
         Time.timeScale = isPaused ? 0 : 1;
         OnPauseStateChanged?.Invoke(isPaused);
+
+
     }
     public void ExitAccount()
     {

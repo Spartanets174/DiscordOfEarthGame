@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class CurseCardSupportAbility : BaseSupportÑardAbility, ITurnCountable
@@ -13,6 +14,7 @@ public class CurseCardSupportAbility : BaseSupportÑardAbility, ITurnCountable
     private List<EnemyCharacter> enemyCharacters;
     private List<PlayerCharacter> playerCharacters;
 
+    private List<GameObject> effects = new();
     private CurseCardSupportAbilityData abilityData;
     public event Action<ITurnCountable> OnReturnToNormal;
 
@@ -35,6 +37,7 @@ public class CurseCardSupportAbility : BaseSupportÑardAbility, ITurnCountable
             foreach (var enemyCharacter in enemyCharacters)
             {
                 enemyCharacter.IsFreezed = true;
+                effects.Add(enemyCharacter.InstantiateEffectOnCharacter(abilityData.effect));
             }
         }
         else
@@ -43,6 +46,7 @@ public class CurseCardSupportAbility : BaseSupportÑardAbility, ITurnCountable
             foreach (var playerCharacter in playerCharacters)
             {
                 playerCharacter.IsFreezed = true;
+                effects.Add(playerCharacter.InstantiateEffectOnCharacter(abilityData.effect));
             }
         }
 
@@ -66,6 +70,10 @@ public class CurseCardSupportAbility : BaseSupportÑardAbility, ITurnCountable
                 enemyCharacter.IsFreezed = false;
             }
 
+        }
+        foreach (var item in effects)
+        {
+            Destroy(item);
         }
         OnReturnToNormal?.Invoke(this);
     }
