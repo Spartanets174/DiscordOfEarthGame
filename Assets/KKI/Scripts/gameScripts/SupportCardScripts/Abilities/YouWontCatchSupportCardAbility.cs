@@ -56,6 +56,7 @@ public class YouWontCatchSupportCardAbility : BaseSupportÑardAbility, ITurnCount
 
         character.MagAttack += magAmount;
         character.PhysAttack += physAmount;
+        character.InstantiateEffectOnCharacter(abilityData.effect);
 
         battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {

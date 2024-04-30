@@ -21,8 +21,6 @@ public class PlayerTurn : State
 
     public override IEnumerator Start()
     {
-        IsSupportCardUsed = false;
-
         BattleSystem.PointsOfAction.Value = 20;
 
         CheckPlayerTurnCountables();

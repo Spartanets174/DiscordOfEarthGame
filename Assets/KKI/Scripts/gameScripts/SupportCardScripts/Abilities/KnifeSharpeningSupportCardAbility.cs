@@ -49,6 +49,7 @@ public class KnifeSharpeningSupportCardAbility : BaseSupportÑardAbility, ITurnCo
 
         character.CritChance += abilityData.critChance;
         character.CritNum += abilityData.critNum;
+        character.InstantiateEffectOnCharacter(abilityData.effect);
 
         battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {

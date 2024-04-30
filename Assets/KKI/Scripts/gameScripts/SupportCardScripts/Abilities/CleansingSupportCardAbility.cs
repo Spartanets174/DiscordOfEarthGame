@@ -1,4 +1,5 @@
 using System;
+using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class CleansingSupportCardAbility : BaseSupportÑardAbility
@@ -31,10 +32,13 @@ public class CleansingSupportCardAbility : BaseSupportÑardAbility
         if (battleSystem.State is PlayerTurn)
         {
             battleSystem.PlayerController.CurrentPlayerCharacter.RemoveDebuffs();
+            battleSystem.PlayerController.CurrentPlayerCharacter.InstantiateEffectOnCharacter(abilityData.effect);
+
         }
         else
         {
             battleSystem.EnemyController.CurrentEnemyCharacter.RemoveDebuffs();
+            battleSystem.EnemyController.CurrentEnemyCharacter.InstantiateEffectOnCharacter(abilityData.effect);
         }
         battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {

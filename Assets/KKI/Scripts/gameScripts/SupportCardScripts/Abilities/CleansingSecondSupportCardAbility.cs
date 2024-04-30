@@ -21,13 +21,22 @@ public class CleansingSecondSupportCardAbility : BaseSupport—ardAbility
         if (battleSystem.State is PlayerTurn)
         {
             battleSystem.PlayerController.RemoveDebuffsAllPlayerCharacters();
+            foreach (var character in battleSystem.PlayerController.PlayerCharactersObjects)
+            {
+                character.InstantiateEffectOnCharacter(abilityData.effect);
+            }
         }
         else
         {
             battleSystem.EnemyController.RemoveDebuffsAllEnemyCharacters();
+            foreach (var character in battleSystem.EnemyController.EnemyCharObjects)
+            {
+                character.InstantiateEffectOnCharacter(abilityData.effect);
+            }
+
         }
-        
-        
+
+
         m_cardSelectBehaviour.OnSelected -= OnSelected;
         UseCard(null);
     }

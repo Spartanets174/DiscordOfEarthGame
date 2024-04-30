@@ -46,6 +46,7 @@ public class ArtOfSurviveSupportCardAbility : BaseSupport—ardAbility, ITurnCount
         {
             character = battleSystem.EnemyController.CurrentEnemyCharacter;
         }
+        character.InstantiateEffectOnCharacter(abilityData.effect);
 
         character.ChanceToAvoidDamage += abilityData.chanceToAvoidDamage;
 

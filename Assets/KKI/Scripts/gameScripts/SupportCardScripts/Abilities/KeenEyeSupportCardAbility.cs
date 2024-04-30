@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [Serializable]
 public class KeenEyeSupportCardAbility : BaseSupport—ardAbility, ITurnCountable
@@ -32,6 +33,8 @@ public class KeenEyeSupportCardAbility : BaseSupport—ardAbility, ITurnCountable
             foreach (var playerCharacter in playerCharacters)
             {
                 playerCharacter.CritChance = abilityData.critChance;
+                playerCharacter.InstantiateEffectOnCharacter(abilityData.effect);
+
             }
         }
         else
@@ -40,6 +43,8 @@ public class KeenEyeSupportCardAbility : BaseSupport—ardAbility, ITurnCountable
             foreach (var enemyCharacter in enemyCharacters)
             {
                 enemyCharacter.CritChance = abilityData.critChance;
+                enemyCharacter.InstantiateEffectOnCharacter(abilityData.effect);
+
             }
         }
 

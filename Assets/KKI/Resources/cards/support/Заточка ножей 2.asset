@@ -38,6 +38,10 @@ MonoBehaviour:
           _suppressLogs: 0
         "support\u0421ardAbilityName": "\u0417\u0430\u0442\u043E\u0447\u043A\u0430
           \u043D\u043E\u0436\u0435\u0439 2"
+        effect:
+          effect: {fileID: 2799084144196254819, guid: c324a6e30ef76314292525669dc7248f, type: 3}
+          effectSound: {fileID: 0}
+          spawnPoint: 1
         selectCardText: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u0436\u0430"
         critChance: 0.35
         critNum: 0.35

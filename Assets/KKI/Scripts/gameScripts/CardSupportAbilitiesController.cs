@@ -95,6 +95,7 @@ public class CardSupportAbilitiesController : MonoBehaviour, ILoadable
 
     private void OnPlayerTurnStarted(PlayerTurn turn)
     {
+        turn.IsSupportCardUsed = false;
         EnableSupportCards();      
     }
 

@@ -38,4 +38,30 @@ MonoBehaviour:
           _suppressLogs: 0
         "support\u0421ardAbilityName": "\u0410\u0442\u043B\u0435\u0442\u0438\u0447\u0435\u0441\u043A\u0430\u044F
           \u043F\u043E\u0434\u0433\u043E\u0442\u043E\u0432\u043A\u0430 2"
+        useEffects:
+          reorderableList:
+            canAdd: 1
+            canRemove: 1
+            draggable: 1
+            expandable: 1
+            multipleSelection: 1
+            isExpanded: 1
+            label:
+              m_Text: Keys
+              m_Image: {fileID: 0}
+              m_Tooltip: 
+            headerHeight: 18
+            footerHeight: 13
+            slideEasing: 0.15
+            verticalSpacing: 2
+            showDefaultBackground: 1
+            elementDisplayType: 0
+            elementNameProperty: 
+            elementNameOverride: 
+            elementIcon: {fileID: 0}
+          reqReferences: {fileID: 0}
+          isExpanded: 1
+          _keyValues: []
+          _keys: []
+          _values: []
         pointsOfAction: 6

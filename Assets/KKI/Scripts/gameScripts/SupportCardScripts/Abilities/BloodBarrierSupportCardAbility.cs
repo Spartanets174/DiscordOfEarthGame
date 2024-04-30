@@ -46,6 +46,7 @@ public class BloodBarrierSupportCardAbility : BaseSupportÑardAbility, ITurnCount
         }
 
         character.CanBeDamaged = false;
+       character.InstantiateEffectOnCharacter(abilityData.effect);
 
         battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {
@@ -66,7 +67,6 @@ public class BloodBarrierSupportCardAbility : BaseSupportÑardAbility, ITurnCount
     public void ReturnToNormal()
     {
         character.CanBeDamaged = true;
-
         OnReturnToNormal?.Invoke(this);
     }
 
@@ -77,6 +77,8 @@ public class BloodBarrierSupportCardAbilityData : BaseSupportÑardAbilityData
     public string selectCardText;
 
     public int turnCount;
+
+
 
     [Header("Íå òğîãàòü!")]
     public bool isBuff;

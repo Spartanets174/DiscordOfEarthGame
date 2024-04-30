@@ -47,6 +47,7 @@ public class UnityWithNatureSupportCardAbility : BaseSupportÑardAbility, ITurnCo
 
         character.HealMoreThenMax(abilityData.healAmount, abilityData.supportÑardAbilityName);
         character.PhysDefence += abilityData.physDefence;
+        character.InstantiateEffectOnCharacter(abilityData.effect);
 
         battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {

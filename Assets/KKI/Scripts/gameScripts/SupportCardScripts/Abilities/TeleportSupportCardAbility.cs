@@ -12,7 +12,7 @@ public class TeleportSupportCardAbility : BaseSupport—ardAbility
         abilityData = (TeleportSupportCardAbilityData)baseAbilityData;
         SetCardSelectBehaviour(new SelectAllPlayerUnitsBehaviour(abilityData.selectCardText, battleSystem));
         SetSelectCharacterBehaviour(new SetAbiableCellsBehaviour(abilityData.selectCharacterText, battleSystem));
-        SetUseCardBehaviour(new MoveToCellBehaviour(battleSystem));
+        SetUseCardBehaviour(new MoveToCellBehaviour(battleSystem, 0));
 
         setAbiableCellsBehaviour = (SetAbiableCellsBehaviour)SelectCharacterBehaviour;
 

@@ -39,4 +39,8 @@ MonoBehaviour:
           _suppressLogs: 0
         "support\u0421ardAbilityName": "\u0414\u0440\u0443\u0437\u044C\u044F \u043B\u0435\u0441\u0430
           2"
+        effect:
+          effect: {fileID: 0}
+          effectSound: {fileID: 0}
+          spawnPoint: 0
         transitionCost: 2

@@ -82,12 +82,12 @@ public class MaterialBladesSecondSupportCardAbility : BaseSupportСardAbility, I
         }
 
         attackSelectedСharactersBehaviour.charactersToAttack = characters;
-        UseCard(null);
         foreach (var character in characters)
         {
             character.IsFreezed = true;
-
+            character.InstantiateEffectOnCharacter(abilityData.effect);
         }
+        UseCard(null);
     }
 
     private void OnCardUse()

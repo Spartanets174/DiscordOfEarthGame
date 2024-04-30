@@ -48,6 +48,7 @@ public class TangibleBodySupportCardAbility : BaseSupportÑardAbility, ITurnCount
         character.HealMoreThenMax(1, abilityData.supportÑardAbilityName);
         character.PhysDefence += abilityData.physAmount;
         character.PhysAttack += abilityData.physAmount;
+        character.InstantiateEffectOnCharacter(abilityData.effect);
 
         battleSystem.PlayerController.SetPlayerChosenState(false, x =>
         {

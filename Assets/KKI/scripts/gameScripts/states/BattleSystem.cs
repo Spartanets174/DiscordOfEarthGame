@@ -132,16 +132,17 @@ public class BattleSystem : StateMachine, ILoadable
         CurrentChosenCharacter.Value = null;
         EnemyController.StopTree();
         PlayerTurn playerTurn = new(this);
-        OnPlayerTurnStarted?.Invoke(playerTurn);
         SetState(playerTurn);
+        OnPlayerTurnStarted?.Invoke(playerTurn);      
     }
     [ContextMenu("SetEnemyTurn")]
     public void SetEnemyTurn()
     {
         CurrentChosenCharacter.Value = null;
         EnemyTurn enemyTurn = new(this);
-        OnEnemyTurnStarted?.Invoke(enemyTurn);
         SetState(enemyTurn);
+        OnEnemyTurnStarted?.Invoke(enemyTurn);
+        
     }
     public void SetWin()
     {

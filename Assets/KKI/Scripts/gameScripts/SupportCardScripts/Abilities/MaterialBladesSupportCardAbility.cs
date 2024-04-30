@@ -3,7 +3,7 @@ using UnityEngine;
 
 [Serializable]
 public class MaterialBladesSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
-{ 
+{
     public int TurnCount { get => abilityData.turnCount; set => abilityData.turnCount = value; }
     public bool IsBuff { get => abilityData.isBuff; }
 
@@ -51,8 +51,9 @@ public class MaterialBladesSupportCardAbility : BaseSupportÑardAbility, ITurnCou
         }
 
         character.IsFreezed = true;
-
+        character.InstantiateEffectOnCharacter(abilityData.effect);
         UseCard(character.gameObject);
+
     }
 
     private void OnCardUse()
@@ -62,7 +63,7 @@ public class MaterialBladesSupportCardAbility : BaseSupportÑardAbility, ITurnCou
 
     private void OnCancelSelection()
     {
-        battleSystem.EnemyController.SetEnemiesStates(true,false, x =>
+        battleSystem.EnemyController.SetEnemiesStates(true, false, x =>
         {
             x.OnClick -= SelectCharacter;
         });

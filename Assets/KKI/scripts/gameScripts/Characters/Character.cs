@@ -676,12 +676,12 @@ public abstract class Character : ChildOutlineInteractableObject
         OnHeal?.Invoke(this, nameObject, amount);
     }
 
-    public void Move(int moveCost, Transform positionToMove)
+    public void Move(int moveCost, Transform positionToMove, float moveTime = 0.5f)
     {
         Speed -= Convert.ToInt32(moveCost);
 
         Vector3 cellToMovePos = positionToMove.position;
-        transform.DOMove(new Vector3(cellToMovePos.x, transform.position.y, cellToMovePos.z), 0.5f).OnComplete(() =>
+        transform.DOMove(new Vector3(cellToMovePos.x, transform.position.y, cellToMovePos.z), moveTime).OnComplete(() =>
         {
             transform.SetParent(positionToMove);
             transform.localPosition = Vector3.zero;

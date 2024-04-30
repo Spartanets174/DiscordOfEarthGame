@@ -1,4 +1,5 @@
 using TypeReferences;
+using UnityEngine;
 
 public class BaseSupportСardAbilityData
 {
@@ -6,4 +7,6 @@ public class BaseSupportСardAbilityData
     public TypeReference SupportСardAbility;
 
     public string supportСardAbilityName;
+
+    public EffectData effect;
 }
