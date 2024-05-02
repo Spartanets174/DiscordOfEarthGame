@@ -7,7 +7,7 @@ public class FieldController : MonoBehaviour, ILoadable
     //Скрипт для создания игрового поля
     [SerializeField] private int width, height;
     [SerializeField] private Cell cellPrefab;
-    [SerializeField] private Cell swampCellPrefab;
+    [SerializeField] private List<Cell> swampCellPrefabs;
     [SerializeField] private GameObject mountainPrefab;
     public Cell[,] CellsOfFieled;
     public void Init()
@@ -25,12 +25,13 @@ public class FieldController : MonoBehaviour, ILoadable
                 Cell spawnedTile;
                 if ((i == 2 && j == 2) || (i == 4 && j == 3) || (i == 2 && j == 7) || (i == 4 && j == 8))
                 {
-                    spawnedTile = Instantiate(swampCellPrefab, Vector3.zero, Quaternion.identity, transform);
+                    spawnedTile = Instantiate(swampCellPrefabs[UnityEngine.Random.Range(0, swampCellPrefabs.Count)], transform);
+                    spawnedTile.transform.localPosition = new Vector3(j * -0.27f, spawnedTile.transform.localPosition.y, i * -0.27f);
                 }
                 else
                 {
                     spawnedTile = Instantiate(cellPrefab, Vector3.zero, Quaternion.identity, transform);
-
+                    spawnedTile.transform.localPosition = new Vector3(j * -0.27f, 0, i * -0.27f);
                 }
                 if ((j == 4 || j == 6) && i % 2 != 0)
                 {
@@ -38,9 +39,7 @@ public class FieldController : MonoBehaviour, ILoadable
                     Mountain.transform.localPosition = new Vector3(0, 0.5f, 0);
                 }
 
-                spawnedTile.SetCellMovable();
-
-                spawnedTile.transform.localPosition = new Vector3(j * -0.27f, 0, i * -0.27f);
+                spawnedTile.SetCellMovable();                
                 spawnedTile.SetCellState(true);
                 spawnedTile.IsEnabled = true;
                 spawnedTile.CellIndex = new Vector2(i, j);

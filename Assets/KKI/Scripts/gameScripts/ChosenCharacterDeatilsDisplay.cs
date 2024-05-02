@@ -75,6 +75,10 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
     private TextMeshProUGUI tipsText;
     [SerializeField]
     private GameObject tipsTextParent;
+    [SerializeField]
+    private TextMeshProUGUI characterAbilityText;
+    [SerializeField]
+    private GameObject characterAbilityPanel;
 
     public ReactiveProperty<Character> currentCharacter = new();
 
@@ -87,6 +91,16 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
     public event Action OnAbilityUsingCancel;
     public void Init()
     {
+        attackAbilityButton.OnHoverEnter += ()=> EnableInfoPanel(Enums.TypeOfAbility.attack);
+        attackAbilityButton.OnHoverExit += DisableInfoPanel;
+
+        defenceAbilityButton.OnHoverEnter += () => EnableInfoPanel(Enums.TypeOfAbility.defence);
+        defenceAbilityButton.OnHoverExit += DisableInfoPanel;
+
+        buffAbilityButton.OnHoverEnter += () => EnableInfoPanel(Enums.TypeOfAbility.buff);
+        buffAbilityButton.OnHoverExit += DisableInfoPanel;
+        characterAbilityPanel.SetActive(false);
+
         foreach (var playerCharacter in playerController.PlayerCharactersObjects)
         {
             if (playerCharacter.PassiveCharacterAbility != null)
@@ -122,6 +136,14 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
     }
     private void OnDestroy()
     {
+        attackAbilityButton.OnHoverEnter -= () => EnableInfoPanel(Enums.TypeOfAbility.attack);
+        attackAbilityButton.OnHoverExit -= DisableInfoPanel;
+
+        defenceAbilityButton.OnHoverEnter -= () => EnableInfoPanel(Enums.TypeOfAbility.defence);
+        defenceAbilityButton.OnHoverExit -= DisableInfoPanel;
+
+        buffAbilityButton.OnHoverEnter -= () => EnableInfoPanel(Enums.TypeOfAbility.buff);
+        buffAbilityButton.OnHoverExit -= DisableInfoPanel;
         disposables.Dispose();
         disposables.Clear();
     }
@@ -312,6 +334,31 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
         {
             SetAbilityButtonsState(false);
         }
+    }
+
+    private void DisableInfoPanel()
+    {
+        characterAbilityPanel.SetActive(false);
+        characterAbilityText.text = "";
+    }
+
+    private void EnableInfoPanel(Enums.TypeOfAbility typeOfAbility)
+    {
+        if (currentCharacter.Value == null) return;
+        characterAbilityPanel.SetActive(true);
+        switch (typeOfAbility)
+        {
+            case Enums.TypeOfAbility.attack:
+                characterAbilityText.text = currentCharacter.Value.Card.attackAbility;
+                break;
+            case Enums.TypeOfAbility.defence:
+                characterAbilityText.text = currentCharacter.Value.Card.defenceAbility;
+                break;
+            case Enums.TypeOfAbility.buff:
+                characterAbilityText.text = currentCharacter.Value.Card.buffAbility;
+                break;
+        }
+        
     }
 
     private void ResetData()
