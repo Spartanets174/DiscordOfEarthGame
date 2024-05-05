@@ -1,6 +1,7 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UniRx;
 using UnityEngine;
 
@@ -420,19 +421,23 @@ public class DbManager : MonoBehaviour
 
     public void InsertToCardsSupportShopStart(PlayerData playerData)
     {
-        for (int i = 0; i < playerData.allSupportCards.Count - 7; i++)
+        
+        for (int i = 0; i < playerData.allSupportCards.Count; i++)
         {
-            string query = $"insert into gamedb.cards_shop(idCards_Shop,cost,id_player) values({playerData.allSupportCards[i].id},{playerData.allSupportCards[i].Price},{playerData.PlayerId})";
-            var command = new MySqlCommand(query, con);
-            try
+            if (!playerData.startUserSupportCards.Contains(playerData.allSupportCards[i]))
             {
-                command.ExecuteNonQuery();
-            }
-            catch (System.Exception ex)
-            {
-                Debug.LogError(ex.Message);
-            }
-            command.Dispose();
+                string query = $"insert into gamedb.cards_shop(idCards_Shop,cost,id_player) values({playerData.allSupportCards[i].id},{playerData.allSupportCards[i].Price},{playerData.PlayerId})";
+                var command = new MySqlCommand(query, con);
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError(ex.Message);
+                }
+                command.Dispose();
+            }           
         }
     }
 
@@ -504,26 +509,24 @@ public class DbManager : MonoBehaviour
 
     }
 
-
-
-
-
-
     public void InsertToCardsShopStart(PlayerData playerData)
     {
-        for (int i = 0; i < playerData.allCharCards.Count - 5; i++)
+        for (int i = 0; i < playerData.allCharCards.Count; i++)
         {
-            string query = $"insert into gamedb.characters_shop(idCharacters_Shop,cost,id_payer) values({playerData.allCharCards[i].id},{playerData.allCharCards[i].Price},{playerData.PlayerId})";
-            var command = new MySqlCommand(query, con);
-            try
+            if (!playerData.startUserCharCards.Contains(playerData.allCharCards[i]))
             {
-                command.ExecuteNonQuery();
+                string query = $"insert into gamedb.characters_shop(idCharacters_Shop,cost,id_payer) values({playerData.allCharCards[i].id},{playerData.allCharCards[i].Price},{playerData.PlayerId})";
+                var command = new MySqlCommand(query, con);
+                try
+                {
+                    command.ExecuteNonQuery();
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError(ex.Message);
+                }
+                command.Dispose();
             }
-            catch (System.Exception ex)
-            {
-                Debug.LogError(ex.Message);
-            }
-            command.Dispose();
         }
     }
 

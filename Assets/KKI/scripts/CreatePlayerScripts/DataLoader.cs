@@ -10,8 +10,8 @@ public class DataLoader : MonoBehaviour, ILoadable
 
     private PlayerData playerData;
 
-    public Action<string> OnPlayerDataRecieved;
-    public Action<bool> OnPlayerDataChecked;
+    public event Action<string> OnPlayerDataRecieved;
+    public event Action<bool> OnPlayerDataChecked;
     public void Init()
     {
         playerData = DB.PlayerData;
