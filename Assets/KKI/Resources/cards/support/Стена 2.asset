@@ -38,6 +38,10 @@ MonoBehaviour:
           _typeNameAndAssembly: WallSecondSupportCardAbility, Assembly-CSharp
           _suppressLogs: 0
         "support\u0421ardAbilityName": "\u0421\u0442\u0435\u043D\u0430 2"
+        effect:
+          effect: {fileID: 0}
+          effectSound: {fileID: 0}
+          spawnPoint: 0
         selectCardText: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u043E\u0431\u043B\u0430\u0441\u0442\u044C
           \u0434\u043B\u044F \u0440\u0430\u0437\u043C\u0435\u0449\u0435\u043D\u0438\u044F"
-        prefab: {fileID: 7333318791917978713, guid: 0115a4050a7b3a346a2d2397d837a780, type: 3}
+        prefab: {fileID: 6106062682485592076, guid: d116221414c2e2f409cb4f42d8dc174f, type: 3}

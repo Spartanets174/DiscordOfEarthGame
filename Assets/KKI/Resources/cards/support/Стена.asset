@@ -37,8 +37,12 @@ MonoBehaviour:
           _typeNameAndAssembly: WallSupportCardAbility, Assembly-CSharp
           _suppressLogs: 0
         "support\u0421ardAbilityName": "\u0421\u0442\u0435\u043D\u0430"
+        effect:
+          effect: {fileID: 0}
+          effectSound: {fileID: 0}
+          spawnPoint: 0
         selectCardText: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u043E\u0431\u043B\u0430\u0441\u0442\u044C
           \u0434\u043B\u044F \u0440\u0430\u0437\u043C\u0435\u0449\u0435\u043D\u0438\u044F"
-        prefab: {fileID: 7333318791917978713, guid: 6611a5c575839a44c85105b6d2c28b65, type: 3}
+        prefab: {fileID: 6902746669399899207, guid: 6d6b131633ad1a54985d5cc8597df66c, type: 3}
         turnCount: 2
         isBuff: 1

@@ -45,7 +45,15 @@ public class WallSupportCardAbility : BaseSupportÑardAbility, ITurnCountable
 
         if (selectCellsBehaviour.highlightedCells.Where(x => x.transform.childCount > 0).ToList().Count == 0 && selectCellsBehaviour.highlightedCells.Count == 3)
         {
-            spawnObjectBehaviour.rotation = selectCellsBehaviour.range.x > selectCellsBehaviour.range.y ? Vector3.zero : new Vector3(0, 90, 0);
+            if (battleSystem.State is PlayerTurn)
+            {
+                spawnObjectBehaviour.rotation = selectCellsBehaviour.range.x > selectCellsBehaviour.range.y ? new Vector3(0, 180, 0) : new Vector3(0, 90, 0);
+
+            }
+            else
+            {
+                spawnObjectBehaviour.rotation = selectCellsBehaviour.range.x > selectCellsBehaviour.range.y ? Vector3.zero : new Vector3(0, 90, 0);
+            }
             UseCard(selectCellsBehaviour.clickedCell.gameObject);
         }
         else
