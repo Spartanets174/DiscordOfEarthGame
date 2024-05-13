@@ -1,14 +1,9 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
-using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 public class StaticEnemyCharacter : Enemy
 {
-    private List<Cell> m_cellsToAttack=new();
+    private List<Cell> m_cellsToAttack = new();
     public List<Cell> CellsToAttack
     {
         get => m_cellsToAttack;
@@ -26,11 +21,11 @@ public class StaticEnemyCharacter : Enemy
                 enemyCharactersToAttack.Add(currentTarget);
             }
         }
-        if (enemyCharactersToAttack.Count!=0)
+        if (enemyCharactersToAttack.Count != 0)
         {
             EnemyCharacter target = enemyCharactersToAttack.OrderBy(x => x.Health).ToList()[0];
             AttackCharacter(target);
-        }        
+        }
     }
 
     public void AttackPlayerCharacters()
@@ -39,12 +34,12 @@ public class StaticEnemyCharacter : Enemy
         foreach (var cell in CellsToAttack)
         {
             PlayerCharacter currentTarget = cell.GetComponentInChildren<PlayerCharacter>();
-            if(currentTarget!=null)
+            if (currentTarget != null)
             {
                 playerCharacterToAttack.Add(currentTarget);
             }
         }
-        if (playerCharacterToAttack.Count!=0)
+        if (playerCharacterToAttack.Count != 0)
         {
             PlayerCharacter target = playerCharacterToAttack.OrderBy(x => x.Health).ToList()[0];
             AttackCharacter(target);

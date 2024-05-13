@@ -101,7 +101,7 @@ public class ForestLadsPassiveAbility : BasePassiveCharacterAbility
 
             Cell cell = battleSystem.FieldController.GetCell(newI, newJ);
 
-            if (cell.transform.childCount > 0)
+            if (cell.transform.childCount > 1)
             {
                 Character character;
                 character = cell.GetComponentInChildren<Character>();

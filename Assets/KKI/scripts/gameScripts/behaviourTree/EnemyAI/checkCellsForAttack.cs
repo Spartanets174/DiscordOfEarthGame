@@ -87,7 +87,7 @@ public class CheckCellsForAttack : Node
             PlayerCharacter enemy = cell.GetComponentInChildren<PlayerCharacter>();
             StaticEnemyCharacter staticEnemy = cell.GetComponentInChildren<StaticEnemyCharacter>();
             KostilEnemy kostilEnemy = cell.GetComponentInChildren<KostilEnemy>();
-            if (cell.transform.childCount > 0)
+            if (cell.transform.childCount > 1)
             {
                 if (enemy != null)
                 {

@@ -157,7 +157,7 @@ public class FieldController : MonoBehaviour, ILoadable
         {
             return null;
         }
-        if (GetCell((int)newI, (int)newJ).transform.childCount > 0)
+        if (GetCell((int)newI, (int)newJ).transform.childCount > 1)
         {
             return null;
         }

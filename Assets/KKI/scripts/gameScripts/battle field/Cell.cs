@@ -3,7 +3,7 @@ using RotaryHeart.Lib.SerializableDictionary;
 using System;
 using UnityEngine;
 
-public class Cell : OutlineInteractableObject
+public class Cell : ChildOutlineInteractableObject
 {
     [SerializeField]
     private ColorDictioanary colorDictionary;
@@ -31,9 +31,6 @@ public class Cell : OutlineInteractableObject
     private MeshRenderer meshRenderer;
     public MeshRenderer MeshRenderer => meshRenderer;
 
-    private BoxCollider boxCollider;
-    public BoxCollider BoxCollider => boxCollider;
-
     private Vector2 m_cellIndex;
     public Vector2 CellIndex
     {
@@ -47,8 +44,7 @@ public class Cell : OutlineInteractableObject
         TransitionCostEnemy = transitionCost;
         TransitionCostPlayer = transitionCost;
 
-        meshRenderer = GetComponent<MeshRenderer>();
-        boxCollider = GetComponent<BoxCollider>();
+        meshRenderer = GetComponentInChildren<MeshRenderer>();
     }
 
     public void SetCellState(bool state)

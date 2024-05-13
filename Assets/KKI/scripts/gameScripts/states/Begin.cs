@@ -50,7 +50,7 @@ public class Begin : State
 
     private void SetActiveCells(Cell cell)
     {
-        if (cell.transform.childCount <=0 &&( cell.CellIndex.y == BattleSystem.FieldController.CellsOfFieled.GetLength(1) - 1 || cell.CellIndex.y == BattleSystem.FieldController.CellsOfFieled.GetLength(1) - 2))
+        if (cell.transform.childCount <=1 &&( cell.CellIndex.y == BattleSystem.FieldController.CellsOfFieled.GetLength(1) - 1 || cell.CellIndex.y == BattleSystem.FieldController.CellsOfFieled.GetLength(1) - 2))
         {
             cell.SetCellMovable();
         }
@@ -58,7 +58,7 @@ public class Begin : State
 
     public override IEnumerator Move(GameObject cell)
     {
-        if (cell.transform.childCount == 0)
+        if (cell.transform.childCount == 1)
         {
             GameCharacterCardDisplay cardDisplay = OnCharacterMovedInvoke();           
             if (cardDisplay!=null)

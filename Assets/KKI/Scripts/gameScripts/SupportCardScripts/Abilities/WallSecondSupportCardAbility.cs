@@ -38,7 +38,7 @@ public class WallSecondSupportCardAbility : BaseSupportÑardAbility
         }
         battleSystem.FieldController.InvokeActionOnField(selectCellsBehaviour.UnSubscribe);
 
-        if (selectCellsBehaviour.highlightedCells.Where(x => x.transform.childCount > 0).ToList().Count == 0 && selectCellsBehaviour.highlightedCells.Count == 3)
+        if (selectCellsBehaviour.highlightedCells.Where(x => x.transform.childCount > 1).ToList().Count == 0 && selectCellsBehaviour.highlightedCells.Count == 3)
         {
             if (battleSystem.State is PlayerTurn)
             {

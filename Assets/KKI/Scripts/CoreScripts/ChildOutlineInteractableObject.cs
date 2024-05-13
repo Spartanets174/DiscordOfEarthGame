@@ -1,6 +1,5 @@
 using HighlightPlus;
 using UnityEngine;
-[RequireComponent(typeof(HighlightEffect))]
 public class ChildOutlineInteractableObject : ChildInteractableObject
 {
     protected HighlightEffect highlightEffect;
@@ -8,9 +7,13 @@ public class ChildOutlineInteractableObject : ChildInteractableObject
     // Start is called before the first frame update
    protected override void Awake()
     {
+        transform.childCount
         base.Awake();
         highlightEffect = GetComponent<HighlightEffect>();
-
+        if (highlightEffect==null)
+        {
+            highlightEffect = GetComponentInChildren<HighlightEffect>();
+        }
         OnHoverEnter += EnableOutline;
         OnHoverExit += DisableOutline;
         OnEnableChanged += x => { if (!x) DisableOutline(null); };

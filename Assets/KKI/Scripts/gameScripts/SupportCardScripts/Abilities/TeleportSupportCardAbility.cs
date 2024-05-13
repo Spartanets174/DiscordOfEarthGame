@@ -53,7 +53,7 @@ public class TeleportSupportCardAbility : BaseSupportÑardAbility
         setAbiableCellsBehaviour.cellsToMove.Clear();
         battleSystem.FieldController.InvokeActionOnField(x =>
         {
-            if (x.transform.childCount == 0)
+            if (x.transform.childCount == 1)
             {
                 setAbiableCellsBehaviour.cellsToMove.Add(x);
             }

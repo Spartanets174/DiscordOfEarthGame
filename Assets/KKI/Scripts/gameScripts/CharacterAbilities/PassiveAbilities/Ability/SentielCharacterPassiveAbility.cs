@@ -92,7 +92,7 @@ public class SentielCharacterPassiveAbility : BasePassiveCharacterAbility
 
             Cell cell = battleSystem.FieldController.GetCell(newI, newJ);
 
-            if (cell.transform.childCount > 0)
+            if (cell.transform.childCount > 1)
             {
                 Character enemy;
                 if (abilityOwner is PlayerCharacter)

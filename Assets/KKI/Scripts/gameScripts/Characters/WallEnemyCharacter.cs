@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WallEnemyCharacter : StaticEnemyCharacter
@@ -11,7 +8,7 @@ public class WallEnemyCharacter : StaticEnemyCharacter
     {
         IsEnabled = true;
 
-        SetData(Card,-1);
+        SetData(Card, -1);
         OnDamaged += AttackAttackedCharacter;
     }
 
@@ -21,7 +18,7 @@ public class WallEnemyCharacter : StaticEnemyCharacter
         {
             LastAttackedCharacter.Damage(LastDamageAmount * 0.3f, CharacterName);
         }
-        
+
     }
 
     private void OnDestroy()

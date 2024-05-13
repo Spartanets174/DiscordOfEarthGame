@@ -124,7 +124,7 @@ public class ForestLadsDefenceAbility : BaseCharacterAbility
 
 
             KostilEnemy kostilEnemy = cell.GetComponentInChildren<KostilEnemy>();
-            if (cell.transform.childCount > 0)
+            if (cell.transform.childCount > 1)
             {
 
                 if (enemy != null && enemy is not KostilEnemy)

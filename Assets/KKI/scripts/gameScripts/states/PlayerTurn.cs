@@ -380,7 +380,7 @@ public class PlayerTurn : State
             Cell cell = BattleSystem.FieldController.GetCell(newI, newJ);
             Enemy enemy = cell.GetComponentInChildren<Enemy>();
             KostilEnemy kostilEnemy = cell.GetComponentInChildren<KostilEnemy>();
-            if (cell.transform.childCount > 0)
+            if (cell.transform.childCount > 1)
             {
                 if (enemy != null&&enemy is not KostilEnemy)
                 {

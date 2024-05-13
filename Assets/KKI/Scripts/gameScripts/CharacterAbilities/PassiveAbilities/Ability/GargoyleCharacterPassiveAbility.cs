@@ -112,7 +112,7 @@ public class GargoyleCharacterPassiveAbility : BasePassiveCharacterAbility, ITur
             }
 
             Cell cell = battleSystem.FieldController.GetCell(newI, newJ);
-            if (cell.transform.childCount > 0)
+            if (cell.transform.childCount > 1)
             {
                 break;
             }

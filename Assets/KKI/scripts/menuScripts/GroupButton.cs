@@ -1,9 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static Enums;
 
 public class GroupButton : MonoBehaviour
 {
@@ -28,7 +24,7 @@ public class GroupButton : MonoBehaviour
         }
     }
 
-    public virtual void  Init()
+    public virtual void Init()
     {
         m_button = GetComponent<Button>();
         m_toggle = GetComponentInChildren<Toggle>();
@@ -38,7 +34,7 @@ public class GroupButton : MonoBehaviour
     protected virtual void OnCLick()
     {
         IsEnabled = !IsEnabled;
-        
+
     }
 
 

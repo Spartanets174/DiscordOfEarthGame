@@ -338,6 +338,7 @@ public abstract class Character : ChildOutlineInteractableObject
 
     private Dictionary<Enums.Classes, float> m_attackMultiplierByClassesDict = new();
     public Dictionary<Enums.Classes, float> AttackMultiplierByClassesDict => m_attackMultiplierByClassesDict;
+
     private Dictionary<Enums.Races, float> m_attackMultiplierByRacesDict = new();
     public Dictionary<Enums.Races, float> AttackMultiplierByRacesDict => m_attackMultiplierByRacesDict;
 
@@ -617,14 +618,7 @@ public abstract class Character : ChildOutlineInteractableObject
 
     private bool CanBeDamagedByClass(Enums.Classes characterClass)
     {
-        if (m_canBeDamagedByClassesDict[characterClass])
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return m_canBeDamagedByClassesDict[characterClass];
     }
     protected bool IsDamageAvoided()
     {

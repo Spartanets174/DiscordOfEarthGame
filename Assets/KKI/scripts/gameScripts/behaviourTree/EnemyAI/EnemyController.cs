@@ -136,7 +136,7 @@ public class EnemyController : Tree
     }
     private bool IsEnemyOnCell(Cell cell)
     {
-        if (cell.transform.childCount > 0)
+        if (cell.transform.childCount > 1)
         {
             return true;
         }
@@ -211,7 +211,7 @@ public class EnemyController : Tree
 
             Cell cell = battleSystem.FieldController.GetCell(newI, newJ);
 
-            if (cell.transform.childCount == 0)
+            if (cell.transform.childCount == 1)
             {
                 staticEnemyCharacter.CellsToAttack.Add(cell);
             }
