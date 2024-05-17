@@ -7,7 +7,6 @@ public class ChildOutlineInteractableObject : ChildInteractableObject
     // Start is called before the first frame update
    protected override void Awake()
     {
-        transform.childCount
         base.Awake();
         highlightEffect = GetComponent<HighlightEffect>();
         if (highlightEffect==null)

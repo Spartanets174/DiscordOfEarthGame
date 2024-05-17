@@ -32,7 +32,7 @@ public class ChangeConncetionInfo : MonoBehaviour, ILoadable
 
     private void ReopenConnection()
     {
-        ConnectionInfo.ChangeConncetionInfo(ipInputField.text, uidInputField.text, pwdInputField.text, dataBaseInputField.text);
+        ConnectionInfo.ChangeConncetionInfo(new ConnectionData(ipInputField.text, uidInputField.text, pwdInputField.text, dataBaseInputField.text));
         dbManager.CloseCon();
         dbManager.OpenCon();
     }

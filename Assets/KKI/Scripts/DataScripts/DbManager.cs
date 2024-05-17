@@ -2,22 +2,55 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using UniRx;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public static class ConnectionInfo
 {
-    public static string ip { get; private set; } = "127.0.0.1";
-    public static string uid { get; private set; } = "root";
-    public static string pwd { get; private set; } = "12345";
-    public static string database { get; private set; } = "gamedb";
+    public static ConnectionData ConnectionData { get; private set; } = new ConnectionData();
 
-    public static void ChangeConncetionInfo(string Ip, string Uid, string Pwd, string Database)
+    public static void ChangeConncetionInfo(ConnectionData connectionData)
     {
-        ip = Ip;
-        uid = Uid;
-        pwd = Pwd;
-        database = Database;
+        ConnectionData = connectionData;
+    }
+}
+[Serializable]
+public class ConnectionData
+{
+    public string ip  = "127.0.0.1";
+    public string uid  = "root";
+    public string pwd  = "12345";
+    public string database = "gamedb";
+
+    public ConnectionData()
+    {
+        
+    }
+
+    public ConnectionData(string ip, string uid, string pwd, string database)
+    {
+        this.ip = ip;
+        this.uid = uid;
+        this.pwd = pwd;
+        this.database = database;
+
+    }
+}
+public static class Hashing
+{
+    public static string ToSHA256(string s)
+    {
+        using var sha256 = SHA256.Create();
+        byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(s));
+        var sb = new StringBuilder();
+        for (int i = 0; i < bytes.Length; i++)
+        {
+            sb.Append(bytes[i].ToString("x2"));
+        }
+        return sb.ToString();
     }
 }
 
@@ -28,6 +61,7 @@ public class DbManager : MonoBehaviour
     public static MySqlConnection con;
 
     [SerializeField] private PlayerData playerData;
+    [SerializeField] private ConnectionData connectionData;
     public PlayerData PlayerData => playerData;
 
     private bool m_isConnected;
@@ -39,7 +73,8 @@ public class DbManager : MonoBehaviour
 
     public void OpenCon()
     {
-        connectionString = $"server = {ConnectionInfo.ip}; uid = {ConnectionInfo.uid}; pwd = {ConnectionInfo.pwd}; Database = {ConnectionInfo.database}";
+        ConnectionInfo.ChangeConncetionInfo(connectionData);
+        connectionString = $"server = {ConnectionInfo.ConnectionData.ip}; uid = {ConnectionInfo.ConnectionData.uid}; pwd = {ConnectionInfo.ConnectionData.pwd}; Database = {ConnectionInfo.ConnectionData.database}";
         m_isConnected = true;
         con = new MySqlConnection(connectionString);
         try
@@ -96,6 +131,7 @@ public class DbManager : MonoBehaviour
     public bool InsertToPlayers(string Name, string password, int balance)
     {
         //'{Name}',{balance}, '{password}'
+        password = Hashing.ToSHA256(password);
         string query = $"insert into gamedb.players (p_name, balance, p_password) values (@name, @balance, @password)";
 
         var command = new MySqlCommand(query, con);
@@ -124,7 +160,7 @@ public class DbManager : MonoBehaviour
         string query = $"select* from gamedb.players where p_name = @name and p_password = @password";
         MySqlCommand command = new MySqlCommand(query, con);
         command.Prepare();
-
+        password = Hashing.ToSHA256(password);
         try
         {
             command.Parameters.AddWithValue("@name", nick);
@@ -388,7 +424,7 @@ public class DbManager : MonoBehaviour
     {
         for (int i = 0; i < playerData.allShopSupportCards.Count; i++)
         {
-            Debug.Log(playerData.allShopSupportCards[i]);
+            /*Debug.Log(playerData.allShopSupportCards[i]);*/
             string query = $"insert into gamedb.cards_shop(idCards_Shop,cost,id_player) values({playerData.allShopSupportCards[i].id},{playerData.allShopSupportCards[i].Price},{playerData.PlayerId})";
             var command = new MySqlCommand(query, con);
             try
