@@ -242,7 +242,7 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
             OnWarningTextName();
             return false;        }
 
-        if (Nick.text.Length > 15)
+        if (Nick.text.Length > 20)
         {
             warningTextNick.text = "Имя слишком большое (максимум 15 символов)!";
             OnWarningTextName();

@@ -11,6 +11,9 @@ public class ChangeConncetionInfo : MonoBehaviour, ILoadable
     private TMP_InputField ipInputField;
 
     [SerializeField]
+    private TMP_InputField portInputField;
+
+    [SerializeField]
     private TMP_InputField uidInputField;
 
     [SerializeField]
@@ -32,7 +35,7 @@ public class ChangeConncetionInfo : MonoBehaviour, ILoadable
 
     private void ReopenConnection()
     {
-        ConnectionInfo.ChangeConncetionInfo(new ConnectionData(ipInputField.text, uidInputField.text, pwdInputField.text, dataBaseInputField.text));
+        ConnectionInfo.ChangeConncetionInfo(new ConnectionData(ipInputField.text, portInputField.text, uidInputField.text, pwdInputField.text, dataBaseInputField.text));
         dbManager.CloseCon();
         dbManager.OpenCon();
     }

@@ -1,11 +1,8 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using UniRx;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public static class ConnectionInfo
@@ -20,19 +17,21 @@ public static class ConnectionInfo
 [Serializable]
 public class ConnectionData
 {
-    public string ip  = "127.0.0.1";
-    public string uid  = "root";
-    public string pwd  = "12345";
+    public string ip = "127.0.0.1";
+    public string port = "3306";
+    public string uid = "root";
+    public string pwd = "12345";
     public string database = "gamedb";
 
     public ConnectionData()
     {
-        
+
     }
 
-    public ConnectionData(string ip, string uid, string pwd, string database)
+    public ConnectionData(string ip, string port, string uid, string pwd, string database)
     {
         this.ip = ip;
+        this.port = port;
         this.uid = uid;
         this.pwd = pwd;
         this.database = database;
@@ -74,7 +73,7 @@ public class DbManager : MonoBehaviour
     public void OpenCon()
     {
         ConnectionInfo.ChangeConncetionInfo(connectionData);
-        connectionString = $"server = {ConnectionInfo.ConnectionData.ip}; uid = {ConnectionInfo.ConnectionData.uid}; pwd = {ConnectionInfo.ConnectionData.pwd}; Database = {ConnectionInfo.ConnectionData.database}";
+        connectionString = $"server = {ConnectionInfo.ConnectionData.ip}; port = {ConnectionInfo.ConnectionData.port}; uid = {ConnectionInfo.ConnectionData.uid}; pwd = {ConnectionInfo.ConnectionData.pwd}; Database = {ConnectionInfo.ConnectionData.database};";
         m_isConnected = true;
         con = new MySqlConnection(connectionString);
         try
@@ -92,7 +91,7 @@ public class DbManager : MonoBehaviour
     private void OnApplicationQuit()
     {
         SavePlayer();
-        
+
         CloseCon();
     }
 
@@ -457,7 +456,7 @@ public class DbManager : MonoBehaviour
 
     public void InsertToCardsSupportShopStart(PlayerData playerData)
     {
-        
+
         for (int i = 0; i < playerData.allSupportCards.Count; i++)
         {
             if (!playerData.startUserSupportCards.Contains(playerData.allSupportCards[i]))
@@ -473,7 +472,7 @@ public class DbManager : MonoBehaviour
                     Debug.LogError(ex.Message);
                 }
                 command.Dispose();
-            }           
+            }
         }
     }
 
