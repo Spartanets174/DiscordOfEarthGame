@@ -74,8 +74,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2010017727888765151}
   - {fileID: 8682857502208765888}
+  - {fileID: 2010017727888765151}
   - {fileID: 7620020190535164847}
   - {fileID: 3573062173354269427}
   - {fileID: 267450083914970513}
@@ -302,6 +302,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3626096291062311545}
     m_Modifications:
+    - target: {fileID: 299463921489663422, guid: 4044c7a67425df3459dabbb0e92e036b, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2606534047591097279, guid: 4044c7a67425df3459dabbb0e92e036b, type: 3}
       propertyPath: m_Name
       value: WarriorOfTheLight
@@ -401,7 +405,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2397306724308569880, guid: 7e624203c7675da478439aab6102b043, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2397306724308569880, guid: 7e624203c7675da478439aab6102b043, type: 3}
       propertyPath: m_AnchorMax.x
