@@ -60,6 +60,8 @@ public class SettingsController : MonoBehaviour, ILoadable
             ChangeMusicLevel(1);
             Screen.SetResolution(1920, 1080, FullScreenMode.FullScreenWindow);
 
+            PlayerPrefs.SetFloat("screenSizeX", 1920);
+            PlayerPrefs.SetFloat("screenSizeY", 1080);
             PlayerPrefs.SetInt("fullScreen", 1);
             PlayerPrefs.SetString("isFirst", "1");
         }
