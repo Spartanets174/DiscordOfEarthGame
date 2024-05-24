@@ -1,12 +1,8 @@
-using Org.BouncyCastle.Bcpg.Sig;
-using System.Collections;
-using System.Collections.Generic;
-using TypeReferences;
 using UnityEngine;
 
 //scriptable object для карт со всеми параметрами карты
-[CreateAssetMenu(fileName = "New Card",menuName = "Card")]
-public class CharacterCard: Card
+[CreateAssetMenu(fileName = "New Card", menuName = "Card")]
+public class CharacterCard : Card
 {
     public GameObject characterPrefab;
     public Enums.Classes Class;
@@ -36,7 +32,7 @@ public class CharacterCard: Card
 
     [Header("Abilities")]
     [SerializeReference, SubclassSelector]
-    public BasePassiveCharacterAbilityData passiveCharacterAbilityData;   
+    public BasePassiveCharacterAbilityData passiveCharacterAbilityData;
 
     [SerializeReference, SubclassSelector]
     public BaseCharacterAbilityData attackCharacterAbilityData;

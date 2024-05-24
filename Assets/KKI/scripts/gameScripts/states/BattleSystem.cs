@@ -182,7 +182,7 @@ public class BattleSystem : StateMachine, ILoadable
 
         int cubeValue = UnityEngine.Random.Range(1, 6);
 
-        gameLogCurrentText.Value = $"На кубице выпало <color=#{infoColor.ToHexString()}>{cubeValue}</color>";
+        gameLogCurrentText.Value = $"На кубике выпало <color=#{infoColor.ToHexString()}>{cubeValue}</color>";
 
         if (cubeValue % 2 == 0)
         {
