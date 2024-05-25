@@ -21,8 +21,8 @@ public class SettingsController : MonoBehaviour, ILoadable
     [SerializeField]
     private KeyCode settingsButton;
     [SerializeField]
-    private int maxFPS=60;
-    
+    private int maxFPS = 60;
+
     private DbManager dbManager;
 
     private Dictionary<int, Vector2> resolutions = new();
@@ -54,16 +54,19 @@ public class SettingsController : MonoBehaviour, ILoadable
                 }
             }
         }
-        if (PlayerPrefs.GetString("isFirst") != "1")
+        if (PlayerPrefs.GetString("isFirst") == string.Empty)
         {
             ChangeSoundLevel(1);
             ChangeMusicLevel(1);
-            Screen.SetResolution(1920, 1080, FullScreenMode.FullScreenWindow);
-
-            PlayerPrefs.SetFloat("screenSizeX", 1920);
-            PlayerPrefs.SetFloat("screenSizeY", 1080);
             PlayerPrefs.SetInt("fullScreen", 1);
+            ChangeScreenSize(resolutions.Last().Key);
+
+            
             PlayerPrefs.SetString("isFirst", "1");
+        }
+        else
+        {
+            SetScreenSettings();
         }
 
         MusicAudioSource.loop = true;
@@ -72,7 +75,7 @@ public class SettingsController : MonoBehaviour, ILoadable
     }
     private void Update()
     {
-        if (Input.GetKeyDown(settingsButton)&&CanPause)
+        if (Input.GetKeyDown(settingsButton) && CanPause)
         {
             TogglePausedState();
         }
@@ -148,16 +151,16 @@ public class SettingsController : MonoBehaviour, ILoadable
         float x = PlayerPrefs.GetFloat("screenSizeX");
         float y = PlayerPrefs.GetFloat("screenSizeY");
         Vector2 res = new Vector2(x, y);
+        if (res.x > 1920 || res.y > 1080 || res.x <= 0 || res.y <= 0)
+        {
+            res = new Vector2(1920, 1080);
+        }
         return resolutions.Where(x => x.Value == res).FirstOrDefault().Key;
     }
 
     private void SetScreenSettings()
     {
         Vector2 vector2 = resolutions[GetScreenSize()];
-        if (vector2.x>1920||vector2.y>1080)
-        {
-            vector2 = new Vector2(1920,1080);
-        }
         FullScreenMode fullScreenMode = GetFullScreenState() ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
         Screen.SetResolution((int)vector2.x, (int)vector2.y, fullScreenMode);
     }

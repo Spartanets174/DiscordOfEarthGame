@@ -18,7 +18,6 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
     private PlayerControllerPresenter playerControllerPresenter;
     [SerializeField]
     private CardSupportAbilitiesController cardSupportAbilitiesController;
-    [SerializeField]
     private SettingsController settingsController;
 
     [Space, Header("Action UI")]
@@ -67,6 +66,8 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
     private float timer = 1f;
     public void Init()
     {
+        settingsController = FindObjectOfType<SettingsController>();
+
         cardSupportAbilitiesController.Init();
         playerControllerPresenter.Init();
 

@@ -1,6 +1,7 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
@@ -332,10 +333,11 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    public List<CharacterCard> SelectFromChars()
+    public void SelectFromChars()
     {
+        playerData.allCharCards = playerData.allCharCards.OrderBy(x => x.name).ToList();
         string query = $"SELECT * FROM gamedb.characters order by char_name";
-        List<CharacterCard> cardList = new List<CharacterCard>();
+      /*  List<CharacterCard> cardList = new List<CharacterCard>();*/
         MySqlCommand command = new MySqlCommand(query, con);
 
         try
@@ -343,10 +345,13 @@ public class DbManager : MonoBehaviour
             var reader = command.ExecuteReader();
             if (reader.HasRows)
             {
+                int count = 0;
                 while (reader.Read())
                 {
-                    CharacterCard item = CreateCharacterCard(reader);
-                    cardList.Add(item);
+                    /*CharacterCard item = */
+                    SetDataToCharacterCard(reader, playerData.allCharCards[count]);
+                    count++;
+                    /*cardList.Add(item);*/
                 }
 
                 command.Dispose();
@@ -361,7 +366,7 @@ public class DbManager : MonoBehaviour
             command.Dispose();
             Debug.LogError(ex.Message);
         }
-        return cardList;
+      /*  return cardList;*/
     }
     #endregion
 
@@ -383,10 +388,11 @@ public class DbManager : MonoBehaviour
             command.Dispose();
         }
     }
-    public List<CardSupport> SelectFromCardsSupport()
+    public void SelectFromCardsSupport()
     {
         string query = $"select * from gamedb.cards ORDER BY name";
-        List<CardSupport> CardSupportList = new List<CardSupport>();
+        playerData.allSupportCards = playerData.allSupportCards.OrderBy(x => x.name).ToList();
+        /* List<CardSupport> CardSupportList = new List<CardSupport>();*/
         MySqlCommand command = new MySqlCommand(query, con);
 
         try
@@ -394,10 +400,13 @@ public class DbManager : MonoBehaviour
             var reader = command.ExecuteReader();
             if (reader.HasRows)
             {
+                int count = 0;
                 while (reader.Read())
                 {
-                    CardSupport item = CreateCardSupport(reader);
-                    CardSupportList.Add(item);
+                   /* CardSupport item = */
+                    SetDataToCardsSupport(reader, playerData.allSupportCards[count]);
+                    count++;
+                   /* CardSupportList.Add(item);*/
                 }
 
                 command.Dispose();
@@ -412,7 +421,7 @@ public class DbManager : MonoBehaviour
             command.Dispose();
             Debug.LogError(ex.Message);
         }
-        return CardSupportList;
+        /*return CardSupportList;*/
     }
 
 
@@ -478,11 +487,11 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    public List<CardSupport> SelectFromCardsSupportShop(PlayerData playerData)
+    public List<int> SelectFromCardsSupportShop(PlayerData playerData)
     {
         string query = $"SELECT idCards FROM gamedb.cards as c inner join gamedb.cards_shop as cs on(c.idCards = cs.idCards_Shop) where cs.id_player = {playerData.PlayerId}";
-        List<CardSupport> CardSupportList = new List<CardSupport>();
-        /*List<int> CardSupportids = new();*/
+        /* List<CardSupport> CardSupportList = new List<CardSupport>();*/
+        List<int> CardSupportids = new();
         MySqlCommand command = new MySqlCommand(query, con);
         try
         {
@@ -491,9 +500,9 @@ public class DbManager : MonoBehaviour
             {
                 while (reader.Read())
                 {
-                    CardSupport item = CreateCardSupport(reader);
-                    CardSupportList.Add(item);
-                    /*CardSupportids.Add(reader.GetInt32("idCards"));*/
+                    /*CardSupport item = CreateCardSupport(reader);
+                    CardSupportList.Add(item);*/
+                    CardSupportids.Add(reader.GetInt32("idCards"));
                 }
 
                 command.Dispose();
@@ -508,7 +517,7 @@ public class DbManager : MonoBehaviour
             command.Dispose();
             Debug.LogError(ex.Message);
         }
-        return CardSupportList;
+        return CardSupportids;
 
     }
     #endregion
@@ -569,10 +578,11 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    public List<CharacterCard> SelectFromCardsShop(PlayerData playerData)
+    public List<int> SelectFromCardsShop(PlayerData playerData)
     {
-        string query = $"SELECT * FROM gamedb.characters as c inner join gamedb.characters_shop as cs on(c.idCharacters = cs.idCharacters_Shop) where cs.id_payer = {playerData.PlayerId}";
-        List<CharacterCard> cardList = new List<CharacterCard>();
+        string query = $"SELECT idCharacters FROM gamedb.characters as c inner join gamedb.characters_shop as cs on(c.idCharacters = cs.idCharacters_Shop) where cs.id_payer = {playerData.PlayerId}";
+        /*List<CharacterCard> cardList = new List<CharacterCard>();*/
+        List<int> cardIds = new List<int>();
         MySqlCommand command = new MySqlCommand(query, con);
         try
         {
@@ -581,8 +591,9 @@ public class DbManager : MonoBehaviour
             {
                 while (reader.Read())
                 {
-                    CharacterCard item = CreateCharacterCard(reader);
-                    cardList.Add(item);
+                    /*CharacterCard item = CreateCharacterCard(reader);
+                    cardList.Add(item);*/
+                    cardIds.Add(reader.GetInt32("idCharacters"));
                 }
 
                 command.Dispose();
@@ -597,7 +608,7 @@ public class DbManager : MonoBehaviour
             command.Dispose();
             Debug.LogError(ex.Message);
         }
-        return cardList;
+        return cardIds;
 
     }
     #endregion
@@ -658,10 +669,11 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    public List<CardSupport> SelectFromOwnCardsSupport(PlayerData playerData)
+    public List<int> SelectFromOwnCardsSupport(PlayerData playerData)
     {
-        string query = $"SELECT * FROM gamedb.cards as c inner join gamedb.owned_cards as cs on(c.idCards = cs.card_id) where cs.player_id = {playerData.PlayerId}";
-        List<CardSupport> CardSupportList = new List<CardSupport>();
+        string query = $"SELECT idCards FROM gamedb.cards as c inner join gamedb.owned_cards as cs on(c.idCards = cs.card_id) where cs.player_id = {playerData.PlayerId}";
+        /*List<CardSupport> CardSupportList = new List<CardSupport>();*/
+        List<int> cardIds = new List<int>();
         MySqlCommand command = new MySqlCommand(query, con);
         try
         {
@@ -670,8 +682,9 @@ public class DbManager : MonoBehaviour
             {
                 while (reader.Read())
                 {
-                    CardSupport item = CreateCardSupport(reader);
-                    CardSupportList.Add(item);
+                    /*CardSupport item = CreateCardSupport(reader);
+                    CardSupportList.Add(item);*/
+                    cardIds.Add(reader.GetInt32("idCards"));
                 }
 
                 command.Dispose();
@@ -686,7 +699,7 @@ public class DbManager : MonoBehaviour
             command.Dispose();
             Debug.LogError(ex.Message);
         }
-        return CardSupportList;
+        return cardIds;
 
     }
 
@@ -749,10 +762,11 @@ public class DbManager : MonoBehaviour
         }
     }
 
-    public List<CharacterCard> SelectFromOwnCards(PlayerData playerData)
+    public List<int> SelectFromOwnCards(PlayerData playerData)
     {
-        string query = $"SELECT * FROM gamedb.characters as c inner join gamedb.owned_characters as cs on(c.idCharacters = cs.character_id) where cs.playerId = {playerData.PlayerId}";
-        List<CharacterCard> cardList = new List<CharacterCard>();
+        string query = $"SELECT idCharacters FROM gamedb.characters as c inner join gamedb.owned_characters as cs on(c.idCharacters = cs.character_id) where cs.playerId = {playerData.PlayerId}";
+        /*List<CharacterCard> cardList = new List<CharacterCard>();*/
+        List<int> cardIds = new List<int>();
         MySqlCommand command = new MySqlCommand(query, con);
         try
         {
@@ -761,8 +775,9 @@ public class DbManager : MonoBehaviour
             {
                 while (reader.Read())
                 {
-                    CharacterCard item = CreateCharacterCard(reader);
-                    cardList.Add(item);
+                    /* CharacterCard item = CreateCharacterCard(reader);
+                     cardList.Add(item);*/
+                    cardIds.Add(reader.GetInt32("idCharacters"));
                 }
 
                 command.Dispose();
@@ -777,7 +792,7 @@ public class DbManager : MonoBehaviour
             command.Dispose();
             Debug.LogError(ex.Message);
         }
-        return cardList;
+        return cardIds;
 
     }
 
@@ -817,10 +832,11 @@ public class DbManager : MonoBehaviour
 
     }
 
-    public List<CardSupport> SelectFromDeckCardsSupport(PlayerData playerData)
+    public List<int> SelectFromDeckCardsSupport(PlayerData playerData)
     {
-        string query = $"SELECT * FROM gamedb.cards as c inner join gamedb.deck_cards as cs on(c.idCards = cs.IdCard) where cs.IdPlayer = {playerData.PlayerId}";
-        List<CardSupport> CardSupportList = new List<CardSupport>();
+        string query = $"SELECT idCards FROM gamedb.cards as c inner join gamedb.deck_cards as cs on(c.idCards = cs.IdCard) where cs.IdPlayer = {playerData.PlayerId}";
+        /* List<CardSupport> CardSupportList = new List<CardSupport>();*/
+        List<int> cardIds = new List<int>();
         MySqlCommand command = new MySqlCommand(query, con);
         try
         {
@@ -829,8 +845,9 @@ public class DbManager : MonoBehaviour
             {
                 while (reader.Read())
                 {
-                    CardSupport item = CreateCardSupport(reader);
-                    CardSupportList.Add(item);
+                    /* CardSupport item = CreateCardSupport(reader);
+                     CardSupportList.Add(item);*/
+                    cardIds.Add(reader.GetInt32("idCards"));
                 }
 
                 command.Dispose();
@@ -845,7 +862,7 @@ public class DbManager : MonoBehaviour
             command.Dispose();
             Debug.LogError(ex.Message);
         }
-        return CardSupportList;
+        return cardIds;
 
     }
     #endregion
@@ -884,10 +901,11 @@ public class DbManager : MonoBehaviour
 
     }
 
-    public List<CharacterCard> SelectFromDeckCards(PlayerData playerData)
+    public List<int> SelectFromDeckCards(PlayerData playerData)
     {
-        string query = $"SELECT * FROM gamedb.characters as c inner join gamedb.deck_characters as cs on(c.idCharacters = cs.IdCharacter) where cs.IdPlayer = {playerData.PlayerId}";
-        List<CharacterCard> cardList = new List<CharacterCard>();
+        string query = $"SELECT idCharacters FROM gamedb.characters as c inner join gamedb.deck_characters as cs on(c.idCharacters = cs.IdCharacter) where cs.IdPlayer = {playerData.PlayerId}";
+        /* List<CharacterCard> cardList = new List<CharacterCard>();*/
+        List<int> cardIds = new List<int>();
         MySqlCommand command = new MySqlCommand(query, con);
         try
         {
@@ -896,8 +914,9 @@ public class DbManager : MonoBehaviour
             {
                 while (reader.Read())
                 {
-                    CharacterCard item = CreateCharacterCard(reader);
-                    cardList.Add(item);
+                    /* CharacterCard item = CreateCharacterCard(reader);
+                     cardList.Add(item);*/
+                    cardIds.Add(reader.GetInt32("idCharacters"));
                 }
                 command.Dispose();
             }
@@ -911,15 +930,14 @@ public class DbManager : MonoBehaviour
             command.Dispose();
             Debug.LogError(ex.Message);
         }
-        return cardList;
+        return cardIds;
 
     }
     #endregion
 
     #region CreatingCards
-    private CharacterCard CreateCharacterCard(MySqlDataReader reader)
+    private void SetDataToCharacterCard(MySqlDataReader reader, CharacterCard item)
     {
-        CharacterCard item = new CharacterCard();
         item.cardName = reader.GetString("char_name");
 
         switch (reader.GetString("race"))
@@ -986,7 +1004,7 @@ public class DbManager : MonoBehaviour
 
         item.Price = reader.GetInt32("price");
 
-        item.image = Resources.Load<Sprite>($"Card images/card of char/{reader.GetString("path")}");
+       /* item.image = Resources.Load<Sprite>($"Card images/card of char/{reader.GetString("path")}");*/
         item.id = reader.GetInt32("idCharacters");
 
         /*                    Debug.Log($"name {item.name} ({reader.GetString("char_name")})");
@@ -1010,12 +1028,10 @@ public class DbManager : MonoBehaviour
                                        Debug.Log($"name {item.image}");    
                     */
 
-        return item;
     }
 
-    private CardSupport CreateCardSupport(MySqlDataReader reader)
+    private void SetDataToCardsSupport(MySqlDataReader reader, CardSupport item)
     {
-        CardSupport item = new CardSupport();
         item.cardName = reader.GetString("name");
         switch (reader.GetString("race"))
         {
@@ -1060,8 +1076,6 @@ public class DbManager : MonoBehaviour
         item.Price = reader.GetInt32("price");
         item.id = reader.GetInt32("idCards");
         /*item.image = Resources.Load<Sprite>($"Card images/cards of support/{reader.GetString("path")}");*/
-
-        return item;
         /*                    Debug.Log($"имя {item.name} ({reader.GetString("name")}), раса {item.race} ({reader.GetString("race")}), способность {item.ability} ({reader.GetString("effect")}), тип {item.type} ({reader.GetString("type")}), редкость {item.rarity} ({reader.GetString("rarity")})");
         */
     }

@@ -43,28 +43,22 @@ public class UICoordinator : MonoBehaviour, ILoadable
     [Space, Header("Controllers")]
     [SerializeField]
     private PlayerDataController PlayerManager;
-    [SerializeField]
     private SettingsController settingsController;
 
-
-    private Camera cam;
     public void Init()
     {
-        cam = FindObjectOfType<Camera>();
-
+        settingsController = FindObjectOfType<SettingsController>();
         playButton.onClick.AddListener(ToGame);
         exitbutton.onClick.AddListener(SceneController.Exit);
         bookOfCardsButton.onClick.AddListener(TurnOnBookOfCards);
 
         shopObject.OnClick += TurnOnShop;
-        shopObject.OnHover += MoveShopCaption;
         shopObject.OnHoverEnter += TurnOnShopText;
         shopObject.OnHoverExit += x => tooltip.HideTooltip();
         shopObject.OnEnableChanged += x => { if (!x) tooltip.HideTooltip(); };
 
 
         settingsObject.OnClick += TurnOnSettings;
-        settingsObject.OnHover += MoveSettingsCaption;
         settingsObject.OnHoverEnter += TurnOnSettingsText;
         settingsObject.OnHoverExit += x => tooltip.HideTooltip();
         settingsObject.OnEnableChanged += x => { if (!x) tooltip.HideTooltip(); };
@@ -82,12 +76,10 @@ public class UICoordinator : MonoBehaviour, ILoadable
         bookOfCardsButton.onClick.RemoveListener(TurnOnBookOfCards);
 
         shopObject.OnClick -= TurnOnShop;
-        shopObject.OnHover -= MoveShopCaption;
         shopObject.OnHoverEnter -= TurnOnShopText;
         shopObject.OnHoverExit -= x=> tooltip.HideTooltip();
 
         settingsObject.OnClick -= TurnOnSettings;
-        settingsObject.OnHover -= MoveSettingsCaption;
         settingsObject.OnHoverEnter -= TurnOnSettingsText;
         settingsObject.OnHoverExit -= x => tooltip.HideTooltip();
 
@@ -113,17 +105,6 @@ public class UICoordinator : MonoBehaviour, ILoadable
         settingsObject.IsEnabled = false;
         SetState(bookOfCards, true); 
     }
-    private void MoveSettingsCaption(GameObject gameObject)
-    {
-        /*Rect settingsRect = settingsText.GetComponent<RectTransform>().rect;
-        settingsText.transform.localPosition = new Vector3(Input.mousePosition.x - cam.scaledPixelWidth / 2 + settingsRect.width/2, Input.mousePosition.y - cam.scaledPixelHeight / 2 + settingsRect.height / 2, 0);*/
-    }
-
-    private void MoveShopCaption(GameObject gameObject)
-    {
-        /*Rect shopRect = shopText.GetComponent<RectTransform>().rect;
-        shopText.transform.localPosition = new Vector3(Input.mousePosition.x - cam.scaledPixelWidth / 2 - shopRect.width/2, Input.mousePosition.y - cam.scaledPixelHeight / 2 + shopRect.height / 2, 0);*/
-    }
     private void TurnOnShop(GameObject gameObject)
     {
         shopObject.IsEnabled = false;
@@ -138,18 +119,10 @@ public class UICoordinator : MonoBehaviour, ILoadable
     {
         tooltip.ShowTooltip(shopCaption);
     }
-/*    private void TurnOffShopText(GameObject gameObject)
-    {
-        SetState(shopText, false);
-    }*/
     private void TurnOnSettingsText(GameObject gameObject)
     {
         tooltip.ShowTooltip(settingsCaption);
     }
-/*    private void TurnOffSettingsText(GameObject gameObject)
-    {
-        SetState(settingsText, false);
-    }*/
     private IEnumerator TurnOffWarnningText()
     {
         yield return new WaitForSecondsRealtime(2);

@@ -77,8 +77,8 @@ public class SettingsControllerPresenter : MonoBehaviour, ILoadable
 
         soundSlider.value = settingsController.GetSoundVolume();
         musicSlider.value = settingsController.GetMusicVolume();
-        fullScreenToggle.isOn = settingsController.GetFullScreenState();
-        screenSizeDropdown.value = settingsController.GetScreenSize();
+        fullScreenToggle.SetIsOnWithoutNotify(settingsController.GetFullScreenState());
+        screenSizeDropdown.SetValueWithoutNotify(settingsController.GetScreenSize());
 
         settingsController.OnPauseStateChanged += TogglePausedState;
     }

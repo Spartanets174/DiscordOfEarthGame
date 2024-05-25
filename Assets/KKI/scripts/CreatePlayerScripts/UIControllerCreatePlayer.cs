@@ -17,6 +17,7 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
     [SerializeField] private Button submitLogin;
     [SerializeField] private Button toRegistration;
     [SerializeField] private Button toLogin;
+    [SerializeField] private Button settingsButton;
     [SerializeField] private Toggle passwordToggle;
 
     [Header("Panels")]
@@ -31,6 +32,7 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
 
     [Header("Scripts")]
     [SerializeField] private DataLoader dataLoader;
+    private SettingsController settingsController;
 
     private Sequence sequenceName;
     private Sequence sequencePassword;
@@ -40,6 +42,7 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
     private CompositeDisposable disposables = new();
     public void Init()
     {
+        settingsController = FindObjectOfType<SettingsController>();
         loadingPanel.SetActive(false);
         changeConncetionInfo.gameObject.SetActive(false);
         Observable.EveryUpdate().Subscribe(x =>
@@ -68,6 +71,7 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
         Nick.onValueChanged.AddListener(TurnOffWarningTextName);
         Password.onValueChanged.AddListener(TurnOffWarningTextPassword);
         passwordToggle.onValueChanged.AddListener(ChangePasswordVisibility);
+        settingsButton.onClick.AddListener(settingsController.TogglePausedState);
 
         passwordToggle.isOn = false;
         dataLoader.CheckPlayerData();

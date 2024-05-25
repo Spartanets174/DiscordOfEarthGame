@@ -81,107 +81,56 @@ public class DataLoader : MonoBehaviour, ILoadable
         playerData.Name = Nick;
         playerData.Password = password;
         SaveSystem.SavePlayer(playerData.Name, playerData.Password);
+        DB.SelectFromChars();
+        DB.SelectFromCardsSupport();
         int id = DB.SelectIdPlayer(playerData.Name);
 
         playerData.money = 10000;
         playerData.PlayerId = id;
-        playerData.deckUserCharCards.Clear();
-        playerData.deckUserSupportCards.Clear();
-        List<CharacterCard> CardOfPlayer = DB.SelectFromChars();
-        List<CardSupport> CardSupportOfPlayer = DB.SelectFromCardsSupport();
-
-        playerData.allCharCards = playerData.allCharCards.OrderBy(x => x.cardName).ToList();
-        CardOfPlayer = CardOfPlayer.OrderBy(x => x.cardName).ToList();
-        playerData.allSupportCards = playerData.allSupportCards.OrderBy(x => x.cardName).ToList();
-        CardSupportOfPlayer = CardSupportOfPlayer.OrderBy(x => x.cardName).ToList();
-
-        for (int i = 0; i < playerData.allCharCards.Count; i++)
-        {
-            playerData.allCharCards[i].cardName = CardOfPlayer[i].cardName;
-            playerData.allCharCards[i].race = CardOfPlayer[i].race;
-            playerData.allCharCards[i].Class = CardOfPlayer[i].Class;
-            playerData.allCharCards[i].rarity = CardOfPlayer[i].rarity;
-            playerData.allCharCards[i].description = CardOfPlayer[i].description;
-            playerData.allCharCards[i].health = CardOfPlayer[i].health;
-            playerData.allCharCards[i].speed = CardOfPlayer[i].speed;
-            playerData.allCharCards[i].physAttack = CardOfPlayer[i].physAttack;
-            playerData.allCharCards[i].magAttack = CardOfPlayer[i].magAttack;
-            playerData.allCharCards[i].range = CardOfPlayer[i].range;
-            playerData.allCharCards[i].physDefence = CardOfPlayer[i].physDefence;
-            playerData.allCharCards[i].magDefence = CardOfPlayer[i].magDefence;
-            playerData.allCharCards[i].critNum = CardOfPlayer[i].critNum;
-            playerData.allCharCards[i].passiveAbility = CardOfPlayer[i].passiveAbility;
-            playerData.allCharCards[i].attackAbility = CardOfPlayer[i].attackAbility;
-            playerData.allCharCards[i].defenceAbility = CardOfPlayer[i].defenceAbility;
-            playerData.allCharCards[i].buffAbility = CardOfPlayer[i].buffAbility;
-            playerData.allCharCards[i].Price = CardOfPlayer[i].Price;
-            playerData.allCharCards[i].id = CardOfPlayer[i].id;
-        }
-
-
-        for (int i = 0; i < playerData.allSupportCards.Count; i++)
-        {
-            playerData.allSupportCards[i].cardName = CardSupportOfPlayer[i].cardName;
-            playerData.allSupportCards[i].race = CardSupportOfPlayer[i].race;
-            playerData.allSupportCards[i].type = CardSupportOfPlayer[i].type;
-            /*Debug.Log($"{playerData.allSupportCards[i].image},{CardSupportOfPlayer[i].image}");*/
-            playerData.allSupportCards[i].image = CardSupportOfPlayer[i].image;
-            playerData.allSupportCards[i].abilityText = CardSupportOfPlayer[i].abilityText;
-            playerData.allSupportCards[i].rarity = CardSupportOfPlayer[i].rarity;
-            playerData.allSupportCards[i].Price = CardSupportOfPlayer[i].Price;
-            playerData.allSupportCards[i].id = CardSupportOfPlayer[i].id;
-            /*Debug.Log($"{playerData.allSupportCards[i].image},{CardSupportOfPlayer[i].image}");*/
-        }
+       
 
         DB.InsertToCardsShopStart(playerData);
         DB.InsertToCardsSupportShopStart(playerData);
         DB.InsertToOwnCardStart(playerData);
         DB.InsertToOwnCardsSupportStart(playerData);
 
-        List<CharacterCard> CardOfShopPlayer = DB.SelectFromCardsShop(playerData);
-        List<CardSupport> CardSupportOfShopPlayer = DB.SelectFromCardsSupportShop(playerData);
-        List<CharacterCard> OwnedCardOfPlayer = DB.SelectFromOwnCards(playerData);
-        List<CardSupport> OwnedCardSupportOfPlayer = DB.SelectFromOwnCardsSupport(playerData);
-
+        List<int> CardOfShopPlayer = DB.SelectFromCardsShop(playerData);
+        List<int> CardSupportOfShopPlayer = DB.SelectFromCardsSupportShop(playerData);
+        List<int> OwnedCardOfPlayer = DB.SelectFromOwnCards(playerData);
+        List<int> OwnedCardSupportOfPlayer = DB.SelectFromOwnCardsSupport(playerData);
 
         playerData.allShopCharCards.Clear();
         playerData.allShopSupportCards.Clear();
         playerData.allUserCharCards.Clear();
         playerData.allUserSupportCards.Clear();
+        playerData.deckUserCharCards.Clear();
+        playerData.deckUserSupportCards.Clear();
 
         List<CharacterCard> CharacterCards = Resources.LoadAll<CharacterCard>($"cards/characters").OrderBy(x => x.cardName).ToList();
         List<CardSupport> CardsSupport = Resources.LoadAll<CardSupport>($"cards/support").OrderBy(x => x.cardName).ToList();
 
         for (int i = 0; i < CardOfShopPlayer.Count; i++)
         {
-            if (CardOfShopPlayer[i].cardName == "Бесстрашный \"Страж\"")
-            {
-                CardOfShopPlayer[i].cardName = "Бесстрашный Страж";
-            }
-            CharacterCard card = CharacterCards.Where(x => x.id == CardOfShopPlayer[i].id).FirstOrDefault();
+            CharacterCard card = CharacterCards.Where(x => x.id == CardOfShopPlayer[i]).FirstOrDefault();
             playerData.allShopCharCards.Add(card);
         }
         
         for (int i = 0; i < CardSupportOfShopPlayer.Count; i++)
         {
-            CardSupport CardSupport = CardsSupport.Where(x => x.id == CardSupportOfShopPlayer[i].id).FirstOrDefault();
+            CardSupport CardSupport = CardsSupport.Where(x => x.id == CardSupportOfShopPlayer[i]).FirstOrDefault();
             playerData.allShopSupportCards.Add(CardSupport);
         }
 
         
         for (int i = 0; i < OwnedCardOfPlayer.Count; i++)
         {
-            if (OwnedCardOfPlayer[i].cardName == "Бесстрашный \"Страж\"")
-            {
-                OwnedCardOfPlayer[i].cardName = "Бесстрашный Страж";
-            }
-            CharacterCard card = CharacterCards.Where(x => x.id == OwnedCardOfPlayer[i].id).FirstOrDefault();
+            CharacterCard card = CharacterCards.Where(x => x.id == OwnedCardOfPlayer[i]).FirstOrDefault();
             playerData.allUserCharCards.Add(card);
         }
         
         for (int i = 0; i < OwnedCardSupportOfPlayer.Count; i++)
         {
-            CardSupport CardSupport = CardsSupport.Where(x => x.id == OwnedCardSupportOfPlayer[i].id).FirstOrDefault();
+            CardSupport CardSupport = CardsSupport.Where(x => x.id == OwnedCardSupportOfPlayer[i]).FirstOrDefault();
             playerData.allUserSupportCards.Add(CardSupport);
         }
 
@@ -201,59 +150,15 @@ public class DataLoader : MonoBehaviour, ILoadable
 
         playerData.PlayerId = DB.SelectIdPlayer(playerData.Name);
         playerData.money = DB.SelectBalancePlayer(playerData);
+        DB.SelectFromChars();
+        DB.SelectFromCardsSupport();
 
-        List<CharacterCard> CardOfPlayer = DB.SelectFromChars();
-        List<CardSupport> CardSupportOfPlayer = DB.SelectFromCardsSupport();
-
-        
-        playerData.allCharCards = playerData.allCharCards.OrderBy(x => x.cardName).ToList();
-        CardOfPlayer = CardOfPlayer.OrderBy(x => x.cardName).ToList();
-
-        playerData.allSupportCards = playerData.allSupportCards.OrderBy(x => x.cardName).ToList();
-        CardSupportOfPlayer = CardSupportOfPlayer.OrderBy(x => x.cardName).ToList();
-        
-
-        for (int i = 0; i < playerData.allCharCards.Count; i++)
-        {
-            playerData.allCharCards[i].cardName = CardOfPlayer[i].cardName;
-            playerData.allCharCards[i].race = CardOfPlayer[i].race;
-            playerData.allCharCards[i].Class = CardOfPlayer[i].Class;
-            playerData.allCharCards[i].rarity = CardOfPlayer[i].rarity;
-            playerData.allCharCards[i].description = CardOfPlayer[i].description;
-            playerData.allCharCards[i].health = CardOfPlayer[i].health;
-            playerData.allCharCards[i].speed = CardOfPlayer[i].speed;
-            playerData.allCharCards[i].physAttack = CardOfPlayer[i].physAttack;
-            playerData.allCharCards[i].magAttack = CardOfPlayer[i].magAttack;
-            playerData.allCharCards[i].range = CardOfPlayer[i].range;
-            playerData.allCharCards[i].physDefence = CardOfPlayer[i].physDefence;
-            playerData.allCharCards[i].magDefence = CardOfPlayer[i].magDefence;
-            playerData.allCharCards[i].critNum = CardOfPlayer[i].critNum;
-            playerData.allCharCards[i].passiveAbility = CardOfPlayer[i].passiveAbility;
-            playerData.allCharCards[i].attackAbility = CardOfPlayer[i].attackAbility;
-            playerData.allCharCards[i].defenceAbility = CardOfPlayer[i].defenceAbility;
-            playerData.allCharCards[i].buffAbility = CardOfPlayer[i].buffAbility;
-            playerData.allCharCards[i].image = CardOfPlayer[i].image;
-            playerData.allCharCards[i].Price = CardOfPlayer[i].Price;
-            playerData.allCharCards[i].id = CardOfPlayer[i].id;
-        }
-        for (int i = 0; i < playerData.allSupportCards.Count; i++)
-        {
-            playerData.allSupportCards[i].cardName = CardSupportOfPlayer[i].cardName;
-            playerData.allSupportCards[i].race = CardSupportOfPlayer[i].race;
-            playerData.allSupportCards[i].type = CardSupportOfPlayer[i].type;
-            playerData.allSupportCards[i].image = CardSupportOfPlayer[i].image;
-            playerData.allSupportCards[i].abilityText = CardSupportOfPlayer[i].abilityText;
-            playerData.allSupportCards[i].rarity = CardSupportOfPlayer[i].rarity;
-            playerData.allSupportCards[i].Price = CardSupportOfPlayer[i].Price;
-            playerData.allSupportCards[i].id = CardSupportOfPlayer[i].id;
-        }
-
-        List<CharacterCard> CardOfShopPlayer = DB.SelectFromCardsShop(playerData);
-        List<CardSupport> CardSupportOfShopPlayer = DB.SelectFromCardsSupportShop(playerData);
-        List<CharacterCard> OwnedCardOfPlayer = DB.SelectFromOwnCards(playerData);
-        List<CardSupport> OwnedCardSupportOfPlayer = DB.SelectFromOwnCardsSupport(playerData);
-        List<CharacterCard> DeckCardOfPlayer = DB.SelectFromDeckCards(playerData);
-        List<CardSupport> DeckCardSupportOfPlayer = DB.SelectFromDeckCardsSupport(playerData);
+        List<int> CardOfShopPlayer = DB.SelectFromCardsShop(playerData);
+        List<int> CardSupportOfShopPlayer = DB.SelectFromCardsSupportShop(playerData);
+        List<int> OwnedCardOfPlayer = DB.SelectFromOwnCards(playerData);
+        List<int> OwnedCardSupportOfPlayer = DB.SelectFromOwnCardsSupport(playerData);
+        List<int> DeckCardOfPlayer = DB.SelectFromDeckCards(playerData);
+        List<int> DeckCardSupportOfPlayer = DB.SelectFromDeckCardsSupport(playerData);
 
         List<CharacterCard> CharacterCards = Resources.LoadAll<CharacterCard>($"cards/characters").OrderBy(x => x.cardName).ToList();
         List<CardSupport> CardsSupport = Resources.LoadAll<CardSupport>($"cards/support").OrderBy(x => x.cardName).ToList();
@@ -267,49 +172,37 @@ public class DataLoader : MonoBehaviour, ILoadable
 
         for (int i = 0; i < CardOfShopPlayer.Count; i++)
         {
-            if (CardOfShopPlayer[i].cardName == "Бесстрашный \"Страж\"")
-            {
-                CardOfShopPlayer[i].cardName = "Бесстрашный Страж";
-            }
-            CharacterCard card = CharacterCards.Where(x => x.id == CardOfShopPlayer[i].id).FirstOrDefault();
+            CharacterCard card = CharacterCards.Where(x => x.id == CardOfShopPlayer[i]).FirstOrDefault();
             playerData.allShopCharCards.Add(card);
         }
        
         for (int i = 0; i < CardSupportOfShopPlayer.Count; i++)
         {
-            CardSupport CardSupport = CardsSupport.Where(x => x.id == CardSupportOfShopPlayer[i].id).FirstOrDefault();
+            CardSupport CardSupport = CardsSupport.Where(x => x.id == CardSupportOfShopPlayer[i]).FirstOrDefault();
             playerData.allShopSupportCards.Add(CardSupport);
         }
         
         for (int i = 0; i < OwnedCardOfPlayer.Count; i++)
         {
-            if (OwnedCardOfPlayer[i].cardName == "Бесстрашный \"Страж\"")
-            {
-                OwnedCardOfPlayer[i].cardName = "Бесстрашный Страж";
-            }
-            CharacterCard card = CharacterCards.Where(x => x.id == OwnedCardOfPlayer[i].id).FirstOrDefault();
+            CharacterCard card = CharacterCards.Where(x => x.id == OwnedCardOfPlayer[i]).FirstOrDefault();
             playerData.allUserCharCards.Add(card);
         }
         
         for (int i = 0; i < OwnedCardSupportOfPlayer.Count; i++)
         {
-            CardSupport CardSupport = CardsSupport.Where(x => x.id == OwnedCardSupportOfPlayer[i].id).FirstOrDefault();
+            CardSupport CardSupport = CardsSupport.Where(x => x.id == OwnedCardSupportOfPlayer[i]).FirstOrDefault();
             playerData.allUserSupportCards.Add(CardSupport);
         }
        
         for (int i = 0; i < DeckCardOfPlayer.Count; i++)
         {
-            if (DeckCardOfPlayer[i].cardName == "Бесстрашный \"Страж\"")
-            {
-                DeckCardOfPlayer[i].cardName = "Бесстрашный Страж";
-            }
-            CharacterCard card = CharacterCards.Where(x => x.id == DeckCardOfPlayer[i].id).FirstOrDefault();
+            CharacterCard card = CharacterCards.Where(x => x.id == DeckCardOfPlayer[i]).FirstOrDefault();
             playerData.deckUserCharCards.Add(card);
         }
         
         for (int i = 0; i < DeckCardSupportOfPlayer.Count; i++)
         {
-            CardSupport CardSupport = CardsSupport.Where(x => x.id == DeckCardSupportOfPlayer[i].id).FirstOrDefault();
+            CardSupport CardSupport = CardsSupport.Where(x => x.id == DeckCardSupportOfPlayer[i]).FirstOrDefault();
             playerData.deckUserSupportCards.Add(CardSupport);
         }
 
