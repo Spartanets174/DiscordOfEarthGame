@@ -19,6 +19,10 @@ public class UICoordinator : MonoBehaviour, ILoadable
     private TextMeshProUGUI playerNick;
     [SerializeField]
     private TextMeshProUGUI warningText;
+    [SerializeField]
+    private string shopCaption;
+    [SerializeField]
+    private string settingsCaption;
 
     [Space, Header("Game objects")]   
     [SerializeField]
@@ -28,9 +32,7 @@ public class UICoordinator : MonoBehaviour, ILoadable
     [SerializeField]
     private GameObject settings;
     [SerializeField]
-    private GameObject shopText;
-    [SerializeField]
-    private GameObject settingsText;
+    private Tooltip tooltip;
 
     [Space, Header("Interactable objects")]
     [SerializeField]
@@ -57,22 +59,21 @@ public class UICoordinator : MonoBehaviour, ILoadable
         shopObject.OnClick += TurnOnShop;
         shopObject.OnHover += MoveShopCaption;
         shopObject.OnHoverEnter += TurnOnShopText;
-        shopObject.OnHoverExit += TurnOffShopText;
-        shopObject.OnEnableChanged += x => { if (!x) TurnOffShopText(null); };
+        shopObject.OnHoverExit += x => tooltip.HideTooltip();
+        shopObject.OnEnableChanged += x => { if (!x) tooltip.HideTooltip(); };
 
 
         settingsObject.OnClick += TurnOnSettings;
         settingsObject.OnHover += MoveSettingsCaption;
         settingsObject.OnHoverEnter += TurnOnSettingsText;
-        settingsObject.OnHoverExit += TurnOffSettingsText;
-        settingsObject.OnEnableChanged += x => { if (!x) TurnOffSettingsText(null); };
+        settingsObject.OnHoverExit += x => tooltip.HideTooltip();
+        settingsObject.OnEnableChanged += x => { if (!x) tooltip.HideTooltip(); };
 
         shopObject.IsEnabled = true;
         settingsObject.IsEnabled = true;
 
         playerNick.text = $"Приветсвуем тебя, {PlayerManager.CharacterName}!";
-        SetState(shopText, false);
-        SetState(settingsText,false);
+        tooltip.HideTooltip();
     }
     private void OnDestroy()
     {
@@ -83,12 +84,12 @@ public class UICoordinator : MonoBehaviour, ILoadable
         shopObject.OnClick -= TurnOnShop;
         shopObject.OnHover -= MoveShopCaption;
         shopObject.OnHoverEnter -= TurnOnShopText;
-        shopObject.OnHoverExit -= TurnOffShopText;
+        shopObject.OnHoverExit -= x=> tooltip.HideTooltip();
 
         settingsObject.OnClick -= TurnOnSettings;
         settingsObject.OnHover -= MoveSettingsCaption;
         settingsObject.OnHoverEnter -= TurnOnSettingsText;
-        settingsObject.OnHoverExit -= TurnOffSettingsText;
+        settingsObject.OnHoverExit -= x => tooltip.HideTooltip();
 
         StopAllCoroutines();
     }
@@ -114,14 +115,14 @@ public class UICoordinator : MonoBehaviour, ILoadable
     }
     private void MoveSettingsCaption(GameObject gameObject)
     {
-        Rect settingsRect = settingsText.GetComponent<RectTransform>().rect;
-        settingsText.transform.localPosition = new Vector3(Input.mousePosition.x - cam.scaledPixelWidth / 2 + settingsRect.width/2, Input.mousePosition.y - cam.scaledPixelHeight / 2 + settingsRect.height / 2, 0);
+        /*Rect settingsRect = settingsText.GetComponent<RectTransform>().rect;
+        settingsText.transform.localPosition = new Vector3(Input.mousePosition.x - cam.scaledPixelWidth / 2 + settingsRect.width/2, Input.mousePosition.y - cam.scaledPixelHeight / 2 + settingsRect.height / 2, 0);*/
     }
 
     private void MoveShopCaption(GameObject gameObject)
     {
-        Rect shopRect = shopText.GetComponent<RectTransform>().rect;
-        shopText.transform.localPosition = new Vector3(Input.mousePosition.x - cam.scaledPixelWidth / 2 - shopRect.width/2, Input.mousePosition.y - cam.scaledPixelHeight / 2 + shopRect.height / 2, 0);
+        /*Rect shopRect = shopText.GetComponent<RectTransform>().rect;
+        shopText.transform.localPosition = new Vector3(Input.mousePosition.x - cam.scaledPixelWidth / 2 - shopRect.width/2, Input.mousePosition.y - cam.scaledPixelHeight / 2 + shopRect.height / 2, 0);*/
     }
     private void TurnOnShop(GameObject gameObject)
     {
@@ -135,20 +136,20 @@ public class UICoordinator : MonoBehaviour, ILoadable
     }
     private void TurnOnShopText(GameObject gameObject)
     {
-        SetState(shopText, true);
+        tooltip.ShowTooltip(shopCaption);
     }
-    private void TurnOffShopText(GameObject gameObject)
+/*    private void TurnOffShopText(GameObject gameObject)
     {
         SetState(shopText, false);
-    }
+    }*/
     private void TurnOnSettingsText(GameObject gameObject)
     {
-        SetState(settingsText, true);
+        tooltip.ShowTooltip(settingsCaption);
     }
-    private void TurnOffSettingsText(GameObject gameObject)
+/*    private void TurnOffSettingsText(GameObject gameObject)
     {
         SetState(settingsText, false);
-    }
+    }*/
     private IEnumerator TurnOffWarnningText()
     {
         yield return new WaitForSecondsRealtime(2);

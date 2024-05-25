@@ -40,6 +40,7 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
     private CompositeDisposable disposables = new();
     public void Init()
     {
+        loadingPanel.SetActive(false);
         changeConncetionInfo.gameObject.SetActive(false);
         Observable.EveryUpdate().Subscribe(x =>
         {
@@ -115,15 +116,17 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
     {
         if (connectionAnwser == "loginned")
         {
-            SceneController.ToMenu();
+            SceneController.ToMenu();            
         }
         if (connectionAnwser == "notConnected")
         {
+            loadingPanel.SetActive(false);
             warningTextPassword.text = "Отсутсвует подключение к серверу!";
             OnWarningTextPassword();
         }
         if (connectionAnwser == "wrongCreditials")
         {
+            loadingPanel.SetActive(false);
             warningTextPassword.text = "Неправильный логин или пароль!";
             OnWarningTextPassword();
         }
@@ -139,7 +142,9 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
 
         if (isNameValid && isPasswordValid)
         {
-            dataLoader.GetPlayerData(Nick.text, Password.text);
+            loadingPanel.SetActive(true);
+
+            StartCoroutine(dataLoader.GetPlayerData(Nick.text, Password.text));
         }
     }
     public void CheckInputs()
@@ -153,10 +158,10 @@ public class UIControllerCreatePlayer : MonoBehaviour, ILoadable
 
         if (isNameValid && isPasswordValid)
         {
-            dataLoader.CreateNewPlayer(Nick.text, Password.text);     
+            loadingPanel.SetActive(true);
+            StartCoroutine(dataLoader.CreateNewPlayer(Nick.text, Password.text));
         }
     }
-
     private void SwapPanels()
     {
         registrationPanel.SetActive(!registrationPanel.activeSelf);

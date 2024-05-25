@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public static class ConnectionInfo
 {
@@ -97,6 +98,7 @@ public class DbManager : MonoBehaviour
 
     public void SavePlayer()
     {
+        if (SceneManager.GetActiveScene().name == "CreatePlayer") return;
         if (playerData != null)
         {
             UpdatePlayerBalance(playerData);
@@ -423,7 +425,7 @@ public class DbManager : MonoBehaviour
     {
         for (int i = 0; i < playerData.allShopSupportCards.Count; i++)
         {
-            /*Debug.Log(playerData.allShopSupportCards[i]);*/
+            if (playerData.allShopSupportCards[i] == null) continue;
             string query = $"insert into gamedb.cards_shop(idCards_Shop,cost,id_player) values({playerData.allShopSupportCards[i].id},{playerData.allShopSupportCards[i].Price},{playerData.PlayerId})";
             var command = new MySqlCommand(query, con);
             try
@@ -478,8 +480,9 @@ public class DbManager : MonoBehaviour
 
     public List<CardSupport> SelectFromCardsSupportShop(PlayerData playerData)
     {
-        string query = $"SELECT * FROM gamedb.cards as c inner join gamedb.cards_shop as cs on(c.idCards = cs.idCards_Shop) where cs.id_player = {playerData.PlayerId}";
+        string query = $"SELECT idCards FROM gamedb.cards as c inner join gamedb.cards_shop as cs on(c.idCards = cs.idCards_Shop) where cs.id_player = {playerData.PlayerId}";
         List<CardSupport> CardSupportList = new List<CardSupport>();
+        /*List<int> CardSupportids = new();*/
         MySqlCommand command = new MySqlCommand(query, con);
         try
         {
@@ -490,6 +493,7 @@ public class DbManager : MonoBehaviour
                 {
                     CardSupport item = CreateCardSupport(reader);
                     CardSupportList.Add(item);
+                    /*CardSupportids.Add(reader.GetInt32("idCards"));*/
                 }
 
                 command.Dispose();
@@ -1055,7 +1059,7 @@ public class DbManager : MonoBehaviour
         }
         item.Price = reader.GetInt32("price");
         item.id = reader.GetInt32("idCards");
-        item.image = Resources.Load<Sprite>($"Card images/cards of support/{reader.GetString("path")}");
+        /*item.image = Resources.Load<Sprite>($"Card images/cards of support/{reader.GetString("path")}");*/
 
         return item;
         /*                    Debug.Log($"имя {item.name} ({reader.GetString("name")}), раса {item.race} ({reader.GetString("race")}), способность {item.ability} ({reader.GetString("effect")}), тип {item.type} ({reader.GetString("type")}), редкость {item.rarity} ({reader.GetString("rarity")})");

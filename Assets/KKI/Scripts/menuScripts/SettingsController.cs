@@ -154,6 +154,10 @@ public class SettingsController : MonoBehaviour, ILoadable
     private void SetScreenSettings()
     {
         Vector2 vector2 = resolutions[GetScreenSize()];
+        if (vector2.x>1920||vector2.y>1080)
+        {
+            vector2 = new Vector2(1920,1080);
+        }
         FullScreenMode fullScreenMode = GetFullScreenState() ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
         Screen.SetResolution((int)vector2.x, (int)vector2.y, fullScreenMode);
     }
