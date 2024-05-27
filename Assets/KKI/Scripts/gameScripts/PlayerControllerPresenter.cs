@@ -118,7 +118,7 @@ public class PlayerControllerPresenter : MonoBehaviour, ILoadable
         }
     }
 
-    private void EbableUnspawnedCards()
+    public void EbableUnspawnedCards()
     {
         foreach (var item in m_gameCharacterCards)
         {
@@ -137,7 +137,6 @@ public class PlayerControllerPresenter : MonoBehaviour, ILoadable
         }
         cardDisplay.IsChosen = true;
     }
-
 
     public GameCharacterCardDisplay GetChosenCard()
     {

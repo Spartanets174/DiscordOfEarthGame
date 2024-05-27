@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 public class GameCharacterCardDisplay : OutlineClicableUI
@@ -42,6 +43,7 @@ public class GameCharacterCardDisplay : OutlineClicableUI
         }
     }
 
+    public event Action<GameObject> OnCharacterSetted;
     private void Start()
     {
         m_isCharacterSpawned = false;
@@ -65,6 +67,7 @@ public class GameCharacterCardDisplay : OutlineClicableUI
         character.OnDamaged += (x,y,z)=> SetHealth(x);
         character.OnHeal += (x, y, z)=> SetHealth(x);
         character.OnDeath += OnDeath;
+        OnCharacterSetted?.Invoke(gameObject);
     }
 
     public void OnAttackAbilityUsed(BaseCharacterAbility baseCharacterAbility)

@@ -63,6 +63,7 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
     private Color changeTurnTextColor;
 
     private CompositeDisposable disposables = new();
+    private CompositeDisposable disposablesForCards = new();
     private float timer = 1f;
     public void Init()
     {
@@ -163,22 +164,52 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
         foreach (var gameCards in playerControllerPresenter.GameCharacterCardDisplays)
         {
             gameCards.OnClick += battleSystem.OnChooseCharacterButton;
+            gameCards.OnCharacterSetted += CancelChoosing;
         }
         begin.OnCharacterMoved += playerControllerPresenter.GetChosenCard;
         begin.OnCharacterChosen += playerControllerPresenter.SetChosenCard;
+        begin.OnCharacterChosen += AddCancelChoosing;
         begin.OnStateCompleted += OnBeginStateCompleted;
     }
 
+    private void AddCancelChoosing(GameCharacterCardDisplay card)
+    {
+        settingsController.CanPause = false;
+        Observable.EveryUpdate().Where(x => Input.GetKey(KeyCode.Escape)).Subscribe(x =>
+        {
+            CancelChoosing(card.gameObject);
+        }).AddTo(disposablesForCards);
+        card.OnClick -= battleSystem.OnChooseCharacterButton;
+        card.OnClick += CancelChoosing;
+    }
+    private void CancelChoosing(GameObject card)
+    {
+        settingsController.CanPause = true;
+        disposablesForCards.Dispose();
+        disposablesForCards.Clear();
+        disposablesForCards = new();
+        GameCharacterCardDisplay cardDisplay = card.GetComponent<GameCharacterCardDisplay>();
+        cardDisplay.OnClick -= CancelChoosing;
+        if (battleSystem.PlayerController.PlayerCharactersObjects.Count!=5)
+        {
+            cardDisplay.OnClick += battleSystem.OnChooseCharacterButton;
+        }
+       
+        battleSystem.FieldController.TurnOffCells();
+        playerControllerPresenter.EbableUnspawnedCards();
+    }
     private void OnBeginStateCompleted(State state)
     {
         Begin begin = (Begin)state;
         foreach (var gameCards in playerControllerPresenter.GameCharacterCardDisplays)
         {
             gameCards.OnClick -= battleSystem.OnChooseCharacterButton;
+            gameCards.OnCharacterSetted -= CancelChoosing;
         }
-        begin.OnCharacterChosen -= playerControllerPresenter.SetChosenCard;
-        begin.OnStateCompleted -= OnBeginStateCompleted;
         begin.OnCharacterMoved -= playerControllerPresenter.GetChosenCard;
+        begin.OnCharacterChosen -= playerControllerPresenter.SetChosenCard;
+        begin.OnCharacterChosen -= AddCancelChoosing;
+        begin.OnStateCompleted -= OnBeginStateCompleted;
 
         foreach (var playerCharacter in battleSystem.PlayerController.PlayerCharactersObjects)
         {

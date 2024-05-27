@@ -88,15 +88,26 @@ public class UICoordinator : MonoBehaviour, ILoadable
 
     public void ToGame()
     {
-        if (PlayerManager.DeckUserCharCards.Count < 5 || PlayerManager.DeckUserSupportCards.Count < 7)
+        if (PlayerManager.DeckUserCharCards.Count < 5 && PlayerManager.DeckUserSupportCards.Count < 7)
         {
-            SetState(warningText.gameObject,true);
-            StartCoroutine(TurnOffWarnningText());
+            SetState(warningText.gameObject, true);
+            StartCoroutine(TurnOffWarnningText($"¬ колоде недостаточно карт персонажей ({5 - PlayerManager.DeckUserCharCards.Count}) и карт помощи ({7 - PlayerManager.DeckUserSupportCards.Count} )"));
+            return;
         }
-        else
+        if (PlayerManager.DeckUserCharCards.Count < 5)
         {
-            SceneController.ToGame();
+            SetState(warningText.gameObject, true);
+            StartCoroutine(TurnOffWarnningText($"¬ колоде недостаточно карт персонажей ({5 - PlayerManager.DeckUserCharCards.Count})"));
+            return;
         }
+        if (PlayerManager.DeckUserSupportCards.Count < 7)
+        {
+            SetState(warningText.gameObject, true);
+            StartCoroutine(TurnOffWarnningText($"¬ колоде недостаточно карт помощи ({7 - PlayerManager.DeckUserSupportCards.Count} )"));
+            return;
+        }
+
+        SceneController.ToGame();
     }
 
     private void TurnOnBookOfCards()
@@ -123,8 +134,9 @@ public class UICoordinator : MonoBehaviour, ILoadable
     {
         tooltip.ShowTooltip(settingsCaption);
     }
-    private IEnumerator TurnOffWarnningText()
+    private IEnumerator TurnOffWarnningText(string text)
     {
+        warningText.text = text;
         yield return new WaitForSecondsRealtime(2);
         Sequence mySequence = DOTween.Sequence();
         mySequence.Append(warningText.DOFade(0, 2f))

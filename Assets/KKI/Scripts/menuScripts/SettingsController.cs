@@ -56,8 +56,8 @@ public class SettingsController : MonoBehaviour, ILoadable
         }
         if (PlayerPrefs.GetString("isFirst") == string.Empty)
         {
-            ChangeSoundLevel(1);
-            ChangeMusicLevel(1);
+            ChangeSoundLevel(0.5f);
+            ChangeMusicLevel(0.5f);
             PlayerPrefs.SetInt("fullScreen", 1);
             ChangeScreenSize(resolutions.Last().Key);
 
@@ -68,7 +68,7 @@ public class SettingsController : MonoBehaviour, ILoadable
         {
             SetScreenSettings();
         }
-
+        Time.timeScale = 1;
         MusicAudioSource.loop = true;
         MusicAudioSource.clip = menuMusic;
         MusicAudioSource.Play();
@@ -91,8 +91,6 @@ public class SettingsController : MonoBehaviour, ILoadable
         }
         Time.timeScale = isPaused ? 0 : 1;
         OnPauseStateChanged?.Invoke(isPaused);
-
-
     }
     public void ExitAccount()
     {
