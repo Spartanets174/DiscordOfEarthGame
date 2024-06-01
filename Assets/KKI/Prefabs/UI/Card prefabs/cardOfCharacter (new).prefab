@@ -1552,8 +1552,8 @@ MonoBehaviour:
   magDefence: {fileID: 3219631283985199349}
   rarity: {fileID: 3818842325137143403}
   image: {fileID: 2894099336416996225}
-  normalColor: {r: 0.6784314, g: 0.6627451, b: 0.73333335, a: 1}
-  mythColor: {r: 0.42352945, g: 0.16470589, b: 0.54901963, a: 1}
+  normalColor: {r: 0.735849, g: 0.735849, b: 0.735849, a: 1}
+  mythColor: {r: 0.39215687, g: 0, b: 0.8, a: 1}
 --- !u!114 &4887834901515906045
 MonoBehaviour:
   m_ObjectHideFlags: 0

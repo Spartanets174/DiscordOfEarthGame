@@ -11,11 +11,16 @@ public class OutlineClicableUI : MonoBehaviour, IPointerExitHandler, IPointerEnt
     [SerializeField]
     protected GameObject blocker;
 
+
+
+    public event Action<GameObject> OnDoubleClick;
     public event Action<GameObject> OnClick;
     public event Action OnHoverExit;
     public event Action OnHoverEnter;
 
     private bool m_isEnabled;
+    private float thresholdDoubleClick = 0.2f;
+    private DateTime lastClick;
 
     public bool IsEnabled
     {
@@ -58,6 +63,14 @@ public class OutlineClicableUI : MonoBehaviour, IPointerExitHandler, IPointerEnt
         if (m_isEnabled)
         {
             OnClick?.Invoke(eventData.pointerClick);
+            if ((DateTime.Now - lastClick).TotalSeconds <= thresholdDoubleClick)
+            {
+                OnDoubleClick?.Invoke(eventData.pointerClick);
+            }
+            else
+            {
+                lastClick = DateTime.Now;
+            }
         }
     }
 

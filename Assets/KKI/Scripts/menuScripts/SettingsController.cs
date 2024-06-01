@@ -56,8 +56,8 @@ public class SettingsController : MonoBehaviour, ILoadable
         }
         if (PlayerPrefs.GetString("isFirst") == string.Empty)
         {
-            ChangeSoundLevel(0.5f);
-            ChangeMusicLevel(0.5f);
+            ChangeSoundLevel(0.3f);
+            ChangeMusicLevel(0.3f);
             PlayerPrefs.SetInt("fullScreen", 1);
             ChangeScreenSize(resolutions.Last().Key);
 

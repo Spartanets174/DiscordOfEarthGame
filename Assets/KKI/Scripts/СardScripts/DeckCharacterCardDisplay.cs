@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DeckCharacterCardDisplay : MonoBehaviour
+public class DeckCharacterCardDisplay : OutlineClicableUI
 {
     [Space, Header("Card Info")]
     [SerializeField]
@@ -16,7 +16,11 @@ public class DeckCharacterCardDisplay : MonoBehaviour
     private Image rarityImage;
     [SerializeField]
     private TextMeshProUGUI characterName;
-   
+    [SerializeField]
+    private Color normalColor;
+    [SerializeField]
+    private Color mythColor;
+
 
     [Space]
     [SerializeField]
@@ -37,24 +41,28 @@ public class DeckCharacterCardDisplay : MonoBehaviour
     public event Action<CharacterCard> onCharacterDelete;
 
     private CharacterCard currentCharacterCard;
+    public CharacterCard CurrentCharacterCard => currentCharacterCard;
     private void Awake()
     {
+        IsEnabled = true;
         deleteButton.onClick.AddListener(DeleteCard);
+        OnDoubleClick += x => DeleteCard();
     }
     private void OnDestroy()
     {
         deleteButton.onClick.RemoveListener(DeleteCard);
+        OnDoubleClick -= x => DeleteCard();
     }
     public void SetData(CharacterCard characterCard)
     {
         currentCharacterCard = characterCard;
         if (characterCard.rarity.ToString() == "Обычная")
         {
-            rarityImage.color = Color.gray;
+            rarityImage.color = normalColor;
         }
         else
         {
-            rarityImage.color = new Color(126, 0, 255);
+            rarityImage.color = mythColor;
         }
         characterImage.sprite = characterCard.image;
         characterName.text = characterCard.cardName;

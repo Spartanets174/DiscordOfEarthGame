@@ -310,8 +310,8 @@ MonoBehaviour:
   rarity: {fileID: 3258436331442719567}
   image: {fileID: 900608762270651215}
   rarityImage: {fileID: 7255924568706218071}
-  normalColor: {r: 0.6784314, g: 0.6627451, b: 0.73333335, a: 1}
-  mythColor: {r: 0.42352945, g: 0.16470589, b: 0.54901963, a: 1}
+  normalColor: {r: 0.735849, g: 0.735849, b: 0.735849, a: 1}
+  mythColor: {r: 0.39215687, g: 0, b: 0.8, a: 1}
 --- !u!114 &5897724931850981017
 MonoBehaviour:
   m_ObjectHideFlags: 0

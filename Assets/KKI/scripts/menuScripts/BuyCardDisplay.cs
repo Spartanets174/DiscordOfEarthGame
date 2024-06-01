@@ -59,7 +59,7 @@ public class BuyCardDisplay : MonoBehaviour
     }
     private void UpdateMoneyText()
     {
-        moneyOfPlayer.text = "У вас денег: " + playerManager.Money.ToString() + "$";
+        moneyOfPlayer.text = playerManager.Money.ToString() + "$";
     }
 
     private void KillSequence()
@@ -89,8 +89,8 @@ public class BuyCardDisplay : MonoBehaviour
         cardName.text = card.cardName;
         m_chosenCard = card;
         cardSprite.sprite = card.image;
-        cardPrice.text = card.Price.ToString()+"$";
-        moneyOfPlayer.text = "У вас денег: " + playerManager.Money.ToString() + "$";
+        cardPrice.text = "Цена "+card.Price.ToString()+"$";
+        moneyOfPlayer.text = playerManager.Money.ToString() + "$";
 
         if (card is CharacterCard)
         {

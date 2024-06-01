@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -51,6 +52,7 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
     private BookOfCardsController bookOfCardsController;
     private Sequence currentSequence;
 
+    private CompositeDisposable disposables = new();
     public void Init()
     {
         bookOfCardsController = FindObjectOfType<BookOfCardsController>();
@@ -91,6 +93,23 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
         addToDeckSupportButton.onClick.AddListener(AddToDeckSupportCard);
         raceDropdown.AddOptions(stringRaces);
         raceDropdown.onValueChanged.AddListener(RaceDropdownCLick);
+
+        characterCardDisplay.chosenCharCard.Subscribe(x =>
+        {
+            addToDeckCharacterButton.interactable = x != null;
+        }).AddTo(disposables);
+
+        supportCardDisplay.chosenCardSupport.Subscribe(x =>
+        {
+            addToDeckSupportButton.interactable = x != null;
+        }).AddTo(disposables);
+    }
+
+    private void OnDestroy()
+    {
+        disposables.Dispose();
+        disposables.Clear();
+        disposables = new();
     }
 
     private void CloseBookOfCards()
@@ -111,13 +130,13 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
 
     private void AddToDeckCharacterCard()
     {
-        if (characterCardDisplay.ChosenCharCard==null) return;
+        if (characterCardDisplay.chosenCharCard.Value == null) return;
 
-        if (bookOfCardsController.CanEquipCharacterCard(characterCardDisplay.ChosenCharCard))
+        if (bookOfCardsController.CanEquipCharacterCard(characterCardDisplay.chosenCharCard.Value))
         {
             SpawnCharacterCards();
-            SpawnCharacterDeckCard(characterCardDisplay.ChosenCharCard);
-            characterCardDisplay.ChosenCharCard = null;
+            SpawnCharacterDeckCard(characterCardDisplay.chosenCharCard.Value);
+            characterCardDisplay.chosenCharCard.Value = null;
         }
         else
         {
@@ -127,7 +146,7 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
             }
             else
             {
-                switch (characterCardDisplay.ChosenCharCard.Class)
+                switch (characterCardDisplay.chosenCharCard.Value.Class)
                 {
                     case Enums.Classes.Лучник:
                         tooMuchCardCaption.text = "В колоде уже максимум лучников (2)";
@@ -146,13 +165,13 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
 
     private void AddToDeckSupportCard()
     {
-        if (supportCardDisplay.ChosenCardSupport == null) return;
+        if (supportCardDisplay.chosenCardSupport.Value == null) return;
 
-        if (bookOfCardsController.CanEquipSupportCard(supportCardDisplay.ChosenCardSupport))
+        if (bookOfCardsController.CanEquipSupportCard(supportCardDisplay.chosenCardSupport.Value))
         {
             SpawnSupportCards();
-            SpawnSupportDeckCard(supportCardDisplay.ChosenCardSupport);
-            supportCardDisplay.ChosenCardSupport = null;
+            SpawnSupportDeckCard(supportCardDisplay.chosenCardSupport.Value);
+            supportCardDisplay.chosenCardSupport.Value = null;
         }
         else
         {
@@ -208,6 +227,8 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
             cardObject.SetValues(card);
 
             cardObject.OnClick += characterCardDisplay.SetCharacterData;
+            cardObject.OnDoubleClick += (x) => AddToDeckCharacterCard();
+
 
             cardObject.IsEnabled = true;
             characterCardObjects.Add(cardObject);
@@ -233,6 +254,7 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
             cardSupportObject.transform.localPosition = Vector3.zero;
             cardSupportObject.SetValues(cardSupport);
             cardSupportObject.OnClick += supportCardDisplay.SetSupportCardData;
+            cardSupportObject.OnDoubleClick += (x) => AddToDeckSupportCard();
             cardSupportObject.IsEnabled = true;
 
             supportCardObjects.Add(cardSupportObject);
@@ -245,6 +267,7 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
         deckCharacterCardDisplay.transform.localPosition = Vector3.zero;
         deckCharacterCardDisplay.SetData(card);
         deckCharacterCardDisplay.onCharacterDelete += DeleteDeckCharacterCard;
+        deckCharacterCardDisplay.OnClick += characterCardDisplay.SetOnlyData;
     }
 
     private void SpawnSupportDeckCard(CardSupport supportCard)
@@ -253,18 +276,17 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
         deckSupportCardDisplay.transform.localPosition = Vector3.zero;
         deckSupportCardDisplay.SetData(supportCard);
         deckSupportCardDisplay.onSupportCardDelete += DeleteDeckSupportCard;
+        deckSupportCardDisplay.OnClick += supportCardDisplay.SetOnlyData;
     }
 
     private void DeleteDeckCharacterCard(CharacterCard card)
-    {
-        
+    {       
         bookOfCardsController.RemoveCardFromDeck(card);
         SpawnCharacterCards();
     }
 
     private void DeleteDeckSupportCard(CardSupport card)
-    {
-        
+    {      
         bookOfCardsController.RemoveCardFromDeck(card);
         SpawnSupportCards();
     }
