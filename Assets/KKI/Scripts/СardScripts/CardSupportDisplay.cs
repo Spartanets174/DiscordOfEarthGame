@@ -10,15 +10,12 @@ public class CardSupportDisplay : OutlineClicableUI
 
 
     public TextMeshProUGUI cardSupportName;
-    
+    public Image background;
     public TextMeshProUGUI ability;
     public TextMeshProUGUI rarity;
     public Image image;
-    public Image rarityImage;
-    public Color normalColor;
-    public Color mythColor;
 
-    public void SetValues(CardSupport cardSupport)
+    public void SetValues(CardSupport cardSupport, Sprite rarityBackground)
     {
         if (cardSupport == null) return; 
         IsEnabled = true;
@@ -28,13 +25,6 @@ public class CardSupportDisplay : OutlineClicableUI
         ability.text = m_cardSupport.abilityText;
         rarity.text = m_cardSupport.rarity.ToString();
         rarity.color = Color.white;
-        if (m_cardSupport.rarity.ToString() == "Обычная")
-        {
-            rarityImage.color = normalColor;
-        }
-        else
-        {
-            rarityImage.color = mythColor;
-        }
+        background.sprite = rarityBackground;
     }
 }

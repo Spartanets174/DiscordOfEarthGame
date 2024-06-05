@@ -1,7 +1,6 @@
 using DG.Tweening;
 using System;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,11 +9,15 @@ public class GameSupportCardDisplay : OutlineClicableUI
     [SerializeField]
     private Image supportImage;
     [SerializeField]
-    private Image supportCardRarity;
+    private Image background;
     [SerializeField]
     private TextMeshProUGUI supportAbility;
     [SerializeField]
     private TextMeshProUGUI supportName;
+    [SerializeField]
+    private Sprite normalBackground;
+    [SerializeField]
+    private Sprite mythBackground;
     [SerializeField]
     private DragAndDropComponent m_dragAndDropComponent;
     public DragAndDropComponent DragAndDropComponent => m_dragAndDropComponent;
@@ -48,16 +51,6 @@ public class GameSupportCardDisplay : OutlineClicableUI
     {
         m_currentCardSupport = cardSupport;
         supportImage.sprite = cardSupport.image;
-
-/*        if (cardSupport.rarity == Enums.Rarity.Ìèôè÷åñêàÿ)
-        {
-            supportCardRarity.color = new Color(126, 0, 255);
-        }
-        else
-        {
-            supportCardRarity.color = Color.gray;
-        }
-*/
         supportAbility.text = cardSupport.abilityText;
         supportName.text = cardSupport.cardName;
 
@@ -67,6 +60,22 @@ public class GameSupportCardDisplay : OutlineClicableUI
             m_gameSupportÑardAbility = (BaseSupportÑardAbility)gameObject.AddComponent(type);
             m_gameSupportÑardAbility.Init(battleSystem, cardSupport.supportÑardAbilityData);
         }
+        background.sprite = GetImageByRarity(cardSupport.rarity);
+    }
+
+    private Sprite GetImageByRarity(Enums.Rarity rarity)
+    {
+        Sprite currentRarityBackground = null;
+        switch (rarity)
+        {
+            case Enums.Rarity.Îáû÷íàÿ:
+                currentRarityBackground = normalBackground;
+                break;
+            case Enums.Rarity.Ìèôè÷åñêàÿ:
+                currentRarityBackground = mythBackground;
+                break;
+        }
+        return currentRarityBackground;
 
     }
 }

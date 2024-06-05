@@ -13,7 +13,14 @@ public class GameCharacterCardDisplay : OutlineClicableUI
     [SerializeField]
     private Image charBuffAbilityImage;
     [SerializeField]
+    private Image background;
+    [SerializeField]
     private HealthBar m_charealthBar;
+
+    [SerializeField]
+    private Sprite normalBackground;
+    [SerializeField]
+    private Sprite mythBackground;
 
     private CharacterCard m_currentCharacterCard;
     public CharacterCard CurrentCharacterCard => m_currentCharacterCard;
@@ -49,12 +56,13 @@ public class GameCharacterCardDisplay : OutlineClicableUI
         m_isCharacterSpawned = false;
     }
 
-    public void SetData(CharacterCard characterCard )
+    public void SetData(CharacterCard characterCard)
     {
         m_currentCharacterCard = characterCard;
         charImage.sprite = m_currentCharacterCard.image;
         m_charealthBar.SetMaxHealth(m_currentCharacterCard.health);
-        m_charealthBar.SetHealth(m_currentCharacterCard.health, 1);      
+        m_charealthBar.SetHealth(m_currentCharacterCard.health, 1);
+        background.sprite = GetImageByRarity(characterCard.rarity);
     }
 
     public void SetCharacter(PlayerCharacter character)
@@ -91,5 +99,21 @@ public class GameCharacterCardDisplay : OutlineClicableUI
     private void OnDeath(Character character)
     {
         IsEnabled = false;
+    }
+
+    private Sprite GetImageByRarity(Enums.Rarity rarity)
+    {
+        Sprite currentRarityBackground = null;
+        switch (rarity)
+        {
+            case Enums.Rarity.Обычная:
+                currentRarityBackground = normalBackground;
+                break;
+            case Enums.Rarity.Мифическая:
+                currentRarityBackground = mythBackground;
+                break;
+        }
+        return currentRarityBackground;
+
     }
 }

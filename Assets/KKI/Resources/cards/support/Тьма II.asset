@@ -15,7 +15,7 @@ MonoBehaviour:
   cardName: "\u0422\u044C\u043C\u0430 2"
   description: 
   race: 4
-  image: {fileID: 21300000, guid: 2e5ab2c75ae563044ac3eceb5cbb4a0b, type: 3}
+  image: {fileID: 21300000, guid: 620356877d969ac40a8675616496950b, type: 3}
   rarity: 2
   Price: 1431423
   id: 30

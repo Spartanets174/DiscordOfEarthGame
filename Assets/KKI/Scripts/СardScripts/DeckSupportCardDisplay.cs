@@ -9,14 +9,9 @@ public class DeckSupportCardDisplay : OutlineClicableUI
     [SerializeField]
     private Image supportImage;
     [SerializeField]
-    private Image rarityImage;
-    [SerializeField]
     private TextMeshProUGUI supportCardName;
     [SerializeField]
-    private Color normalColor;
-    [SerializeField]
-    private Color mythColor;
-
+    private Image background;
 
     [Space]
     [SerializeField]
@@ -39,19 +34,12 @@ public class DeckSupportCardDisplay : OutlineClicableUI
         OnDoubleClick -= x => DeleteCard();
 
     }
-    public void SetData(CardSupport cardSupport)
+    public void SetData(CardSupport cardSupport, Sprite rarityBackground)
     {
         currentCardSupport = cardSupport;
-        if (cardSupport.rarity.ToString() == "Обычная")
-        {
-            rarityImage.color = normalColor;
-        }
-        else
-        {
-            rarityImage.color = mythColor;
-        }
         supportImage.sprite = cardSupport.image;
         supportCardName.text = cardSupport.cardName;
+        background.sprite = rarityBackground;
     }
 
     private void DeleteCard()

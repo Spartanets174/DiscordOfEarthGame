@@ -1520,7 +1520,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c241e847af767d148b898393a975bb22, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ffaca0d3003e86d4fb8fe0db3a30be91, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1550,7 +1550,8 @@ MonoBehaviour:
   magAttack: {fileID: 7937522672575185093}
   physDefence: {fileID: 870048829357835171}
   magDefence: {fileID: 3219631283985199349}
-  rarity: {fileID: 3818842325137143403}
+  background: {fileID: 2871793005278825263}
+  characterClass: {fileID: 3818842325137143403}
   image: {fileID: 2894099336416996225}
   normalColor: {r: 0.735849, g: 0.735849, b: 0.735849, a: 1}
   mythColor: {r: 0.39215687, g: 0, b: 0.8, a: 1}
@@ -1843,7 +1844,7 @@ GameObject:
   - component: {fileID: 6194794934909962169}
   - component: {fileID: 2980990133652443835}
   m_Layer: 5
-  m_Name: RarityParent
+  m_Name: ClassParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1898,7 +1899,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 76a827c0b7b700d4fa9e135b970a64b1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5659b073e19871d4da7394b6456da365, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2981,7 +2982,7 @@ GameObject:
   - component: {fileID: 3818842325137143403}
   - component: {fileID: 508088047063410910}
   m_Layer: 5
-  m_Name: Rarity
+  m_Name: Class
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3028,14 +3029,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.42352945, g: 0.16470589, b: 0.54901963, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 0f043e210ad61cf4cbad69fc99284c98, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7d70dd789b7196b4097649f10935a8c7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

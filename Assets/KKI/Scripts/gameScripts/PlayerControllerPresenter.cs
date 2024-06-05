@@ -8,6 +8,7 @@ public class PlayerControllerPresenter : MonoBehaviour, ILoadable
 {
     [SerializeField]
     private PlayerController playerController;
+    public PlayerController PlayerController=> playerController;
 
     [SerializeField]
     private BattleSystem battleSystem;

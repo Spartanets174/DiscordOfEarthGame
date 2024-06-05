@@ -1,5 +1,3 @@
-
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,13 +20,27 @@ public class ShopPresenter : CardPresenter, ILoadable
     [SerializeField]
     private List<ButtonSupportType> supportTypeButtons;
 
+    [Space, Header("Sprites")]
+    [SerializeField]
+    private Sprite warrior;
+    [SerializeField]
+    private Sprite archer;
+    [SerializeField]
+    private Sprite cavalry;
+    [SerializeField]
+    private Sprite magician;
+    [SerializeField]
+    private Sprite normalBackground;
+    [SerializeField]
+    private Sprite mythBackground;
+
 
     private List<CardDisplay> characterCardObjects = new();
     private List<CardSupportDisplay> supportCardObjects = new();
 
     [SerializeField]
     private BuyCardDisplay buyCardDisplay;
-  
+
     private ShopController shopController;
     public void Init()
     {
@@ -85,7 +97,7 @@ public class ShopPresenter : CardPresenter, ILoadable
             }
             else
             {
-              StartCoroutine(buyCardDisplay.TurnOffNotEnoughtCaption());
+                StartCoroutine(buyCardDisplay.TurnOffNotEnoughtCaption());
             }
 
         }
@@ -99,7 +111,7 @@ public class ShopPresenter : CardPresenter, ILoadable
             {
                 StartCoroutine(buyCardDisplay.TurnOffNotEnoughtCaption());
             }
-            
+
         }
     }
 
@@ -107,11 +119,11 @@ public class ShopPresenter : CardPresenter, ILoadable
     {
         foreach (var raceButton in raceButtons)
         {
-            if (raceButton!= buttonRace)
+            if (raceButton != buttonRace)
             {
                 raceButton.IsEnabled = false;
             }
-            
+
         }
         shopController.SetCurrentRace(buttonRace.Race);
         SpawnCharacterCards();
@@ -120,11 +132,11 @@ public class ShopPresenter : CardPresenter, ILoadable
     {
         foreach (var classButton in classButtons)
         {
-            if (classButton!= buttonClass)
+            if (classButton != buttonClass)
             {
                 classButton.IsEnabled = false;
             }
-            
+
         }
         shopController.SetCurrentClass(buttonClass.Class);
         SpawnCharacterCards();
@@ -133,11 +145,11 @@ public class ShopPresenter : CardPresenter, ILoadable
     {
         foreach (var supportTypeButton in supportTypeButtons)
         {
-            if (buttonSupportType!= supportTypeButton)
+            if (buttonSupportType != supportTypeButton)
             {
                 supportTypeButton.IsEnabled = false;
             }
-            
+
         }
         shopController.SetCurrentTypeOfSupport(buttonSupportType.TypeOfSupport);
         SpawnSupportCards();
@@ -155,13 +167,41 @@ public class ShopPresenter : CardPresenter, ILoadable
 
         foreach (var card in cards)
         {
-            CardDisplay cardObject = Instantiate(characterCardObjectPrefab,Vector3.zero,Quaternion.identity, parentToSpawnCharacterCards);
-            cardObject.transform.localPosition = Vector3.zero;            
-            cardObject.SetValues(card);
+            CardDisplay cardObject = Instantiate(characterCardObjectPrefab, Vector3.zero, Quaternion.identity, parentToSpawnCharacterCards);
+            cardObject.transform.localPosition = Vector3.zero;
+            Sprite currentRarityBackground = null;
+            Sprite currentClassImage = null;
+            switch (card.rarity)
+            {
+                case Enums.Rarity.Обычная:
+                    currentRarityBackground = normalBackground;
+                    break;
+                case Enums.Rarity.Мифическая:
+                    currentRarityBackground = mythBackground;
+                    break;
+            }
+
+            switch (card.Class)
+            {
+                case Enums.Classes.Паладин:
+                    currentClassImage = warrior;
+                    break;
+                case Enums.Classes.Лучник:
+                    currentClassImage = archer;
+                    break;
+                case Enums.Classes.Кавалерия:
+                    currentClassImage = cavalry;
+                    break;
+                case Enums.Classes.Маг:
+                    currentClassImage = magician;
+                    break;
+            }
+
+            cardObject.SetValues(card, currentClassImage, currentRarityBackground);
 
             cardObject.OnClick += SetBuyCardWindow;
             characterCardObjects.Add(cardObject);
-        } 
+        }
     }
 
 
@@ -175,13 +215,26 @@ public class ShopPresenter : CardPresenter, ILoadable
         supportCardObjects.Clear();
 
         List<CardSupport> cardsSupport = shopController.FilterSupportCards(shopController.SupportShopCards);
-        
+
 
         foreach (var cardSupport in cardsSupport)
         {
             CardSupportDisplay cardSupportObject = Instantiate(supportCardObjectPrefab, Vector3.zero, Quaternion.identity, parentToSpawnSupportCards);
-            cardSupportObject.transform.localPosition = Vector3.zero;         
-            cardSupportObject.SetValues(cardSupport);
+            cardSupportObject.transform.localPosition = Vector3.zero;
+            Sprite currentRarityBackground = null;
+
+            switch (cardSupport.rarity)
+            {
+                case Enums.Rarity.Обычная:
+                    currentRarityBackground = normalBackground;
+                    break;
+                case Enums.Rarity.Мифическая:
+                    currentRarityBackground = mythBackground;
+                    break;
+            }
+
+
+            cardSupportObject.SetValues(cardSupport, currentRarityBackground);
             cardSupportObject.OnClick += SetBuyCardWindow;
 
             supportCardObjects.Add(cardSupportObject);

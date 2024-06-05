@@ -425,8 +425,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 12eaceb7341922b4398ff20c8bbcff90, type: 3}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: c241e847af767d148b898393a975bb22, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -488,7 +488,10 @@ MonoBehaviour:
   charAttackAbilityImage: {fileID: 7098780936323818735}
   charDefenceAbilityImage: {fileID: 4113182510634865920}
   charBuffAbilityImage: {fileID: 6844590693316743109}
+  background: {fileID: 1708015023212547356}
   m_charealthBar: {fileID: 1708015022892898995}
+  normalBackground: {fileID: 21300000, guid: c241e847af767d148b898393a975bb22, type: 3}
+  mythBackground: {fileID: 21300000, guid: ffaca0d3003e86d4fb8fe0db3a30be91, type: 3}
 --- !u!1 &1708015023457039174
 GameObject:
   m_ObjectHideFlags: 0

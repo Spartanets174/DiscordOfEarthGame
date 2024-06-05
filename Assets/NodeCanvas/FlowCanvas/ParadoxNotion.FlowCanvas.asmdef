@@ -1,0 +1,17 @@
+{
+    "name": "ParadoxNotion.FlowCanvas",
+    "rootNamespace": "",
+    "references": [
+        "GUID:699e8abaced909a4ca557744796fe57a",
+        "GUID:453196b4002cef242b188a82b8214a25"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

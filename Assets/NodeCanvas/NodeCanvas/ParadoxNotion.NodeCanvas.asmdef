@@ -1,0 +1,15 @@
+{
+    "name": "ParadoxNotion.NodeCanvas",
+    "references": [
+        "GUID:699e8abaced909a4ca557744796fe57a",
+        "GUID:a7163f39e3be5504ea14bb87ad8431d0"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

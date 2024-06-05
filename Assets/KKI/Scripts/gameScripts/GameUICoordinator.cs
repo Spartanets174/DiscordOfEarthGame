@@ -114,7 +114,6 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
         chosenCharacterDeatilsDisplay.OnAbilityUsed += OnAbilityUsed;
         chosenCharacterDeatilsDisplay.OnAbilityUsingCancel += OnAbilityUsed;
 
-
         Observable.EveryUpdate().Subscribe(x =>
         {
             timer -= Time.deltaTime;
@@ -175,9 +174,9 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
     private void AddCancelChoosing(GameCharacterCardDisplay card)
     {
         settingsController.CanPause = false;
-        Observable.EveryUpdate().Where(x => Input.GetKey(KeyCode.Escape)).Subscribe(x =>
+        Observable.EveryUpdate().Where(x => Input.GetKey(KeyCode.Escape) && card != null).Subscribe(x =>
         {
-            CancelChoosing(card.gameObject);
+             CancelChoosing(card.gameObject);
         }).AddTo(disposablesForCards);
         card.OnClick -= battleSystem.OnChooseCharacterButton;
         card.OnClick += CancelChoosing;

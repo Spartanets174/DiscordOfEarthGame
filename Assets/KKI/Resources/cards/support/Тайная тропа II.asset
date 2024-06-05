@@ -16,7 +16,7 @@ MonoBehaviour:
     2"
   description: 
   race: 2
-  image: {fileID: 21300000, guid: c642609a13d7d8741bf7671ddd6695a4, type: 3}
+  image: {fileID: 21300000, guid: 5d67fe60ce39eae4395c031108854018, type: 3}
   rarity: 2
   Price: 546
   id: 23

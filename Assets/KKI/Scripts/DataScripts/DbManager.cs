@@ -14,6 +14,17 @@ public static class ConnectionInfo
     public static void ChangeConncetionInfo(ConnectionData connectionData)
     {
         ConnectionData = connectionData;
+        PlayerPrefs.SetString("ip", ConnectionData.ip);
+        PlayerPrefs.SetString("port", ConnectionData.port);
+        PlayerPrefs.SetString("uid", ConnectionData.uid);
+        PlayerPrefs.SetString("pwd", ConnectionData.pwd);
+        PlayerPrefs.SetString("database", ConnectionData.database);
+
+        Debug.Log("ip: "+PlayerPrefs.GetString("ip"));
+        Debug.Log("port: " + PlayerPrefs.GetString("port"));
+        Debug.Log("uid: " + PlayerPrefs.GetString("uid"));
+        Debug.Log("pwd: " + PlayerPrefs.GetString("pwd"));
+        Debug.Log("database " + PlayerPrefs.GetString("database"));
     }
 }
 [Serializable]
@@ -37,7 +48,6 @@ public class ConnectionData
         this.uid = uid;
         this.pwd = pwd;
         this.database = database;
-
     }
 }
 public static class Hashing
@@ -69,12 +79,25 @@ public class DbManager : MonoBehaviour
     public bool IsConnected => m_isConnected;
     public void Awake()
     {
+        if (PlayerPrefs.GetString("isFirstConn") == string.Empty)
+        {
+            PlayerPrefs.SetString("isFirstConn", "1");
+            ConnectionInfo.ChangeConncetionInfo(connectionData);
+        }
+        else
+        {
+            connectionData.ip = PlayerPrefs.GetString("ip");
+            connectionData.port = PlayerPrefs.GetString("port");
+            connectionData.uid = PlayerPrefs.GetString("uid");
+            connectionData.pwd = PlayerPrefs.GetString("pwd");
+            connectionData.database = PlayerPrefs.GetString("database");
+            ConnectionInfo.ChangeConncetionInfo(connectionData);
+        }
         OpenCon();
     }
 
     public void OpenCon()
     {
-        ConnectionInfo.ChangeConncetionInfo(connectionData);
         connectionString = $"server = {ConnectionInfo.ConnectionData.ip}; port = {ConnectionInfo.ConnectionData.port}; uid = {ConnectionInfo.ConnectionData.uid}; pwd = {ConnectionInfo.ConnectionData.pwd}; Database = {ConnectionInfo.ConnectionData.database};";
         m_isConnected = true;
         con = new MySqlConnection(connectionString);
@@ -337,7 +360,7 @@ public class DbManager : MonoBehaviour
     {
         playerData.allCharCards = playerData.allCharCards.OrderBy(x => x.name).ToList();
         string query = $"SELECT * FROM gamedb.characters order by char_name";
-      /*  List<CharacterCard> cardList = new List<CharacterCard>();*/
+        /*  List<CharacterCard> cardList = new List<CharacterCard>();*/
         MySqlCommand command = new MySqlCommand(query, con);
 
         try
@@ -366,7 +389,7 @@ public class DbManager : MonoBehaviour
             command.Dispose();
             Debug.LogError(ex.Message);
         }
-      /*  return cardList;*/
+        /*  return cardList;*/
     }
     #endregion
 
@@ -403,10 +426,10 @@ public class DbManager : MonoBehaviour
                 int count = 0;
                 while (reader.Read())
                 {
-                   /* CardSupport item = */
+                    /* CardSupport item = */
                     SetDataToCardsSupport(reader, playerData.allSupportCards[count]);
                     count++;
-                   /* CardSupportList.Add(item);*/
+                    /* CardSupportList.Add(item);*/
                 }
 
                 command.Dispose();
@@ -1004,7 +1027,7 @@ public class DbManager : MonoBehaviour
 
         item.Price = reader.GetInt32("price");
 
-       /* item.image = Resources.Load<Sprite>($"Card images/card of char/{reader.GetString("path")}");*/
+        /* item.image = Resources.Load<Sprite>($"Card images/card of char/{reader.GetString("path")}");*/
         item.id = reader.GetInt32("idCharacters");
 
         /*                    Debug.Log($"name {item.name} ({reader.GetString("char_name")})");

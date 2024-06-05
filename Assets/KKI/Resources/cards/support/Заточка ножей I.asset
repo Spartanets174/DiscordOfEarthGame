@@ -17,7 +17,7 @@ MonoBehaviour:
     \u043F\u043E\u0434\u0433\u043E\u0442\u043E\u0432\u043A\u0430 I"
   description: 
   race: 1
-  image: {fileID: 21300000, guid: 1ba2725fb6306504c8efad62cb404497, type: 3}
+  image: {fileID: 21300000, guid: 1c19c848b0d3bd341a43769cdb31f783, type: 3}
   rarity: 1
   Price: 800
   id: 35

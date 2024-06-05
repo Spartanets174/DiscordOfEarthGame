@@ -47,6 +47,21 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
     [SerializeField]
     private TextMeshProUGUI tooMuchCardCaption;
 
+    [Space, Header("Sprites")]
+    [SerializeField]
+    private Sprite warrior;
+    [SerializeField]
+    private Sprite archer;
+    [SerializeField]
+    private Sprite cavalry;
+    [SerializeField]
+    private Sprite magician;
+    [SerializeField]
+    private Sprite normalBackground;
+    [SerializeField]
+    private Sprite mythBackground;
+
+
     private List<CardDisplay> characterCardObjects = new();
     private List<CardSupportDisplay> supportCardObjects = new();
     private BookOfCardsController bookOfCardsController;
@@ -224,7 +239,9 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
         {
             CardDisplay cardObject = Instantiate(characterCardObjectPrefab, Vector3.zero, Quaternion.identity, parentToSpawnCharacterCards);
             cardObject.transform.localPosition = Vector3.zero;
-            cardObject.SetValues(card);
+            
+
+            cardObject.SetValues(card, GetImageByClass(card.Class), GetImageByRarity(card.rarity));
 
             cardObject.OnClick += characterCardDisplay.SetCharacterData;
             cardObject.OnDoubleClick += (x) => AddToDeckCharacterCard();
@@ -252,7 +269,10 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
         {
             CardSupportDisplay cardSupportObject = Instantiate(supportCardObjectPrefab, Vector3.zero, Quaternion.identity, parentToSpawnSupportCards);
             cardSupportObject.transform.localPosition = Vector3.zero;
-            cardSupportObject.SetValues(cardSupport);
+
+            Sprite currentRarityBackground = null;
+
+            cardSupportObject.SetValues(cardSupport, GetImageByRarity(cardSupport.rarity));
             cardSupportObject.OnClick += supportCardDisplay.SetSupportCardData;
             cardSupportObject.OnDoubleClick += (x) => AddToDeckSupportCard();
             cardSupportObject.IsEnabled = true;
@@ -265,7 +285,8 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
     {
         DeckCharacterCardDisplay deckCharacterCardDisplay = Instantiate(deckCharacterCardObjectPrefab, Vector3.zero, Quaternion.identity, parentToSpawnDeckCharacterCards);
         deckCharacterCardDisplay.transform.localPosition = Vector3.zero;
-        deckCharacterCardDisplay.SetData(card);
+
+        deckCharacterCardDisplay.SetData(card, GetImageByClass(card.Class), GetImageByRarity(card.rarity));
         deckCharacterCardDisplay.onCharacterDelete += DeleteDeckCharacterCard;
         deckCharacterCardDisplay.OnClick += characterCardDisplay.SetOnlyData;
     }
@@ -274,7 +295,7 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
     {
         DeckSupportCardDisplay deckSupportCardDisplay = Instantiate(deckSupportCardObjectPrefab, Vector3.zero, Quaternion.identity, parentToSpawnDeckSupportCards);
         deckSupportCardDisplay.transform.localPosition = Vector3.zero;
-        deckSupportCardDisplay.SetData(supportCard);
+        deckSupportCardDisplay.SetData(supportCard, GetImageByRarity(supportCard.rarity));
         deckSupportCardDisplay.onSupportCardDelete += DeleteDeckSupportCard;
         deckSupportCardDisplay.OnClick += supportCardDisplay.SetOnlyData;
     }
@@ -308,6 +329,44 @@ public class BookOfCardsPresenter : CardPresenter, ILoadable
             tooMuchCardCaption.gameObject.SetActive(false);
         });
         currentSequence.Play();
+
+    }
+
+    private Sprite GetImageByClass(Enums.Classes charClass)
+    {
+        Sprite currentClassImage = null;
+        switch (charClass)
+        {
+            case Enums.Classes.Паладин:
+                currentClassImage = warrior;
+                break;
+            case Enums.Classes.Лучник:
+                currentClassImage = archer;
+                break;
+            case Enums.Classes.Кавалерия:
+                currentClassImage = cavalry;
+                break;
+            case Enums.Classes.Маг:
+                currentClassImage = magician;
+                break;
+        }
+        return currentClassImage;
+        
+    }
+
+    private Sprite GetImageByRarity(Enums.Rarity rarity)
+    {
+        Sprite currentRarityBackground = null;
+        switch (rarity)
+        {
+            case Enums.Rarity.Обычная:
+                currentRarityBackground = normalBackground;
+                break;
+            case Enums.Rarity.Мифическая:
+                currentRarityBackground = mythBackground;
+                break;
+        }
+        return currentRarityBackground;
 
     }
 }

@@ -16,30 +16,25 @@ public class CardDisplay : OutlineClicableUI
     public TextMeshProUGUI magAttack;
     public TextMeshProUGUI physDefence;
     public TextMeshProUGUI magDefence;
-    public Image rarity;
+    public Image background;
+    public Image characterClass;
     public Image image;
     public Color normalColor;
     public Color mythColor;
 
-    public void SetValues(CharacterCard card)
+    public void SetValues(CharacterCard card, Sprite classImage, Sprite rarityBackground)
     {
         if (card == null) return;
         IsEnabled = true;
         m_card = card;
         cardName.text = m_card.cardName;
-        if (m_card.rarity.ToString() == "Обычная")
-        {
-            rarity.color = normalColor;
-        }
-        else
-        {
-            rarity.color = mythColor;
-        }
         health.text = Convert.ToString(m_card.health * 100);
         physAttack.text = Convert.ToString(m_card.physAttack * 100);
         magAttack.text = Convert.ToString(m_card.magAttack * 100);
         physDefence.text = Convert.ToString(m_card.physDefence * 100);
         magDefence.text = Convert.ToString(m_card.magDefence * 100);
         image.sprite = m_card.image;
+        background.sprite = rarityBackground;
+        characterClass.sprite = classImage;
     }
 }
