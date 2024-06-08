@@ -323,7 +323,6 @@ MonoBehaviour:
   blocker: {fileID: 0}
   characterImage: {fileID: 2894099336416996225}
   classImage: {fileID: 3336090200074270588}
-  rarityImage: {fileID: 0}
   background: {fileID: 2871793005278825263}
   characterName: {fileID: 2469340801815459508}
   deleteButton: {fileID: 8095682422861141129}
@@ -636,8 +635,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1.8507996, y: -1.2244034}
-  m_SizeDelta: {x: -29.6117, y: -24.695}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2447768726316825613
 CanvasRenderer:

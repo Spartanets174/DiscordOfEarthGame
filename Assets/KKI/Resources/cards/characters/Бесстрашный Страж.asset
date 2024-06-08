@@ -15,7 +15,7 @@ MonoBehaviour:
   cardName: "\u0411\u0435\u0441\u0441\u0442\u0440\u0430\u0448\u043D\u044B\u0439 \"\u0421\u0442\u0440\u0430\u0436\""
   description: "\u044D\u043B\u044C\u0444"
   race: 3
-  image: {fileID: 21300000, guid: 30a557852010cdf43ad46d48e0708fb3, type: 3}
+  image: {fileID: 21300000, guid: 8003b0da52c279c4e8854e936a27eab7, type: 3}
   rarity: 2
   Price: 3452
   id: 30
@@ -114,7 +114,6 @@ MonoBehaviour:
           _keyValues: []
           _keys: []
           _values: []
-        useSound: {fileID: 0}
         abilityImage: {fileID: 21300000, guid: 125bb49b217257347be09ede099b888d, type: 3}
         abilityName: "\u0417\u043E\u0432"
         selectAbilityText: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0440\u0430\u0436\u0435\u0441\u043A\u043E\u0433\u043E
@@ -165,7 +164,6 @@ MonoBehaviour:
           - effect: {fileID: 2799084144196254819, guid: c324a6e30ef76314292525669dc7248f, type: 3}
             effectSound: {fileID: 0}
             spawnPoint: 1
-        useSound: {fileID: 0}
         abilityImage: {fileID: 21300000, guid: c1d35b40e3fb0f9438f23087432d9765, type: 3}
         abilityName: "\u0411\u043E\u043B\u044C"
         selectAbilityText: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u043E\u044E\u0437\u043D\u043E\u0433\u043E
@@ -212,7 +210,6 @@ MonoBehaviour:
           - effect: {fileID: 2799084144196254819, guid: c324a6e30ef76314292525669dc7248f, type: 3}
             effectSound: {fileID: 0}
             spawnPoint: 1
-        useSound: {fileID: 0}
         abilityImage: {fileID: 21300000, guid: a2563f2b8dbc4044b9a50537d3a29962, type: 3}
         abilityName: "\u0412\u043E\u0439"
         selectAbilityText: "\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u043F\u0435\u0440\u0432\u043E\u0433\u043E
