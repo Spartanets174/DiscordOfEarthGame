@@ -24,8 +24,6 @@ public class EnemyTurn : State
         BattleSystem.EnemyController.AttackAllEnemiesStaticCharacters();
 
         BattleSystem.EnemyController.ResetEnemyCharacters();      
-        BattleSystem.EnemyController.SetupTree();
-        BattleSystem.EnemyController.RestartTree();
         
         yield break;
     }
@@ -57,8 +55,7 @@ public class EnemyTurn : State
     {
         EnemyCharacter enemyCharacter = character.GetComponent<EnemyCharacter>();
         BattleSystem.EnemyController.SetCurrentEnemyChosenCharacter(enemyCharacter);
-        new WaitForSecondsRealtime(1f);
-        yield return character;
+        yield break;
     }
     
 
@@ -68,7 +65,6 @@ public class EnemyTurn : State
         EnemyCharacter enemyCharacter = BattleSystem.EnemyController.CurrentEnemyCharacter;
         Cell currentCell = enemyCharacter.GetComponentInParent<Cell>();
         int moveCost = BattleSystem.FieldController.GetMoveCost(currentCell, cellToMove,BattleSystem.State, enemyCharacter);
-
 
         if (moveCost > BattleSystem.PointsOfAction.Value)
         {
@@ -91,39 +87,33 @@ public class EnemyTurn : State
         {
             BattleSystem.SetPlayerTurn();
         }
-
-        new WaitForSecondsRealtime(1f);
         yield break;
     }
     public override IEnumerator Attack(GameObject target)
     {
         /*Логика при атаке*/
-        if (2 <= BattleSystem.PointsOfAction.Value)
+        EnemyCharacter enemyCharacter = BattleSystem.EnemyController.CurrentEnemyCharacter;
+        Character currentTarget = target.GetComponent<Character>();
+
+        enemyCharacter.OnAttackInvoke();
+
+        currentTarget.Damage(enemyCharacter);
+
+        if (BattleSystem.PlayerController.PlayerCharactersObjects.Count == 0)
         {
-            EnemyCharacter enemyCharacter = BattleSystem.EnemyController.CurrentEnemyCharacter;
-            Character currentTarget = target.GetComponent<Character>();
-
-            enemyCharacter.OnAttackInvoke();
-
-             currentTarget.Damage(enemyCharacter);
-
-            if (BattleSystem.PlayerController.PlayerCharactersObjects.Count == 0)
-            {
-                BattleSystem.SetLost();
-            }
-            float chance = UnityEngine.Random.Range(0f, 1f);
-            if (chance > enemyCharacter.ChanceToFreeAttack)
-            {
-                BattleSystem.PointsOfAction.Value -= 2;
-            }
-            
-            if (BattleSystem.PointsOfAction.Value == 0)
-            {
-                BattleSystem.SetPlayerTurn();
-            }
-            BattleSystem.FieldController.TurnOnCells();
+            BattleSystem.SetLost();
         }
-        new WaitForSecondsRealtime(1f);
+        float chance = UnityEngine.Random.Range(0f, 1f);
+        if (chance > enemyCharacter.ChanceToFreeAttack)
+        {
+            BattleSystem.PointsOfAction.Value -= 2;
+        }
+
+        if (BattleSystem.PointsOfAction.Value == 0)
+        {
+            BattleSystem.SetPlayerTurn();
+        }
+        BattleSystem.FieldController.TurnOnCells();
         yield break;
     }
 

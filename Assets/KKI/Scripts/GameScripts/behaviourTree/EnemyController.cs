@@ -1,17 +1,16 @@
-using BehaviourTree;
 using System;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
-using Tree = BehaviourTree.Tree;
+/*using Tree = BehaviourTree.Tree;*/
 
-public class EnemyController : Tree
+public class EnemyController : MonoBehaviour, ILoadable
 {
     [Header("Main sripts")]
     [SerializeField]
-    private BattleSystem battleSystem;
-    [SerializeField]
     private FieldController fieldController;
+    public FieldController FieldController => fieldController;
+
     [SerializeField]
     private PlayerData playerData;
 
@@ -40,12 +39,12 @@ public class EnemyController : Tree
     private EnemyCharacter m_currentEnemyCharacter;
     public EnemyCharacter CurrentEnemyCharacter => m_currentEnemyCharacter;
 
-    public override void Init()
+    public void Init()
     {
         CreateEnemy();
         InstantiateEnemies();
     }
-    public override void SetupTree()
+    /*public override void SetupTree()
     {
         _root = new Sequence(new List<Node>
                 {
@@ -75,13 +74,13 @@ public class EnemyController : Tree
         {
             SetupTree();
         }
-    }
+    }*/
     private void CreateEnemy()
     {
         while (m_enemyCharCards.Count < 5)
         {
             CharacterCard EnemyMan = playerData.allCharCards[UnityEngine.Random.Range(0, playerData.allCharCards.Count)];
-            if (!m_enemyCharCards.Contains(EnemyMan)&& EnemyMan.characterPrefab!=null)
+            if (!m_enemyCharCards.Contains(EnemyMan) && EnemyMan.characterPrefab != null)
             {
                 m_enemyCharCards.Add(EnemyMan);
             }
@@ -209,7 +208,7 @@ public class EnemyController : Tree
                 break;
             }
 
-            Cell cell = battleSystem.FieldController.GetCell(newI, newJ);
+            Cell cell = fieldController.GetCell(newI, newJ);
 
             if (cell.transform.childCount == 1)
             {

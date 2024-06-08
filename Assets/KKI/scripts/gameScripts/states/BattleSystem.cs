@@ -37,9 +37,12 @@ public class BattleSystem : StateMachine, ILoadable
 
     public ReactiveProperty<Character> CurrentChosenCharacter = new ReactiveProperty<Character>();
 
-    public ReactiveProperty<int> PointsOfAction = new ReactiveProperty<int>();
+    public ReactiveProperty<int> PointsOfAction = new();
+    public int PointsOfActionValue => PointsOfAction.Value;
 
     public ReactiveProperty<string> gameLogCurrentText = new ReactiveProperty<string>();
+
+    public Type StateType => State.GetType();
 
     public event Action<Begin> OnGameStarted;
     public event Action OnGameEnded;
@@ -136,7 +139,7 @@ public class BattleSystem : StateMachine, ILoadable
     public void SetPlayerTurn()
     {
         CurrentChosenCharacter.Value = null;
-        EnemyController.StopTree();
+        /*EnemyController.StopTree();*/
         PlayerTurn playerTurn = new(this);
         SetState(playerTurn);
         OnPlayerTurnStarted?.Invoke(playerTurn);      
@@ -152,14 +155,14 @@ public class BattleSystem : StateMachine, ILoadable
     }
     public void SetWin()
     {
-        EnemyController.StopTree();
+        /*EnemyController.StopTree();*/
         PlayerController.ClearDisposables();
         SetState(new Won(this));
         OnGameEnded?.Invoke();
     }
     public void SetLost()
     {
-        EnemyController.StopTree();
+        /*EnemyController.StopTree();*/
         PlayerController.ClearDisposables();
         SetState(new Lost(this));
         OnGameEnded?.Invoke();

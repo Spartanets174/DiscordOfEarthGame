@@ -300,7 +300,7 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
                 playerTurn.SetStateToNormal();
             }
         }
-        if (battleSystem.State is EnemyTurn enemyTurn)
+        /*if (battleSystem.State is EnemyTurn enemyTurn)
         {
             if (state)
             {
@@ -310,7 +310,7 @@ public class GameUICoordinator : MonoBehaviour, ILoadable
             {
                 battleSystem.EnemyController.RestartTree();
             }
-        }
+        }*/
     }
 
     private void OnEnemyTurnStart(EnemyTurn enemyTurn)
