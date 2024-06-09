@@ -89,6 +89,10 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
     public event Action OnAbilitySelected;
     public event Action OnAbilityUsed;
     public event Action OnAbilityUsingCancel;
+    private void Start()
+    {
+        DisableInfoPanel();
+    }
     public void Init()
     {
         attackAbilityButton.OnHoverEnter += ()=> EnableInfoPanel(Enums.TypeOfAbility.attack);
@@ -133,6 +137,7 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
             playerCharacter.BuffCharacterAbility.OnUsingCancel += OnUsingCancel;
             playerCharacter.BuffCharacterAbility.Init(battleSystem, playerCharacter, playerCharacter.Card.buffCharacterAbilityData);
         }
+        DisableInfoPanel();
     }
     private void OnDestroy()
     {
@@ -332,6 +337,7 @@ public class ChosenCharacterDeatilsDisplay : MonoBehaviour, ILoadable
         }
         else
         {
+            DisableInfoPanel();
             SetAbilityButtonsState(false);
         }
     }
